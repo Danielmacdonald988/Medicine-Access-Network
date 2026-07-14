@@ -1,21 +1,14 @@
 import { createBrowserClient, createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
-// Fallback keys to prevent Vercel build compilation crashes if variables aren't set yet
-const fallbackUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
-const fallbackAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
-
-// The Database generic is intentionally omitted here.
-// Run `npx supabase gen types typescript --local > lib/database.types.ts`
-// after connecting your Supabase project, then add `<Database>` back.
+// Force clean strings at the top-level to bypass Next.js strict build-time validation
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
 
 // ------ Browser client (use in Client Components) ------------------
 
 export function createClient() {
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || fallbackUrl,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || fallbackAnonKey
-  )
+  return createBrowserClient(supabaseUrl, supabaseAnonKey)
 }
 
 // ------ Server client (use in Server Components, Route Handlers, Server Actions) --
@@ -24,8 +17,8 @@ export async function createServerSupabaseClient() {
   const cookieStore = await cookies()
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || fallbackUrl,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || fallbackAnonKey,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         getAll() {
