@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { bookingRequestSchema } from '@/lib/validations'
 import { z } from 'zod'
 

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type Stripe from 'stripe'
 import { constructWebhookEvent } from '@/lib/stripe'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabaseServer'
 
 // Stripe requires the raw request body for signature verification.
 // Next.js App Router gives us it via request.text().

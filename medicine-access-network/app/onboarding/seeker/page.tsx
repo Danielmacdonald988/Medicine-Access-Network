@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { requireAuth } from '@/lib/auth'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { SeekerOnboardingForm } from '@/components/forms/SeekerOnboardingForm'
 
 export const metadata: Metadata = { title: 'Tell us about your journey' }

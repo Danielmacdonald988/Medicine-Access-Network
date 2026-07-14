@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { verificationNoteSchema } from '@/lib/validations'
 
 async function requireAdmin(supabase: Awaited<ReturnType<typeof createServerSupabaseClient>>) {

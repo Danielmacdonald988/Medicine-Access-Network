@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { CheckCircle } from 'lucide-react'
 import { requireAuth } from '@/lib/auth'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { FacilitatorOnboardingForm } from '@/components/forms/FacilitatorOnboardingForm'
 import { Card, CardContent } from '@/components/ui/card'
 

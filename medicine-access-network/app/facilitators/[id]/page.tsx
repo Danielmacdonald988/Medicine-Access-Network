@@ -18,7 +18,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { BookingRequestForm } from '@/components/forms/BookingRequestForm'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { getCurrentUser } from '@/lib/auth'
 
 interface PageProps {

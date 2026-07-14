@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import type { UserRole } from '@/lib/types'
 
 // ─── Types ───────────────────────────────────────────────────────────────────

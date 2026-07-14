@@ -7,7 +7,7 @@ import { SearchFilters } from '@/components/search/SearchFilters'
 import { FacilitatorCard } from '@/components/cards/FacilitatorCard'
 import { SafetyDisclaimer } from '@/components/layout/SafetyDisclaimer'
 import { Button } from '@/components/ui/button'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import type { FacilitatorSearchResult } from '@/lib/types'
 
 export const metadata: Metadata = {

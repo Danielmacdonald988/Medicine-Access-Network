@@ -3,7 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { requireRole } from '@/lib/auth'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ReviewForm } from '@/components/forms/ReviewForm'
 
