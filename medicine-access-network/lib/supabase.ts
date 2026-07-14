@@ -1,27 +1,31 @@
 import { createBrowserClient, createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
+// Fallback keys to prevent Vercel build compilation crashes if variables aren't set yet
+const fallbackUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
+const fallbackAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
+
 // The Database generic is intentionally omitted here.
 // Run `npx supabase gen types typescript --local > lib/database.types.ts`
 // after connecting your Supabase project, then add `<Database>` back.
 
-// ─── Browser client (use in Client Components) ───────────────────────────────
+// ------ Browser client (use in Client Components) ------------------
 
 export function createClient() {
   return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_URL || fallbackUrl,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || fallbackAnonKey
   )
 }
 
-// ─── Server client (use in Server Components, Route Handlers, Server Actions) ─
+// ------ Server client (use in Server Components, Route Handlers, Server Actions) --
 
 export async function createServerSupabaseClient() {
   const cookieStore = await cookies()
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL || fallbackUrl,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || fallbackAnonKey,
     {
       cookies: {
         getAll() {
@@ -33,30 +37,9 @@ export async function createServerSupabaseClient() {
               cookieStore.set(name, value, options)
             )
           } catch {
-            // setAll called from a Server Component — cookies are read-only
+            // The setAll method was called from a Server Component — cookies are read-only
           }
         },
-      },
-    }
-  )
-}
-
-// ─── Service role client (use only in secure server contexts / admin routes) ──
-
-export async function createServiceRoleClient() {
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set')
-  }
-  // Service role bypasses RLS — use only in secure server contexts (admin batch ops, webhooks).
-  // Uses a no-op cookie store since service role auth doesn't rely on session cookies.
-  const cookieStore = await cookies()
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY,
-    {
-      cookies: {
-        getAll: () => cookieStore.getAll(),
-        setAll: () => {},
       },
     }
   )
