@@ -1,5 +1,4 @@
 import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
 
 export async function createServerSupabaseClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
@@ -7,8 +6,12 @@ export async function createServerSupabaseClient() {
 
   let cookieStore;
   try {
+    // Dynamically import next/headers only when execution happens at runtime.
+    // This stops Next.js from throwing an error during the static compilation phase.
+    const { cookies } = await import('next/headers')
     cookieStore = await cookies()
   } catch (e) {
+    // Safe fallback client for static layout/build rendering
     return createServerClient(url, anonKey, { cookies: { getAll() { return [] }, setAll() {} } })
   }
 
@@ -26,7 +29,7 @@ export async function createServerSupabaseClient() {
               cookieStore.set(name, value, options)
             )
           } catch {
-            // Safe fallback for read-only contexts
+            // Safe fallback for read-only server component contexts
           }
         },
       },
