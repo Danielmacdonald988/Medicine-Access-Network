@@ -8,9 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase'
-import { dashboardPathForRole } from '@/lib/auth'
 import { loginSchema, type LoginInput } from '@/lib/validations'
-import type { UserRole } from '@/lib/types'
 import Link from 'next/link'
 
 export function LoginForm() {
@@ -25,7 +23,7 @@ export function LoginForm() {
   } = useForm<LoginInput>({ resolver: zodResolver(loginSchema) })
 
   const onSubmit = async (data: LoginInput) => {
-    const { data: authData, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     })
@@ -37,24 +35,13 @@ export function LoginForm() {
 
     // Honour the ?next= redirect param from middleware (e.g. user tried to visit /admin)
     const next = searchParams.get('next')
-    if (next && next.startsWith('/')) {
-      router.push(next)
-      router.refresh()
-      return
-    }
+    const destination = next && next.startsWith('/') ? next : '/dashboard'
 
-    // Otherwise route by role
-    if (authData.user) {
-      const { data: profile } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', authData.user.id)
-        .single()
-
-      const path = dashboardPathForRole((profile?.role ?? 'seeker') as UserRole)
-      router.push(path)
-      router.refresh()
-    }
+    // /dashboard is a server-side dispatcher that reads the role (and self-heals
+    // the profile row if needed) before routing — avoids duplicating that logic
+    // here and getting out of sync with it.
+    router.push(destination)
+    router.refresh()
   }
 
   return (

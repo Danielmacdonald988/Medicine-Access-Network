@@ -16,6 +16,10 @@ export interface SessionUser {
 /**
  * Returns the authenticated user + their app-level profile row, or null.
  * Safe to call from any Server Component or Route Handler.
+ *
+ * If the `public.users` row is missing (e.g. the on_auth_user_created trigger
+ * hasn't run yet or failed), this recreates it from the auth metadata that was
+ * captured at signup, instead of silently treating the user as logged out.
  */
 export async function getCurrentUser(): Promise<SessionUser | null> {
   const supabase = await createServerSupabaseClient()
@@ -27,11 +31,28 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
 
   if (authError || !user) return null
 
-  const { data: profile } = await supabase
+  let { data: profile } = await supabase
     .from('users')
     .select('full_name, role')
     .eq('id', user.id)
     .single()
+
+  if (!profile) {
+    await supabase.from('users').upsert(
+      {
+        id: user.id,
+        email: user.email ?? '',
+        full_name: user.user_metadata?.full_name ?? '',
+        role: (user.user_metadata?.role as UserRole) ?? 'seeker',
+      },
+      { onConflict: 'id' }
+    )
+    ;({ data: profile } = await supabase
+      .from('users')
+      .select('full_name, role')
+      .eq('id', user.id)
+      .single())
+  }
 
   if (!profile) return null
 
@@ -45,11 +66,22 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
 
 /**
  * Requires an authenticated session.
- * Redirects to /login if the user is not signed in.
+ * Redirects to /login if there's no session at all. If the session is valid
+ * but a profile row still can't be found/created (e.g. blocked by RLS),
+ * redirects to /auth/error instead of /login — sending a signed-in user back
+ * to /login just bounces them straight back here via the middleware,
+ * producing an infinite redirect loop.
  */
 export async function requireAuth(): Promise<SessionUser> {
+  const supabase = await createServerSupabaseClient()
+  const {
+    data: { user: authUser },
+  } = await supabase.auth.getUser()
+
+  if (!authUser) redirect('/login')
+
   const user = await getCurrentUser()
-  if (!user) redirect('/login')
+  if (!user) redirect('/auth/error?reason=profile_missing')
   return user
 }
 

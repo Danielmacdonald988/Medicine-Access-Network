@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
-import { dashboardPathForRole } from '@/lib/auth'
-import type { UserRole } from '@/lib/types'
+import { dashboardPathForRole, getCurrentUser } from '@/lib/auth'
 
 /**
  * Handles the OAuth / email-confirmation code exchange.
@@ -31,25 +30,15 @@ export async function GET(request: Request) {
         return NextResponse.redirect(`${origin}${next}`)
       }
 
-      // Look up role and route accordingly
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
+      // Look up role and route accordingly. getCurrentUser() self-heals the
+      // public.users row if the signup trigger hasn't created it yet.
+      const user = await getCurrentUser()
 
       if (user) {
-        const { data: profile } = await supabase
-          .from('users')
-          .select('role')
-          .eq('id', user.id)
-          .single()
-
-        if (profile) {
-          const path = dashboardPathForRole(profile.role as UserRole)
-          return NextResponse.redirect(`${origin}${path}`)
-        }
+        return NextResponse.redirect(`${origin}${dashboardPathForRole(user.role)}`)
       }
 
-      return NextResponse.redirect(`${origin}/dashboard`)
+      return NextResponse.redirect(`${origin}/auth/error?reason=profile_missing`)
     }
   }
 
