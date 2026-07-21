@@ -1,4 +1,4 @@
-export const APP_NAME = 'Medicine Access Network'
+export const APP_NAME = 'The Facilitator Network'
 export const APP_TAGLINE = 'Find trusted guides for your healing journey'
 
 export const MODALITY_CATEGORIES = {
@@ -93,7 +93,7 @@ export const PREFERRED_FORMATS = [
 ] as const
 
 export const SAFETY_DISCLAIMER =
-  'Medicine Access Network does not sell, distribute, or coordinate access to controlled substances. ' +
+  `${APP_NAME} does not sell, distribute, or coordinate access to controlled substances. ` +
   'All services listed are legal support services including education, preparation coaching, integration guidance, ' +
   'breathwork, and somatic work. Nothing on this platform constitutes medical advice, diagnosis, or treatment. ' +
   'Always consult a licensed healthcare provider for medical concerns.'

@@ -245,7 +245,7 @@ export default function Home() {
             {trustPillars.map(({ icon: Icon, heading, body }) => (
               <div
                 key={heading}
-                className="flex flex-col gap-4 rounded-2xl border border-stone-100 bg-stone-50 p-6"
+                className="flex flex-col gap-4 rounded-2xl border border-stone-100 bg-stone-50 p-6 shadow-sm"
               >
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-stone-200">
                   <Icon className="h-5 w-5 text-stone-700" strokeWidth={1.5} />
@@ -388,7 +388,15 @@ export default function Home() {
                   <p className="text-sm leading-7 text-stone-600">{quote}</p>
                 </div>
                 <div className="mt-6 flex items-center gap-3 border-t border-stone-100 pt-5">
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-emerald-200 to-stone-200" />
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-200 to-stone-200 text-[11px] font-semibold text-emerald-900">
+                    {name
+                      .split(/[.\s]+/)
+                      .filter(Boolean)
+                      .map((p) => p[0])
+                      .join('')
+                      .slice(0, 2)
+                      .toUpperCase()}
+                  </div>
                   <div>
                     <p className="text-xs font-semibold text-stone-800">{name}</p>
                     <p className="text-xs text-stone-400">{role}</p>

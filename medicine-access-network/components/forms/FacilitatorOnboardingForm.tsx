@@ -14,7 +14,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
 import { createClient } from '@/lib/supabase'
 import { facilitatorOnboardingSchema } from '@/lib/validations'
-import { MODALITIES, MODALITY_CATEGORIES } from '@/lib/constants'
+import { MODALITIES, MODALITY_CATEGORIES, APP_NAME } from '@/lib/constants'
 
 // ─── Step metadata ────────────────────────────────────────────────────────────
 
@@ -96,7 +96,7 @@ const STEP_FIELDS: Record<number, string[]> = {
 const PLATFORM_RULES = [
   'I offer only legal support services: preparation coaching, integration guidance, breathwork, somatic coaching, meditation guidance, spiritual coaching, harm reduction education, and related legal wellness work.',
   'I will not facilitate illegal ceremonies and will not source, supply, or coordinate access to controlled substances of any kind.',
-  'I understand my profile will not appear publicly until it has been reviewed and approved by the Medicine Access Network team.',
+  `I understand my profile will not appear publicly until it has been reviewed and approved by the ${APP_NAME} team.`,
   'I will keep my safety practices, contraindication screening process, and profile information accurate and up to date.',
   'I understand that approval is not an endorsement of any specific practice, product, or health outcome.',
 ]

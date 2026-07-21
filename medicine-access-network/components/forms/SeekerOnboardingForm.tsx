@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
 import { createClient } from '@/lib/supabase'
 import { seekerOnboardingSchema } from '@/lib/validations'
-import { EXPERIENCE_LEVELS, SUPPORT_NEEDS } from '@/lib/constants'
+import { EXPERIENCE_LEVELS, SUPPORT_NEEDS, APP_NAME } from '@/lib/constants'
 
 // ─── Step metadata ────────────────────────────────────────────────────────────
 
@@ -163,7 +163,7 @@ export function SeekerOnboardingForm() {
       return
     }
 
-    toast.success('Profile saved — welcome to Medicine Access Network.')
+    toast.success(`Profile saved — welcome to ${APP_NAME}.`)
     router.push('/seeker')
   }
 

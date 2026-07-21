@@ -1,4 +1,4 @@
-# Project: Medicine Access Network
+# Project: The Facilitator Network
 
 ## Product Vision
 Build a trusted discovery and matching platform for plant medicine facilitators, integration guides, breathwork practitioners, somatic workers, and preparation coaches.

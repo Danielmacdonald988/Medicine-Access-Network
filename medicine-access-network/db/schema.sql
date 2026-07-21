@@ -1,5 +1,5 @@
 -- ============================================================================
--- Medicine Access Network — Database Schema
+-- The Facilitator Network — Database Schema
 -- Run once in a fresh Supabase project via the SQL editor.
 -- ============================================================================
 

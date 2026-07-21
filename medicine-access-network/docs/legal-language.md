@@ -1,4 +1,4 @@
-# Medicine Access Network — Legal Language Guide
+# The Facilitator Network — Legal Language Guide
 
 This document defines the approved and prohibited language for all platform copy, facilitator profiles, and marketing materials.
 
@@ -22,16 +22,16 @@ This document defines the approved and prohibited language for all platform copy
 ## Standard Disclaimers
 
 ### Site-wide footer disclaimer
-> Medicine Access Network does not sell, distribute, or coordinate access to controlled substances. All services listed are legal support services including education, preparation coaching, integration guidance, breathwork, and somatic work. Nothing on this platform constitutes medical advice, diagnosis, or treatment. Always consult a licensed healthcare provider for medical concerns.
+> The Facilitator Network does not sell, distribute, or coordinate access to controlled substances. All services listed are legal support services including education, preparation coaching, integration guidance, breathwork, and somatic work. Nothing on this platform constitutes medical advice, diagnosis, or treatment. Always consult a licensed healthcare provider for medical concerns.
 
 ### Profile page disclaimer
-> This facilitator offers legal support services only. Verification by Medicine Access Network does not constitute endorsement, guarantee of outcomes, or confirmation of clinical credentials. Always consult a licensed healthcare provider for medical concerns.
+> This facilitator offers legal support services only. Verification by The Facilitator Network does not constitute endorsement, guarantee of outcomes, or confirmation of clinical credentials. Always consult a licensed healthcare provider for medical concerns.
 
 ### Booking request disclaimer
 > All booking requests are for legal support services only. No payment on this platform is for controlled substances, illegal ceremonies, or medical treatment.
 
 ### Payment disclaimer
-> Payments are for legal services only: preparation coaching, integration sessions, breathwork, consultation, and educational support. Medicine Access Network does not process payments for substances or illegal activities.
+> Payments are for legal services only: preparation coaching, integration sessions, breathwork, consultation, and educational support. The Facilitator Network does not process payments for substances or illegal activities.
 
 ## Tone Guidelines
 

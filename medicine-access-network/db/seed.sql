@@ -1,5 +1,5 @@
 -- ============================================================================
--- Medicine Access Network — Seed Data
+-- The Facilitator Network — Seed Data
 -- Run AFTER schema.sql.  For local development only.
 -- ============================================================================
 

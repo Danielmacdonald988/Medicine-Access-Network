@@ -1,4 +1,4 @@
-# Medicine Access Network — Product Specification
+# The Facilitator Network — Product Specification
 
 ## Vision
 

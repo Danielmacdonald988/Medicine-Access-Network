@@ -1,8 +1,8 @@
-# Medicine Access Network — Safety Policy
+# The Facilitator Network — Safety Policy
 
 ## Platform Purpose
 
-Medicine Access Network connects individuals seeking support with vetted professionals who offer **legal** services including:
+The Facilitator Network connects individuals seeking support with vetted professionals who offer **legal** services including:
 
 - Preparation coaching
 - Integration coaching and therapy

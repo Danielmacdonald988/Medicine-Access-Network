@@ -12,7 +12,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Menu, X, Leaf } from 'lucide-react'
+import { Logomark } from '@/components/icons/logomark'
+import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
 
 const navLinks = [
@@ -42,7 +43,7 @@ export function Navbar({ user }: NavbarProps) {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-semibold text-stone-900">
-          <Leaf className="h-5 w-5 text-emerald-700" />
+          <Logomark className="h-5 w-5 text-emerald-700" />
           <span className="text-sm sm:text-base">{APP_NAME}</span>
         </Link>
 

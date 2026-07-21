@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Leaf } from 'lucide-react'
+import { Logomark } from '@/components/icons/logomark'
 import { SafetyDisclaimer } from './SafetyDisclaimer'
 import { APP_NAME } from '@/lib/constants'
 
@@ -32,7 +32,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 font-semibold text-stone-900">
-              <Leaf className="h-4 w-4 text-emerald-700" />
+              <Logomark className="h-4 w-4 text-emerald-700" />
               <span className="text-sm">{APP_NAME}</span>
             </Link>
             <p className="mt-3 text-xs leading-relaxed text-stone-500">
