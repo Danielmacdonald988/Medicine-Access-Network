@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import Link from 'next/link'
-import { SlidersHorizontal, Users, ArrowRight } from 'lucide-react'
+import { SlidersHorizontal, Users } from 'lucide-react'
 import { SearchBar } from '@/components/search/SearchBar'
 import { SearchFilters } from '@/components/search/SearchFilters'
 import { FacilitatorCard } from '@/components/cards/FacilitatorCard'
@@ -14,6 +14,11 @@ export const metadata: Metadata = {
   title: 'Find a Guide',
   description:
     'Browse vetted preparation coaches, integration guides, breathwork practitioners, and somatic workers.',
+  // Search/filter query strings (?modality=, ?location=, etc.) are views of
+  // this same page, not distinct pages — canonicalizing to the bare path
+  // avoids duplicate-content signals from every filter combination getting
+  // indexed separately.
+  alternates: { canonical: '/facilitators' },
 }
 
 // ─── URL param shape ──────────────────────────────────────────────────────────
@@ -50,29 +55,10 @@ function hasActiveFilters(params: SearchParamsType): boolean {
 }
 
 // ─── Empty state components ───────────────────────────────────────────────────
-
-function RequestHelpCard() {
-  return (
-    <div className="mt-6 rounded-xl border border-stone-200 bg-stone-50 p-6">
-      <p className="font-medium text-stone-900">Not finding the right support?</p>
-      <p className="mt-1 text-sm text-stone-500">
-        Tell us what you&apos;re looking for and we&apos;ll help connect you with the
-        right guide.
-      </p>
-      <Button
-        asChild
-        variant="outline"
-        size="sm"
-        className="mt-4 border-emerald-600 text-emerald-700 hover:bg-emerald-50"
-      >
-        <Link href="/onboarding/seeker">
-          Get personalized help
-          <ArrowRight className="ml-1.5 size-3.5" />
-        </Link>
-      </Button>
-    </div>
-  )
-}
+// (The old "get personalized help" card linked to /onboarding/seeker, the
+// seeker intake form used to tailor matches. Seekers have no accounts and
+// no intake flow anymore — removed along with it rather than repointed
+// somewhere that no longer fits.)
 
 function EmptyNoResults({ params }: { params: SearchParamsType }) {
   const filtersActive = hasActiveFilters(params)
@@ -108,8 +94,6 @@ function EmptyNoResults({ params }: { params: SearchParamsType }) {
           </Button>
         )}
       </div>
-
-      <RequestHelpCard />
     </div>
   )
 }
@@ -127,8 +111,6 @@ function EmptyNoFacilitators() {
           as they are verified — check back soon.
         </p>
       </div>
-
-      <RequestHelpCard />
     </div>
   )
 }
@@ -145,10 +127,15 @@ async function FacilitatorGrid({ searchParams }: PageProps) {
       ? [params.modality]
       : []
 
+  // facilitator_public_profiles already filters to approved + public, and
+  // doesn't carry a verification_status column to filter on even if we
+  // wanted to. It also doesn't have a declared FK relationship PostgREST
+  // can embed reviews through (it's a view, not the base table), so ratings
+  // are fetched as a second query below instead of a `reviews!facilitator_id`
+  // embed.
   let query = supabase
-    .from('facilitator_profiles')
-    .select(`*, reviews!facilitator_id (rating)`)
-    .eq('verification_status', 'approved')
+    .from('facilitator_public_profiles')
+    .select('*')
     .order('created_at', { ascending: false })
 
   if (params.remote === 'true') query = query.eq('remote_available', true)
@@ -171,17 +158,26 @@ async function FacilitatorGrid({ searchParams }: PageProps) {
     )
   }
 
-  // Compute ratings from joined rows
+  const userIds = (data ?? []).map((f) => f.user_id)
+  const { data: ratingRows } =
+    userIds.length > 0
+      ? await supabase.from('reviews').select('facilitator_id, rating').in('facilitator_id', userIds)
+      : { data: [] }
+
+  const ratingsByUserId = new Map<string, number[]>()
+  for (const r of ratingRows ?? []) {
+    const list = ratingsByUserId.get(r.facilitator_id) ?? []
+    list.push(r.rating)
+    ratingsByUserId.set(r.facilitator_id, list)
+  }
+
   const facilitators: FacilitatorSearchResult[] = (data ?? []).map((f) => {
-    const ratingRows = (f.reviews ?? []) as { rating: number }[]
+    const ratings = ratingsByUserId.get(f.user_id) ?? []
     const avg_rating =
-      ratingRows.length > 0
-        ? ratingRows.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) /
-          ratingRows.length
+      ratings.length > 0
+        ? ratings.reduce((sum, r) => sum + r, 0) / ratings.length
         : undefined
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { reviews: _, ...rest } = f as typeof f & { reviews: unknown }
-    return { ...rest, avg_rating, review_count: ratingRows.length || undefined }
+    return { ...f, avg_rating, review_count: ratings.length || undefined }
   })
 
   // In-memory text search for MVP (move to pg_trgm index for scale)

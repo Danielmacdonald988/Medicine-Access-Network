@@ -7,7 +7,6 @@ const footerLinks = {
   Platform: [
     { href: '/facilitators', label: 'Find a Guide' },
     { href: '/onboarding/facilitator', label: 'Become a Guide' },
-    { href: '/onboarding/seeker', label: 'Seeker Onboarding' },
   ],
   'Safety Library': [
     { href: '/resources', label: 'All Guides' },

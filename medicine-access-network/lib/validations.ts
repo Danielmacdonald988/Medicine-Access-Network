@@ -2,41 +2,19 @@ import { z } from 'zod'
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
 
+// Seekers have no accounts — signup only ever creates a facilitator. No
+// role field: there's nothing to choose anymore. (See lib/auth.ts and
+// app/auth/callback/route.ts, which still tolerate a legacy 'seeker' role
+// value on old rows — this schema is only about what NEW signups can be.)
 export const signUpSchema = z.object({
   full_name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Please enter a valid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
-  role: z.enum(['seeker', 'facilitator']),
 })
 
 export const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
   password: z.string().min(1, 'Password is required'),
-})
-
-// ─── Seeker Onboarding ───────────────────────────────────────────────────────
-
-export const seekerOnboardingSchema = z.object({
-  // Step 1
-  display_name: z.string().min(2, 'Display name must be at least 2 characters'),
-  // Step 2
-  location: z.string().optional(),
-  remote_preference: z.boolean().default(false),
-  // Step 3
-  experience_level: z.enum(['curious', 'beginner', 'experienced']),
-  // Step 4 — stored in preferred_modalities text[]
-  preferred_modalities: z.array(z.string()).min(1, 'Please select at least one type of support'),
-  // Step 5
-  intention: z
-    .string()
-    .min(10, 'Please share a bit more — at least 10 characters')
-    .max(1000, 'Keep it under 1000 characters'),
-  // Always private by default
-  privacy_preference: z.enum(['public', 'private']).default('private'),
-  // Step 6 — acknowledgements (stripped before DB write)
-  ack_not_medical: z.literal(true, { message: 'Please confirm this statement' }),
-  ack_no_substances: z.literal(true, { message: 'Please confirm this statement' }),
-  ack_not_emergency: z.literal(true, { message: 'Please confirm this statement' }),
 })
 
 // ─── Facilitator Onboarding ──────────────────────────────────────────────────
@@ -77,10 +55,16 @@ export const facilitatorOnboardingSchema = z.object({
   }),
 })
 
-// ─── Booking Request ─────────────────────────────────────────────────────────
+// ─── Contact Request (stateless — no seeker account) ──────────────────────────
+// Replaces the old account-gated bookingRequestSchema. Seekers have no
+// accounts, so name/email travel with the request itself — they're the only
+// way the facilitator can identify and reply to whoever contacted them.
 
 // Base schema — what the API accepts and stores in the DB
-export const bookingRequestSchema = z.object({
+export const contactRequestSchema = z.object({
+  facilitator_profile_id: z.string().uuid(),
+  seeker_name: z.string().min(2, 'Please enter your name').max(200),
+  seeker_email: z.string().email('Please enter a valid email address'),
   requested_service: z.string().min(1, 'Please select a type of support'),
   message: z
     .string()
@@ -90,10 +74,13 @@ export const bookingRequestSchema = z.object({
   preferred_time_window: z.string().max(200).optional(),
 })
 
-// Form schema — extends the base with a UI-only safety acknowledgement
-export const bookingRequestFormSchema = bookingRequestSchema.extend({
+// Form schema — extends the base with a UI-only safety acknowledgement.
+// Deliberately does NOT include the honeypot field — that's checked as a
+// raw, unvalidated string server-side (see app/api/contact-requests/route.ts)
+// so a bot filling it never sees a validation error hinting it's a trap.
+export const contactRequestFormSchema = contactRequestSchema.extend({
   ack_safety: z.literal(true, {
-    message: 'Please confirm before sending your request',
+    message: 'Please confirm before sending your message',
   }),
 })
 
@@ -119,9 +106,8 @@ export const verificationNoteSchema = z.object({
 // Inferred types
 export type SignUpInput = z.infer<typeof signUpSchema>
 export type LoginInput = z.infer<typeof loginSchema>
-export type SeekerOnboardingInput = z.infer<typeof seekerOnboardingSchema>
 export type FacilitatorOnboardingInput = z.infer<typeof facilitatorOnboardingSchema>
-export type BookingRequestInput = z.infer<typeof bookingRequestSchema>
-export type BookingRequestFormInput = z.infer<typeof bookingRequestFormSchema>
+export type ContactRequestInput = z.infer<typeof contactRequestSchema>
+export type ContactRequestFormInput = z.infer<typeof contactRequestFormSchema>
 export type ReviewInput = z.infer<typeof reviewSchema>
 export type VerificationNoteInput = z.infer<typeof verificationNoteSchema>

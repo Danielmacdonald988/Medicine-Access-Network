@@ -7,7 +7,7 @@ import { Footer } from '@/components/layout/Footer'
 import { Toaster } from '@/components/ui/sonner'
 import { SkipLink } from '@/components/ui/skip-link'
 import { getCurrentUser } from '@/lib/auth'
-import { APP_NAME, APP_TAGLINE } from '@/lib/constants'
+import { APP_NAME, APP_TAGLINE, SITE_URL } from '@/lib/constants'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: `%s — ${APP_NAME}`,
   },
   description: APP_TAGLINE,
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
+  metadataBase: new URL(SITE_URL),
   openGraph: {
     siteName: APP_NAME,
     type: 'website',

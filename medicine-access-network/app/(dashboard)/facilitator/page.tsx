@@ -11,6 +11,7 @@ import {
   AlertCircle,
   MessageSquare,
   Calendar,
+  Mail,
 } from 'lucide-react'
 import { requireRole } from '@/lib/auth'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
@@ -103,6 +104,8 @@ function RequestCard({
     preferred_time_window: string | null
     status: string
     created_at: string
+    seeker_name: string | null
+    seeker_email: string | null
   }
   showActions: boolean
 }) {
@@ -123,6 +126,26 @@ function RequestCard({
                 {config.label}
               </Badge>
             </div>
+            {(req.seeker_name || req.seeker_email) && (
+              <p className="text-xs text-stone-500">
+                From{' '}
+                <span className="font-medium text-stone-700">
+                  {req.seeker_name ?? 'Unknown'}
+                </span>
+                {req.seeker_email && (
+                  <>
+                    {' — '}
+                    <a
+                      href={`mailto:${req.seeker_email}`}
+                      className="inline-flex items-center gap-1 text-emerald-700 hover:underline"
+                    >
+                      <Mail className="size-3" />
+                      {req.seeker_email}
+                    </a>
+                  </>
+                )}
+              </p>
+            )}
             <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-stone-400">
               <span>{formatPreferredFormat(req.preferred_format)}</span>
               {req.preferred_time_window && (
@@ -192,7 +215,7 @@ export default async function FacilitatorDashboard() {
     supabase
       .from('booking_requests')
       .select(
-        'id, requested_service, message, preferred_format, preferred_time_window, status, created_at'
+        'id, requested_service, message, preferred_format, preferred_time_window, status, created_at, seeker_name, seeker_email'
       )
       .eq('facilitator_id', user.id)
       .order('created_at', { ascending: false })

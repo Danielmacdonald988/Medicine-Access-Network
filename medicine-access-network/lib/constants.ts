@@ -1,6 +1,12 @@
 export const APP_NAME = 'The Facilitator Network'
 export const APP_TAGLINE = 'Find trusted guides for your healing journey'
 
+// Single source of truth for the site's absolute origin — used by
+// app/layout.tsx's metadataBase, app/robots.ts, and app/sitemap.ts. Set
+// NEXT_PUBLIC_APP_URL in production (see .env.local.example); falls back to
+// localhost for local dev.
+export const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+
 export const MODALITY_CATEGORIES = {
   preparation: 'Preparation',
   integration: 'Integration',

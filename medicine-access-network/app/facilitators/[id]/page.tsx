@@ -17,9 +17,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { BookingRequestForm } from '@/components/forms/BookingRequestForm'
+import { ContactRequestForm } from '@/components/forms/ContactRequestForm'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
-import { getCurrentUser } from '@/lib/auth'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -30,17 +29,43 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params
   const supabase = await createServerSupabaseClient()
+  // facilitator_public_profiles already filters to approved + public — no
+  // separate status check needed (and verification_status isn't a column
+  // on this view at all).
   const { data } = await supabase
-    .from('facilitator_profiles')
-    .select('display_name, bio')
+    .from('facilitator_public_profiles')
+    .select('display_name, bio, location, modalities, avatar_url')
     .eq('id', id)
-    .eq('verification_status', 'approved')
     .maybeSingle()
 
-  if (!data) return { title: 'Guide not found' }
+  // A pending/rejected/hidden/nonexistent id all land here identically
+  // (see the view's own filter) — explicitly noindex it. Otherwise a stale
+  // or guessed link could get crawled and indexed as a thin/empty page.
+  if (!data) {
+    return { title: 'Guide not found', robots: { index: false, follow: false } }
+  }
+
+  const description = data.location
+    ? `${data.bio.slice(0, 140)} — ${data.location}`.slice(0, 160)
+    : data.bio.slice(0, 160)
+
   return {
     title: data.display_name,
-    description: data.bio.slice(0, 160),
+    description,
+    alternates: { canonical: `/facilitators/${id}` },
+    openGraph: {
+      title: data.display_name,
+      description,
+      url: `/facilitators/${id}`,
+      type: 'profile',
+      images: data.avatar_url ? [{ url: data.avatar_url }] : undefined,
+    },
+    twitter: {
+      card: 'summary',
+      title: data.display_name,
+      description,
+      images: data.avatar_url ? [data.avatar_url] : undefined,
+    },
   }
 }
 
@@ -87,15 +112,11 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
   const supabase = await createServerSupabaseClient()
 
-  const [{ data: facilitator }, currentUser] = await Promise.all([
-    supabase
-      .from('facilitator_profiles')
-      .select('*')
-      .eq('id', id)
-      .eq('verification_status', 'approved')
-      .maybeSingle(),
-    getCurrentUser(),
-  ])
+  const { data: facilitator } = await supabase
+    .from('facilitator_public_profiles')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle()
 
   if (!facilitator) notFound()
 
@@ -428,11 +449,11 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             <Card className="border-stone-200 shadow-sm">
               <CardContent className="p-5">
                 <h3 className="font-semibold text-stone-900">
-                  Request a conversation
+                  Send a message
                 </h3>
                 <p className="mt-1 text-xs text-stone-500">
                   Reach out to {facilitator.display_name} to discuss whether
-                  their support is the right fit for your needs.
+                  their support is the right fit for your needs. No account needed.
                 </p>
 
                 <Separator className="my-4" />
@@ -451,9 +472,9 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                     )}
                 </div>
 
-                <BookingRequestForm
-                  facilitatorId={facilitator.user_id}
-                  isAuthenticated={!!currentUser}
+                <ContactRequestForm
+                  facilitatorProfileId={facilitator.id}
+                  facilitatorDisplayName={facilitator.display_name}
                 />
               </CardContent>
             </Card>

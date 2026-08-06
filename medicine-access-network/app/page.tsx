@@ -211,7 +211,7 @@ export default function Home() {
               className="h-12 w-full border-stone-600 bg-transparent px-8 text-base font-medium text-stone-200 hover:border-stone-400 hover:bg-stone-900 hover:text-white sm:w-auto"
               asChild
             >
-              <Link href="/onboarding/facilitator">Apply as a facilitator</Link>
+              <Link href="/signup">Apply as a facilitator</Link>
             </Button>
           </div>
 
@@ -470,7 +470,7 @@ export default function Home() {
               className="mt-7 border-stone-300 text-stone-800 hover:border-emerald-500 hover:text-emerald-700"
               asChild
             >
-              <Link href="/onboarding/facilitator">
+              <Link href="/signup">
                 Apply as a facilitator <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>

@@ -6,7 +6,30 @@ import { Button } from '@/components/ui/button'
 
 export const metadata: Metadata = { title: 'Account setup issue' }
 
-export default function AuthErrorPage() {
+// Every reason that lands here is a genuine, logged query/lookup failure —
+// see app/auth/callback/route.ts. There is no "new user, no profile yet"
+// case anymore; that routes to /onboarding/facilitator instead. Copy here
+// is deliberately generic (no raw DB error text — that goes to server
+// logs only) but distinguishes *what* failed so support has a starting
+// point without needing to reproduce the issue from scratch.
+const REASON_COPY: Record<string, string> = {
+  profile_lookup_failed:
+    "You're signed in, but we couldn't load your account. This has been logged on our end.",
+  facilitator_profile_lookup_failed:
+    "You're signed in, but we couldn't check your guide application status. This has been logged on our end.",
+}
+
+const DEFAULT_MESSAGE =
+  "You're signed in, but we couldn't finish setting up your account. This has been logged on our end."
+
+export default async function AuthErrorPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ reason?: string }>
+}) {
+  const { reason } = await searchParams
+  const message = (reason && REASON_COPY[reason]) || DEFAULT_MESSAGE
+
   return (
     <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md border-stone-200">
@@ -16,8 +39,8 @@ export default function AuthErrorPage() {
           </div>
           <CardTitle className="text-xl">We hit a snag setting up your account</CardTitle>
           <CardDescription>
-            You&apos;re signed in, but we couldn&apos;t finish setting up your profile. This is
-            usually temporary — signing out and back in often resolves it.
+            {message} Signing out and back in often resolves it — if it keeps happening,
+            please contact support.
           </CardDescription>
         </CardHeader>
         <CardContent>

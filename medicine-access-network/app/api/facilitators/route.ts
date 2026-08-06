@@ -15,13 +15,14 @@ export async function GET(request: Request) {
 
   const supabase = await createServerSupabaseClient()
 
+  // facilitator_public_profiles already filters to approved + public, and
+  // has no verification_status column to select or filter on.
   let query = supabase
-    .from('facilitator_profiles')
+    .from('facilitator_public_profiles')
     .select(
-      'id, display_name, bio, location, remote_available, modalities, donation_based, minimum_donation, hourly_rate, avatar_url, years_experience, verification_status',
+      'id, display_name, bio, location, remote_available, modalities, donation_based, minimum_donation, hourly_rate, avatar_url, years_experience',
       { count: 'exact' }
     )
-    .eq('verification_status', 'approved')
     .order('created_at', { ascending: false })
     .range(offset, offset + limit - 1)
 

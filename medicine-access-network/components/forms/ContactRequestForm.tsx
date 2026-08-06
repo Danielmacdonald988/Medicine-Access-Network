@@ -2,12 +2,12 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ShieldCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from 'sonner'
-import { bookingRequestFormSchema } from '@/lib/validations'
+import { contactRequestFormSchema } from '@/lib/validations'
 import { PREFERRED_FORMATS } from '@/lib/constants'
 
 // ─── Options ──────────────────────────────────────────────────────────────────
@@ -45,19 +45,22 @@ const TIME_WINDOWS = [
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
-interface BookingRequestFormProps {
-  facilitatorId: string
-  isAuthenticated: boolean
+interface ContactRequestFormProps {
+  facilitatorProfileId: string
+  facilitatorDisplayName: string
 }
 
 // ─── Form ─────────────────────────────────────────────────────────────────────
+// No account required — this posts to the stateless /api/contact-requests
+// endpoint. Nothing here ever displays or requires a facilitator's contact
+// details; the seeker's own name/email travel with the request so the
+// facilitator can reply.
 
-export function BookingRequestForm({
-  facilitatorId,
-  isAuthenticated,
-}: BookingRequestFormProps) {
+export function ContactRequestForm({
+  facilitatorProfileId,
+  facilitatorDisplayName,
+}: ContactRequestFormProps) {
   const [submitted, setSubmitted] = useState(false)
-  const pathname = usePathname()
 
   const {
     register,
@@ -66,7 +69,7 @@ export function BookingRequestForm({
     setValue,
     formState: { errors, isSubmitting },
   } = useForm({
-    resolver: zodResolver(bookingRequestFormSchema),
+    resolver: zodResolver(contactRequestFormSchema),
     defaultValues: {
       preferred_time_window: '',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -76,13 +79,22 @@ export function BookingRequestForm({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
-    // ack_safety is validation-only — strip before sending to API
+    // ack_safety is validation-only — strip before sending to API. The
+    // honeypot field (`website`) is intentionally NOT part of the
+    // react-hook-form–managed data; it's read directly off the DOM at
+    // submit time below so autofill/password-manager tools that populate
+    // every field on a page are more likely to trip it too.
     const { ack_safety: _a, ...submitData } = data
+    const honeypotEl = document.getElementById('website') as HTMLInputElement | null
 
-    const res = await fetch('/api/booking-requests', {
+    const res = await fetch('/api/contact-requests', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...submitData, facilitator_id: facilitatorId }),
+      body: JSON.stringify({
+        ...submitData,
+        facilitator_profile_id: facilitatorProfileId,
+        website: honeypotEl?.value ?? '',
+      }),
     })
 
     if (!res.ok) {
@@ -99,33 +111,10 @@ export function BookingRequestForm({
   if (submitted) {
     return (
       <div className="space-y-1 py-4 text-center">
-        <p className="font-medium text-emerald-700">Request sent</p>
+        <p className="font-medium text-emerald-700">Message sent</p>
         <p className="text-sm text-stone-500">
-          The guide will reach out if there is a good fit. No payment is required
-          at this stage.
-        </p>
-      </div>
-    )
-  }
-
-  // ── Unauthenticated gate ─────────────────────────────────────────────────────
-
-  if (!isAuthenticated) {
-    return (
-      <div className="space-y-3 py-2 text-center">
-        <p className="text-sm text-stone-600">
-          Sign in to send a conversation request.
-        </p>
-        <Button asChild className="w-full bg-emerald-700 hover:bg-emerald-800">
-          <Link href={`/login?next=${encodeURIComponent(pathname)}`}>
-            Sign in to continue
-          </Link>
-        </Button>
-        <p className="text-xs text-stone-400">
-          Don&apos;t have an account?{' '}
-          <Link href="/signup" className="underline hover:text-stone-600">
-            Create one free
-          </Link>
+          {facilitatorDisplayName} will reach out by email if there is a good fit. No
+          payment is required at this stage.
         </p>
       </div>
     )
@@ -136,7 +125,45 @@ export function BookingRequestForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
 
-      {/* 1. Type of support */}
+      {/* Honeypot — hidden from real visitors (off-screen, not display:none,
+          and unreachable by keyboard/AT), never validated client-side so a
+          bot that fills it gets no hint it was a trap. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-[9999px] top-auto h-px w-px overflow-hidden"
+      >
+        <label htmlFor="website">Website</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+
+      {/* 1. Contact details */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="seeker_name">Your name</Label>
+          <Input id="seeker_name" placeholder="Jane Doe" {...register('seeker_name')} />
+          {errors.seeker_name && (
+            <p className="text-xs text-red-500">{errors.seeker_name.message}</p>
+          )}
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="seeker_email">Your email</Label>
+          <Input
+            id="seeker_email"
+            type="email"
+            placeholder="you@example.com"
+            {...register('seeker_email')}
+          />
+          {errors.seeker_email && (
+            <p className="text-xs text-red-500">{errors.seeker_email.message}</p>
+          )}
+        </div>
+      </div>
+      <p className="text-xs text-stone-400">
+        Only {facilitatorDisplayName} sees this — it&apos;s never shown publicly and is
+        used solely so they can reply to you.
+      </p>
+
+      {/* 2. Type of support */}
       <div className="space-y-1.5">
         <Label>Type of support</Label>
         <Select
@@ -160,7 +187,7 @@ export function BookingRequestForm({
         )}
       </div>
 
-      {/* 2. Preferred format */}
+      {/* 3. Preferred format */}
       <div className="space-y-1.5">
         <Label>Preferred format</Label>
         <Select
@@ -189,7 +216,7 @@ export function BookingRequestForm({
         )}
       </div>
 
-      {/* 3. Message */}
+      {/* 4. Message */}
       <div className="space-y-1.5">
         <Label htmlFor="message">Message</Label>
         <Textarea
@@ -203,7 +230,7 @@ export function BookingRequestForm({
         )}
       </div>
 
-      {/* 4. Preferred time window */}
+      {/* 5. Preferred time window */}
       <div className="space-y-1.5">
         <Label>Preferred time window</Label>
         <Select
@@ -223,7 +250,7 @@ export function BookingRequestForm({
         <p className="text-xs text-stone-400">Optional — helps the guide plan.</p>
       </div>
 
-      {/* 5. Safety acknowledgement */}
+      {/* 6. Safety acknowledgement */}
       <p className="text-xs text-stone-400">
         Unsure about something?{' '}
         <Link
@@ -283,11 +310,11 @@ export function BookingRequestForm({
         className="w-full bg-emerald-700 hover:bg-emerald-800"
         disabled={isSubmitting}
       >
-        {isSubmitting ? 'Sending…' : 'Request conversation'}
+        {isSubmitting ? 'Sending…' : 'Send message'}
       </Button>
 
       <p className="text-center text-xs text-stone-400">
-        No payment required to send a request.
+        No account or payment required to send a message.
       </p>
     </form>
   )
