@@ -1,3 +1,5 @@
+import 'server-only'
+
 // Email stub — swap the implementation without changing call sites, same
 // pattern as lib/analytics.ts.
 //
@@ -5,7 +7,7 @@
 // via fetch — no SDK dependency needed. Set RESEND_API_KEY and
 // RESEND_FROM_EMAIL to activate.
 //
-// Without them, this logs the email to the console instead of sending it —
+// Without them, notification is skipped without logging personal information —
 // fine for local development, but be aware: the contact-request flow has no
 // other delivery path. If these aren't configured in production, inquiries
 // are still stored (see app/api/contact-requests/route.ts — storage and
@@ -48,15 +50,15 @@ export async function sendFacilitatorInquiryEmail(
 
   if (!apiKey || !fromEmail) {
     console.warn(
-      '[email] RESEND_API_KEY / RESEND_FROM_EMAIL not configured — logging instead of sending.'
+      '[email] Notification provider not configured; inquiry remains in the dashboard.'
     )
-    console.log('[email]', { to: input.facilitatorEmail, subject, text })
     return { sent: false }
   }
 
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
+      signal: AbortSignal.timeout(10_000),
       headers: {
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
@@ -71,14 +73,13 @@ export async function sendFacilitatorInquiryEmail(
     })
 
     if (!res.ok) {
-      const body = await res.text().catch(() => '')
-      console.error('[email] Resend API error', res.status, body)
+      console.error('[email] Provider rejected notification', { status: res.status })
       return { sent: false }
     }
 
     return { sent: true }
-  } catch (err) {
-    console.error('[email] failed to send facilitator inquiry email', err)
+  } catch {
+    console.error('[email] Notification delivery failed')
     return { sent: false }
   }
 }

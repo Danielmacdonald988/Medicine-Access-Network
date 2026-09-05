@@ -17,12 +17,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .order('created_at', { ascending: false })
     .limit(50000) // Google's per-sitemap cap; split into multiple sitemaps if ever exceeded.
 
-  const facilitatorEntries: MetadataRoute.Sitemap = (facilitators ?? []).map((f) => ({
-    url: `${SITE_URL}/facilitators/${f.id}`,
-    lastModified: f.created_at,
-    changeFrequency: 'weekly',
-    priority: 0.7,
-  }))
+  const facilitatorEntries: MetadataRoute.Sitemap = (facilitators ?? []).map(
+    (f) => ({
+      url: `${SITE_URL}/facilitators/${f.id}`,
+      lastModified: f.created_at,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    }),
+  )
 
   const resourceEntries: MetadataRoute.Sitemap = resources.map((r) => ({
     url: `${SITE_URL}/resources/${r.slug}`,
@@ -46,6 +48,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.5,
     },
+    { url: `${SITE_URL}/about` },
+    { url: `${SITE_URL}/contact` },
     ...resourceEntries,
     ...facilitatorEntries,
   ]

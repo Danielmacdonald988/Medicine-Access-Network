@@ -9,17 +9,16 @@ const footerLinks = {
     { href: '/onboarding/facilitator', label: 'Become a Guide' },
   ],
   'Safety Library': [
-    { href: '/resources', label: 'All Guides' },
+    { href: '/resources', label: 'Browse resources' },
     { href: '/resources/preparation-basics', label: 'Preparation' },
     { href: '/resources/integration-basics', label: 'Integration' },
     { href: '/resources/red-flags', label: 'Red Flags' },
-    { href: '/resources/emergency', label: 'Emergency Disclaimer' },
+    { href: '/resources/emergency', label: 'Urgent support' },
   ],
-  Company: [
-    { href: '/about', label: 'About' },
-    { href: '/contact', label: 'Contact' },
-    { href: '/privacy', label: 'Privacy Policy' },
-    { href: '/terms', label: 'Terms of Service' },
+  'About & help': [
+    { href: '/about', label: 'About & profile review' },
+    { href: '/contact', label: 'Contact & report a concern' },
+    { href: '/resources/questions-to-ask', label: 'Choosing a guide' },
   ],
 }
 
@@ -34,8 +33,8 @@ export function Footer() {
               <Logomark className="h-4 w-4 text-emerald-700" />
               <span className="text-sm">{APP_NAME}</span>
             </Link>
-            <p className="mt-3 text-xs leading-relaxed text-stone-500">
-              A trusted discovery platform for plant medicine-adjacent facilitators, coaches, and
+            <p className="mt-3 text-sm leading-relaxed text-stone-600">
+              A discovery platform for preparation and integration facilitators, coaches, and
               guides. Education, preparation, and integration only.
             </p>
           </div>
@@ -43,13 +42,13 @@ export function Footer() {
           {/* Link columns */}
           {Object.entries(footerLinks).map(([heading, links]) => (
             <div key={heading}>
-              <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-stone-400">
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-stone-600">
                 {heading}
               </h3>
               <ul className="space-y-2">
                 {links.map(({ href, label }) => (
                   <li key={href}>
-                    <Link href={href} className="text-xs text-stone-500 hover:text-stone-900 transition-colors">
+                    <Link href={href} className="text-sm text-stone-600 hover:text-stone-900 transition-colors">
                       {label}
                     </Link>
                   </li>

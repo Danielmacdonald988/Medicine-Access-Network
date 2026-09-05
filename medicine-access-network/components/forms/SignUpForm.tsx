@@ -98,7 +98,7 @@ export function SignUpForm() {
       </Button>
 
       <p className="text-center text-xs text-stone-400">
-        By signing up you agree to our Terms of Service and Privacy Policy.
+        Your account is for managing a guide profile. Profiles require review before publication.
       </p>
     </form>
   )

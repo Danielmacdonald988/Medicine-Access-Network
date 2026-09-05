@@ -1,15 +1,14 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Search } from 'lucide-react'
+import { ChevronDown, Search, SlidersHorizontal } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Separator } from '@/components/ui/separator'
 import { MODALITIES, MODALITY_CATEGORIES } from '@/lib/constants'
+import { directoryHref, filterSearchParams, parseFacilitatorFilters } from '@/lib/facilitator-search'
 
 const EXPERIENCE_OPTIONS = [
   { label: 'Any', value: '' },
@@ -22,207 +21,126 @@ export function SearchFilters() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const locationRef = useRef<HTMLInputElement>(null)
+  const [open, setOpen] = useState(false)
+  const [isPending, startTransition] = useTransition()
+  const filters = parseFacilitatorFilters(searchParams)
+  const activeCount = filters.modalities.length + Number(filters.remote) + Number(filters.donation) + Number(Boolean(filters.minExperience)) + Number(Boolean(filters.location))
 
-  const selectedModalities = searchParams.getAll('modality')
-  const remoteOnly = searchParams.get('remote') === 'true'
-  const donationOnly = searchParams.get('donation') === 'true'
-  const minExp = searchParams.get('min_exp') ?? ''
-  const locationFilter = searchParams.get('location') ?? ''
+  const navigate = (params: URLSearchParams) => {
+    startTransition(() => router.push(directoryHref(params), { scroll: false }))
+  }
 
-  const activeCount =
-    selectedModalities.length +
-    (remoteOnly ? 1 : 0) +
-    (donationOnly ? 1 : 0) +
-    (minExp ? 1 : 0) +
-    (locationFilter ? 1 : 0)
-
-  // Generic toggle helper for checkbox-style filters
   const toggle = (key: string, value: string, checked: boolean) => {
-    const params = new URLSearchParams(searchParams.toString())
+    const params = filterSearchParams(filters)
     if (key === 'modality') {
-      const current = params.getAll('modality').filter((v) => v !== value)
+      const current = params.getAll('modality').filter((item) => item !== value)
       params.delete('modality')
-      current.forEach((v) => params.append('modality', v))
+      current.forEach((item) => params.append('modality', item))
       if (checked) params.append('modality', value)
     } else if (checked) {
       params.set(key, value)
     } else {
       params.delete(key)
     }
-    router.push(`/facilitators?${params.toString()}`)
+    navigate(params)
   }
 
-  const setMinExp = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-    value ? params.set('min_exp', value) : params.delete('min_exp')
-    router.push(`/facilitators?${params.toString()}`)
-  }
-
-  const handleLocationSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleLocationSubmit = (event: React.FormEvent) => {
+    event.preventDefault()
     const value = locationRef.current?.value.trim() ?? ''
-    const params = new URLSearchParams(searchParams.toString())
-    value ? params.set('location', value) : params.delete('location')
-    router.push(`/facilitators?${params.toString()}`)
+    toggle('location', value, Boolean(value))
   }
 
-  const clearAll = () => router.push('/facilitators')
-
-  const categorized = (
-    Object.entries(MODALITY_CATEGORIES) as [keyof typeof MODALITY_CATEGORIES, string][]
-  ).map(([key, label]) => ({
-    key,
-    label,
-    modalities: MODALITIES.filter((m) => m.category === key),
-  }))
+  const clearFilters = () => {
+    const params = new URLSearchParams()
+    if (filters.q) params.set('q', filters.q)
+    navigate(params)
+  }
 
   return (
-    <aside className="w-full shrink-0 space-y-5 lg:w-56">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-stone-900">Filters</h2>
+    <aside aria-label="Filter guides" className="w-full shrink-0 rounded-2xl border border-stone-200 bg-white p-5 lg:w-64">
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="hidden text-sm font-semibold text-stone-900 lg:block">Refine your search</h2>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls="guide-filter-options"
+          onClick={() => setOpen(!open)}
+          className="flex min-h-9 flex-1 items-center gap-2 text-sm font-semibold text-stone-900 lg:hidden"
+        >
+          <SlidersHorizontal aria-hidden="true" className="size-4" />
+          Filters {activeCount > 0 && `(${activeCount})`}
+          <ChevronDown aria-hidden="true" className={cn('ml-auto size-4 transition-transform', open && 'rotate-180')} />
+        </button>
         {activeCount > 0 && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-auto p-0 text-xs text-stone-400 hover:text-stone-700"
-            onClick={clearAll}
-          >
-            Clear all ({activeCount})
+          <Button variant="ghost" size="sm" disabled={isPending} onClick={clearFilters} className="text-xs text-emerald-800">
+            Clear filters
           </Button>
         )}
       </div>
 
-      {/* Location */}
-      <div>
-        <Label className="text-xs font-semibold uppercase tracking-wider text-stone-400">
-          Location
-        </Label>
-        <form onSubmit={handleLocationSubmit} className="mt-2 flex gap-1.5">
-          <Input
-            ref={locationRef}
-            key={locationFilter}
-            defaultValue={locationFilter}
-            placeholder="City or country"
-            className="h-8 text-sm"
-          />
-          <Button
-            type="submit"
-            size="sm"
-            variant="outline"
-            className="h-8 shrink-0 px-2"
-            aria-label="Apply location filter"
-          >
-            <Search className="size-3.5" />
-          </Button>
-        </form>
-        {locationFilter && (
-          <button
-            className="mt-1 text-xs text-stone-400 hover:text-stone-600"
-            onClick={() => {
-              if (locationRef.current) locationRef.current.value = ''
-              toggle('location', '', false)
-            }}
-          >
-            ✕ {locationFilter}
-          </button>
-        )}
-      </div>
-
-      <Separator />
-
-      {/* Availability */}
-      <div>
-        <Label className="text-xs font-semibold uppercase tracking-wider text-stone-400">
-          Availability
-        </Label>
-        <div className="mt-2 flex items-center gap-2">
-          <Checkbox
-            id="remote"
-            checked={remoteOnly}
-            onCheckedChange={(checked) => toggle('remote', 'true', !!checked)}
-          />
-          <label htmlFor="remote" className="cursor-pointer text-sm text-stone-700">
-            Remote / online only
-          </label>
+      <fieldset id="guide-filter-options" disabled={isPending} aria-busy={isPending} className={cn('mt-5 min-w-0 space-y-5', !open && 'hidden lg:block')}>
+        <legend className="sr-only">Guide search filters</legend>
+        <div>
+          <label htmlFor="guide-location" className="text-xs font-semibold uppercase tracking-wider text-stone-600">Location</label>
+          <form onSubmit={handleLocationSubmit} className="mt-2 flex gap-1.5">
+            <Input id="guide-location" name="location" ref={locationRef} key={filters.location} defaultValue={filters.location} maxLength={100} placeholder="City or country" className="h-10 min-w-0 text-sm" />
+            <Button type="submit" variant="outline" className="h-10 shrink-0 px-3" aria-label="Apply location filter">
+              <Search aria-hidden="true" className="size-4" />
+            </Button>
+          </form>
+          <p className="mt-2 text-xs leading-relaxed text-stone-500">For online support, leave location blank to explore guides anywhere.</p>
         </div>
-      </div>
 
-      <Separator />
-
-      {/* Pricing */}
-      <div>
-        <Label className="text-xs font-semibold uppercase tracking-wider text-stone-400">
-          Pricing
-        </Label>
-        <div className="mt-2 flex items-center gap-2">
-          <Checkbox
-            id="donation"
-            checked={donationOnly}
-            onCheckedChange={(checked) => toggle('donation', 'true', !!checked)}
-          />
-          <label htmlFor="donation" className="cursor-pointer text-sm text-stone-700">
-            Donation-based only
-          </label>
-        </div>
-      </div>
-
-      <Separator />
-
-      {/* Experience */}
-      <div>
-        <Label className="text-xs font-semibold uppercase tracking-wider text-stone-400">
-          Experience
-        </Label>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {EXPERIENCE_OPTIONS.map(({ label, value }) => (
-            <button
-              key={value}
-              onClick={() => setMinExp(value)}
-              className={cn(
-                'rounded-full px-3 py-1 text-xs font-medium transition-colors',
-                (value === '' ? minExp === '' : minExp === value)
-                  ? 'bg-emerald-700 text-white'
-                  : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
-              )}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <Separator />
-
-      {/* Modalities grouped by category */}
-      {categorized
-        .filter((c) => c.modalities.length > 0)
-        .map((category) => (
-          <div key={category.key}>
-            <Label className="text-xs font-semibold uppercase tracking-wider text-stone-400">
-              {category.label}
-            </Label>
-            <div className="mt-2 space-y-2">
-              {category.modalities.map((m) => (
-                <div key={m.id} className="flex items-center gap-2">
-                  <Checkbox
-                    id={m.id}
-                    checked={selectedModalities.includes(m.name)}
-                    onCheckedChange={(checked) =>
-                      toggle('modality', m.name, !!checked)
-                    }
-                  />
-                  <label
-                    htmlFor={m.id}
-                    className="cursor-pointer text-sm text-stone-700"
-                  >
-                    {m.name}
-                  </label>
-                </div>
-              ))}
-            </div>
+        <fieldset className="space-y-3 border-t border-stone-100 pt-4">
+          <legend className="sr-only">Availability and pricing</legend>
+          <div className="flex min-h-8 items-center gap-2">
+            <Checkbox id="remote" checked={filters.remote} onCheckedChange={(checked) => toggle('remote', 'true', checked)} />
+            <label htmlFor="remote" className="cursor-pointer text-sm text-stone-700">Online sessions available</label>
           </div>
-        ))}
+          <div className="flex min-h-8 items-center gap-2">
+            <Checkbox id="donation" checked={filters.donation} onCheckedChange={(checked) => toggle('donation', 'true', checked)} />
+            <label htmlFor="donation" className="cursor-pointer text-sm text-stone-700">Donation-based pricing</label>
+          </div>
+          <p className="text-xs leading-relaxed text-stone-500">Donation-based guides may set a minimum. Check each profile for details.</p>
+        </fieldset>
+
+        <fieldset className="border-t border-stone-100 pt-4">
+          <legend className="text-xs font-semibold uppercase tracking-wider text-stone-600">Years of experience</legend>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {EXPERIENCE_OPTIONS.map(({ label, value }) => (
+              <button key={value} type="button" aria-pressed={filters.minExperience === Number(value)} onClick={() => toggle('min_exp', value, Boolean(value))} className={cn('min-h-9 rounded-full px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700', filters.minExperience === Number(value) ? 'bg-emerald-700 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200')}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
+        <div className="border-t border-stone-100 pt-4">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-stone-600">Type of support</h3>
+          <p className="mt-1 text-xs text-stone-500">Matches any selected type.</p>
+          <div className="mt-3 space-y-2">
+            {Object.entries(MODALITY_CATEGORIES).map(([key, label]) => {
+              const modalities = MODALITIES.filter((modality) => modality.category === key)
+              const selected = modalities.filter((modality) => filters.modalities.includes(modality.name)).length
+              return (
+                <details key={key} open={selected > 0 ? true : undefined} className="rounded-lg border border-stone-100 px-3">
+                  <summary className="cursor-pointer py-3 text-sm font-medium text-stone-700">{label}{selected > 0 && ` (${selected})`}</summary>
+                  <div className="space-y-2 pb-3">
+                    {modalities.map((modality) => (
+                      <div key={modality.id} className="flex min-h-8 items-center gap-2">
+                        <Checkbox id={`filter-${modality.id}`} checked={filters.modalities.includes(modality.name)} onCheckedChange={(checked) => toggle('modality', modality.name, checked)} />
+                        <label htmlFor={`filter-${modality.id}`} className="cursor-pointer text-sm text-stone-700">{modality.name}</label>
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              )
+            })}
+          </div>
+        </div>
+      </fieldset>
+      <p role="status" className="sr-only">{isPending ? 'Updating guide results…' : ''}</p>
     </aside>
   )
 }

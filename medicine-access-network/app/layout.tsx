@@ -35,7 +35,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="flex min-h-full flex-col bg-stone-50 text-stone-900">
         <SkipLink />
         <Navbar user={user} />
-        <main id="main-content" className="flex-1">
+        <main id="main-content" tabIndex={-1} className="flex-1">
           {children}
         </main>
         <Footer />

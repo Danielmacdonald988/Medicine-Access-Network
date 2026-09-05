@@ -54,22 +54,19 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
   }
 
   if (!profile) {
-    const { error: upsertError } = await supabase.from('users').upsert(
+    const { error: insertError } = await supabase.from('users').insert(
       {
         id: user.id,
         email: user.email ?? '',
         full_name: user.user_metadata?.full_name ?? '',
-        // Only facilitators and admins sign up through this path now —
-        // seekers have no accounts. 'facilitator' is the correct default
-        // for a brand-new row whose metadata is somehow missing a role,
-        // not the old 'seeker' fallback.
-        role: (user.user_metadata?.role as UserRole) ?? 'facilitator',
-      },
-      { onConflict: 'id' }
+        // User metadata cannot grant administrative privileges.
+        // Existing roles are never overwritten during recovery.
+        role: 'facilitator',
+      }
     )
 
-    if (upsertError) {
-      console.error('[getCurrentUser] self-heal upsert failed for', user.id, upsertError)
+    if (insertError && insertError.code !== '23505') {
+      console.error('[getCurrentUser] self-heal insert failed for', user.id, insertError)
       return null
     }
 

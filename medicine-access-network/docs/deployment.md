@@ -1,116 +1,59 @@
-# Deployment Guide
+# Deployment and operations
 
-## Vercel (recommended)
+The application continues to use Next.js, Supabase and the existing Vercel project. Run the application from the repository's `medicine-access-network` directory; confirm that the Vercel project's Root Directory points there. No hosting migration is required.
 
-### Prerequisites
-- Supabase project running (see `docs/supabase-setup.md`)
-- GitHub/GitLab repository connected to Vercel
+## Database preparation
 
-### Step 1 — Import project
+Use a separate development or preview database to verify these changes before applying them to production. A successful frontend build does not establish that the live database has the required schema or permissions.
 
-1. Go to [vercel.com](https://vercel.com) → New Project
-2. Import your repository
-3. Framework preset: **Next.js** (auto-detected)
-4. Do **not** change the build settings — defaults are correct
+For an **existing database**, review and apply these migrations in order:
 
-### Step 2 — Set environment variables
+1. `db/migrations/0001_facilitator_status_visibility.sql`
+2. `db/migrations/0002_facilitator_public_rls.sql`
+3. `db/migrations/0003_contact_without_account.sql`
+4. `db/migrations/0004_authorization_and_contact.sql`
 
-In Vercel → Project Settings → Environment Variables, add:
+Apply the full sequence before switching traffic to the new code; the public directory depends on the final `facilitator_public_profiles` view and contact submission depends on the hardened server-only RPCs. The intermediate files contain historical warnings and compatibility corrections. Do not re-run old non-idempotent migrations against a database where they are already installed. Files ending in `.verify.sql` are diagnostic scripts, not numbered upgrade steps.
 
-**Required (all environments):**
-```
-NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
-SUPABASE_SERVICE_ROLE_KEY
-NEXT_PUBLIC_APP_URL          ← your Vercel domain or custom domain
-```
+For a **fresh database**, use the current `db/schema.sql`, which includes migrations 0001–0004. Do not also run those migrations on the same fresh database. Do not assume a Supabase CLI reset automatically reads `db/schema.sql`; this repository does not use the CLI's default `supabase/migrations` layout.
 
-**Optional (production only when ready):**
-```
-STRIPE_SECRET_KEY
-STRIPE_WEBHOOK_SECRET
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-STRIPE_PRICE_PREPARATION_SESSION
-STRIPE_PRICE_INTEGRATION_SESSION
-STRIPE_PRICE_BREATHWORK_SESSION
-STRIPE_PRICE_EDUCATION_SESSION
-STRIPE_PRICE_FACILITATOR_SUBSCRIPTION
-```
+Migration 0001 defaults profile visibility to `hidden`, including previously approved guides. Deliberately choose which existing approved profiles to republish; do not bulk-publish them without that decision. The admin **Approve & publish** action writes approval and public visibility together. Pending and rejected decisions write hidden visibility. The admin dashboard counts only approved, public profiles as published.
 
-**Feature flags:**
-```
-NEXT_PUBLIC_PAYMENTS_ENABLED=false   ← keep false until Stripe is fully configured
-```
+Verify that anonymous visitors can read only approved, public profiles; cannot read private users or requests; cannot call server-only contact/rate-limit functions; and cannot promote their own role or publication status. Also verify that administrators can publish and that a guide can read their own requests. Do not rely on a browser button being hidden as an authorization boundary.
 
-### Step 3 — Deploy
+## Environment configuration
 
-Click **Deploy**. Vercel builds and deploys automatically.
+Set each environment's values in Vercel and use its own Supabase project and secrets where possible.
 
-After the first deployment:
-1. Note your deployment URL (e.g. `https://medicine-access-network.vercel.app`)
-2. Update `NEXT_PUBLIC_APP_URL` to match
-3. Update Supabase Auth redirect URLs to include this domain
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL for public queries and guide authentication |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase public key; access remains constrained by database grants and policies |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-only anonymous contact delivery; never prefix with `NEXT_PUBLIC_` or expose it to browsers |
+| `NEXT_PUBLIC_APP_URL` | Canonical production origin, used by metadata, sitemap and auth redirects |
+| `RESEND_API_KEY` | Server-only credential for guide email notifications |
+| `RESEND_FROM_EMAIL` | Sender address configured with the email provider |
+| `CONTACT_RATE_LIMIT_SECRET` | Optional separate secret for keyed IP hashing; the service key is the fallback |
+| `NEXT_PUBLIC_PAYMENTS_ENABLED` | Keep `false`; anonymous conversation requests do not invoke Stripe |
 
-### Step 4 — Set up Stripe webhook (when enabling payments)
+Without email configuration or if delivery fails, a saved request remains available in the guide dashboard. The visitor receives confirmation of receipt, not a promise that an email was delivered or a guide will respond. There is no general-purpose automatic retry queue for email delivery.
 
-1. In Stripe Dashboard → Developers → Webhooks → Add endpoint
-2. Endpoint URL: `https://yourdomain.com/api/stripe/webhook`
-3. Events to listen for:
-   - `checkout.session.completed`
-   - `checkout.session.expired`
-   - `charge.refunded`
-   - `customer.subscription.updated`
-   - `customer.subscription.deleted`
-4. Copy the signing secret → set as `STRIPE_WEBHOOK_SECRET` in Vercel
-5. Set `NEXT_PUBLIC_PAYMENTS_ENABLED=true` once all price IDs are configured
+Configure Supabase's Site URL and allowed authentication callback URLs for the intended production and preview origins. Accounts are for guides and administrators; visitors do not need to sign in. Confirm the administrator role through the trusted database administration process, never through client-supplied signup metadata.
 
----
+Production rate limiting relies on Vercel's trusted client-IP headers. If hosting behind another proxy, explicitly review how that host sets and sanitizes these headers before accepting contact submissions there.
 
-## Custom domain
+## Release validation
 
-1. Vercel → Project → Domains → Add domain
-2. Follow Vercel's DNS configuration instructions
-3. Update `NEXT_PUBLIC_APP_URL` to your custom domain
-4. Update Supabase allowed redirect URLs
+Run the checks in the README. Then validate against the prepared preview database:
 
----
+- An approved, public profile appears in the directory, profile page and sitemap. Hidden and unapproved profiles do not.
+- Search, combined filters, empty results, pagination and browser back/forward work on desktop and mobile.
+- An anonymous visitor can complete all visible contact fields and submit without an account. The request appears only in the intended guide's dashboard, and configured email delivery reaches that guide.
+- Invalid input, unavailable profiles and rate-limited requests produce useful feedback without clearing the visitor's message.
+- A non-admin cannot publish a profile. An admin's approval publishes it; rejection or pending status hides it. Failed changes display an error.
+- Guide signup, confirmation, login and password reset return to the correct guide flow.
+- The support email in `lib/constants.ts` is the operator's monitored inbox.
 
-## Production checklist
+Review [the remaining operator decisions](product-improvements.md#remaining-operator-decisions), including privacy and terms, before treating the public contact flow as production ready.
 
-### Before going live
-
-- [ ] All required environment variables are set in Vercel
-- [ ] `NEXT_PUBLIC_APP_URL` matches the live domain
-- [ ] Supabase Auth redirect URLs include the live domain
-- [ ] RLS is enabled on all tables (verify in Supabase dashboard)
-- [ ] First admin user is created and role is set in DB
-- [ ] Email confirmations are enabled in Supabase Auth
-- [ ] `NEXT_PUBLIC_PAYMENTS_ENABLED=false` unless Stripe is fully configured
-
-### Security checks
-
-- [ ] `SUPABASE_SERVICE_ROLE_KEY` is not exposed in client-side code
-- [ ] `STRIPE_SECRET_KEY` is not exposed in client-side code
-- [ ] No `.env.local` committed to version control (`.gitignore` should cover this)
-
-### Monitoring
-
-- [ ] Vercel Functions logs are accessible (Vercel Dashboard → Logs)
-- [ ] Set up error alerts (Sentry, or Vercel's built-in monitoring)
-- [ ] Review Supabase logs for any RLS policy failures
-
----
-
-## CI/CD
-
-Vercel automatically deploys:
-- **Production** on push to `main`
-- **Preview** on every pull request
-
-To disable preview deployments: Vercel → Project → Git → Preview Deployments.
-
----
-
-## Rollback
-
-To rollback a bad deployment: Vercel → Deployments → select a previous deployment → Redeploy.
+Deploy through the existing Vercel/Git workflow after the database and environment are ready. Keep the previous deployment available for application rollback, but account for database compatibility: rolling back code does not undo schema, grant or policy changes. Record migration execution and any deliberate profile republication separately.

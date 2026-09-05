@@ -1,53 +1,29 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
+import { boundedInteger, buildFacilitatorQuery, parseFacilitatorFilters } from '@/lib/facilitator-search'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
+  const filters = parseFacilitatorFilters(searchParams)
+  const limit = boundedInteger(searchParams.get('limit'), 20, 1, 100)
+  const offset = boundedInteger(searchParams.get('offset'), 0, 0, 1000000)
 
-  const q = searchParams.get('q')
-  const modalities = searchParams.getAll('modality')
-  const remote = searchParams.get('remote') === 'true'
-  const donation = searchParams.get('donation') === 'true'
-  const location = searchParams.get('location')
-  const minExp = parseInt(searchParams.get('min_exp') ?? '', 10)
-  const limit = Math.min(parseInt(searchParams.get('limit') ?? '20', 10), 100)
-  const offset = parseInt(searchParams.get('offset') ?? '0', 10)
-
-  const supabase = await createServerSupabaseClient()
-
-  // facilitator_public_profiles already filters to approved + public, and
-  // has no verification_status column to select or filter on.
-  let query = supabase
-    .from('facilitator_public_profiles')
-    .select(
-      'id, display_name, bio, location, remote_available, modalities, donation_based, minimum_donation, hourly_rate, avatar_url, years_experience',
-      { count: 'exact' }
+  try {
+    const supabase = await createServerSupabaseClient()
+    const { data, error, count } = await buildFacilitatorQuery(supabase, filters, {
+      limit,
+      offset,
+      columns: 'id, display_name, bio, location, remote_available, modalities, donation_based, minimum_donation, hourly_rate, avatar_url, years_experience',
+    })
+    if (error?.code === 'PGRST103') {
+      return NextResponse.json({ error: 'This results page is out of range. Start again with offset 0.' }, { status: 400 })
+    }
+    if (error) throw error
+    return NextResponse.json({ data: data ?? [], total: count ?? 0, limit, offset })
+  } catch {
+    return NextResponse.json(
+      { error: 'The guide directory is temporarily unavailable. Please try again.' },
+      { status: 503, headers: { 'Retry-After': '30' } }
     )
-    .order('created_at', { ascending: false })
-    .range(offset, offset + limit - 1)
-
-  if (remote) query = query.eq('remote_available', true)
-  if (donation) query = query.eq('donation_based', true)
-  if (modalities.length > 0) query = query.overlaps('modalities', modalities)
-  if (location) query = query.ilike('location', `%${location}%`)
-  if (!isNaN(minExp) && minExp > 0) query = query.gte('years_experience', minExp)
-
-  const { data, error, count } = await query
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-
-  // In-memory text search for MVP
-  const filtered = q
-    ? data?.filter(
-        (f) =>
-          f.display_name.toLowerCase().includes(q.toLowerCase()) ||
-          f.bio.toLowerCase().includes(q.toLowerCase()) ||
-          (f.location ?? '').toLowerCase().includes(q.toLowerCase()) ||
-          (f.modalities ?? []).some((m: string) =>
-            m.toLowerCase().includes(q.toLowerCase())
-          )
-      )
-    : data
-
-  return NextResponse.json({ data: filtered, total: count, limit, offset })
+  }
 }

@@ -96,7 +96,6 @@ create or replace view public.facilitator_public_profiles
   with (security_invoker = true) as
 select
   id,
-  user_id,
   display_name,
   bio,
   location,
@@ -111,6 +110,7 @@ select
   minimum_donation,
   hourly_rate,
   avatar_url,
+  user_id,
   created_at
 from public.facilitator_profiles
 where public.is_facilitator_profile_public(id);

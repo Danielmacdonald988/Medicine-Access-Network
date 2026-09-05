@@ -1,41 +1,50 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useRef } from 'react'
+import { useRef, useTransition } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
+import { directoryHref, filterSearchParams, parseFacilitatorFilters } from '@/lib/facilitator-search'
 
 export function SearchBar() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const inputRef = useRef<HTMLInputElement>(null)
+  const [isPending, startTransition] = useTransition()
+  const filters = parseFacilitatorFilters(searchParams)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const value = inputRef.current?.value.trim()
-    const params = new URLSearchParams(searchParams.toString())
+    const params = filterSearchParams(filters)
     if (value) {
       params.set('q', value)
     } else {
       params.delete('q')
     }
-    router.push(`/facilitators?${params.toString()}`)
+    startTransition(() => router.push(directoryHref(params), { scroll: false }))
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
+    <form role="search" aria-label="Guide directory" onSubmit={handleSubmit} className="flex gap-2" aria-busy={isPending}>
       <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+        <label htmlFor="guide-search" className="sr-only">Search guides by name, modality, or location</label>
+        <Search aria-hidden="true" className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
         <Input
+          id="guide-search"
+          name="q"
+          type="search"
+          key={filters.q}
           ref={inputRef}
-          defaultValue={searchParams.get('q') ?? ''}
-          placeholder="Search by name, modality, or location…"
-          className="pl-9"
+          defaultValue={filters.q}
+          maxLength={120}
+          placeholder="Name, modality, or location…"
+          className="h-11 bg-white pl-9"
         />
       </div>
-      <Button type="submit" className="bg-emerald-700 hover:bg-emerald-800">
-        Search
+      <Button type="submit" disabled={isPending} className="h-11 bg-emerald-700 hover:bg-emerald-800">
+        {isPending ? 'Searching…' : 'Search'}
       </Button>
     </form>
   )

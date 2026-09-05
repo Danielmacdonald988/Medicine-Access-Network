@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -18,11 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { toast } from 'sonner'
-import { contactRequestFormSchema } from '@/lib/validations'
+import {
+  contactRequestFormSchema,
+  type ContactRequestFormInput,
+} from '@/lib/validations'
 import { PREFERRED_FORMATS } from '@/lib/constants'
-
-// ─── Options ──────────────────────────────────────────────────────────────────
 
 const SUPPORT_SERVICES = [
   'Preparation coaching',
@@ -43,230 +43,371 @@ const TIME_WINDOWS = [
   'Evenings only',
 ] as const
 
-// ─── Props ────────────────────────────────────────────────────────────────────
-
 interface ContactRequestFormProps {
   facilitatorProfileId: string
   facilitatorDisplayName: string
 }
-
-// ─── Form ─────────────────────────────────────────────────────────────────────
-// No account required — this posts to the stateless /api/contact-requests
-// endpoint. Nothing here ever displays or requires a facilitator's contact
-// details; the seeker's own name/email travel with the request so the
-// facilitator can reply.
 
 export function ContactRequestForm({
   facilitatorProfileId,
   facilitatorDisplayName,
 }: ContactRequestFormProps) {
   const [submitted, setSubmitted] = useState(false)
+  const [submissionError, setSubmissionError] = useState<string | null>(null)
+  const honeypot = useRef<HTMLInputElement>(null)
+  const id = useId()
 
   const {
     register,
     handleSubmit,
     control,
-    setValue,
     formState: { errors, isSubmitting },
-  } = useForm({
+  } = useForm<ContactRequestFormInput>({
     resolver: zodResolver(contactRequestFormSchema),
     defaultValues: {
+      facilitator_profile_id: facilitatorProfileId,
+      seeker_name: '',
+      seeker_email: '',
+      requested_service: '',
+      message: '',
       preferred_time_window: '',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ack_safety: undefined as any,
     },
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = async (data: any) => {
-    // ack_safety is validation-only — strip before sending to API. The
-    // honeypot field (`website`) is intentionally NOT part of the
-    // react-hook-form–managed data; it's read directly off the DOM at
-    // submit time below so autofill/password-manager tools that populate
-    // every field on a page are more likely to trip it too.
-    const { ack_safety: _a, ...submitData } = data
-    const honeypotEl = document.getElementById('website') as HTMLInputElement | null
-
-    const res = await fetch('/api/contact-requests', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...submitData,
-        facilitator_profile_id: facilitatorProfileId,
-        website: honeypotEl?.value ?? '',
-      }),
-    })
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}))
-      toast.error(err.error ?? 'Something went wrong. Please try again.')
-      return
+  const onSubmit = async (data: ContactRequestFormInput) => {
+    setSubmissionError(null)
+    try {
+      const res = await fetch('/api/contact-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          facilitator_profile_id: facilitatorProfileId,
+          seeker_name: data.seeker_name.trim(),
+          seeker_email: data.seeker_email.trim(),
+          requested_service: data.requested_service,
+          preferred_format: data.preferred_format,
+          message: data.message,
+          preferred_time_window: data.preferred_time_window,
+          website: honeypot.current?.value ?? '',
+        }),
+      })
+      if (!res.ok) {
+        setSubmissionError(
+          res.status === 429
+            ? 'Too many requests from this connection. Please wait before trying again. Your message is still here.'
+            : res.status === 404
+              ? 'This guide is no longer available for requests. Your message is still here so you can copy it.'
+              : 'We could not send your request. Your message is still here. Please try again later.',
+        )
+        return
+      }
+      setSubmitted(true)
+    } catch {
+      setSubmissionError(
+        'We could not confirm whether your request was received. Your message is still here. Retrying may send it twice; wait a moment or contact platform support if you need help.',
+      )
     }
-
-    setSubmitted(true)
   }
-
-  // ── Success state ────────────────────────────────────────────────────────────
 
   if (submitted) {
     return (
-      <div className="space-y-1 py-4 text-center">
-        <p className="font-medium text-emerald-700">Message sent</p>
-        <p className="text-sm text-stone-500">
-          {facilitatorDisplayName} will reach out by email if there is a good fit. No
-          payment is required at this stage.
+      <div
+        role="status"
+        tabIndex={-1}
+        ref={(node) => {
+          node?.focus()
+        }}
+        className="space-y-3 rounded-lg py-4 text-center focus-visible:ring-2 focus-visible:ring-emerald-600"
+      >
+        <p className="font-medium text-emerald-700">
+          Conversation request received
         </p>
+        <p className="text-sm leading-relaxed text-stone-600">
+          Your request is available to {facilitatorDisplayName}. The guide can
+          reply to the email address you provided. A response or session is not
+          guaranteed.
+        </p>
+        <p className="text-sm leading-relaxed text-stone-600">
+          Check your inbox and spam folder. Timing, fees, and fit still need to
+          be agreed with the guide.
+        </p>
+        <p className="text-sm text-stone-600">
+          No account was created and no payment was taken.
+        </p>
+        <Link
+          href="/resources/questions-to-ask"
+          className="inline-block text-sm font-medium text-emerald-800 underline underline-offset-4"
+        >
+          Prepare for your first conversation
+        </Link>
       </div>
     )
   }
 
-  // ── Form ─────────────────────────────────────────────────────────────────────
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-
-      {/* Honeypot — hidden from real visitors (off-screen, not display:none,
-          and unreachable by keyboard/AT), never validated client-side so a
-          bot that fills it gets no hint it was a trap. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-[9999px] top-auto h-px w-px overflow-hidden"
-      >
-        <label htmlFor="website">Website</label>
-        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
-      </div>
-
-      {/* 1. Contact details */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor="seeker_name">Your name</Label>
-          <Input id="seeker_name" placeholder="Jane Doe" {...register('seeker_name')} />
-          {errors.seeker_name && (
-            <p className="text-xs text-red-500">{errors.seeker_name.message}</p>
-          )}
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="seeker_email">Your email</Label>
-          <Input
-            id="seeker_email"
-            type="email"
-            placeholder="you@example.com"
-            {...register('seeker_email')}
-          />
-          {errors.seeker_email && (
-            <p className="text-xs text-red-500">{errors.seeker_email.message}</p>
-          )}
-        </div>
-      </div>
-      <p className="text-xs text-stone-400">
-        Only {facilitatorDisplayName} sees this — it&apos;s never shown publicly and is
-        used solely so they can reply to you.
+    <form
+      onSubmit={(event) => {
+        void handleSubmit(onSubmit)(event)
+      }}
+      className="space-y-4"
+      noValidate
+      aria-busy={isSubmitting}
+    >
+      <p className="text-sm leading-relaxed text-stone-600">
+        Start with a brief introduction. All fields are required except your
+        preferred time window.
       </p>
 
-      {/* 2. Type of support */}
+      <div aria-hidden="true" className="hidden">
+        <label htmlFor={`${id}-website`}>Website</label>
+        <input
+          ref={honeypot}
+          id={`${id}-website`}
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       <div className="space-y-1.5">
-        <Label>Type of support</Label>
-        <Select
-          onValueChange={(v) => setValue('requested_service', v as string)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="What are you looking for?" />
-          </SelectTrigger>
-          <SelectContent>
-            {SUPPORT_SERVICES.map((s) => (
-              <SelectItem key={s} value={s}>
-                {s}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Label htmlFor={`${id}-name`}>Your name</Label>
+        <Input
+          id={`${id}-name`}
+          autoComplete="name"
+          maxLength={200}
+          disabled={isSubmitting}
+          aria-required="true"
+          aria-invalid={!!errors.seeker_name}
+          aria-describedby={errors.seeker_name ? `${id}-name-error` : undefined}
+          className="min-h-11"
+          {...register('seeker_name')}
+        />
+        {errors.seeker_name && (
+          <p
+            id={`${id}-name-error`}
+            role="alert"
+            className="text-sm text-red-700"
+          >
+            {errors.seeker_name.message}
+          </p>
+        )}
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor={`${id}-email`}>Your email</Label>
+        <Input
+          id={`${id}-email`}
+          type="email"
+          autoComplete="email"
+          maxLength={254}
+          disabled={isSubmitting}
+          aria-required="true"
+          aria-invalid={!!errors.seeker_email}
+          aria-describedby={`${id}-contact-help${errors.seeker_email ? ` ${id}-email-error` : ''}`}
+          className="min-h-11"
+          {...register('seeker_email')}
+        />
+        {errors.seeker_email && (
+          <p
+            id={`${id}-email-error`}
+            role="alert"
+            className="text-sm text-red-700"
+          >
+            {errors.seeker_email.message}
+          </p>
+        )}
+      </div>
+      <p
+        id={`${id}-contact-help`}
+        className="text-sm leading-relaxed text-stone-600"
+      >
+        Your name, email, and message are shared with this guide and processed
+        by the platform to deliver your request. They are not displayed
+        publicly. No account is created.
+      </p>
+
+      <div className="space-y-1.5">
+        <Label htmlFor={`${id}-service`}>Type of support</Label>
+        <Controller
+          name="requested_service"
+          control={control}
+          render={({ field }) => (
+            <Select
+              value={field.value || null}
+              onValueChange={field.onChange}
+              disabled={isSubmitting}
+            >
+              <SelectTrigger
+                id={`${id}-service`}
+                ref={field.ref}
+                onBlur={field.onBlur}
+                aria-required="true"
+                aria-invalid={!!errors.requested_service}
+                aria-describedby={
+                  errors.requested_service ? `${id}-service-error` : undefined
+                }
+                className="min-h-11 w-full"
+              >
+                <SelectValue placeholder="What are you looking for?" />
+              </SelectTrigger>
+              <SelectContent>
+                {SUPPORT_SERVICES.map((service) => (
+                  <SelectItem key={service} value={service}>
+                    {service}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
         {errors.requested_service && (
-          <p className="text-xs text-red-500">
+          <p
+            id={`${id}-service-error`}
+            role="alert"
+            className="text-sm text-red-700"
+          >
             {errors.requested_service.message}
           </p>
         )}
       </div>
 
-      {/* 3. Preferred format */}
       <div className="space-y-1.5">
-        <Label>Preferred format</Label>
-        <Select
-          onValueChange={(v) =>
-            setValue(
-              'preferred_format',
-              v as 'voice' | 'video' | 'in_person' | 'async'
-            )
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="How would you like to connect?" />
-          </SelectTrigger>
-          <SelectContent>
-            {PREFERRED_FORMATS.map(({ value, label }) => (
-              <SelectItem key={value} value={value}>
-                {label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Label htmlFor={`${id}-format`}>Preferred format</Label>
+        <Controller
+          name="preferred_format"
+          control={control}
+          render={({ field }) => (
+            <Select
+              value={field.value ?? null}
+              onValueChange={field.onChange}
+              disabled={isSubmitting}
+            >
+              <SelectTrigger
+                id={`${id}-format`}
+                ref={field.ref}
+                onBlur={field.onBlur}
+                aria-required="true"
+                aria-invalid={!!errors.preferred_format}
+                aria-describedby={
+                  errors.preferred_format ? `${id}-format-error` : undefined
+                }
+                className="min-h-11 w-full"
+              >
+                <SelectValue placeholder="How would you like to connect?">
+                  {field.value
+                    ? PREFERRED_FORMATS.find(
+                        (format) => format.value === field.value,
+                      )?.label
+                    : undefined}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {PREFERRED_FORMATS.map(({ value, label }) => (
+                  <SelectItem key={value} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
         {errors.preferred_format && (
-          <p className="text-xs text-red-500">
-            {errors.preferred_format.message}
+          <p
+            id={`${id}-format-error`}
+            role="alert"
+            className="text-sm text-red-700"
+          >
+            Please select how you would like to connect.
           </p>
         )}
       </div>
 
-      {/* 4. Message */}
       <div className="space-y-1.5">
-        <Label htmlFor="message">Message</Label>
+        <Label htmlFor={`${id}-message`}>Brief introduction</Label>
+        <p
+          id={`${id}-message-help`}
+          className="text-sm leading-relaxed text-stone-600"
+        >
+          This message is shared with the guide. Describe the support you want;
+          leave out medical records, medication details, trauma histories, and
+          other sensitive information. 20–1,000 characters.
+        </p>
         <Textarea
-          id="message"
+          id={`${id}-message`}
           rows={4}
-          placeholder="Share where you are in your journey and what kind of support you're looking for. The more context you share, the better the guide can assess fit."
+          minLength={20}
+          maxLength={1000}
+          disabled={isSubmitting}
+          aria-required="true"
+          aria-invalid={!!errors.message}
+          aria-describedby={`${id}-message-help${errors.message ? ` ${id}-message-error` : ''}`}
+          placeholder="I’m looking for integration support and would like to learn about your approach, availability, and fees."
           {...register('message')}
         />
         {errors.message && (
-          <p className="text-xs text-red-500">{errors.message.message}</p>
+          <p
+            id={`${id}-message-error`}
+            role="alert"
+            className="text-sm text-red-700"
+          >
+            {errors.message.message}
+          </p>
         )}
       </div>
 
-      {/* 5. Preferred time window */}
       <div className="space-y-1.5">
-        <Label>Preferred time window</Label>
-        <Select
-          onValueChange={(v) => setValue('preferred_time_window', v as string)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="When works for you?" />
-          </SelectTrigger>
-          <SelectContent>
-            {TIME_WINDOWS.map((t) => (
-              <SelectItem key={t} value={t}>
-                {t}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <p className="text-xs text-stone-400">Optional — helps the guide plan.</p>
+        <Label htmlFor={`${id}-time`}>Preferred time window (optional)</Label>
+        <Controller
+          name="preferred_time_window"
+          control={control}
+          render={({ field }) => (
+            <Select
+              value={field.value || null}
+              onValueChange={field.onChange}
+              disabled={isSubmitting}
+            >
+              <SelectTrigger
+                id={`${id}-time`}
+                ref={field.ref}
+                onBlur={field.onBlur}
+                aria-describedby={`${id}-time-help`}
+                className="min-h-11 w-full"
+              >
+                <SelectValue placeholder="When works for you?" />
+              </SelectTrigger>
+              <SelectContent>
+                {TIME_WINDOWS.map((time) => (
+                  <SelectItem key={time} value={time}>
+                    {time}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
+        <p id={`${id}-time-help`} className="text-sm text-stone-500">
+          A preference, not a booking. Confirm your time zone with the guide.
+        </p>
       </div>
 
-      {/* 6. Safety acknowledgement */}
-      <p className="text-xs text-stone-400">
-        Unsure about something?{' '}
+      <p className="text-sm leading-relaxed text-stone-600">
+        Before you connect:{' '}
         <Link
           href="/resources/questions-to-ask"
-          className="underline hover:text-stone-600"
+          className="underline underline-offset-2 hover:text-stone-800"
           target="_blank"
+          rel="noopener noreferrer"
         >
           Questions to ask a guide
-        </Link>
-        {' '}·{' '}
+          <span className="sr-only"> (opens in a new tab)</span>
+        </Link>{' '}
+        ·{' '}
         <Link
           href="/resources/red-flags"
-          className="underline hover:text-stone-600"
+          className="underline underline-offset-2 hover:text-stone-800"
           target="_blank"
+          rel="noopener noreferrer"
         >
-          Red flags to watch for
+          Red flags<span className="sr-only"> (opens in a new tab)</span>
         </Link>
       </p>
       <Controller
@@ -275,46 +416,79 @@ export function ContactRequestForm({
         render={({ field }) => (
           <div
             className={cn(
-              'flex cursor-pointer items-start gap-3 rounded-xl border-2 p-3 transition-all select-none',
+              'flex items-start gap-3 rounded-xl border-2 p-3 transition-colors',
               field.value
                 ? 'border-emerald-600 bg-emerald-50'
-                : 'border-stone-200'
+                : 'border-stone-200',
             )}
-            onClick={() => field.onChange(field.value ? undefined : true)}
           >
             <Checkbox
+              id={`${id}-safety`}
+              ref={field.ref}
               checked={field.value === true}
               onCheckedChange={(checked) =>
                 field.onChange(checked ? true : undefined)
               }
+              onBlur={field.onBlur}
+              disabled={isSubmitting}
+              aria-required="true"
+              aria-invalid={!!errors.ack_safety}
+              aria-describedby={
+                errors.ack_safety ? `${id}-safety-error` : undefined
+              }
               className="mt-0.5 shrink-0"
             />
-            <div className="flex items-start gap-1.5">
-              <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-stone-400" />
-              <span className="text-xs leading-relaxed text-stone-600">
+            <Label
+              htmlFor={`${id}-safety`}
+              className="cursor-pointer items-start gap-1.5 text-sm font-normal leading-relaxed text-stone-600"
+            >
+              <ShieldCheck
+                aria-hidden="true"
+                className="mt-0.5 size-3.5 shrink-0 text-stone-500"
+              />
+              <span>
                 I understand this is not a medical service, guides are not
-                emergency providers, and this platform does not coordinate access
-                to controlled substances.
+                emergency providers, and this platform does not coordinate
+                access to controlled substances.
               </span>
-            </div>
+            </Label>
           </div>
         )}
       />
       {errors.ack_safety && (
-        <p className="text-xs text-red-500">{errors.ack_safety.message}</p>
+        <p
+          id={`${id}-safety-error`}
+          role="alert"
+          className="text-sm text-red-700"
+        >
+          {errors.ack_safety.message}
+        </p>
       )}
 
-      {/* Submit */}
+      {submissionError && (
+        <div
+          role="alert"
+          className="space-y-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800"
+        >
+          <p>{submissionError}</p>
+          <Link
+            href="/contact"
+            className="inline-block font-medium underline underline-offset-2"
+          >
+            Contact platform support
+          </Link>
+        </div>
+      )}
+
       <Button
         type="submit"
-        className="w-full bg-emerald-700 hover:bg-emerald-800"
+        className="min-h-11 w-full bg-emerald-700 hover:bg-emerald-800"
         disabled={isSubmitting}
       >
-        {isSubmitting ? 'Sending…' : 'Send message'}
+        {isSubmitting ? 'Sending…' : 'Request conversation'}
       </Button>
-
-      <p className="text-center text-xs text-stone-400">
-        No account or payment required to send a message.
+      <p className="text-center text-sm text-stone-500">
+        No account or payment required. A request does not book a session.
       </p>
     </form>
   )

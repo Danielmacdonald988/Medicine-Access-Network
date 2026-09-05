@@ -1,11 +1,12 @@
 export const APP_NAME = 'The Facilitator Network'
-export const APP_TAGLINE = 'Find trusted guides for your healing journey'
+export const APP_TAGLINE = 'Explore preparation coaches, integration guides, and wellness support at your own pace.'
+export const SUPPORT_EMAIL = 'Dmacmedicine@pm.me'
 
 // Single source of truth for the site's absolute origin — used by
 // app/layout.tsx's metadataBase, app/robots.ts, and app/sitemap.ts. Set
 // NEXT_PUBLIC_APP_URL in production (see .env.local.example); falls back to
-// localhost for local dev.
-export const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+// the public production origin when no override is configured.
+export const SITE_URL = (process.env.NEXT_PUBLIC_APP_URL || 'https://medicine-access-network.vercel.app').replace(/\/$/, '')
 
 export const MODALITY_CATEGORIES = {
   preparation: 'Preparation',

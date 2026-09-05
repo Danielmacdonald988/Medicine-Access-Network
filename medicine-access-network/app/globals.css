@@ -149,3 +149,20 @@
 .step-connector {
   background: linear-gradient(90deg, oklch(0.6 0.12 160) 0%, transparent 100%);
 }
+/* Visible keyboard focus across links, disclosures, and form controls. */
+@layer base {
+  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+    outline: 3px solid #059669;
+    outline-offset: 4px;
+  }
+  html { scroll-padding-top: 5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
