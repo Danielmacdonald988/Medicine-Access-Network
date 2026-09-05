@@ -17,9 +17,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { BookingRequestForm } from '@/components/forms/BookingRequestForm'
+import { ContactRequestForm } from '@/components/forms/ContactRequestForm'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
-import { getCurrentUser } from '@/lib/auth'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -30,17 +29,43 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params
   const supabase = await createServerSupabaseClient()
+  // facilitator_public_profiles already filters to approved + public — no
+  // separate status check needed (and verification_status isn't a column
+  // on this view at all).
   const { data } = await supabase
-    .from('facilitator_profiles')
-    .select('display_name, bio')
+    .from('facilitator_public_profiles')
+    .select('display_name, bio, location, modalities, avatar_url')
     .eq('id', id)
-    .eq('verification_status', 'approved')
     .maybeSingle()
 
-  if (!data) return { title: 'Guide not found' }
+  // A pending/rejected/hidden/nonexistent id all land here identically
+  // (see the view's own filter) — explicitly noindex it. Otherwise a stale
+  // or guessed link could get crawled and indexed as a thin/empty page.
+  if (!data) {
+    return { title: 'Guide not found', robots: { index: false, follow: false } }
+  }
+
+  const description = data.location
+    ? `${data.bio.slice(0, 140)} — ${data.location}`.slice(0, 160)
+    : data.bio.slice(0, 160)
+
   return {
     title: data.display_name,
-    description: data.bio.slice(0, 160),
+    description,
+    alternates: { canonical: `/facilitators/${id}` },
+    openGraph: {
+      title: data.display_name,
+      description,
+      url: `/facilitators/${id}`,
+      type: 'profile',
+      images: data.avatar_url ? [{ url: data.avatar_url }] : undefined,
+    },
+    twitter: {
+      card: 'summary',
+      title: data.display_name,
+      description,
+      images: data.avatar_url ? [data.avatar_url] : undefined,
+    },
   }
 }
 
@@ -48,10 +73,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 function StarRow({ rating, max = 5 }: { rating: number; max?: number }) {
   return (
-    <div className="flex gap-0.5">
+    <div className="flex gap-0.5" role="img" aria-label={`${rating} out of ${max} stars`}>
       {Array.from({ length: max }).map((_, i) => (
         <Star
           key={i}
+          aria-hidden="true"
           className={`size-3.5 ${i < rating ? 'fill-amber-400 text-amber-400' : 'text-stone-200'}`}
         />
       ))}
@@ -87,15 +113,11 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
   const supabase = await createServerSupabaseClient()
 
-  const [{ data: facilitator }, currentUser] = await Promise.all([
-    supabase
-      .from('facilitator_profiles')
-      .select('*')
-      .eq('id', id)
-      .eq('verification_status', 'approved')
-      .maybeSingle(),
-    getCurrentUser(),
-  ])
+  const { data: facilitator } = await supabase
+    .from('facilitator_public_profiles')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle()
 
   if (!facilitator) notFound()
 
@@ -141,7 +163,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
     ? facilitator.minimum_donation
       ? `Donation-based — suggested from $${facilitator.minimum_donation}`
       : 'Donation-based / sliding scale'
-    : facilitator.hourly_rate
+    : typeof facilitator.hourly_rate === 'number'
       ? `$${facilitator.hourly_rate} per session`
       : 'Rate discussed on request'
 
@@ -149,6 +171,9 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+      <Link href="/facilitators" className="mb-6 inline-flex min-h-11 items-center text-sm font-medium text-emerald-700 underline-offset-4 hover:underline">
+        ← Browse all guides
+      </Link>
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
 
         {/* ── Main content ─────────────────────────────────────────────────── */}
@@ -174,8 +199,8 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                   {facilitator.display_name}
                 </h1>
                 <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">
-                  <ShieldCheck className="size-3" />
-                  Verified guide
+                  <ShieldCheck aria-hidden="true" className="size-3" />
+                  Profile reviewed
                 </span>
               </div>
 
@@ -202,7 +227,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                   )}
               </div>
 
-              {avgRating !== null && reviews && (
+              {avgRating !== null && reviews ? (
                 <div className="mt-2 flex items-center gap-2">
                   <StarRow rating={Math.round(avgRating)} />
                   <span className="text-sm font-medium text-stone-700">
@@ -213,9 +238,26 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                     {reviews.length === 1 ? 'review' : 'reviews'})
                   </span>
                 </div>
+              ) : (
+                <p className="mt-2 text-sm text-stone-500">No reviews yet</p>
               )}
             </div>
           </div>
+
+          <section id="profile-review" aria-labelledby="profile-review-heading" className="scroll-mt-24 rounded-xl border border-emerald-200 bg-emerald-50/60 p-5">
+            <h2 id="profile-review-heading" className="font-semibold text-emerald-900">
+              What “profile reviewed” means
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-emerald-900">
+              The platform team has approved this profile for the directory.
+              Approval does not verify a clinical license or guarantee safety,
+              suitability, or an outcome. Training and practice details below are
+              provided by the guide.
+            </p>
+            <Link href="/resources/questions-to-ask" className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-emerald-800 underline underline-offset-4">
+              Questions to ask before choosing a guide
+            </Link>
+          </section>
 
           <Separator />
 
@@ -252,6 +294,10 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 <GraduationCap className="size-5 text-stone-400" />
                 Training &amp; lineage
               </h2>
+              <p className="mb-3 text-xs text-stone-500">
+                Reported by the guide. Ask about the issuer, scope, and current
+                status of any credential relevant to your needs.
+              </p>
               {facilitator.lineage_or_training && (
                 <p className="whitespace-pre-line leading-relaxed text-stone-600">
                   {facilitator.lineage_or_training}
@@ -299,20 +345,18 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                   <ShieldCheck className="mt-0.5 size-5 shrink-0 text-emerald-600" />
                   <div className="text-sm leading-relaxed text-emerald-900">
                     <p className="font-medium">
-                      {facilitator.display_name} screens for contraindications
+                      {facilitator.display_name} has acknowledged a screening commitment
                     </p>
                     <p className="mt-2 text-emerald-800">
-                      This guide has committed to conducting intake assessments and
-                      declining to work with clients where contraindications are
-                      present. Common contraindications include certain medications
-                      (MAOIs, lithium, antipsychotics), cardiovascular conditions,
-                      active psychosis or schizophrenia, severe PTSD, pregnancy, and
-                      recent major surgery.
+                      During their application, this guide committed to appropriate
+                      screening and declining work where contraindications are
+                      present. This is a statement from the guide, not an independent
+                      assessment of their screening or clinical qualifications.
                     </p>
                     <p className="mt-2 text-emerald-800">
-                      If you have any of these conditions or are uncertain, please
-                      discuss them openly before proceeding. You should also consult
-                      your healthcare provider.
+                      Ask how screening works, what falls outside their scope,
+                      and how referrals are handled. Discuss medical questions with
+                      a licensed healthcare provider.
                     </p>
                   </div>
                 </div>
@@ -327,6 +371,10 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             </h2>
             <div className="rounded-xl border border-stone-200 bg-stone-50 p-5">
               <p className="font-medium text-stone-900">{rateDisplay}</p>
+              <p className="mt-2 text-sm text-stone-600">
+                Confirm session length, total cost, cancellation terms, and any
+                sliding scale options before agreeing to a session.
+              </p>
               <p className="mt-1.5 text-xs text-stone-500">
                 All payments are for legal support services only — preparation
                 coaching, integration guidance, breathwork, and consultation. No
@@ -339,7 +387,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
           {reviews && reviews.length > 0 && (
             <section>
               <div className="mb-5 flex flex-wrap items-center gap-4">
-                <h2 className="text-lg font-semibold text-stone-900">Reviews</h2>
+                <h2 className="text-lg font-semibold text-stone-900">Recent reviews</h2>
                 {avgRating !== null && (
                   <div className="flex items-center gap-2">
                     <StarRow rating={Math.round(avgRating)} />
@@ -353,10 +401,15 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                   </div>
                 )}
               </div>
+              <p className="mb-5 text-xs leading-relaxed text-stone-500">
+                Ratings summarize the {reviews.length === 20 ? '20 most recent' : reviews.length} reviews shown below.
+                Reviews reflect individual experiences and do not establish safety
+                or predict results.
+              </p>
 
               {/* Sub-ratings summary */}
               {avgSafetyRating !== null && avgIntegrationRating !== null && (
-                <div className="mb-5 flex gap-6 rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm">
+                <div className="mb-5 flex flex-wrap gap-6 rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm">
                   <div>
                     <p className="text-xs text-stone-400">Safety</p>
                     <div className="mt-1 flex items-center gap-1.5">
@@ -395,8 +448,8 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                     return (
                       <Card key={review.id} className="border-stone-200">
                         <CardContent className="p-5">
-                          <div className="mb-3 flex items-center justify-between gap-3">
-                            <div className="flex items-center gap-2">
+                          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+                            <div className="flex flex-wrap items-center gap-2">
                               <StarRow rating={review.rating} />
                               <span className="text-xs text-stone-400">
                                 Safety {review.safety_rating}/5 &middot;{' '}
@@ -428,11 +481,11 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             <Card className="border-stone-200 shadow-sm">
               <CardContent className="p-5">
                 <h3 className="font-semibold text-stone-900">
-                  Request a conversation
+                  Send a message
                 </h3>
                 <p className="mt-1 text-xs text-stone-500">
                   Reach out to {facilitator.display_name} to discuss whether
-                  their support is the right fit for your needs.
+                  their support is the right fit for your needs. No account needed.
                 </p>
 
                 <Separator className="my-4" />
@@ -451,9 +504,10 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                     )}
                 </div>
 
-                <BookingRequestForm
-                  facilitatorId={facilitator.user_id}
-                  isAuthenticated={!!currentUser}
+                <ContactRequestForm
+                  key={facilitator.id}
+                  facilitatorProfileId={facilitator.id}
+                  facilitatorDisplayName={facilitator.display_name}
                 />
               </CardContent>
             </Card>

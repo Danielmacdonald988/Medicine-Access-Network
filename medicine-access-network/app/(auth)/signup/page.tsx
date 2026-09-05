@@ -9,9 +9,14 @@ export default function SignUpPage() {
   return (
     <Card className="border-stone-200">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">Create your account</CardTitle>
+        <CardTitle className="text-2xl">Apply as a guide</CardTitle>
         <CardDescription>
-          Join as a seeker looking for support, or apply as a guide
+          Create an account to submit your facilitator application. Looking for support
+          instead? You don&apos;t need an account —{' '}
+          <Link href="/facilitators" className="font-medium text-emerald-700 hover:underline">
+            browse guides directly
+          </Link>
+          .
         </CardDescription>
       </CardHeader>
       <CardContent>

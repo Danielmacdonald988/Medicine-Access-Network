@@ -243,7 +243,8 @@ export function FacilitatorOnboardingForm() {
       minimum_donation: rest.minimum_donation ?? null,
       hourly_rate: rest.hourly_rate ?? null,
       verification_status: 'pending',
-    })
+      visibility: 'hidden',
+    }, { onConflict: 'user_id' })
 
     if (error) {
       toast.error(error.message)

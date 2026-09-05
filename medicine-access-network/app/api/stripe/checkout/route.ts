@@ -16,6 +16,17 @@ const checkoutSchema = z.object({
   amount_cents: z.number().int().min(50).optional(),
 })
 
+// NOTE: this route is inactive twice over now — PAYMENTS_ENABLED defaults
+// to false (see lib/payments.ts / CLAUDE.md), AND it requires an
+// authenticated `role === 'seeker'` caller, which no new account can ever
+// have (seekers have no accounts as of the seeker-account-removal
+// migration — see app/api/contact-requests/route.ts for the flow that
+// replaced authenticated booking requests). Redesigning how a payment
+// could ever be initiated by an anonymous inquiry is a real product
+// question, not a mechanical fix, and out of scope here — left inactive
+// rather than half-migrated. The redirect URLs below were still pointed at
+// the now-deleted /seeker route; fixed so this doesn't 404 if the flag is
+// ever flipped on before that redesign happens.
 export async function POST(request: Request) {
   if (!PAYMENTS_ENABLED) {
     return NextResponse.json(
@@ -98,8 +109,8 @@ export async function POST(request: Request) {
       bookingRequestId: booking_request_id,
       seekerId: user.id,
       facilitatorId: bookingRequest.facilitator_id,
-      successUrl: `${appUrl}/seeker?payment=success`,
-      cancelUrl: `${appUrl}/seeker?payment=cancelled`,
+      successUrl: `${appUrl}/?payment=success`,
+      cancelUrl: `${appUrl}/?payment=cancelled`,
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Stripe error'

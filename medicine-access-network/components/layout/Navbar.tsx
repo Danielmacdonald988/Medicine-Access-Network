@@ -14,10 +14,11 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Logomark } from '@/components/icons/logomark'
 import { Menu, X } from 'lucide-react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 const navLinks = [
   { href: '/facilitators', label: 'Find a Guide' },
+  { href: '/resources', label: 'Safety library' },
   { href: '/onboarding/facilitator', label: 'Become a Guide' },
 ]
 
@@ -28,6 +29,7 @@ interface NavbarProps {
 export function Navbar({ user }: NavbarProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const menuButton = useRef<HTMLButtonElement>(null)
 
   const initials = user?.full_name
     ? user.full_name
@@ -48,11 +50,12 @@ export function Navbar({ user }: NavbarProps) {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav aria-label="Main navigation" className="hidden items-center gap-6 md:flex">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
+              aria-current={pathname.startsWith(href) ? 'page' : undefined}
               className={`text-sm font-medium transition-colors hover:text-emerald-700 ${
                 pathname.startsWith(href) ? 'text-emerald-700' : 'text-stone-600'
               }`}
@@ -67,7 +70,7 @@ export function Navbar({ user }: NavbarProps) {
           {user ? (
             <DropdownMenu>
               {/* Base UI Trigger — renders a <button> directly, no asChild needed */}
-              <DropdownMenuTrigger className="relative flex h-8 w-8 items-center justify-center rounded-full outline-none">
+              <DropdownMenuTrigger aria-label="Account menu" className="relative flex size-11 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-emerald-100 text-emerald-800 text-xs">
                     {initials}
@@ -80,28 +83,27 @@ export function Navbar({ user }: NavbarProps) {
                   <p className="text-xs text-stone-500">{user.email}</p>
                 </div>
                 <DropdownMenuSeparator />
-                {/* Base UI MenuItem — render Link inside, not as asChild */}
-                <DropdownMenuItem>
-                  <Link href="/dashboard" className="flex w-full">Dashboard</Link>
+                <DropdownMenuItem render={<Link href="/dashboard" />}>
+                  Dashboard
                 </DropdownMenuItem>
                 {user.role === 'admin' && (
-                  <DropdownMenuItem>
-                    <Link href="/admin" className="flex w-full">Admin</Link>
+                  <DropdownMenuItem render={<Link href="/admin" />}>
+                    Admin
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Link href="/api/auth/signout" className="flex w-full">Sign out</Link>
+                <DropdownMenuItem render={<Link href="/api/auth/signout" prefetch={false} />}>
+                  Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <>
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/login">Sign in</Link>
+                <Link href="/login">Guide sign in</Link>
               </Button>
               <Button size="sm" className="bg-emerald-700 hover:bg-emerald-800" asChild>
-                <Link href="/signup">Get started</Link>
+                <Link href="/signup">Join as a guide</Link>
               </Button>
             </>
           )}
@@ -109,9 +111,13 @@ export function Navbar({ user }: NavbarProps) {
 
         {/* Mobile menu toggle */}
         <button
-          className="md:hidden text-stone-600"
+          ref={menuButton}
+          type="button"
+          className="flex size-11 items-center justify-center rounded-lg text-stone-600 md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
+          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-navigation"
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -119,13 +125,13 @@ export function Navbar({ user }: NavbarProps) {
 
       {/* Mobile nav */}
       {mobileOpen && (
-        <div className="border-t border-stone-200 bg-white px-4 pb-4 pt-2 md:hidden">
-          <nav className="flex flex-col gap-3">
+        <div id="mobile-navigation" className="border-t border-stone-200 bg-white px-4 pb-4 pt-2 md:hidden" onKeyDown={(event) => { if (event.key === 'Escape') { setMobileOpen(false); menuButton.current?.focus() } }} onClick={(event) => { if ((event.target as HTMLElement).closest('a')) setMobileOpen(false) }}>
+          <nav aria-label="Mobile navigation" className="flex flex-col gap-1">
             {navLinks.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
-                className="text-sm font-medium text-stone-700"
+                className="flex min-h-11 items-center text-sm font-medium text-stone-700"
                 onClick={() => setMobileOpen(false)}
               >
                 {label}
@@ -133,20 +139,20 @@ export function Navbar({ user }: NavbarProps) {
             ))}
             {user ? (
               <>
-                <Link href="/dashboard" className="text-sm font-medium text-stone-700">
+                <Link href="/dashboard" className="flex min-h-11 items-center text-sm font-medium text-stone-700">
                   Dashboard
                 </Link>
-                <Link href="/api/auth/signout" className="text-sm font-medium text-stone-500">
+                <Link href="/api/auth/signout" prefetch={false} className="flex min-h-11 items-center text-sm font-medium text-stone-600">
                   Sign out
                 </Link>
               </>
             ) : (
               <div className="flex flex-col gap-2 pt-2">
                 <Button variant="outline" size="sm" asChild>
-                  <Link href="/login">Sign in</Link>
+                  <Link href="/login">Guide sign in</Link>
                 </Button>
                 <Button size="sm" className="bg-emerald-700 hover:bg-emerald-800" asChild>
-                  <Link href="/signup">Get started</Link>
+                  <Link href="/signup">Join as a guide</Link>
                 </Button>
               </div>
             )}

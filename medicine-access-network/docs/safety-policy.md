@@ -49,7 +49,7 @@ This list is not exhaustive. Facilitators apply their professional judgment.
 
 ## Reporting
 
-If you encounter a facilitator who violates these policies, please report it via our contact form. We investigate all reports and will suspend or remove listings where violations are confirmed.
+If you encounter a facilitator who violates these policies, please report it by email at Dmacmedicine@pm.me (see /contact). We investigate all reports and will suspend or remove listings where violations are confirmed.
 
 ## Disclaimer
 

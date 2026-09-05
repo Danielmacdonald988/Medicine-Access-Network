@@ -24,8 +24,17 @@ function formatDate(iso: string) {
   })
 }
 
-export default async function AdminPage() {
+export default async function AdminPage({ searchParams }: { searchParams: Promise<{ notice?: string | string[] }> }) {
   const supabase = await createServerSupabaseClient()
+  const params = await searchParams
+  const notice = Array.isArray(params.notice) ? params.notice[0] : params.notice
+  const notices: Record<string, string> = {
+    published: 'Profile approved and published in the public directory.',
+    hidden: 'Review decision saved. The profile is hidden from the public directory.',
+    invalid: 'The review decision was not valid. Please try again.',
+    update_failed: 'The review decision could not be saved. Please try again.',
+    note_failed: 'The review decision was saved, but the optional note could not be recorded.',
+  }
 
   const [
     { data: facilitatorStats },
@@ -34,7 +43,7 @@ export default async function AdminPage() {
     { data: pendingFacilitators },
     { data: recentlyReviewed },
   ] = await Promise.all([
-    supabase.from('facilitator_profiles').select('verification_status'),
+    supabase.from('facilitator_profiles').select('verification_status, visibility'),
     supabase.from('users').select('role'),
     supabase.from('booking_requests').select('status'),
     supabase
@@ -46,7 +55,7 @@ export default async function AdminPage() {
       .order('created_at', { ascending: true }),
     supabase
       .from('facilitator_profiles')
-      .select('id, display_name, verification_status, created_at')
+      .select('id, display_name, verification_status, visibility, created_at')
       .in('verification_status', ['approved', 'rejected'])
       .order('created_at', { ascending: false })
       .limit(5),
@@ -55,11 +64,10 @@ export default async function AdminPage() {
   const counts = {
     facilitators: {
       pending: facilitatorStats?.filter((s) => s.verification_status === 'pending').length ?? 0,
-      approved: facilitatorStats?.filter((s) => s.verification_status === 'approved').length ?? 0,
+      published: facilitatorStats?.filter((s) => s.verification_status === 'approved' && s.visibility === 'public').length ?? 0,
       rejected: facilitatorStats?.filter((s) => s.verification_status === 'rejected').length ?? 0,
     },
     users: {
-      seekers: userStats?.filter((u) => u.role === 'seeker').length ?? 0,
       facilitators: userStats?.filter((u) => u.role === 'facilitator').length ?? 0,
       total: userStats?.length ?? 0,
     },
@@ -72,13 +80,18 @@ export default async function AdminPage() {
 
   return (
     <div className="space-y-8">
+      {notice && notices[notice] && (
+        <p role={notice === 'published' || notice === 'hidden' ? 'status' : 'alert'} className="rounded-xl border border-stone-200 bg-white p-4 text-sm text-stone-700">
+          {notices[notice]}
+        </p>
+      )}
       {/* Stats grid */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
           {
-            label: 'Total users',
+            label: 'Total accounts',
             value: counts.users.total,
-            sub: `${counts.users.seekers} seekers · ${counts.users.facilitators} facilitators`,
+            sub: `${counts.users.facilitators} guide accounts · visitors need no account`,
             icon: Users,
             color: 'text-stone-500',
           },
@@ -91,8 +104,8 @@ export default async function AdminPage() {
             highlight: counts.facilitators.pending > 0,
           },
           {
-            label: 'Active guides',
-            value: counts.facilitators.approved,
+            label: 'Published guides',
+            value: counts.facilitators.published,
             sub: `${counts.facilitators.rejected} rejected`,
             icon: CheckCircle,
             color: 'text-emerald-600',
@@ -221,12 +234,16 @@ export default async function AdminPage() {
                     method="POST"
                     className="space-y-3"
                   >
+                    <label htmlFor={`review-note-${f.id}`} className="text-sm font-medium text-stone-700">Review note (optional)</label>
                     <Textarea
+                      id={`review-note-${f.id}`}
                       name="note"
+                      maxLength={1000}
                       placeholder="Optional note to record with this decision…"
                       rows={2}
                       className="text-sm"
                     />
+                    <p className="text-xs leading-relaxed text-stone-600">Approving publishes this profile so visitors can view it and send conversation requests. Rejecting keeps it hidden.</p>
                     <div className="flex gap-2">
                       <Button
                         type="submit"
@@ -236,7 +253,7 @@ export default async function AdminPage() {
                         className="bg-emerald-700 text-xs hover:bg-emerald-800"
                       >
                         <CheckCircle className="mr-1.5 size-3.5" />
-                        Approve
+                        Approve &amp; publish
                       </Button>
                       <Button
                         type="submit"
@@ -284,8 +301,13 @@ export default async function AdminPage() {
                           : 'border-red-200 bg-red-50 text-xs text-red-600'
                       }
                     >
-                      {f.verification_status === 'approved' ? 'Approved' : 'Rejected'}
+                      {f.verification_status === 'approved' ? f.visibility === 'public' ? 'Published' : 'Approved · hidden' : 'Rejected · hidden'}
                     </Badge>
+                    {f.verification_status === 'approved' && f.visibility !== 'public' && (
+                      <form action={`/api/admin/facilitators/${f.id}`} method="POST">
+                        <Button type="submit" name="status" value="approved" size="sm" variant="outline">Publish profile</Button>
+                      </form>
+                    )}
                     <span className="text-xs text-stone-400">
                       {formatDate(f.created_at)}
                     </span>

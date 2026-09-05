@@ -5,6 +5,10 @@ const serverEnvSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().optional(),
   NEXT_PUBLIC_PAYMENTS_ENABLED: z.enum(['true', 'false']).optional().default('false'),
+  // Optional — see lib/email.ts. Without these, facilitator contact-request
+  // notifications are logged instead of sent.
+  RESEND_API_KEY: z.string().optional(),
+  RESEND_FROM_EMAIL: z.string().email().optional(),
 })
 
 export function validateEnv() {

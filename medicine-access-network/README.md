@@ -1,96 +1,74 @@
 # The Facilitator Network
 
-A trusted discovery and matching platform for plant medicine facilitators, integration guides, breathwork practitioners, somatic workers, and preparation coaches.
+A directory for preparation coaches, integration guides, breathwork practitioners, and somatic support. The platform lists legal education and wellness services; it does not sell or source controlled substances or provide medical treatment.
 
-This is **not a drug marketplace**. The platform coordinates legal support services only — education, preparation coaching, integration guidance, breathwork, and somatic work. It does not sell, distribute, source, or facilitate access to controlled substances.
+## How it works
 
----
+- Visitors browse public profiles, compare support, location, online availability, and pricing, and request a conversation without creating an account.
+- A conversation request shares the visitor's name, email, and brief message with the chosen guide. It does not book a session or take payment.
+- Guides create an account, submit an application, and manage incoming requests in their dashboard. Email notifications require configured delivery credentials.
+- Administrators review applications. **Approve & publish** makes a profile public; pending or rejected profiles remain hidden. Profile review is not independent clinical credentialing or a guarantee of outcomes.
+- The resource library offers educational guidance on preparation, integration, boundaries, and urgent support.
 
-## What it does
+New seeker accounts, seeker onboarding, and the seeker dashboard have been removed. Legacy database records remain for existing requests and reviews.
 
-- **Seekers** browse verified facilitator profiles, filter by modality, location, and format, and send conversation requests
-- **Facilitators** apply, get reviewed by admins, receive booking requests, and collect reviews
-- **Admins** review facilitator applications and manage the platform
-- **Safety Library** — 7 grounded articles on preparation, integration, red flags, contraindications, and emergencies
+## Stack
 
-## Tech stack
-
-| Layer | Choice |
+| Layer | Technology |
 |---|---|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS + shadcn/ui |
-| Auth + DB | Supabase (Postgres, Auth, RLS) |
-| Payments | Stripe (infrastructure built, disabled by default) |
-| Deployment | Vercel |
+| Application | Next.js 16 App Router, React, TypeScript |
+| Interface | Tailwind CSS, shadcn/ui and Base UI components |
+| Identity and data | Supabase Auth, PostgreSQL and row-level security |
+| Inquiry notifications | Resend HTTP API |
+| Hosting | Existing Vercel project |
+| Payments | Legacy Stripe infrastructure; disabled by default |
 
-## Quick start
+## Development
+
+Run commands from this `medicine-access-network` directory.
 
 ```bash
-# 1. Clone
-git clone <repo-url>
-cd medicine-access-network
-
-# 2. Install dependencies
-npm install
-
-# 3. Configure environment
-cp .env.local.example .env.local
-# Edit .env.local — fill in Supabase keys at minimum
-
-# 4. Run the Supabase schema
-# See docs/supabase-setup.md
-
-# 5. Start dev server
+npm ci
+cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Set Supabase credentials in `.env.local` and prepare a development database using [the deployment guide](docs/deployment.md). Anonymous contact submission also needs a server-only service-role credential. Without a configured database, public pages can render but the directory and account/contact features cannot be validated end to end.
+
+Open [localhost:3000](http://localhost:3000). Keep secrets out of source control.
+
+## Checks
+
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+node --test tests/contact-request-form.test.mjs tests/admin-publication.test.mjs
+npx tsc tests/facilitator-search.test.ts --module commonjs --moduleResolution node --target es2020 --esModuleInterop --skipLibCheck --outDir node_modules/.cache/search-tests
+node --test "$PWD/node_modules/.cache/search-tests/tests/facilitator-search.test.js"
+```
+
+The search tests use mocked database responses to check query construction, pagination and review behavior. Contact and admin tests exercise the actual form configuration/schema and route code. They do not replace a production database, email-delivery or browser acceptance check.
+
+## Key paths
+
+| Path | Purpose |
+|---|---|
+| `app/facilitators/` | Public directory and profiles |
+| `app/api/contact-requests/` | Account-free conversation requests |
+| `app/(dashboard)/facilitator/` | Guide dashboard |
+| `app/admin/` | Admin review and publication |
+| `app/onboarding/facilitator/` | Guide application |
+| `app/resources/` | Educational resources |
+| `app/about/`, `app/contact/` | Review explanation and platform contact |
+| `lib/facilitator-search.ts` | Shared validated search and rating queries |
+| `db/schema.sql`, `db/migrations/` | Fresh database setup and existing-database upgrades |
 
 ## Documentation
 
-| Document | Purpose |
-|---|---|
-| [docs/supabase-setup.md](docs/supabase-setup.md) | Database setup and RLS configuration |
-| [docs/environment-variables.md](docs/environment-variables.md) | All environment variables explained |
-| [docs/deployment.md](docs/deployment.md) | Vercel deployment guide |
+- [Product improvements and remaining operator decisions](docs/product-improvements.md)
+- [Deployment and operational prerequisites](docs/deployment.md)
+- [Environment variables](docs/environment-variables.md)
+- [Supabase setup](docs/supabase-setup.md)
 
-## Project structure
-
-```
-app/
-  (dashboard)/          # Auth-gated role dashboards
-    seeker/             # Seeker dashboard + review flow
-    facilitator/        # Guide dashboard
-    dashboard/          # Role-based redirect dispatcher
-  admin/                # Admin verification dashboard
-  api/                  # Route handlers
-    booking-requests/   # CRUD + status updates
-    reviews/            # Review submission
-    stripe/             # Checkout + webhook (inactive)
-    admin/facilitators/ # Admin approve/reject
-  facilitators/         # Public guide directory + profiles
-  onboarding/           # Multi-step onboarding forms
-  resources/            # Safety Library (7 articles)
-components/
-  forms/                # React Hook Form + Zod forms
-  layout/               # Navbar, Footer, ResourceNav
-  ui/                   # shadcn/ui components
-lib/
-  auth.ts               # requireAuth, requireRole helpers
-  constants.ts          # Modalities, support types, labels
-  payments.ts           # Feature flag + pricing catalog
-  resources.ts          # Safety Library content
-  stripe.ts             # Stripe server utilities (server-only)
-  env.ts                # Environment variable validation
-  analytics.ts          # Analytics stub
-db/
-  schema.sql            # Full Postgres schema + RLS policies
-```
-
-## Legal notes
-
-- No payment may be labeled as payment for medicine, substances, ceremonies, or illegal services
-- All facilitator profiles require admin review before appearing publicly
-- The platform does not provide medical advice, diagnosis, or treatment
-- See `docs/legal-language.md` for approved terminology
+The older product specification describes the original account-based MVP. Use the current application and the product-improvements document for the account-free visitor flow.

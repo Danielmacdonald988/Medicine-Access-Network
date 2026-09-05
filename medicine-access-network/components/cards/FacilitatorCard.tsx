@@ -21,7 +21,7 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
     ? f.minimum_donation
       ? `Donation from $${f.minimum_donation}`
       : 'Donation-based'
-    : f.hourly_rate
+    : typeof f.hourly_rate === 'number'
       ? `$${f.hourly_rate} / session`
       : 'Rate on request'
 
@@ -43,13 +43,19 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
           <div className="min-w-0 flex-1">
             {/* Name + verification badge */}
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className="truncate font-semibold text-stone-900">
+              <h3 className="break-words font-semibold text-stone-900">
                 {f.display_name}
               </h3>
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-1.5 py-0.5 text-xs font-medium text-emerald-700">
-                <ShieldCheck className="size-2.5" />
-                Verified
-              </span>
+              {(
+                <Link
+                  href={`/facilitators/${f.id}#profile-review`}
+                  aria-label={`What profile review means for ${f.display_name}`}
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 underline-offset-2 hover:underline"
+                >
+                  <ShieldCheck aria-hidden="true" className="size-3" />
+                  Profile reviewed
+                </Link>
+              )}
             </div>
 
             {/* Meta row: location / remote / experience */}
@@ -75,16 +81,18 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
             </div>
 
             {/* Rating */}
-            {f.avg_rating !== undefined && f.review_count !== undefined && (
+            {typeof f.avg_rating === 'number' && Number.isFinite(f.avg_rating) && (f.review_count ?? 0) > 0 ? (
               <div className="mt-1 flex items-center gap-1 text-xs">
-                <Star className="size-3 fill-amber-400 text-amber-400" />
+                <Star aria-hidden="true" className="size-3 fill-amber-400 text-amber-400" />
                 <span className="font-medium text-stone-700">
-                  {f.avg_rating.toFixed(1)}
+                  {f.avg_rating.toFixed(1)}<span className="sr-only"> out of 5</span>
                 </span>
                 <span className="text-stone-400">
                   ({f.review_count} {f.review_count === 1 ? 'review' : 'reviews'})
                 </span>
               </div>
+            ) : (
+              <p className="mt-1 text-xs text-stone-500">No reviews yet</p>
             )}
           </div>
         </div>
@@ -119,15 +127,15 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
       </div>
 
       {/* Card footer */}
-      <div className="flex items-center justify-between border-t border-stone-100 px-5 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-stone-100 px-5 py-3">
         <span className="text-xs font-medium text-stone-500">{rateDisplay}</span>
         <Button
           size="sm"
           variant="outline"
-          className="border-emerald-600 text-xs text-emerald-700 hover:bg-emerald-50"
+          className="min-h-11 border-emerald-600 text-xs text-emerald-700 hover:bg-emerald-50"
           asChild
         >
-          <Link href={`/facilitators/${f.id}`}>View profile</Link>
+          <Link href={`/facilitators/${f.id}`} aria-label={`View ${f.display_name}'s profile`}>View profile</Link>
         </Button>
       </div>
     </article>

@@ -1,8 +1,22 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const PROTECTED_PREFIXES = ['/dashboard', '/seeker', '/facilitator', '/admin', '/onboarding']
+// Seekers no longer have accounts — browse/search/filter/facilitator-detail
+// pages are fully public and intentionally NOT listed here (see the SEO
+// migration notes: they need to be crawlable, and running an auth/cookie
+// exchange on every crawler hit is wasted work). Only routes that still
+// require a session are matched below; see `config.matcher`.
+//
+// '/seeker' is gone entirely (see the seeker-account-removal migration) —
+// no route exists there anymore, so there's nothing left to protect.
+const PROTECTED_PREFIXES = ['/dashboard', '/facilitator', '/admin', '/onboarding']
 const AUTH_ONLY_PATHS = ['/login', '/signup', '/forgot-password']
+
+// Security headers used to be set here on every matched response. They now
+// live in next.config.ts's `headers()` — that applies them to ALL routes,
+// including the public ones this middleware no longer runs on, without
+// paying for a middleware invocation (and a Supabase auth round-trip) on
+// every request. See next.config.ts.
 
 export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
@@ -57,19 +71,25 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(dashUrl)
   }
 
-  supabaseResponse.headers.set('X-Content-Type-Options', 'nosniff')
-  supabaseResponse.headers.set('X-Frame-Options', 'DENY')
-  supabaseResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-  supabaseResponse.headers.set(
-    'Permissions-Policy',
-    'camera=(), microphone=(), geolocation=()'
-  )
-
   return supabaseResponse
 }
 
+// Explicit allowlist, not a "run everywhere except assets" blanket matcher
+// — this is the point of this migration's middleware change. Browse,
+// search, filter, and facilitator-detail pages (and everything else not
+// listed) never invoke this function at all.
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/dashboard',
+    '/dashboard/:path*',
+    '/facilitator',
+    '/facilitator/:path*',
+    '/admin',
+    '/admin/:path*',
+    '/onboarding',
+    '/onboarding/:path*',
+    '/login',
+    '/signup',
+    '/forgot-password',
   ],
 }
