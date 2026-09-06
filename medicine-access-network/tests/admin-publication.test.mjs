@@ -16,6 +16,7 @@ function loadModule(path, mocks = {}) {
 }
 
 const schemas = loadModule('lib/validations.ts')
+const bodyHelpers = loadModule('lib/request-body.ts')
 
 function fixture({ admin = true, updateFails = false, noteFails = false } = {}) {
   const writes = []
@@ -39,14 +40,15 @@ function fixture({ admin = true, updateFails = false, noteFails = false } = {}) 
   const routes = loadModule('app/api/admin/facilitators/[id]/route.ts', {
     '@/lib/supabaseServer': { createServerSupabaseClient: async () => supabase },
     '@/lib/validations': schemas,
+    '@/lib/request-body': bodyHelpers,
   })
   return { writes, routes }
 }
 
 const context = () => ({ params: Promise.resolve({ id: 'profile-id' }) })
-function request(status, note) {
+function request(status, note, headers = {}) {
   return new Request('https://directory.test/api/admin/facilitators/profile-id', {
-    method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status, note }),
+    method: 'PATCH', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify({ status, note }),
   })
 }
 
@@ -81,5 +83,33 @@ test('HTML review form reports publication or note failure after redirecting to 
     const response = await routes.POST(new Request('https://directory.test/api/admin/facilitators/profile-id', { method: 'POST', body: form }), context())
     assert.equal(response.status, 303)
     assert.equal(new URL(response.headers.get('Location')).searchParams.get('notice'), noteFails ? 'note_failed' : 'published')
+  }
+})
+
+test('cross-site JSON and HTML approval requests cannot change publication or add notes', async () => {
+  for (const method of ['PATCH', 'POST']) {
+    for (const headers of [{ Origin: 'https://unrelated.test' }, { 'Sec-Fetch-Site': 'cross-site' }]) {
+      const { writes, routes } = fixture()
+      const incoming = method === 'PATCH'
+        ? request('approved', 'A review note', headers)
+        : new Request('https://directory.test/api/admin/facilitators/profile-id', {
+          method: 'POST', headers, body: new URLSearchParams({ status: 'approved', note: 'A review note' }),
+        })
+      assert.equal((await routes[method](incoming, context())).status, 403)
+      assert.deepEqual(writes, [])
+    }
+  }
+})
+
+test('oversized approval bodies are rejected before any publication or note writes', async () => {
+  for (const method of ['PATCH', 'POST']) {
+    const { writes, routes } = fixture()
+    const incoming = method === 'PATCH'
+      ? request('approved', 'x'.repeat(16_384))
+      : new Request('https://directory.test/api/admin/facilitators/profile-id', {
+        method: 'POST', body: new URLSearchParams({ status: 'approved', note: 'x'.repeat(16_384) }),
+      })
+    assert.equal((await routes[method](incoming, context())).status, 413)
+    assert.deepEqual(writes, [])
   }
 })

@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase'
 import { loginSchema, type LoginInput } from '@/lib/validations'
 import Link from 'next/link'
+import { safeRedirectPath } from '@/lib/safe-redirect'
 
 export function LoginForm() {
   const router = useRouter()
@@ -34,8 +35,7 @@ export function LoginForm() {
     }
 
     // Honour the ?next= redirect param from middleware (e.g. user tried to visit /admin)
-    const next = searchParams.get('next')
-    const destination = next && next.startsWith('/') ? next : '/dashboard'
+    const destination = safeRedirectPath(searchParams.get('next'))
 
     // /dashboard is a server-side dispatcher that reads the role (and self-heals
     // the profile row if needed) before routing — avoids duplicating that logic

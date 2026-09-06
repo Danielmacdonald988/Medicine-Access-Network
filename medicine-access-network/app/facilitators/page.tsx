@@ -25,8 +25,8 @@ import {
 import type { FacilitatorSearchResult } from '@/lib/types'
 
 export const metadata: Metadata = {
-  title: 'Find a Guide',
-  description: 'Find preparation, integration, breathwork, and somatic support. Compare location, experience, online availability, and pricing.',
+  title: 'Find Psychedelic Preparation & Integration Support',
+  description: 'Compare facilitators offering psychedelic preparation, integration, and related support by location, approach, online availability, and pricing.',
 }
 
 interface PageProps {

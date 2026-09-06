@@ -112,7 +112,7 @@ export default async function ResourcePage({ params }: PageProps) {
         className="inline-flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-700"
       >
         <ArrowLeft className="size-3.5" />
-        All guides
+        Safety library
       </Link>
 
       {/* Header */}
@@ -127,6 +127,32 @@ export default async function ResourcePage({ params }: PageProps) {
           <RenderBlock key={i} block={block} />
         ))}
       </div>
+
+      {resource.sourceCheck && (
+        <section className="rounded-xl border border-stone-200 bg-stone-50 p-5" aria-labelledby="resource-sources">
+          <h2 id="resource-sources" className="text-sm font-semibold text-stone-900">
+            Sources and service information
+          </h2>
+          <p className="mt-2 text-sm text-stone-600">
+            {resource.sourceCheck.scope}{' '}
+            Last checked{' '}
+            <time dateTime={resource.sourceCheck.date}>
+              {new Date(`${resource.sourceCheck.date}T12:00:00Z`).toLocaleDateString('en-US', {
+                month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC',
+              })}
+            </time>.
+          </p>
+          <ul className="mt-3 space-y-2 text-sm">
+            {resource.sourceCheck.sources.map((source) => (
+              <li key={source.url}>
+                <a href={source.url} className="text-emerald-800 underline underline-offset-4 hover:text-emerald-950">
+                  {source.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* Footer disclaimer */}
       <div className="mt-10 border-t border-stone-100 pt-6 text-xs text-stone-400">

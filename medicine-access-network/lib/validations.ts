@@ -63,15 +63,16 @@ export const facilitatorOnboardingSchema = z.object({
 // Base schema — what the API accepts and stores in the DB
 export const contactRequestSchema = z.object({
   facilitator_profile_id: z.string().uuid(),
-  seeker_name: z.string().min(2, 'Please enter your name').max(200),
-  seeker_email: z.string().email('Please enter a valid email address'),
-  requested_service: z.string().min(1, 'Please select a type of support'),
+  seeker_name: z.string().trim().min(2, 'Please enter your name').max(200),
+  seeker_email: z.string().trim().email('Please enter a valid email address').max(254),
+  requested_service: z.string().trim().min(1, 'Please select a type of support').max(200),
   message: z
     .string()
+    .trim()
     .min(20, 'Please share a bit more — at least 20 characters')
     .max(1000, 'Keep it under 1000 characters'),
   preferred_format: z.enum(['voice', 'video', 'in_person', 'async']),
-  preferred_time_window: z.string().max(200).optional(),
+  preferred_time_window: z.string().trim().max(200).optional(),
 })
 
 // Form schema — extends the base with a UI-only safety acknowledgement.

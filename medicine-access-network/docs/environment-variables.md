@@ -1,72 +1,51 @@
-# Environment Variables
+# Environment and launch configuration
 
-Copy `.env.local.example` to `.env.local` and fill in each value.
+Copy `.env.example` to `.env.local` for development. Never commit credentials.
 
----
+## Production configuration
 
-## Required — app will not start without these
+Set these in the Vercel project, scoped to **Production**:
 
-### Supabase
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_APP_URL` | Canonical HTTPS origin, with no path/query/fragment. Change only after the new domain and certificate work. |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project HTTPS URL. |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public browser key. Database row/column permissions remain the security boundary. |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-only contact submission credential. Never expose it through a `NEXT_PUBLIC_` variable or client code. |
+| `NEXT_PUBLIC_PAYMENTS_ENABLED` | Keep `false`. Checkout and webhook processing are disabled for this launch. |
+| `RESEND_API_KEY` | Server-only email-sending key restricted to the verified sender domain. |
+| `RESEND_FROM_EMAIL` | Sender address on the verified Resend domain. |
+| `CONTACT_RATE_LIMIT_SECRET` | Optional independent secret for contact-rate key hashing; otherwise the server credential is used. |
 
-| Variable | Description |
-|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL (e.g. `https://xyz.supabase.co`) |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon/public key — safe to expose in the browser |
-| `SUPABASE_SERVICE_ROLE_KEY` | Service role key — **never expose this to the browser** |
+When `VERCEL_ENV=production`, invalid required configuration fails the build. Local/CI builds may use placeholder public settings and do not require production credentials. A successful build with missing Resend configuration warns that email notifications will not be sent; inquiries still persist in facilitator dashboards.
 
-Found at: Supabase Dashboard → Settings → API
+## Domain change
 
----
+1. Register the selected domain and attach it to the Vercel project.
+2. Verify DNS and HTTPS before changing the canonical app URL.
+3. Add the new exact callback URL in Supabase Authentication > URL Configuration, including the password-reset callback query, and change its Site URL.
+4. Set `NEXT_PUBLIC_APP_URL` to the new canonical origin and redeploy. Update the fallback origin in `lib/constants.ts` when making the domain permanent.
+5. Redirect the alternate `www`/apex host and the old production alias to the canonical host. Preserve paths and query strings, including authentication callbacks.
+6. Verify page canonicals, sitemap, robots, email confirmation and password reset from the new host. Existing sessions on the previous host do not transfer to another domain; facilitators may need to sign in again.
+7. Verify the domain in Google Search Console and submit its sitemap. Indexing and displayed search titles are controlled by Google and are not guaranteed immediately.
 
-## Optional — app works without these but some features degrade
+## Two separate email paths
 
-### App URL
+- **Supabase custom SMTP** sends account confirmation and password-reset emails. Configure this separately in the Supabase dashboard. Its default test sender cannot deliver to arbitrary new facilitator addresses.
+- **Resend API** sends inquiry notifications. Configure the two Vercel variables above after verifying the sender domain's DNS records. The visitor's email is used as Reply-To.
 
-| Variable | Default | Description |
-|---|---|---|
-| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` | Full URL of the app — required in production for correct redirect URLs |
+Use the provider's exact DNS values for DKIM/SPF and configure DMARC. Keep click/open tracking disabled for account messages so authentication links are not rewritten. Keep email confirmation enabled. Set practical email rate limits for the invited cohort and the provider's sending quota.
 
-Set this to your Vercel domain (e.g. `https://medicine-access-network.vercel.app`) or custom domain.
+Test confirmation, password reset, an authorized inquiry, notification receipt, and a reply before distributing invitations. Provider acceptance alone does not establish inbox delivery. Failed notifications leave the inquiry in the dashboard; automatic retry is not implemented in this release.
 
----
+## Monitoring and recovery
 
-## Stripe — inactive until `NEXT_PUBLIC_PAYMENTS_ENABLED=true`
+`GET /api/health` returns 200 or 503 after a bounded anonymous read of the public directory. It exposes no private records or configuration. It verifies core connectivity and configuration presence, not actual contact writes, credential validity, SMTP or inbox delivery.
 
-| Variable | Description |
-|---|---|
-| `STRIPE_SECRET_KEY` | Server-side secret key from Stripe dashboard (`sk_test_...` or `sk_live_...`) |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Client-safe publishable key (`pk_test_...` or `pk_live_...`) |
-| `STRIPE_WEBHOOK_SECRET` | Signing secret for webhook verification (`whsec_...`) |
-| `STRIPE_PRICE_PREPARATION_SESSION` | Stripe Price ID for preparation coaching sessions |
-| `STRIPE_PRICE_INTEGRATION_SESSION` | Stripe Price ID for integration coaching sessions |
-| `STRIPE_PRICE_BREATHWORK_SESSION` | Stripe Price ID for breathwork sessions |
-| `STRIPE_PRICE_EDUCATION_SESSION` | Stripe Price ID for educational consultations |
-| `STRIPE_PRICE_FACILITATOR_SUBSCRIPTION` | Stripe Price ID for guide platform membership |
+Configure an external uptime monitor to check the endpoint and alert the operator. Keep backups and test restoration in a separate database. Supabase Free can pause inactive projects; use an appropriate production plan for continuous availability. Keep spending controls enabled and review the bill before activating additional projects or services.
 
-**Important:** All Stripe product names and descriptions must reference only legal coaching or educational services. Never label a product with the name of a substance, medicine, or ceremony.
+No database migrations are required for the launch-hardening application changes. Migrations 0001–0004 must already be applied. Roll back only to an application version compatible with those database permissions. The previous production commit is recorded in the release notes.
 
----
+## Payments
 
-## Feature flags
-
-| Variable | Default | Description |
-|---|---|---|
-| `NEXT_PUBLIC_PAYMENTS_ENABLED` | `false` | Set to `true` to activate Stripe checkout. Requires Stripe keys above. |
-
-### Checklist before enabling payments
-
-- [ ] Stripe account is fully verified and activated
-- [ ] All products are created with legal service descriptions
-- [ ] All `STRIPE_PRICE_*` env vars are populated
-- [ ] `STRIPE_WEBHOOK_SECRET` is registered in Stripe Dashboard → Webhooks
-- [ ] Webhook endpoint `https://yourdomain.com/api/stripe/webhook` is registered
-- [ ] Legal review of payment flows is complete
-- [ ] Test mode confirmed working before switching to live keys
-
----
-
-## Development vs production
-
-Use **test keys** (`sk_test_...`, `pk_test_...`) in development. Never commit live Stripe keys to version control.
-
-In Vercel, set environment variables under Project Settings → Environment Variables. Mark `SUPABASE_SERVICE_ROLE_KEY` and `STRIPE_SECRET_KEY` as Production-only.
+Payments remain disabled and production builds reject enabling them. The legacy enabled webhook needs a separate implementation/review of trusted database writes, error handling, idempotency and the actual service's payment-provider eligibility before activation.

@@ -1,66 +1,82 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
+import { hasCrossOriginSource, readSmallFormData, readSmallJson } from '@/lib/request-body'
 import { z } from 'zod'
 
 const updateSchema = z.object({
   status: z.enum(['accepted', 'declined', 'completed']),
 })
+const requestIdSchema = z.string().uuid()
 
 interface RouteParams {
   params: Promise<{ id: string }>
 }
 
-// PATCH /api/booking-requests/[id] — facilitator updates status
-export async function PATCH(request: Request, { params }: RouteParams) {
+async function updateStatus(request: Request, { params }: RouteParams, isForm: boolean) {
+  if (hasCrossOriginSource(request)) {
+    return NextResponse.json({ error: 'This request must come from this site.' }, { status: 403 })
+  }
   const { id } = await params
-  const supabase = await createServerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
-
-  const body = await request.json().catch(() => null)
-  const parsed = updateSchema.safeParse(body)
-  if (!parsed.success) {
-    return NextResponse.json({ error: 'Invalid status value' }, { status: 400 })
+  if (!requestIdSchema.safeParse(id).success) {
+    return NextResponse.json({ error: 'Invalid conversation request.' }, { status: 400 })
   }
 
-  // RLS ensures only the facilitator of this request can update it
-  const { error } = await supabase
-    .from('booking_requests')
-    .update({ status: parsed.data.status })
-    .eq('id', id)
-    .eq('facilitator_id', user.id)
+  try {
+    const supabase = await createServerSupabaseClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return isForm
+        ? NextResponse.redirect(new URL('/login', request.url), 303)
+        : NextResponse.json({ error: 'Authentication required' }, { status: 401 })
+    }
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    let body: unknown
+    if (isForm) {
+      const result = await readSmallFormData(request)
+      if (!result.ok) return NextResponse.json({ error: result.error }, { status: result.status })
+      body = { status: result.data.get('status') }
+    } else {
+      const result = await readSmallJson(request)
+      if (!result.ok) return NextResponse.json({ error: result.error }, { status: result.status })
+      body = result.data
+    }
+    const parsed = updateSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid status value' }, { status: 400 })
+    }
 
-  return NextResponse.json({ success: true })
+    // RLS and the recipient filter both restrict this write. Returning its id
+    // distinguishes an actual update from a missing or inaccessible request.
+    const { data, error } = await supabase
+      .from('booking_requests')
+      .update({ status: parsed.data.status })
+      .eq('id', id)
+      .eq('facilitator_id', user.id)
+      .select('id')
+      .maybeSingle()
+
+    if (error) {
+      console.error('[booking-requests] Status update failed', { code: error.code })
+      return NextResponse.json({ error: 'We could not update this request. Please try again.' }, { status: 503 })
+    }
+    if (!data) {
+      return NextResponse.json({ error: 'Conversation request not found.' }, { status: 404 })
+    }
+
+    return isForm
+      ? NextResponse.redirect(new URL('/facilitator', request.url), 303)
+      : NextResponse.json({ success: true })
+  } catch {
+    console.error('[booking-requests] Status service unavailable')
+    return NextResponse.json({ error: 'We could not update this request. Please try again.' }, { status: 503 })
+  }
 }
 
-// POST /api/booking-requests/[id] — plain HTML form fallback (no JS)
-export async function POST(request: Request, { params }: RouteParams) {
-  const { id } = await params
-  const formData = await request.formData().catch(() => null)
-  if (!formData) return NextResponse.json({ error: 'Invalid form' }, { status: 400 })
+// JSON clients and the dashboard's plain HTML form use the same checked write.
+export async function PATCH(request: Request, context: RouteParams) {
+  return updateStatus(request, context, false)
+}
 
-  const status = formData.get('status')
-  const parsed = updateSchema.safeParse({ status })
-  if (!parsed.success) return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
-
-  const supabase = await createServerSupabaseClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) {
-    return NextResponse.redirect(new URL('/login', request.url))
-  }
-
-  await supabase
-    .from('booking_requests')
-    .update({ status: parsed.data.status })
-    .eq('id', id)
-    .eq('facilitator_id', user.id)
-
-  return NextResponse.redirect(new URL('/facilitator', request.url))
+export async function POST(request: Request, context: RouteParams) {
+  return updateStatus(request, context, true)
 }

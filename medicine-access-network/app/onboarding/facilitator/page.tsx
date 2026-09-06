@@ -40,8 +40,9 @@ export default async function FacilitatorOnboardingPage() {
         </p>
         <h1 className="mt-2 text-2xl font-bold text-stone-900">Apply as a guide</h1>
         <p className="mt-2 text-stone-500">
-          Submit your profile for review. Our team verifies every application before
-          your listing appears publicly — typically within 3–5 business days.
+          Submit your profile for review before it can appear publicly. Approval is
+          an administrative decision to include a profile, not verification of a
+          clinical license or a guarantee of safety. Check your dashboard for updates.
         </p>
       </div>
 

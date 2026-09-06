@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { verificationNoteSchema, type VerificationNoteInput } from '@/lib/validations'
+import { hasCrossOriginSource, readSmallFormData, readSmallJson } from '@/lib/request-body'
 
 type AdminSupabase = Awaited<ReturnType<typeof createServerSupabaseClient>>
 
@@ -48,12 +49,17 @@ async function saveReview(supabase: AdminSupabase, adminId: string, profileId: s
 }
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  if (hasCrossOriginSource(request)) {
+    return NextResponse.json({ error: 'This request must come from this site.' }, { status: 403 })
+  }
   const { id } = await params
   const supabase = await createServerSupabaseClient()
   const admin = await requireAdmin(supabase)
   if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
-  const parsed = verificationNoteSchema.safeParse(await request.json().catch(() => null))
+  const body = await readSmallJson(request)
+  if (!body.ok) return NextResponse.json({ error: body.error }, { status: body.status })
+  const parsed = verificationNoteSchema.safeParse(body.data)
   if (!parsed.success) return NextResponse.json({ error: 'Invalid request', details: parsed.error.flatten() }, { status: 400 })
 
   const result = await saveReview(supabase, admin.id, id, parsed.data)
@@ -62,12 +68,17 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 }
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  if (hasCrossOriginSource(request)) {
+    return NextResponse.json({ error: 'This request must come from this site.' }, { status: 403 })
+  }
   const { id } = await params
   const supabase = await createServerSupabaseClient()
   const admin = await requireAdmin(supabase)
   if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
-  const formData = await request.formData()
+  const body = await readSmallFormData(request)
+  if (!body.ok) return NextResponse.json({ error: body.error }, { status: body.status })
+  const formData = body.data
   const note = formData.get('note')
   const parsed = verificationNoteSchema.safeParse({
     status: formData.get('status'),

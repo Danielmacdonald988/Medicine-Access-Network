@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
-import '@/lib/env'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Toaster } from '@/components/ui/sonner'
@@ -19,6 +18,7 @@ export const metadata: Metadata = {
   },
   description: APP_TAGLINE,
   metadataBase: new URL(SITE_URL),
+  robots: process.env.VERCEL_ENV === 'preview' ? { index: false, follow: false } : undefined,
   openGraph: {
     siteName: APP_NAME,
     type: 'website',

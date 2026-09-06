@@ -222,7 +222,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                     <span className="flex items-center gap-1.5">
                       <Clock className="size-3.5" />
                       {facilitator.years_experience} yr
-                      {facilitator.years_experience === 1 ? '' : 's'} experience
+                      {facilitator.years_experience === 1 ? '' : 's'} practice (self-reported)
                     </span>
                   )}
               </div>
@@ -499,7 +499,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                       <p className="mt-0.5 text-xs text-stone-400">
                         {facilitator.years_experience} year
                         {facilitator.years_experience === 1 ? '' : 's'} of
-                        experience
+                        practice, self-reported; may include personal practice
                       </p>
                     )}
                 </div>
