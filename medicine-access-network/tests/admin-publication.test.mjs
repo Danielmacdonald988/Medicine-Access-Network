@@ -15,7 +15,10 @@ function loadModule(path, mocks = {}) {
   return loadedModule.exports
 }
 
-const schemas = loadModule('lib/validations.ts')
+const schemas = loadModule('lib/validations.ts', {
+  './direct-contact': loadModule('lib/direct-contact.ts'),
+  './profile-media': loadModule('lib/profile-media.ts'),
+})
 const bodyHelpers = loadModule('lib/request-body.ts')
 
 function fixture({ admin = true, updateFails = false, noteFails = false } = {}) {

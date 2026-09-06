@@ -1,4 +1,6 @@
 import { z } from 'zod'
+import { directContactUrlSchema } from './direct-contact'
+import { isProfileImagePath, MAX_PROFILE_IMAGES } from './profile-media'
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
 
@@ -49,7 +51,14 @@ export const facilitatorOnboardingSchema = z.object({
   donation_based: z.boolean().default(false),
   minimum_donation: z.coerce.number().min(0).optional(),
   hourly_rate: z.coerce.number().min(0).optional(),
-  // Step 12 — stripped before DB write
+  image_paths: z.array(z.string().refine(isProfileImagePath, 'Upload this photo again.'))
+    .min(1, 'Add at least one profile photo.')
+    .max(MAX_PROFILE_IMAGES, 'Choose up to five photos.')
+    .refine((paths) => new Set(paths).size === paths.length, 'Each photo can only be added once.'),
+  whatsapp_url: directContactUrlSchema('whatsapp'),
+  signal_url: directContactUrlSchema('signal'),
+  telegram_url: directContactUrlSchema('telegram'),
+  // Step 14 — stripped before DB write
   platform_agreement: z.literal(true, {
     message: 'You must agree to the platform rules to apply',
   }),

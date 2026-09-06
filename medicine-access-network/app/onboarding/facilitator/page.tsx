@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { CheckCircle } from 'lucide-react'
 import { requireAuth } from '@/lib/auth'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
@@ -11,6 +12,7 @@ export const metadata: Metadata = { title: 'Apply as a guide' }
 const REQUIREMENTS = [
   'Legal services only — preparation, integration, breathwork, somatic coaching, education',
   'No facilitation of illegal ceremonies or coordination of substance procurement',
+  'At least one profile photo is required; JPG, PNG, or WebP, up to 4 MB',
   'Detailed safety practice documentation is required',
   'Contraindication awareness acknowledgement is required',
   'Admin review before your profile appears publicly',
@@ -19,17 +21,26 @@ const REQUIREMENTS = [
 export default async function FacilitatorOnboardingPage() {
   const user = await requireAuth()
 
-  // Seekers and admins don't apply as facilitators via this flow
+  // Admins use the separate administration workflow.
   if (user.role === 'admin') redirect('/admin')
 
   // If they already submitted an application, send them to their dashboard
   const supabase = await createServerSupabaseClient()
-  const { data: existing } = await supabase
+  const { data: existing, error } = await supabase
     .from('facilitator_profiles')
     .select('id')
     .eq('user_id', user.id)
     .maybeSingle()
 
+  if (error) {
+    return (
+      <div className="mx-auto max-w-2xl space-y-4 px-4 py-12 sm:px-6">
+        <h1 className="text-2xl font-bold text-stone-900">Your application could not be loaded</h1>
+        <p className="text-stone-600">Please try again before starting an application.</p>
+        <Link href="/onboarding/facilitator" className="text-sm font-medium text-emerald-800 underline">Try again</Link>
+      </div>
+    )
+  }
   if (existing) redirect('/facilitator')
 
   return (

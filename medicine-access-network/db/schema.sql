@@ -1,6 +1,6 @@
 -- ============================================================================
 -- The Facilitator Network — Database Schema
--- Fresh Supabase projects only: this file includes migrations 0001–0004.
+-- Fresh Supabase projects only: this file includes migrations 0001–0005.
 -- Existing projects: apply the numbered migrations instead; never rerun this file.
 -- ============================================================================
 
@@ -1229,5 +1229,168 @@ revoke all on function public.submit_contact_request(uuid, text, text, text, tex
   from public, anon, authenticated;
 grant execute on function public.submit_contact_request(uuid, text, text, text, text, text, public.preferred_format, text)
   to service_role;
+
+commit;
+
+
+-- Included migration: 0005_profile_media_links.sql
+-- Migration 0005: required profile photographs and optional direct-message links.
+-- Requires 0001–0004 and the standard Supabase Storage schema. Safe to reapply.
+-- Historical profiles are not rewritten or automatically published/unpublished.
+-- Storage is private: the app authorizes each image read before a server download.
+
+begin;
+
+alter table public.facilitator_profiles
+  add column if not exists image_paths text[] not null default '{}',
+  add column if not exists whatsapp_url text,
+  add column if not exists signal_url text,
+  add column if not exists telegram_url text;
+
+-- NOT VALID preserves historical empty profiles during migration, but PostgreSQL
+-- still enforces this check on every newly inserted or updated row. A legacy
+-- profile must therefore add a photograph before any future profile update.
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conrelid = 'public.facilitator_profiles'::regclass
+      and conname = 'facilitator_profiles_image_count'
+  ) then
+    alter table public.facilitator_profiles add constraint facilitator_profiles_image_count
+      check (cardinality(image_paths) between 1 and 5) not valid;
+  end if;
+  if not exists (
+    select 1 from pg_constraint where conrelid = 'public.facilitator_profiles'::regclass
+      and conname = 'facilitator_profiles_whatsapp_url'
+  ) then
+    alter table public.facilitator_profiles add constraint facilitator_profiles_whatsapp_url
+      check (whatsapp_url is null or whatsapp_url ~ '^https://wa[.]me/[1-9][0-9]{6,14}$');
+  end if;
+  if not exists (
+    select 1 from pg_constraint where conrelid = 'public.facilitator_profiles'::regclass
+      and conname = 'facilitator_profiles_signal_url'
+  ) then
+    alter table public.facilitator_profiles add constraint facilitator_profiles_signal_url
+      check (signal_url is null or signal_url ~ '^https://signal[.]me/#(eu/[A-Za-z0-9_-]{64}|p/[+][1-9][0-9]{6,14})$');
+  end if;
+  if not exists (
+    select 1 from pg_constraint where conrelid = 'public.facilitator_profiles'::regclass
+      and conname = 'facilitator_profiles_telegram_url'
+  ) then
+    alter table public.facilitator_profiles add constraint facilitator_profiles_telegram_url
+      check (telegram_url is null or (
+        telegram_url ~ '^https://t[.]me/[A-Za-z][A-Za-z0-9_]{4,31}$'
+        and lower(substring(telegram_url from 14)) <> all (array[
+          'addemoji', 'addlist', 'addstickers', 'addstyle', 'addtheme', 'auction',
+          'auth', 'boost', 'call', 'confirmphone', 'contact', 'giftcode', 'invoice',
+          'joinchat', 'login', 'm', 'nft', 'proxy', 'setlanguage', 'share', 'socks',
+          'web', 'a', 'k', 'z'
+        ])
+      ));
+  end if;
+end;
+$$;
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('profile-images', 'profile-images', false, 2097152, array['image/webp'])
+on conflict (id) do update
+  set public = false, file_size_limit = excluded.file_size_limit,
+      allowed_mime_types = excluded.allowed_mime_types;
+
+-- Restrictive policies remain effective even if an unrelated permissive policy
+-- is later added. Existing access to every other bucket is left unchanged.
+-- Hosted Supabase owns these tables and already enables RLS. Read the catalog
+-- rather than altering managed tables; refuse to install an ineffective policy
+-- if either table unexpectedly lacks RLS.
+do $$
+begin
+  if (
+    select count(*) from pg_catalog.pg_class c
+    join pg_catalog.pg_namespace n on n.oid = c.relnamespace
+    where n.nspname = 'storage' and c.relname in ('objects', 'buckets')
+      and c.relrowsecurity
+  ) <> 2 then
+    raise exception using errcode = '42501', message = 'profile_images_require_storage_rls';
+  end if;
+end;
+$$;
+
+drop policy if exists "profile images: server access only" on storage.objects;
+create policy "profile images: server access only"
+  on storage.objects as restrictive for all to anon, authenticated
+  using (bucket_id is distinct from 'profile-images')
+  with check (bucket_id is distinct from 'profile-images');
+
+drop policy if exists "profile images bucket: server access only" on storage.buckets;
+create policy "profile images bucket: server access only"
+  on storage.buckets as restrictive for all to anon, authenticated
+  using (id is distinct from 'profile-images')
+  with check (id is distinct from 'profile-images');
+
+-- The private object lookup runs as the migration owner, while profile writes
+-- still run under their existing RLS policies. No new publishing permission is
+-- granted. Image paths are generated by the server after re-encoding to WebP.
+create or replace function public.validate_facilitator_profile_images()
+returns trigger language plpgsql security definer set search_path = '' as $$
+declare
+  image_path text;
+begin
+  if new.image_paths is null or cardinality(new.image_paths) not between 1 and 5
+    or array_ndims(new.image_paths) is distinct from 1
+    or array_lower(new.image_paths, 1) is distinct from 1 then
+    raise exception using errcode = '23514', message = 'profile_requires_one_to_five_images';
+  end if;
+  if cardinality(new.image_paths) <> (
+    select count(distinct item) from unnest(new.image_paths) as item
+  ) then
+    raise exception using errcode = '23514', message = 'profile_images_must_be_unique';
+  end if;
+  foreach image_path in array new.image_paths loop
+    if image_path is null or image_path !~ (
+      '^' || new.user_id::text || '/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}[.]webp$'
+    ) then
+      raise exception using errcode = '23514', message = 'profile_image_path_not_owned';
+    end if;
+    if not exists (
+      select 1 from storage.objects
+      where bucket_id = 'profile-images' and name = image_path
+    ) then
+      raise exception using errcode = '23514', message = 'profile_image_not_uploaded';
+    end if;
+  end loop;
+  return new;
+end;
+$$;
+revoke all on function public.validate_facilitator_profile_images() from public, anon, authenticated;
+drop trigger if exists facilitator_profiles_validate_images on public.facilitator_profiles;
+create trigger facilitator_profiles_validate_images
+  before insert or update of image_paths, user_id on public.facilitator_profiles
+  for each row execute function public.validate_facilitator_profile_images();
+
+-- New fields are deliberately public only for approved, publicly visible
+-- profiles. Appending columns preserves the existing view's column order and
+-- identity, including its grants and security_invoker behavior.
+grant select (image_paths, whatsapp_url, signal_url, telegram_url)
+  on public.facilitator_profiles to anon;
+create or replace view public.facilitator_public_profiles
+  with (security_invoker = true) as
+select
+  id, display_name, bio, location, remote_available, modalities,
+  years_experience, lineage_or_training, certifications, safety_practices,
+  contraindications_acknowledged, donation_based, minimum_donation, hourly_rate,
+  avatar_url, user_id, created_at, image_paths, whatsapp_url, signal_url, telegram_url
+from public.facilitator_profiles
+where public.is_facilitator_profile_public(id);
+grant select on public.facilitator_public_profiles to anon, authenticated;
+
+comment on column public.facilitator_profiles.image_paths is
+  'Ordered private profile-images object paths. First image is the profile photo. '
+  'One to five required on each new application or update; app authorizes image reads.';
+comment on column public.facilitator_profiles.whatsapp_url is
+  'Optional owner-supplied public WhatsApp contact link; may expose their phone number.';
+comment on column public.facilitator_profiles.signal_url is
+  'Optional owner-supplied public Signal contact link; phone links expose their number.';
+comment on column public.facilitator_profiles.telegram_url is
+  'Optional owner-supplied public Telegram username link.';
 
 commit;

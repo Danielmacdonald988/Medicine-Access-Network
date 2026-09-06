@@ -45,6 +45,10 @@ export interface FacilitatorProfile {
   verification_status: VerificationStatus
   visibility: 'public' | 'unlisted' | 'hidden'
   avatar_url?: string
+  image_paths: string[]
+  whatsapp_url?: string | null
+  signal_url?: string | null
+  telegram_url?: string | null
   created_at: string
   updated_at: string
 }
@@ -71,6 +75,10 @@ export interface FacilitatorPublicProfile {
   minimum_donation?: number
   hourly_rate?: number
   avatar_url?: string
+  image_paths: string[]
+  whatsapp_url?: string | null
+  signal_url?: string | null
+  telegram_url?: string | null
   created_at: string
 }
 

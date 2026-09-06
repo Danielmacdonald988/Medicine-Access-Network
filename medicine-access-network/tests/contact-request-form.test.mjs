@@ -10,7 +10,15 @@ const formSource = readFileSync(new URL('components/forms/ContactRequestForm.tsx
 const schemaSource = readFileSync(new URL('lib/validations.ts', root), 'utf8')
 const schemaModule = { exports: {} }
 const schemaCode = ts.transpileModule(schemaSource, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText
-new Function('require', 'module', 'exports', schemaCode)(require, schemaModule, schemaModule.exports)
+const schemaImports = {}
+for (const dependency of ['direct-contact', 'profile-media']) {
+  const source = readFileSync(new URL(`lib/${dependency}.ts`, root), 'utf8')
+  const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText
+  const loaded = { exports: {} }
+  new Function('require', 'module', 'exports', compiled)(require, loaded, loaded.exports)
+  schemaImports[`./${dependency}`] = loaded.exports
+}
+new Function('require', 'module', 'exports', schemaCode)((name) => schemaImports[name] ?? require(name), schemaModule, schemaModule.exports)
 const { contactRequestFormSchema, contactRequestSchema } = schemaModule.exports
 
 // Read the actual form configuration. Duplicating the defaults in the test

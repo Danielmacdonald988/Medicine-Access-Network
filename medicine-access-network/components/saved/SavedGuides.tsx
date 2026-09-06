@@ -5,6 +5,8 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { savedGuideFee, type SavedGuideProfile } from '@/lib/saved-guides'
 import { Button } from '@/components/ui/button'
 import { clearSavedGuides, removeSavedGuide, useSavedGuides } from './useSavedGuides'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { getProfileImageUrl } from '@/lib/profile-media'
 
 type LoadState = { status: 'loading' } | { status: 'error' } | { status: 'ready'; profiles: SavedGuideProfile[] }
 
@@ -63,6 +65,10 @@ function Comparison({ ids, onRemove }: { ids: string[]; onRemove: (id: string) =
               const profile = profiles[index]
               return <th scope="col" key={id} className="p-5 align-top font-normal">
                 {profile ? <>
+                  <Avatar className="mb-3 size-20 rounded-xl">
+                    {getProfileImageUrl(profile.image_paths?.[0]) && <AvatarImage src={getProfileImageUrl(profile.image_paths?.[0])!} alt={profile.display_name} className="object-cover" />}
+                    <AvatarFallback className="bg-emerald-100 font-medium text-emerald-800">{profile.display_name.split(' ').map((part) => part[0]).join('').toUpperCase().slice(0, 2)}</AvatarFallback>
+                  </Avatar>
                   <Link href={`/facilitators/${id}`} className="break-words text-lg font-semibold text-emerald-900 underline underline-offset-4">{profile.display_name}</Link>
                   <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-stone-600">{profile.bio}</p>
                   <Link href={`/facilitators/${id}`} className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-emerald-800 underline underline-offset-4">View profile & contact</Link>

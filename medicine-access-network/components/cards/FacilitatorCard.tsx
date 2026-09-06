@@ -5,12 +5,14 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { FacilitatorSearchResult } from '@/lib/types'
 import { SaveGuideButton } from '@/components/saved/SaveGuideButton'
+import { getProfileImageUrl } from '@/lib/profile-media'
 
 interface FacilitatorCardProps {
   facilitator: FacilitatorSearchResult
 }
 
 export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
+  const photoUrl = getProfileImageUrl(f.image_paths?.[0])
   const initials = f.display_name
     .split(' ')
     .map((n) => n[0])
@@ -32,9 +34,9 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
       <div className="flex flex-1 flex-col gap-4 p-5">
         {/* Top row: avatar + identity */}
         <div className="flex items-start gap-3">
-          <Link href={`/facilitators/${f.id}`} tabIndex={-1} aria-hidden="true" className="shrink-0"><Avatar className="size-12 shrink-0">
-            {f.avatar_url && (
-              <AvatarImage src={f.avatar_url} alt={f.display_name} />
+          <Link href={`/facilitators/${f.id}`} tabIndex={-1} aria-hidden="true" className="shrink-0"><Avatar className="size-20 shrink-0 rounded-xl">
+            {photoUrl && (
+              <AvatarImage src={photoUrl} alt={f.display_name} className="object-cover" />
             )}
             <AvatarFallback className="bg-emerald-100 text-sm font-medium text-emerald-800">
               {initials}
