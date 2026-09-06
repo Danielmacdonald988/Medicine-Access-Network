@@ -7,9 +7,9 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 export type SavedGuideProfile = Pick<FacilitatorPublicProfile,
   'id' | 'display_name' | 'bio' | 'location' | 'remote_available' | 'modalities' |
   'donation_based' | 'minimum_donation' | 'hourly_rate' | 'years_experience' |
-  'lineage_or_training' | 'certifications'>
+  'lineage_or_training' | 'certifications' | 'image_paths'>
 
-export const SAVED_GUIDE_COLUMNS = 'id, display_name, bio, location, remote_available, modalities, donation_based, minimum_donation, hourly_rate, years_experience, lineage_or_training, certifications'
+export const SAVED_GUIDE_COLUMNS = 'id, display_name, bio, location, remote_available, modalities, donation_based, minimum_donation, hourly_rate, years_experience, lineage_or_training, certifications, image_paths'
 
 // Reject malformed or oversized API lists before starting a database request.
 export function parseSavedGuideQuery(values: string[]): string[] | null {

@@ -20,7 +20,10 @@ function loadModule(path, mocks = {}) {
 }
 
 const bodyHelpers = loadModule('lib/request-body.ts')
-const schemas = loadModule('lib/validations.ts')
+const schemas = loadModule('lib/validations.ts', {
+  './direct-contact': loadModule('lib/direct-contact.ts'),
+  './profile-media': loadModule('lib/profile-media.ts'),
+})
 const requestId = 'd83e7d80-e6fa-4528-a981-f088343cb29a'
 const privateMarker = 'private-visitor@example.com'
 const inquiry = {

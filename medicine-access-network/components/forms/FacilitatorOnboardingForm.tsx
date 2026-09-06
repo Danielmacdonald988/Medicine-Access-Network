@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { z } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { CheckIcon, CheckCircle } from 'lucide-react'
-import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,12 +13,14 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
 import { createClient } from '@/lib/supabase'
-import { facilitatorOnboardingSchema } from '@/lib/validations'
+import { facilitatorOnboardingSchema, type FacilitatorOnboardingInput } from '@/lib/validations'
+import type { FacilitatorProfile } from '@/lib/types'
+import { ProfileMediaFields } from '@/components/profile/ProfileMediaFields'
 import { MODALITIES, MODALITY_CATEGORIES, APP_NAME } from '@/lib/constants'
 
 // ─── Step metadata ────────────────────────────────────────────────────────────
 
-const TOTAL_STEPS = 12
+const TOTAL_STEPS = 14
 
 const STEP_META: Record<number, { title: string; description: string }> = {
   1: {
@@ -70,6 +72,14 @@ const STEP_META: Record<number, { title: string; description: string }> = {
     description: 'Optional — you can update this at any time from your dashboard.',
   },
   12: {
+    title: 'Add your profile photos',
+    description: 'At least one photo is required. Your primary photo helps people recognise you.',
+  },
+  13: {
+    title: 'Let people message you directly',
+    description: 'Optional — add links to your own messaging accounts.',
+  },
+  14: {
     title: 'Platform agreement',
     description:
       'Please read the platform rules carefully and agree before submitting your application.',
@@ -88,15 +98,17 @@ const STEP_FIELDS: Record<number, string[]> = {
   9: ['contraindications_acknowledged'],
   10: ['donation_based'],
   11: ['minimum_donation', 'hourly_rate'],
-  12: ['platform_agreement'],
+  12: ['image_paths'],
+  13: ['whatsapp_url', 'signal_url', 'telegram_url'],
+  14: ['platform_agreement'],
 }
 
-// ─── Platform rules shown on step 12 ─────────────────────────────────────────
+// ─── Platform rules shown on step 14 ─────────────────────────────────────────
 
 const PLATFORM_RULES = [
   'I offer only legal support services: preparation coaching, integration guidance, breathwork, somatic coaching, meditation guidance, spiritual coaching, harm reduction education, and related legal wellness work.',
   'I will not facilitate illegal ceremonies and will not source, supply, or coordinate access to controlled substances of any kind.',
-  `I understand my profile will not appear publicly until it has been reviewed and approved by the ${APP_NAME} team.`,
+  `I understand my profile will not appear publicly until it has been reviewed and approved by ${APP_NAME}.`,
   'I will keep my safety practices, contraindication screening process, and profile information accurate and up to date.',
   'I understand that approval is not an endorsement of any specific practice, product, or health outcome.',
 ]
@@ -138,15 +150,15 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
 
 // ─── Confirmation screen ──────────────────────────────────────────────────────
 
-function ConfirmationScreen() {
+function ConfirmationScreen({ editing }: { editing: boolean }) {
   return (
     <div className="py-8 text-center">
       <div className="mx-auto mb-5 flex size-16 items-center justify-center rounded-full bg-emerald-100">
         <CheckCircle className="size-8 text-emerald-600" />
       </div>
-      <h2 className="text-xl font-semibold text-stone-900">Application submitted</h2>
+      <h2 className="text-xl font-semibold text-stone-900">{editing ? 'Profile changes submitted' : 'Application submitted'}</h2>
       <p className="mt-3 text-stone-600">
-        Your facilitator application has been submitted for review.
+        {editing ? 'Your updated profile has been submitted for review.' : 'Your facilitator application has been submitted for review.'}
       </p>
       <p className="mt-2 text-sm text-stone-500">
         Your profile stays hidden while it is pending review. Check your dashboard
@@ -163,8 +175,12 @@ function ConfirmationScreen() {
 
 // ─── Form ─────────────────────────────────────────────────────────────────────
 
-export function FacilitatorOnboardingForm() {
-  const [step, setStep] = useState(1)
+export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile?: FacilitatorProfile }) {
+  const [step, setStep] = useState(existingProfile ? 12 : 1)
+  const [uploading, setUploading] = useState(false)
+  const [saveError, setSaveError] = useState('')
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const errorRef = useRef<HTMLParagraphElement>(null)
   const [submitted, setSubmitted] = useState(false)
   const supabase = createClient()
 
@@ -175,25 +191,27 @@ export function FacilitatorOnboardingForm() {
     trigger,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm({
+  } = useForm<z.input<typeof facilitatorOnboardingSchema>, unknown, FacilitatorOnboardingInput>({
     resolver: zodResolver(facilitatorOnboardingSchema),
     defaultValues: {
-      display_name: '',
-      location: '',
-      remote_available: true,
-      bio: '',
-      modalities: [] as string[],
-      years_experience: undefined,
-      lineage_or_training: '',
-      certifications: '',
-      safety_practices: '',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      contraindications_acknowledged: undefined as any,
-      donation_based: false,
-      minimum_donation: undefined,
-      hourly_rate: undefined,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      platform_agreement: undefined as any,
+      display_name: existingProfile?.display_name ?? '',
+      location: existingProfile?.location ?? '',
+      remote_available: existingProfile?.remote_available ?? true,
+      bio: existingProfile?.bio ?? '',
+      modalities: existingProfile?.modalities ?? [],
+      years_experience: existingProfile?.years_experience ?? undefined,
+      lineage_or_training: existingProfile?.lineage_or_training ?? '',
+      certifications: existingProfile?.certifications?.join(', ') ?? '',
+      safety_practices: existingProfile?.safety_practices ?? '',
+      contraindications_acknowledged: existingProfile?.contraindications_acknowledged ? true : undefined,
+      donation_based: existingProfile?.donation_based ?? false,
+      minimum_donation: existingProfile?.minimum_donation ?? undefined,
+      hourly_rate: existingProfile?.hourly_rate ?? undefined,
+      image_paths: existingProfile?.image_paths ?? [],
+      whatsapp_url: existingProfile?.whatsapp_url ?? '',
+      signal_url: existingProfile?.signal_url ?? '',
+      telegram_url: existingProfile?.telegram_url ?? '',
+      platform_agreement: undefined,
     },
   })
 
@@ -201,69 +219,132 @@ export function FacilitatorOnboardingForm() {
   const safetyPractices = watch('safety_practices') ?? ''
   const donationBased = watch('donation_based')
 
+  const goToStep = (nextStep: number) => {
+    setStep(nextStep)
+    requestAnimationFrame(() => headingRef.current?.focus())
+  }
+
   const advance = async () => {
+    if (uploading || isSubmitting) return
     const valid = await trigger(
       STEP_FIELDS[step] as Parameters<typeof trigger>[0]
     )
-    if (valid) setStep((s) => s + 1)
+    if (valid) goToStep(step + 1)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = async (data: any) => {
-    const { platform_agreement: _p, ...rest } = data
+  const onSubmit = async (data: FacilitatorOnboardingInput) => {
+    if (uploading) return
+    setSaveError('')
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) {
+        setSaveError('Your sign-in has expired. Sign in again before submitting your profile.')
+        requestAnimationFrame(() => errorRef.current?.focus())
+        return
+      }
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (!user) {
-      toast.error('Please sign in to continue.')
-      return
+      const certifications = data.certifications
+        ? data.certifications.split(',').map((entry) => entry.trim()).filter(Boolean)
+        : []
+      const profileData = {
+        user_id: user.id,
+        display_name: data.display_name,
+        bio: data.bio,
+        location: data.location || null,
+        remote_available: data.remote_available,
+        modalities: data.modalities,
+        years_experience: data.years_experience ?? null,
+        lineage_or_training: data.lineage_or_training || null,
+        certifications,
+        safety_practices: data.safety_practices,
+        contraindications_acknowledged: data.contraindications_acknowledged,
+        donation_based: data.donation_based,
+        minimum_donation: data.minimum_donation ?? null,
+        hourly_rate: data.hourly_rate ?? null,
+        image_paths: data.image_paths,
+        whatsapp_url: data.whatsapp_url || null,
+        signal_url: data.signal_url || null,
+        telegram_url: data.telegram_url || null,
+        verification_status: 'pending',
+        visibility: 'hidden',
+      }
+      // New applications never overwrite an existing profile. Editing is explicitly
+      // scoped to this profile and the authenticated owner; database policies enforce it.
+      const query = existingProfile
+        ? supabase.from('facilitator_profiles').update(profileData)
+            .eq('id', existingProfile.id).eq('user_id', user.id)
+        : supabase.from('facilitator_profiles').insert(profileData)
+      const { data: saved, error } = await query.select('id').single()
+      if (error || !saved) {
+        setSaveError(error?.code === '23505'
+          ? 'An application already exists for this account. Open your dashboard to edit it.'
+          : 'Your profile could not be saved. Your entries are still here; please try again.')
+        requestAnimationFrame(() => errorRef.current?.focus())
+        return
+      }
+
+      // An old photo stays attached until this save succeeds. Cleanup is best-effort;
+      // the image endpoint also rejects deletion while any profile still uses it.
+      const removedPaths = (existingProfile?.image_paths ?? []).filter((path) => !data.image_paths.includes(path))
+      for (const path of removedPaths) {
+        void fetch('/api/profile-images', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path }),
+        }).catch(() => undefined)
+      }
+      setSubmitted(true)
+    } catch {
+      setSaveError('Your profile could not be saved. Check your connection and try again; your entries are still here.')
+      requestAnimationFrame(() => errorRef.current?.focus())
     }
-
-    const certifications = rest.certifications
-      ? (rest.certifications as string)
-          .split(',')
-          .map((c: string) => c.trim())
-          .filter(Boolean)
-      : []
-
-    const { error } = await supabase.from('facilitator_profiles').upsert({
-      user_id: user.id,
-      display_name: rest.display_name,
-      bio: rest.bio,
-      location: rest.location || null,
-      remote_available: rest.remote_available,
-      modalities: rest.modalities,
-      years_experience: rest.years_experience ?? null,
-      lineage_or_training: rest.lineage_or_training || null,
-      certifications,
-      safety_practices: rest.safety_practices,
-      contraindications_acknowledged: rest.contraindications_acknowledged,
-      donation_based: rest.donation_based,
-      minimum_donation: rest.minimum_donation ?? null,
-      hourly_rate: rest.hourly_rate ?? null,
-      verification_status: 'pending',
-      visibility: 'hidden',
-    }, { onConflict: 'user_id' })
-
-    if (error) {
-      toast.error(error.message)
-      return
-    }
-
-    setSubmitted(true)
   }
 
-  if (submitted) return <ConfirmationScreen />
+  if (submitted) return <ConfirmationScreen editing={Boolean(existingProfile)} />
 
   const { title, description } = STEP_META[step]
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+    <form onSubmit={(event) => {
+      if (step < TOTAL_STEPS) {
+        event.preventDefault()
+        void advance()
+        return
+      }
+      void handleSubmit(onSubmit, (invalidFields) => {
+        const invalidStep = Object.entries(STEP_FIELDS).find(([, fields]) =>
+          fields.some((field) => field in invalidFields)
+        )
+        if (invalidStep) goToStep(Number(invalidStep[0]))
+      })(event)
+    }} noValidate>
+      {existingProfile && (
+        <div className="mb-6 space-y-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
+          <p className="text-sm leading-relaxed text-amber-900">
+            {existingProfile.verification_status === 'approved'
+              ? 'Submitting changes will hide your public profile until the updated profile is reviewed and approved.'
+              : 'Submitting changes sends your updated profile for review. It stays hidden until approved.'}
+          </p>
+          <Label htmlFor="edit-profile-section">Jump to a section</Label>
+          <select
+            id="edit-profile-section"
+            value={step}
+            disabled={uploading || isSubmitting}
+            onChange={(event) => goToStep(Number(event.target.value))}
+            className="min-h-10 w-full rounded-lg border border-stone-300 bg-white px-3 text-sm text-stone-800"
+          >
+            {Object.entries(STEP_META).map(([key, section]) => (
+              <option key={key} value={key}>{key}. {section.title}</option>
+            ))}
+          </select>
+        </div>
+      )}
       <StepIndicator current={step} total={TOTAL_STEPS} />
 
       <div className="mb-6">
-        <h2 className="text-xl font-semibold text-stone-900">{title}</h2>
+        <h2 ref={headingRef} tabIndex={-1} className="text-xl font-semibold text-stone-900 focus:outline-none">{title}</h2>
         <p className="mt-1 text-sm text-stone-500">{description}</p>
       </div>
 
@@ -311,6 +392,7 @@ export function FacilitatorOnboardingForm() {
             <button
               type="button"
               onClick={() => field.onChange(!field.value)}
+              aria-pressed={field.value}
               className={cn(
                 'flex w-full items-start gap-3 rounded-xl border-2 p-4 text-left transition-all',
                 field.value
@@ -388,6 +470,7 @@ export function FacilitatorOnboardingForm() {
                         <button
                           key={m.id}
                           type="button"
+                          aria-pressed={selected}
                           onClick={() =>
                             field.onChange(
                               selected
@@ -438,7 +521,7 @@ export function FacilitatorOnboardingForm() {
             max={50}
             placeholder="0"
             autoFocus
-            {...register('years_experience')}
+            {...register('years_experience', { setValueAs: (value) => value === '' ? undefined : value })}
           />
           {errors.years_experience && (
             <p className="text-xs text-red-500">{errors.years_experience.message}</p>
@@ -531,16 +614,17 @@ export function FacilitatorOnboardingForm() {
             name="contraindications_acknowledged"
             control={control}
             render={({ field }) => (
-              <div
+              <label
+                htmlFor="contraindications_acknowledged"
                 className={cn(
                   'flex cursor-pointer items-start gap-3 rounded-xl border-2 p-4 transition-all select-none',
                   field.value
                     ? 'border-emerald-600 bg-emerald-50'
                     : 'border-stone-200'
                 )}
-                onClick={() => field.onChange(field.value ? undefined : true)}
               >
                 <Checkbox
+                  id="contraindications_acknowledged"
                   checked={field.value === true}
                   onCheckedChange={(checked) =>
                     field.onChange(checked ? true : undefined)
@@ -550,7 +634,7 @@ export function FacilitatorOnboardingForm() {
                 <span className="text-sm font-medium text-stone-800">
                   I understand and commit to appropriate contraindication screening for every client.
                 </span>
-              </div>
+              </label>
             )}
           />
           {errors.contraindications_acknowledged && (
@@ -585,6 +669,7 @@ export function FacilitatorOnboardingForm() {
                   <button
                     key={String(value)}
                     type="button"
+                    aria-pressed={field.value === value}
                     onClick={() => field.onChange(value)}
                     className={cn(
                       'flex w-full items-start gap-3 rounded-xl border-2 p-4 text-left transition-all',
@@ -638,7 +723,7 @@ export function FacilitatorOnboardingForm() {
                   placeholder="0"
                   className="pl-6"
                   autoFocus
-                  {...register('minimum_donation')}
+                  {...register('minimum_donation', { setValueAs: (value) => value === '' ? undefined : value })}
                 />
               </div>
               <p className="text-xs text-stone-400">
@@ -659,7 +744,7 @@ export function FacilitatorOnboardingForm() {
                   placeholder="0"
                   className="pl-6"
                   autoFocus
-                  {...register('hourly_rate')}
+                  {...register('hourly_rate', { setValueAs: (value) => value === '' ? undefined : value })}
                 />
               </div>
               <p className="text-xs text-stone-400">
@@ -667,11 +752,81 @@ export function FacilitatorOnboardingForm() {
               </p>
             </>
           )}
+          {donationBased && errors.minimum_donation && (
+            <p role="alert" className="text-sm text-red-700">{errors.minimum_donation.message}</p>
+          )}
+          {!donationBased && errors.hourly_rate && (
+            <p role="alert" className="text-sm text-red-700">{errors.hourly_rate.message}</p>
+          )}
         </div>
       )}
 
-      {/* ── Step 12: Platform agreement ──────────────────────────────────────── */}
       {step === 12 && (
+        <Controller
+          name="image_paths"
+          control={control}
+          render={({ field }) => (
+            <ProfileMediaFields
+              value={field.value ?? []}
+              onChange={(paths) => {
+                field.onChange(paths)
+                void trigger('image_paths')
+              }}
+              onBusyChange={setUploading}
+              error={errors.image_paths?.message}
+              disabled={isSubmitting || uploading}
+            />
+          )}
+        />
+      )}
+
+      {step === 13 && (
+        <div className="space-y-5">
+          <p className="rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm leading-relaxed text-stone-600">
+            These links will appear publicly on your approved profile. Visitors can open your
+            messaging app and contact you directly. WhatsApp links and phone-based Signal links
+            reveal your phone number. Conversations take place in that app, outside this site.
+          </p>
+          <div className="space-y-1.5">
+            <Label htmlFor="whatsapp_url">WhatsApp link (optional)</Label>
+            <Input id="whatsapp_url" type="url" inputMode="url" autoCapitalize="none" spellCheck={false}
+              placeholder="https://wa.me/14155552671" maxLength={320}
+              aria-describedby="whatsapp-help whatsapp-error" aria-invalid={Boolean(errors.whatsapp_url)}
+              {...register('whatsapp_url')} />
+            <p id="whatsapp-help" className="text-xs text-stone-500">
+              Use https://wa.me/ followed by your country code and number, with no spaces or plus sign.
+            </p>
+            {errors.whatsapp_url && <p id="whatsapp-error" role="alert" className="text-sm text-red-700">{errors.whatsapp_url.message}</p>}
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="signal_url">Signal link (optional)</Label>
+            <Input id="signal_url" type="url" inputMode="url" autoCapitalize="none" spellCheck={false}
+              placeholder="Paste your https://signal.me/ share link" maxLength={320}
+              aria-describedby="signal-help signal-error" aria-invalid={Boolean(errors.signal_url)}
+              {...register('signal_url')} />
+            <p id="signal-help" className="text-xs text-stone-500">
+              In Signal, open Settings → your profile → QR Code or Link, then copy your link.
+              A username share link lets you avoid listing your phone number here.
+            </p>
+            {errors.signal_url && <p id="signal-error" role="alert" className="text-sm text-red-700">{errors.signal_url.message}</p>}
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="telegram_url">Telegram link (optional)</Label>
+            <Input id="telegram_url" type="url" inputMode="url" autoCapitalize="none" spellCheck={false}
+              placeholder="https://t.me/your_username" maxLength={320}
+              aria-describedby="telegram-help telegram-error" aria-invalid={Boolean(errors.telegram_url)}
+              {...register('telegram_url')} />
+            <p id="telegram-help" className="text-xs text-stone-500">
+              Add your personal account link, without an @ before the username. Use your own account, rather than a group or bot.
+            </p>
+            {errors.telegram_url && <p id="telegram-error" role="alert" className="text-sm text-red-700">{errors.telegram_url.message}</p>}
+          </div>
+          <p className="text-xs text-stone-500">Adding a link does not send a message. Leave all fields blank to use only the website contact form.</p>
+        </div>
+      )}
+
+      {/* ── Step 14: Platform agreement ──────────────────────────────────────── */}
+      {step === 14 && (
         <div className="space-y-4">
           <ul className="space-y-2 rounded-xl border border-stone-200 bg-stone-50 p-5">
             {PLATFORM_RULES.map((rule, i) => (
@@ -688,16 +843,17 @@ export function FacilitatorOnboardingForm() {
             name="platform_agreement"
             control={control}
             render={({ field }) => (
-              <div
+              <label
+                htmlFor="platform_agreement"
                 className={cn(
                   'flex cursor-pointer items-start gap-3 rounded-xl border-2 p-4 transition-all select-none',
                   field.value
                     ? 'border-emerald-600 bg-emerald-50'
                     : 'border-stone-200'
                 )}
-                onClick={() => field.onChange(field.value ? undefined : true)}
               >
                 <Checkbox
+                  id="platform_agreement"
                   checked={field.value === true}
                   onCheckedChange={(checked) =>
                     field.onChange(checked ? true : undefined)
@@ -707,7 +863,7 @@ export function FacilitatorOnboardingForm() {
                 <span className="text-sm font-medium text-stone-800">
                   I have read and agree to all of the platform rules above.
                 </span>
-              </div>
+              </label>
             )}
           />
           {errors.platform_agreement && (
@@ -716,13 +872,20 @@ export function FacilitatorOnboardingForm() {
         </div>
       )}
 
+      {saveError && (
+        <p ref={errorRef} tabIndex={-1} role="alert" className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+          {saveError} <Link href="/facilitator" className="font-medium underline">Open dashboard</Link>
+        </p>
+      )}
+
       {/* ── Navigation ───────────────────────────────────────────────────────── */}
       <div className="mt-8 flex items-center gap-3">
         {step > 1 && (
           <Button
             type="button"
             variant="ghost"
-            onClick={() => setStep((s) => s - 1)}
+            onClick={() => goToStep(step - 1)}
+            disabled={uploading || isSubmitting}
             className="text-stone-500"
           >
             Back
@@ -733,19 +896,27 @@ export function FacilitatorOnboardingForm() {
 
         {step < TOTAL_STEPS ? (
           <Button
+            key="continue"
             type="button"
-            onClick={advance}
+            onClick={(event) => {
+              // Prevent this click from submitting if a successful validation
+              // renders the final submit button before the browser default runs.
+              event.preventDefault()
+              void advance()
+            }}
+            disabled={uploading || isSubmitting}
             className="bg-emerald-700 hover:bg-emerald-800"
           >
             Continue
           </Button>
         ) : (
           <Button
+            key="submit"
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || uploading}
             className="bg-emerald-700 hover:bg-emerald-800"
           >
-            {isSubmitting ? 'Submitting…' : 'Submit application'}
+            {isSubmitting ? 'Submitting…' : existingProfile ? 'Submit changes for review' : 'Submit application'}
           </Button>
         )}
       </div>

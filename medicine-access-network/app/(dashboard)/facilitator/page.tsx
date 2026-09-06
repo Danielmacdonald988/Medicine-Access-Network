@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import { requireRole } from '@/lib/auth'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -252,7 +252,7 @@ export default async function FacilitatorDashboard() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
         <div className="flex items-center gap-3">
           <Avatar className="size-10">
             <AvatarFallback className="bg-emerald-100 font-medium text-emerald-800">
@@ -266,13 +266,20 @@ export default async function FacilitatorDashboard() {
             <p className="text-sm text-stone-500">Guide dashboard</p>
           </div>
         </div>
-        {facilitatorProfile?.verification_status === 'approved' && (
-          <Button size="sm" variant="outline" asChild className="shrink-0">
-            <Link href={`/facilitators/${facilitatorProfile.id}`}>
-              Public profile
-              <ArrowRight className="ml-1 size-3" />
-            </Link>
-          </Button>
+        {hasProfile && (
+          <div className="flex shrink-0 flex-wrap gap-2">
+            <Button size="sm" variant="outline" asChild>
+              <Link href="/facilitator/edit">Edit profile</Link>
+            </Button>
+            {facilitatorProfile?.verification_status === 'approved' && (
+              <Button size="sm" variant="outline" asChild>
+                <Link href={`/facilitators/${facilitatorProfile.id}`}>
+                  Public profile
+                  <ArrowRight className="ml-1 size-3" />
+                </Link>
+              </Button>
+            )}
+          </div>
         )}
       </div>
 
@@ -372,14 +379,14 @@ export default async function FacilitatorDashboard() {
                     </p>
                     {status === 'pending' && (
                       <p className="mt-0.5 text-xs text-stone-500">
-                        Under review — typically 3–5 business days.
+                        Your profile is hidden while it is being reviewed. Check here for updates.
                       </p>
                     )}
                     {status === 'rejected' && (
                       <p className="mt-0.5 text-xs text-stone-500">
                         Check your email for feedback, then{' '}
                         <Link
-                          href="/onboarding/facilitator"
+                          href="/facilitator/edit"
                           className="underline hover:text-emerald-700"
                         >
                           update your application
@@ -534,7 +541,7 @@ export default async function FacilitatorDashboard() {
             className="text-stone-400 hover:text-stone-700"
             asChild
           >
-            <Link href="/onboarding/facilitator">Edit profile</Link>
+            <Link href="/facilitator/edit">Edit profile, photos &amp; messaging links</Link>
           </Button>
         </div>
       )}

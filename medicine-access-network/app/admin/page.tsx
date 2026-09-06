@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import {
   Shield,
   Clock,
@@ -13,6 +14,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import { getProfileImageUrl } from '@/lib/profile-media'
+import { getDirectContactLinks } from '@/lib/direct-contact'
 
 export const metadata: Metadata = { title: 'Admin' }
 
@@ -49,7 +52,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     supabase
       .from('facilitator_profiles')
       .select(
-        'id, display_name, location, modalities, bio, safety_practices, years_experience, lineage_or_training, certifications, created_at, user_id'
+        'id, display_name, location, modalities, bio, safety_practices, years_experience, lineage_or_training, certifications, created_at, user_id, image_paths, whatsapp_url, signal_url, telegram_url'
       )
       .eq('verification_status', 'pending')
       .order('created_at', { ascending: true }),
@@ -178,6 +181,29 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  <div>
+                    <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-stone-500">Profile photos</h3>
+                    {(f.image_paths ?? []).length > 0 ? (
+                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+                        {(f.image_paths as string[]).slice(0, 5).map((path, index) => {
+                          const url = getProfileImageUrl(path)
+                          return url ? <a key={path} href={url} target="_blank" rel="noopener noreferrer" className="overflow-hidden rounded-lg border border-stone-200 bg-stone-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
+                            <Image src={url} alt={`${f.display_name} — submitted photo ${index + 1}`} width={400} height={300} unoptimized className="aspect-[4/3] w-full object-contain" />
+                            <span className="block p-2 text-xs text-stone-600">{index === 0 ? 'Primary photo' : `Photo ${index + 1}`} · open in new tab</span>
+                          </a> : null
+                        })}
+                      </div>
+                    ) : <p className="text-sm text-amber-800">A profile photo is required before publication.</p>}
+                  </div>
+                  <div>
+                    <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-stone-500">Public direct contact links</h3>
+                    {getDirectContactLinks(f).length > 0 ? <>
+                      <div className="flex flex-wrap gap-3">
+                        {getDirectContactLinks(f).map(({ platform, label, href }) => <a key={platform} href={href} target="_blank" rel="noopener noreferrer nofollow ugc" className="inline-flex min-h-11 items-center break-all rounded-lg border border-stone-200 px-3 py-2 text-sm font-medium text-emerald-800 underline underline-offset-4">{label} · open in app or new tab</a>)}
+                      </div>
+                      <p className="mt-2 text-xs text-stone-600">The link format is checked. Confirm the destination belongs to this guide during review.</p>
+                    </> : <p className="text-sm text-stone-600">No direct contact links supplied; the website inquiry form remains available.</p>}
+                  </div>
                   {/* Modalities */}
                   {(f.modalities ?? []).length > 0 && (
                     <div className="flex flex-wrap gap-1.5">

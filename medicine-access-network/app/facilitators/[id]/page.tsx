@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import {
   MapPin,
@@ -21,6 +22,9 @@ import { Button } from '@/components/ui/button'
 import { SaveGuideButton } from '@/components/saved/SaveGuideButton'
 import { ContactRequestForm } from '@/components/forms/ContactRequestForm'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
+import { getProfileImageUrl } from '@/lib/profile-media'
+import { getDirectContactLinks } from '@/lib/direct-contact'
+import { DirectContactLinks } from '@/components/profile/DirectContactLinks'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -38,7 +42,7 @@ export async function generateMetadata({
   // on this view at all).
   const { data } = await supabase
     .from('facilitator_public_profiles')
-    .select('display_name, bio, location, modalities, avatar_url')
+    .select('display_name, bio, location, modalities, image_paths')
     .eq('id', id)
     .maybeSingle()
 
@@ -55,6 +59,7 @@ export async function generateMetadata({
   const description = data.location
     ? `${data.bio.slice(0, 140)} — ${data.location}`.slice(0, 160)
     : data.bio.slice(0, 160)
+  const photoUrl = getProfileImageUrl(data.image_paths?.[0])
 
   return {
     title: data.display_name,
@@ -65,13 +70,13 @@ export async function generateMetadata({
       description,
       url: `/facilitators/${id}`,
       type: 'profile',
-      images: data.avatar_url ? [{ url: data.avatar_url }] : undefined,
+      images: photoUrl ? [{ url: photoUrl }] : undefined,
     },
     twitter: {
       card: 'summary',
       title: data.display_name,
       description,
-      images: data.avatar_url ? [data.avatar_url] : undefined,
+      images: photoUrl ? [photoUrl] : undefined,
     },
   }
 }
@@ -189,6 +194,12 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
       : 'Rate discussed on request'
 
   const certifications: string[] = facilitator.certifications ?? []
+  const photoUrls = (facilitator.image_paths ?? [])
+    .slice(0, 5)
+    .map((path: string) => getProfileImageUrl(path))
+    .filter((url: string | null): url is string => url !== null)
+  const primaryPhotoUrl = photoUrls[0]
+  const hasDirectContact = getDirectContactLinks(facilitator).length > 0
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -201,11 +212,12 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
       <div className="rounded-2xl border border-stone-200 bg-white p-5 sm:p-7">
         <div className="grid items-start gap-6 md:grid-cols-[minmax(0,1fr)_minmax(240px,300px)]">
           <div className="flex items-start gap-4 sm:gap-5">
-            <Avatar className="size-20 shrink-0 ring-2 ring-emerald-100 ring-offset-2">
-              {facilitator.avatar_url && (
+            <Avatar className="size-24 shrink-0 rounded-xl ring-2 ring-emerald-100 ring-offset-2 sm:size-32">
+              {primaryPhotoUrl && (
                 <AvatarImage
-                  src={facilitator.avatar_url}
+                  src={primaryPhotoUrl}
                   alt={facilitator.display_name}
+                  className="object-cover"
                 />
               )}
               <AvatarFallback className="bg-emerald-100 text-xl font-semibold text-emerald-800">
@@ -279,13 +291,16 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             <p className="mt-1 text-xs leading-relaxed text-stone-600">
               Confirm session length and total cost directly.
             </p>
+            {hasDirectContact && <div className="mt-4"><DirectContactLinks profile={facilitator} /></div>}
             <Button
               asChild
-              className="mt-4 h-auto min-h-11 w-full whitespace-normal bg-emerald-700 hover:bg-emerald-800"
+              variant={hasDirectContact ? 'outline' : 'default'}
+              className={`mt-4 h-auto min-h-11 w-full whitespace-normal ${hasDirectContact ? 'border-emerald-700 text-emerald-800 hover:bg-emerald-50' : 'bg-emerald-700 hover:bg-emerald-800'}`}
             >
               <a href="#contact">
                 {isOwnProfile
                   ? 'View your profile options'
+                  : hasDirectContact ? 'Send a website inquiry'
                   : `Contact ${facilitator.display_name}`}
               </a>
             </Button>
@@ -308,6 +323,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
       >
         {[
           { href: '#about', label: 'About & approach' },
+          ...(photoUrls.length ? [{ href: '#photos', label: 'Photos' }] : []),
           { href: '#training', label: 'Training' },
           { href: '#safety', label: 'Safety' },
           { href: '#fees', label: 'Fees' },
@@ -386,6 +402,27 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               {facilitator.bio}
             </p>
           </section>
+
+          {photoUrls.length > 0 && (
+            <section id="photos" aria-labelledby="photos-heading" className="scroll-mt-24">
+              <h2 id="photos-heading" className="text-lg font-semibold text-stone-900">Photos</h2>
+              <p className="mt-2 text-sm text-stone-600">Provided by {facilitator.display_name}. Select a photo to view it in a new tab.</p>
+              <div className={`mt-4 grid gap-3 ${photoUrls.length > 1 ? 'sm:grid-cols-2' : ''}`}>
+                {photoUrls.map((url: string, index: number) => (
+                  <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-xl border border-stone-200 bg-stone-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
+                    <Image
+                      src={url}
+                      alt={`${facilitator.display_name} — ${index === 0 ? 'profile photo' : `additional photo ${index}`}`}
+                      width={960}
+                      height={720}
+                      unoptimized
+                      className="aspect-[4/3] max-h-96 w-full object-contain"
+                    />
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Training, lineage & certifications */}
           <section
@@ -680,9 +717,11 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-stone-600">
                   {isOwnProfile
-                    ? 'Visitors can use this space to send you a conversation request.'
+                    ? 'Visitors can use your listed contact options or send you a website inquiry.'
                     : 'Introduce yourself and ask whether this guide’s support could be right for you.'}
                 </p>
+
+                {hasDirectContact && <div className="mt-5"><DirectContactLinks profile={facilitator} /></div>}
 
                 <Separator className="my-4" />
 
@@ -709,6 +748,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                   </Button>
                 ) : (
                   <>
+                    {hasDirectContact && <h3 className="mb-3 font-semibold text-stone-900">Or send a website inquiry</h3>}
                     <div className="mb-5 rounded-lg bg-emerald-50 p-4 text-sm text-emerald-900">
                       <h3 className="font-medium">What happens next</h3>
                       <ol className="mt-2 list-decimal space-y-2 pl-4 leading-relaxed">
