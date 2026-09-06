@@ -5,8 +5,10 @@ import { APP_NAME } from '@/lib/constants'
 
 const footerLinks = {
   Platform: [
-    { href: '/facilitators', label: 'Find a Guide' },
-    { href: '/onboarding/facilitator', label: 'Become a Guide' },
+    { href: '/facilitators', label: 'Find a guide' },
+    { href: '/saved', label: 'Saved guides' },
+    { href: '/#process-heading', label: 'How it works' },
+    { href: '/onboarding/facilitator', label: 'List your practice' },
   ],
   'Safety Library': [
     { href: '/resources', label: 'Browse resources' },

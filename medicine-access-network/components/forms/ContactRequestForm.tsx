@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -22,16 +22,10 @@ import {
   contactRequestFormSchema,
   type ContactRequestFormInput,
 } from '@/lib/validations'
-import { PREFERRED_FORMATS } from '@/lib/constants'
-
-const SUPPORT_SERVICES = [
-  'Preparation coaching',
-  'Integration coaching',
-  'Breathwork session',
-  'Somatic coaching',
-  'Harm reduction consultation',
-  'General consultation',
-] as const
+import {
+  profileFormatOptions,
+  profileSupportOptions,
+} from '@/lib/contact-options'
 
 const TIME_WINDOWS = [
   'No preference — flexible',
@@ -46,16 +40,29 @@ const TIME_WINDOWS = [
 interface ContactRequestFormProps {
   facilitatorProfileId: string
   facilitatorDisplayName: string
+  modalities: string[]
+  remoteAvailable: boolean
+  location?: string | null
 }
 
 export function ContactRequestForm({
   facilitatorProfileId,
   facilitatorDisplayName,
+  modalities,
+  remoteAvailable,
+  location,
 }: ContactRequestFormProps) {
   const [submitted, setSubmitted] = useState(false)
   const [submissionError, setSubmissionError] = useState<string | null>(null)
   const honeypot = useRef<HTMLInputElement>(null)
+  const submissionErrorRef = useRef<HTMLDivElement>(null)
   const id = useId()
+  const supportOptions = profileSupportOptions(modalities)
+  const formatOptions = profileFormatOptions(remoteAvailable, location)
+
+  useEffect(() => {
+    if (submissionError) submissionErrorRef.current?.focus()
+  }, [submissionError])
 
   const {
     register,
@@ -250,7 +257,7 @@ export function ContactRequestForm({
                 <SelectValue placeholder="What are you looking for?" />
               </SelectTrigger>
               <SelectContent>
-                {SUPPORT_SERVICES.map((service) => (
+                {supportOptions.map((service) => (
                   <SelectItem key={service} value={service}>
                     {service}
                   </SelectItem>
@@ -271,7 +278,7 @@ export function ContactRequestForm({
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor={`${id}-format`}>Preferred format</Label>
+        <Label htmlFor={`${id}-format`}>How would you prefer to connect?</Label>
         <Controller
           name="preferred_format"
           control={control}
@@ -287,21 +294,19 @@ export function ContactRequestForm({
                 onBlur={field.onBlur}
                 aria-required="true"
                 aria-invalid={!!errors.preferred_format}
-                aria-describedby={
-                  errors.preferred_format ? `${id}-format-error` : undefined
-                }
+                aria-describedby={`${id}-format-help${errors.preferred_format ? ` ${id}-format-error` : ''}`}
                 className="min-h-11 w-full"
               >
                 <SelectValue placeholder="How would you like to connect?">
                   {field.value
-                    ? PREFERRED_FORMATS.find(
+                    ? formatOptions.find(
                         (format) => format.value === field.value,
                       )?.label
                     : undefined}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                {PREFERRED_FORMATS.map(({ value, label }) => (
+                {formatOptions.map(({ value, label }) => (
                   <SelectItem key={value} value={value}>
                     {label}
                   </SelectItem>
@@ -310,6 +315,16 @@ export function ContactRequestForm({
             </Select>
           )}
         />
+        <p
+          id={`${id}-format-help`}
+          className="text-sm leading-relaxed text-stone-600"
+        >
+          The guide can reply to your email. These are preferences to discuss,
+          not confirmed session options.{' '}
+          {remoteAvailable
+            ? 'Online support is listed; confirm whether they can work with you where you live.'
+            : 'Online sessions are not listed on this profile.'}
+        </p>
         {errors.preferred_format && (
           <p
             id={`${id}-format-error`}
@@ -468,6 +483,8 @@ export function ContactRequestForm({
       {submissionError && (
         <div
           role="alert"
+          tabIndex={-1}
+          ref={submissionErrorRef}
           className="space-y-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800"
         >
           <p>{submissionError}</p>
@@ -485,7 +502,7 @@ export function ContactRequestForm({
         className="min-h-11 w-full bg-emerald-700 hover:bg-emerald-800"
         disabled={isSubmitting}
       >
-        {isSubmitting ? 'Sending…' : 'Request conversation'}
+        {isSubmitting ? 'Sending…' : 'Send conversation request'}
       </Button>
       <p className="text-center text-sm text-stone-500">
         No account or payment required. A request does not book a session.

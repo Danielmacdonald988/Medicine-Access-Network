@@ -11,6 +11,7 @@ export interface FacilitatorFilters {
   remote: boolean
   donation: boolean
   minExperience: number
+  sort: 'newest' | 'name'
 }
 
 export const DIRECTORY_PAGE_SIZE = 18
@@ -47,6 +48,7 @@ export function parseFacilitatorFilters(params: Pick<URLSearchParams, 'get' | 'g
     remote: params.get('remote') === 'true',
     donation: params.get('donation') === 'true',
     minExperience: boundedInteger(params.get('min_exp'), 0, 0, 50),
+    sort: params.get('sort') === 'name' ? 'name' : 'newest',
   }
 }
 
@@ -58,6 +60,7 @@ export function filterSearchParams(filters: FacilitatorFilters): URLSearchParams
   if (filters.remote) params.set('remote', 'true')
   if (filters.donation) params.set('donation', 'true')
   if (filters.minExperience) params.set('min_exp', String(filters.minExperience))
+  if (filters.sort === 'name') params.set('sort', 'name')
   return params
 }
 
@@ -67,7 +70,9 @@ export function directoryHref(params: URLSearchParams): string {
 }
 
 export function hasActiveFilters(filters: FacilitatorFilters): boolean {
-  return filterSearchParams(filters).size > 0
+  const params = filterSearchParams(filters)
+  params.delete('sort')
+  return params.size > 0
 }
 
 // Escape a literal substring for PostgreSQL's case-insensitive regex operator.
@@ -84,7 +89,22 @@ function quoteFilterValue(value: string): string {
 export function textSearchExpression(q: string): string {
   const value = quoteFilterValue(literalSearchPattern(q))
   const clauses = ['display_name', 'bio', 'location'].map((column) => `${column}.imatch.${value}`)
-  const modalities = MODALITIES.filter((modality) => modality.name.toLowerCase().includes(q.toLowerCase()))
+  // Only expand a small set of plain-language descriptions of the catalog.
+  // These are support categories, not a clinical or suitability assessment.
+  const aliases: Record<string, 'preparation' | 'integration'> = {
+    prep: 'preparation',
+    preparing: 'preparation',
+    'before a journey': 'preparation',
+    'before an experience': 'preparation',
+    'prepare for a journey': 'preparation',
+    integrate: 'integration',
+    'after a journey': 'integration',
+    'after an experience': 'integration',
+    'processing an experience': 'integration',
+  }
+  const term = q.toLowerCase().trim().replace(/\s+/g, ' ')
+  const category = Object.hasOwn(aliases, term) ? aliases[term] : undefined
+  const modalities = MODALITIES.filter((modality) => modality.name.toLowerCase().includes(term) || modality.category === category)
   if (modalities.length) {
     // Modality names come from the same catalog used by the application form.
     clauses.push(`modalities.ov.{${modalities.map((modality) => quoteFilterValue(modality.name)).join(',')}}`)
@@ -110,10 +130,12 @@ export function buildFacilitatorQuery(
   if (filters.location) query = query.regexIMatch('location', literalSearchPattern(filters.location))
   if (filters.minExperience) query = query.gte('years_experience', filters.minExperience)
 
-  return query
-    .order('created_at', { ascending: false })
-    .order('id', { ascending: false })
-    .range(offset, offset + limit - 1)
+  // Both orderings run in the database before pagination. The ID tiebreaker
+  // keeps equal names / creation dates stable between result pages.
+  query = filters.sort === 'name'
+    ? query.order('display_name', { ascending: true }).order('id', { ascending: true })
+    : query.order('created_at', { ascending: false }).order('id', { ascending: false })
+  return query.range(offset, offset + limit - 1)
 }
 
 export async function addFacilitatorRatings(

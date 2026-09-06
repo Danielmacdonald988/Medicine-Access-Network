@@ -1,11 +1,10 @@
 'use client'
 
-import { useRef, useState, useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ChevronDown, Search, SlidersHorizontal } from 'lucide-react'
+import { ChevronDown, SlidersHorizontal } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { MODALITIES, MODALITY_CATEGORIES } from '@/lib/constants'
 import { directoryHref, filterSearchParams, parseFacilitatorFilters } from '@/lib/facilitator-search'
@@ -20,11 +19,10 @@ const EXPERIENCE_OPTIONS = [
 export function SearchFilters() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const locationRef = useRef<HTMLInputElement>(null)
   const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
   const filters = parseFacilitatorFilters(searchParams)
-  const activeCount = filters.modalities.length + Number(filters.remote) + Number(filters.donation) + Number(Boolean(filters.minExperience)) + Number(Boolean(filters.location))
+  const activeCount = filters.modalities.length + Number(filters.remote) + Number(filters.donation) + Number(Boolean(filters.minExperience))
 
   const navigate = (params: URLSearchParams) => {
     startTransition(() => router.push(directoryHref(params), { scroll: false }))
@@ -45,16 +43,8 @@ export function SearchFilters() {
     navigate(params)
   }
 
-  const handleLocationSubmit = (event: React.FormEvent) => {
-    event.preventDefault()
-    const value = locationRef.current?.value.trim() ?? ''
-    toggle('location', value, Boolean(value))
-  }
-
   const clearFilters = () => {
-    const params = new URLSearchParams()
-    if (filters.q) params.set('q', filters.q)
-    navigate(params)
+    navigate(filterSearchParams({ ...filters, modalities: [], remote: false, donation: false, minExperience: 0 }))
   }
 
   return (
@@ -81,19 +71,8 @@ export function SearchFilters() {
 
       <fieldset id="guide-filter-options" disabled={isPending} aria-busy={isPending} className={cn('mt-5 min-w-0 space-y-5', !open && 'hidden lg:block')}>
         <legend className="sr-only">Guide search filters</legend>
-        <div>
-          <label htmlFor="guide-location" className="text-xs font-semibold uppercase tracking-wider text-stone-600">Location</label>
-          <form onSubmit={handleLocationSubmit} className="mt-2 flex gap-1.5">
-            <Input id="guide-location" name="location" ref={locationRef} key={filters.location} defaultValue={filters.location} maxLength={100} placeholder="City or country" className="h-10 min-w-0 text-sm" />
-            <Button type="submit" variant="outline" className="h-10 shrink-0 px-3" aria-label="Apply location filter">
-              <Search aria-hidden="true" className="size-4" />
-            </Button>
-          </form>
-          <p className="mt-2 text-xs leading-relaxed text-stone-500">For online support, leave location blank to explore guides anywhere.</p>
-        </div>
-
-        <fieldset className="space-y-3 border-t border-stone-100 pt-4">
-          <legend className="sr-only">Availability and pricing</legend>
+        <fieldset className="space-y-3">
+          <legend className="mb-2 text-xs font-semibold uppercase tracking-wider text-stone-600">Format and pricing</legend>
           <div className="flex min-h-8 items-center gap-2">
             <Checkbox id="remote" checked={filters.remote} onCheckedChange={(checked) => toggle('remote', 'true', checked)} />
             <label htmlFor="remote" className="cursor-pointer text-sm text-stone-700">Online sessions available</label>
@@ -102,11 +81,11 @@ export function SearchFilters() {
             <Checkbox id="donation" checked={filters.donation} onCheckedChange={(checked) => toggle('donation', 'true', checked)} />
             <label htmlFor="donation" className="cursor-pointer text-sm text-stone-700">Donation-based pricing</label>
           </div>
-          <p className="text-xs leading-relaxed text-stone-500">Donation-based guides may set a minimum. Check each profile for details.</p>
+          <p className="text-xs leading-relaxed text-stone-500">Online support depends on where you live. Donation-based guides may set a minimum. Confirm both before arranging a session.</p>
         </fieldset>
 
         <fieldset className="border-t border-stone-100 pt-4">
-          <legend className="text-xs font-semibold uppercase tracking-wider text-stone-600">Years of experience</legend>
+          <legend className="text-xs font-semibold uppercase tracking-wider text-stone-600">Self-reported practice</legend>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {EXPERIENCE_OPTIONS.map(({ label, value }) => (
               <button key={value} type="button" aria-pressed={filters.minExperience === Number(value)} onClick={() => toggle('min_exp', value, Boolean(value))} className={cn('min-h-9 rounded-full px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700', filters.minExperience === Number(value) ? 'bg-emerald-700 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200')}>
@@ -114,6 +93,7 @@ export function SearchFilters() {
               </button>
             ))}
           </div>
+          <p className="mt-2 text-xs leading-relaxed text-stone-500">Years may include personal practice. This is not a measure of training or professional experience.</p>
         </fieldset>
 
         <div className="border-t border-stone-100 pt-4">

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Search, SlidersHorizontal, Users, X } from 'lucide-react'
-import { SearchBar } from '@/components/search/SearchBar'
+import { SearchBar, SearchSort } from '@/components/search/SearchBar'
 import { SearchFilters } from '@/components/search/SearchFilters'
 import { SearchRecovery } from '@/components/search/SearchRecovery'
 import { FacilitatorCard } from '@/components/cards/FacilitatorCard'
@@ -77,7 +77,7 @@ function ActiveFilters({ filters }: { filters: FacilitatorFilters }) {
     ...(filters.location ? [{ key: 'location', value: filters.location, label: filters.location }] : []),
     ...(filters.remote ? [{ key: 'remote', value: 'true', label: 'Online available' }] : []),
     ...(filters.donation ? [{ key: 'donation', value: 'true', label: 'Donation-based' }] : []),
-    ...(filters.minExperience ? [{ key: 'min_exp', value: String(filters.minExperience), label: `${filters.minExperience}+ years` }] : []),
+    ...(filters.minExperience ? [{ key: 'min_exp', value: String(filters.minExperience), label: `${filters.minExperience}+ years of self-reported practice` }] : []),
     ...filters.modalities.map((value) => ({ key: 'modality', value, label: value })),
   ]
   if (!entries.length) return null
@@ -173,8 +173,8 @@ export default async function FacilitatorsPage({ searchParams }: PageProps) {
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-8">
         <p className="text-sm font-medium text-emerald-800">Find your support</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-stone-900 sm:text-4xl">A guide who fits your next step.</h1>
-        <p className="mt-4 max-w-2xl leading-relaxed text-stone-600">Explore preparation, integration, breathwork, and somatic support. Start with what matters to you: the approach, the format, or the cost.</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-stone-900 sm:text-4xl">Find a guide for your next step.</h1>
+        <p className="mt-4 max-w-2xl leading-relaxed text-stone-600">Compare preparation, integration, breathwork, and somatic support. Read profiles and ask questions directly. No explorer account is needed.</p>
         <Link href="/about#profile-review" className="mt-3 inline-block text-sm text-emerald-800 underline underline-offset-4">What does profile review mean?</Link>
       </div>
       <div className="mb-6"><Suspense><SearchBar /></Suspense></div>
@@ -182,6 +182,13 @@ export default async function FacilitatorsPage({ searchParams }: PageProps) {
         <Suspense><SearchFilters /></Suspense>
         <section aria-label="Guide search results" className="min-w-0 flex-1">
           <ActiveFilters filters={filters} />
+          <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <details className="max-w-md text-sm text-stone-600">
+              <summary className="cursor-pointer py-3 font-medium text-emerald-800 underline underline-offset-4">How profiles are ordered</summary>
+              <p className="leading-relaxed">Profiles are ordered by when they were created, newest first, or alphabetically when you choose Name A–Z. Placement is not a quality rating or a recommendation. Guides do not pay for placement.</p>
+            </details>
+            <Suspense><SearchSort /></Suspense>
+          </div>
           <Suspense key={`${filterSearchParams(filters)}:${page}`} fallback={<GridSkeleton />}>
             <FacilitatorGrid filters={filters} page={page} />
           </Suspense>

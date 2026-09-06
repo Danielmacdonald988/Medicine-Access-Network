@@ -17,6 +17,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
+import { SaveGuideButton } from '@/components/saved/SaveGuideButton'
 import { ContactRequestForm } from '@/components/forms/ContactRequestForm'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
 
@@ -26,7 +28,9 @@ interface PageProps {
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { id } = await params
   const supabase = await createServerSupabaseClient()
   // facilitator_public_profiles already filters to approved + public — no
@@ -42,7 +46,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // (see the view's own filter) — explicitly noindex it. Otherwise a stale
   // or guessed link could get crawled and indexed as a thin/empty page.
   if (!data) {
-    return { title: 'Guide not found', robots: { index: false, follow: false } }
+    return {
+      title: 'Guide not found',
+      robots: { index: false, follow: false },
+    }
   }
 
   const description = data.location
@@ -73,7 +80,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 function StarRow({ rating, max = 5 }: { rating: number; max?: number }) {
   return (
-    <div className="flex gap-0.5" role="img" aria-label={`${rating} out of ${max} stars`}>
+    <div
+      className="flex gap-0.5"
+      role="img"
+      aria-label={`${rating} out of ${max} stars`}
+    >
       {Array.from({ length: max }).map((_, i) => (
         <Star
           key={i}
@@ -121,6 +132,14 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
   if (!facilitator) notFound()
 
+  // This only changes the owner preview. Browsing and contacting other guides
+  // never require an explorer account, and an auth outage leaves the page usable.
+  const authUser = await supabase.auth
+    .getUser()
+    .then(({ data }) => data.user)
+    .catch(() => null)
+  const isOwnProfile = authUser?.id === facilitator.user_id
+
   // reviews.facilitator_id references users.id, not facilitator_profiles.id
   const { data: reviews } = await supabase
     .from('reviews')
@@ -138,15 +157,17 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
   const avgRating =
     reviews && reviews.length > 0
-      ? reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) /
-        reviews.length
+      ? reviews.reduce(
+          (sum: number, r: { rating: number }) => sum + r.rating,
+          0,
+        ) / reviews.length
       : null
 
   const avgSafetyRating =
     reviews && reviews.length > 0
       ? reviews.reduce(
           (sum: number, r: { safety_rating: number }) => sum + r.safety_rating,
-          0
+          0,
         ) / reviews.length
       : null
 
@@ -155,12 +176,12 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
       ? reviews.reduce(
           (sum: number, r: { integration_rating: number }) =>
             sum + r.integration_rating,
-          0
+          0,
         ) / reviews.length
       : null
 
   const rateDisplay = facilitator.donation_based
-    ? facilitator.minimum_donation
+    ? typeof facilitator.minimum_donation === 'number'
       ? `Donation-based — suggested from $${facilitator.minimum_donation}`
       : 'Donation-based / sliding scale'
     : typeof facilitator.hourly_rate === 'number'
@@ -170,17 +191,16 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
   const certifications: string[] = facilitator.certifications ?? []
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
-      <Link href="/facilitators" className="mb-6 inline-flex min-h-11 items-center text-sm font-medium text-emerald-700 underline-offset-4 hover:underline">
-        ← Browse all guides
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+      <Link
+        href="/facilitators"
+        className="mb-6 inline-flex min-h-11 items-center text-sm font-medium text-emerald-700 underline-offset-4 hover:underline"
+      >
+        ← Back to all guides
       </Link>
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
-
-        {/* ── Main content ─────────────────────────────────────────────────── */}
-        <div className="space-y-10 lg:col-span-2">
-
-          {/* Header */}
-          <div className="flex items-start gap-5">
+      <div className="rounded-2xl border border-stone-200 bg-white p-5 sm:p-7">
+        <div className="grid items-start gap-6 md:grid-cols-[minmax(0,1fr)_minmax(240px,300px)]">
+          <div className="flex items-start gap-4 sm:gap-5">
             <Avatar className="size-20 shrink-0 ring-2 ring-emerald-100 ring-offset-2">
               {facilitator.avatar_url && (
                 <AvatarImage
@@ -195,13 +215,16 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-2xl font-bold text-stone-900">
+                <h1 className="break-words text-2xl font-bold text-stone-900">
                   {facilitator.display_name}
                 </h1>
-                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">
+                <a
+                  href="#profile-review"
+                  className="inline-flex min-h-9 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 underline-offset-4 hover:underline"
+                >
                   <ShieldCheck aria-hidden="true" className="size-3" />
                   Profile reviewed
-                </span>
+                </a>
               </div>
 
               <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-stone-500">
@@ -220,9 +243,10 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 {typeof facilitator.years_experience === 'number' &&
                   facilitator.years_experience > 0 && (
                     <span className="flex items-center gap-1.5">
-                      <Clock className="size-3.5" />
+                      <Clock aria-hidden="true" className="size-3.5" />
                       {facilitator.years_experience} yr
-                      {facilitator.years_experience === 1 ? '' : 's'} practice (self-reported)
+                      {facilitator.years_experience === 1 ? '' : 's'} practice
+                      (self-reported)
                     </span>
                   )}
               </div>
@@ -233,10 +257,13 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                   <span className="text-sm font-medium text-stone-700">
                     {avgRating.toFixed(1)}
                   </span>
-                  <span className="text-sm text-stone-400">
-                    ({reviews.length}{' '}
-                    {reviews.length === 1 ? 'review' : 'reviews'})
-                  </span>
+                  <a
+                    href="#reviews"
+                    className="text-sm text-stone-600 underline underline-offset-4"
+                  >
+                    {reviews.length} recent{' '}
+                    {reviews.length === 1 ? 'review' : 'reviews'}
+                  </a>
                 </div>
               ) : (
                 <p className="mt-2 text-sm text-stone-500">No reviews yet</p>
@@ -244,17 +271,85 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             </div>
           </div>
 
-          <section id="profile-review" aria-labelledby="profile-review-heading" className="scroll-mt-24 rounded-xl border border-emerald-200 bg-emerald-50/60 p-5">
-            <h2 id="profile-review-heading" className="font-semibold text-emerald-900">
+          <div className="rounded-xl bg-stone-50 p-4">
+            <p className="text-xs font-medium uppercase tracking-wide text-stone-500">
+              Listed fee · USD
+            </p>
+            <p className="mt-1 font-semibold text-stone-900">{rateDisplay}</p>
+            <p className="mt-1 text-xs leading-relaxed text-stone-600">
+              Confirm session length and total cost directly.
+            </p>
+            <Button
+              asChild
+              className="mt-4 h-auto min-h-11 w-full whitespace-normal bg-emerald-700 hover:bg-emerald-800"
+            >
+              <a href="#contact">
+                {isOwnProfile
+                  ? 'View your profile options'
+                  : `Contact ${facilitator.display_name}`}
+              </a>
+            </Button>
+            <p className="mt-2 text-center text-xs text-stone-600">
+              No account needed. No payment to reach out.
+            </p>
+            <div className="mt-3 flex justify-center">
+              <SaveGuideButton
+                profileId={facilitator.id}
+                displayName={facilitator.display_name}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav
+        aria-label="Profile sections"
+        className="my-6 flex flex-wrap gap-x-5 gap-y-1 border-b border-stone-200 pb-2"
+      >
+        {[
+          { href: '#about', label: 'About & approach' },
+          { href: '#training', label: 'Training' },
+          { href: '#safety', label: 'Safety' },
+          { href: '#fees', label: 'Fees' },
+          { href: '#reviews', label: 'Reviews' },
+          {
+            href: '#contact',
+            label: isOwnProfile ? 'Your profile' : 'Contact',
+          },
+        ].map(({ href, label }) => (
+          <a
+            key={href}
+            href={href}
+            className="inline-flex min-h-11 items-center text-sm font-medium text-stone-700 underline-offset-4 hover:text-emerald-800 hover:underline"
+          >
+            {label}
+          </a>
+        ))}
+      </nav>
+
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
+        <div className="min-w-0 space-y-10 lg:col-span-2">
+          <section
+            id="profile-review"
+            aria-labelledby="profile-review-heading"
+            className="scroll-mt-24 rounded-xl border border-emerald-200 bg-emerald-50/60 p-5"
+          >
+            <h2
+              id="profile-review-heading"
+              className="font-semibold text-emerald-900"
+            >
               What “profile reviewed” means
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-emerald-900">
               The platform team has approved this profile for the directory.
               Approval does not verify a clinical license or guarantee safety,
-              suitability, or an outcome. Training and practice details below are
-              provided by the guide.
+              suitability, or an outcome. Training and practice details below
+              are provided by the guide.
             </p>
-            <Link href="/resources/questions-to-ask" className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-emerald-800 underline underline-offset-4">
+            <Link
+              href="/resources/questions-to-ask"
+              className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-emerald-800 underline underline-offset-4"
+            >
               Questions to ask before choosing a guide
             </Link>
           </section>
@@ -262,10 +357,20 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
           <Separator />
 
           {/* Modalities */}
-          <section>
-            <h2 className="mb-3 text-lg font-semibold text-stone-900">
-              Areas of practice
+          <section
+            id="about"
+            aria-labelledby="about-heading"
+            className="scroll-mt-24"
+          >
+            <h2
+              id="about-heading"
+              className="mb-3 text-lg font-semibold text-stone-900"
+            >
+              About &amp; approach
             </h2>
+            <p className="mb-3 text-sm font-medium text-stone-600">
+              Listed areas of practice
+            </p>
             <div className="flex flex-wrap gap-2">
               {facilitator.modalities.map((m: string) => (
                 <Badge
@@ -277,97 +382,143 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 </Badge>
               ))}
             </div>
-          </section>
-
-          {/* Bio */}
-          <section>
-            <h2 className="mb-3 text-lg font-semibold text-stone-900">About</h2>
-            <p className="whitespace-pre-line leading-relaxed text-stone-600">
+            <p className="mt-5 whitespace-pre-line leading-relaxed text-stone-600">
               {facilitator.bio}
             </p>
           </section>
 
           {/* Training, lineage & certifications */}
-          {(facilitator.lineage_or_training || certifications.length > 0) && (
-            <section>
-              <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-stone-900">
-                <GraduationCap className="size-5 text-stone-400" />
-                Training &amp; lineage
-              </h2>
-              <p className="mb-3 text-xs text-stone-500">
-                Reported by the guide. Ask about the issuer, scope, and current
-                status of any credential relevant to your needs.
-              </p>
-              {facilitator.lineage_or_training && (
-                <p className="whitespace-pre-line leading-relaxed text-stone-600">
-                  {facilitator.lineage_or_training}
+          <section
+            id="training"
+            aria-labelledby="training-heading"
+            className="scroll-mt-24"
+          >
+            <h2
+              id="training-heading"
+              className="mb-3 flex items-center gap-2 text-lg font-semibold text-stone-900"
+            >
+              <GraduationCap
+                aria-hidden="true"
+                className="size-5 text-stone-400"
+              />
+              Training &amp; lineage
+            </h2>
+            {facilitator.lineage_or_training || certifications.length > 0 ? (
+              <div>
+                <p className="mb-3 text-xs text-stone-500">
+                  Reported by the guide. Ask about the issuer, scope, and
+                  current status of any credential relevant to your needs.
                 </p>
-              )}
-              {certifications.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {certifications.map((cert: string) => (
-                    <Badge
-                      key={cert}
-                      variant="outline"
-                      className="border-stone-300 text-xs text-stone-600"
-                    >
-                      {cert}
-                    </Badge>
-                  ))}
-                </div>
-              )}
-            </section>
-          )}
+                {facilitator.lineage_or_training && (
+                  <p className="whitespace-pre-line leading-relaxed text-stone-600">
+                    {facilitator.lineage_or_training}
+                  </p>
+                )}
+                {certifications.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {certifications.map((cert: string) => (
+                      <Badge
+                        key={cert}
+                        variant="outline"
+                        className="border-stone-300 text-xs text-stone-600"
+                      >
+                        {cert}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm leading-relaxed text-stone-600">
+                Training details have not been provided. Ask about relevant
+                training, supervision, and the scope of their work before
+                deciding.
+              </p>
+            )}
+          </section>
 
-          {/* Safety practices */}
-          {facilitator.safety_practices && (
-            <section>
-              <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-stone-900">
-                <ShieldCheck className="size-5 text-amber-500" />
-                Safety practices &amp; screening
-              </h2>
+          <section
+            id="safety"
+            aria-labelledby="safety-heading"
+            className="scroll-mt-24 space-y-5"
+          >
+            <h2
+              id="safety-heading"
+              className="mb-3 flex items-center gap-2 text-lg font-semibold text-stone-900"
+            >
+              <ShieldCheck className="size-5 text-amber-500" />
+              Safety practices &amp; screening
+            </h2>
+            {facilitator.safety_practices ? (
               <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
+                <p className="mb-2 text-xs font-medium text-amber-800">
+                  Described by the guide
+                </p>
                 <p className="whitespace-pre-line text-sm leading-relaxed text-amber-900">
                   {facilitator.safety_practices}
                 </p>
               </div>
-            </section>
-          )}
+            ) : (
+              <p className="text-sm leading-relaxed text-stone-600">
+                This profile does not describe screening or safety practices.
+                Ask how consent, boundaries, screening, and referrals are
+                handled.
+              </p>
+            )}
 
-          {/* Contraindication awareness */}
-          {facilitator.contraindications_acknowledged && (
-            <section>
-              <h2 className="mb-3 text-lg font-semibold text-stone-900">
-                Contraindication awareness
-              </h2>
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
-                <div className="flex items-start gap-3">
-                  <ShieldCheck className="mt-0.5 size-5 shrink-0 text-emerald-600" />
-                  <div className="text-sm leading-relaxed text-emerald-900">
-                    <p className="font-medium">
-                      {facilitator.display_name} has acknowledged a screening commitment
-                    </p>
-                    <p className="mt-2 text-emerald-800">
-                      During their application, this guide committed to appropriate
-                      screening and declining work where contraindications are
-                      present. This is a statement from the guide, not an independent
-                      assessment of their screening or clinical qualifications.
-                    </p>
-                    <p className="mt-2 text-emerald-800">
-                      Ask how screening works, what falls outside their scope,
-                      and how referrals are handled. Discuss medical questions with
-                      a licensed healthcare provider.
-                    </p>
+            {/* Contraindication awareness */}
+            {facilitator.contraindications_acknowledged && (
+              <div>
+                <h3 className="mb-3 font-semibold text-stone-900">
+                  Screening commitment
+                </h3>
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+                  <div className="flex items-start gap-3">
+                    <ShieldCheck className="mt-0.5 size-5 shrink-0 text-emerald-600" />
+                    <div className="text-sm leading-relaxed text-emerald-900">
+                      <p className="font-medium">
+                        {facilitator.display_name} has acknowledged a screening
+                        commitment
+                      </p>
+                      <p className="mt-2 text-emerald-800">
+                        During their application, this guide committed to
+                        appropriate screening and declining work where
+                        contraindications are present. This is a statement from
+                        the guide, not an independent assessment of their
+                        screening or clinical qualifications.
+                      </p>
+                      <p className="mt-2 text-emerald-800">
+                        Ask how screening works, what falls outside their scope,
+                        and how referrals are handled. Discuss medical questions
+                        with a licensed healthcare provider.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </section>
-          )}
+            )}
+            <p className="text-sm leading-relaxed text-stone-600">
+              Discuss health questions with a licensed healthcare provider.{' '}
+              <Link
+                href="/resources/contraindications"
+                className="font-medium text-emerald-800 underline underline-offset-4"
+              >
+                Health Questions &amp; Screening
+              </Link>
+            </p>
+          </section>
 
           {/* Compensation */}
-          <section>
-            <h2 className="mb-3 text-lg font-semibold text-stone-900">
-              Compensation
+          <section
+            id="fees"
+            aria-labelledby="fees-heading"
+            className="scroll-mt-24"
+          >
+            <h2
+              id="fees-heading"
+              className="mb-3 text-lg font-semibold text-stone-900"
+            >
+              Fees &amp; practical details
             </h2>
             <div className="rounded-xl border border-stone-200 bg-stone-50 p-5">
               <p className="font-medium text-stone-900">{rateDisplay}</p>
@@ -380,112 +531,157 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 coaching, integration guidance, breathwork, and consultation. No
                 payment is required to send a conversation request.
               </p>
+              <p className="mt-3 text-sm text-stone-600">
+                {facilitator.remote_available
+                  ? 'Online support is listed. Confirm formats, time zones, and whether the guide can work with you where you live.'
+                  : 'Online sessions are not listed. Ask which formats and locations are possible.'}{' '}
+                A listed location does not confirm in-person availability.
+              </p>
             </div>
           </section>
 
-          {/* Reviews */}
-          {reviews && reviews.length > 0 && (
-            <section>
-              <div className="mb-5 flex flex-wrap items-center gap-4">
-                <h2 className="text-lg font-semibold text-stone-900">Recent reviews</h2>
-                {avgRating !== null && (
-                  <div className="flex items-center gap-2">
-                    <StarRow rating={Math.round(avgRating)} />
-                    <span className="text-sm font-medium text-stone-700">
-                      {avgRating.toFixed(1)}
-                    </span>
-                    <span className="text-sm text-stone-400">
-                      ({reviews.length}{' '}
-                      {reviews.length === 1 ? 'review' : 'reviews'})
-                    </span>
+          <section
+            id="reviews"
+            aria-labelledby="reviews-heading"
+            className="scroll-mt-24"
+          >
+            {reviews && reviews.length > 0 ? (
+              <div>
+                <div className="mb-5 flex flex-wrap items-center gap-4">
+                  <h2
+                    id="reviews-heading"
+                    className="text-lg font-semibold text-stone-900"
+                  >
+                    Recent reviews
+                  </h2>
+                  {avgRating !== null && (
+                    <div className="flex items-center gap-2">
+                      <StarRow rating={Math.round(avgRating)} />
+                      <span className="text-sm font-medium text-stone-700">
+                        {avgRating.toFixed(1)}
+                      </span>
+                      <span className="text-sm text-stone-400">
+                        ({reviews.length}{' '}
+                        {reviews.length === 1 ? 'review' : 'reviews'})
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <p className="mb-5 text-xs leading-relaxed text-stone-500">
+                  Ratings summarize the{' '}
+                  {reviews.length === 20 ? '20 most recent' : reviews.length}{' '}
+                  reviews shown below. Reviews reflect individual experiences
+                  and do not establish safety or predict results.
+                </p>
+
+                {/* Sub-ratings summary */}
+                {avgSafetyRating !== null && avgIntegrationRating !== null && (
+                  <div className="mb-5 flex flex-wrap gap-6 rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm">
+                    <div>
+                      <p className="text-xs text-stone-400">Safety</p>
+                      <div className="mt-1 flex items-center gap-1.5">
+                        <StarRow rating={Math.round(avgSafetyRating)} />
+                        <span className="font-medium text-stone-700">
+                          {avgSafetyRating.toFixed(1)}
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-xs text-stone-400">Integration</p>
+                      <div className="mt-1 flex items-center gap-1.5">
+                        <StarRow rating={Math.round(avgIntegrationRating)} />
+                        <span className="font-medium text-stone-700">
+                          {avgIntegrationRating.toFixed(1)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 )}
-              </div>
-              <p className="mb-5 text-xs leading-relaxed text-stone-500">
-                Ratings summarize the {reviews.length === 20 ? '20 most recent' : reviews.length} reviews shown below.
-                Reviews reflect individual experiences and do not establish safety
-                or predict results.
-              </p>
 
-              {/* Sub-ratings summary */}
-              {avgSafetyRating !== null && avgIntegrationRating !== null && (
-                <div className="mb-5 flex flex-wrap gap-6 rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm">
-                  <div>
-                    <p className="text-xs text-stone-400">Safety</p>
-                    <div className="mt-1 flex items-center gap-1.5">
-                      <StarRow rating={Math.round(avgSafetyRating)} />
-                      <span className="font-medium text-stone-700">
-                        {avgSafetyRating.toFixed(1)}
-                      </span>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-xs text-stone-400">Integration</p>
-                    <div className="mt-1 flex items-center gap-1.5">
-                      <StarRow rating={Math.round(avgIntegrationRating)} />
-                      <span className="font-medium text-stone-700">
-                        {avgIntegrationRating.toFixed(1)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="space-y-4">
-                {reviews.map(
-                  (review: {
-                    id: string
-                    rating: number
-                    safety_rating: number
-                    integration_rating: number
-                    text: string
-                    created_at: string
-                  }) => {
-                    const date = new Date(review.created_at).toLocaleDateString(
-                      'en-US',
-                      { month: 'long', year: 'numeric' }
-                    )
-                    return (
-                      <Card key={review.id} className="border-stone-200">
-                        <CardContent className="p-5">
-                          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <StarRow rating={review.rating} />
-                              <span className="text-xs text-stone-400">
-                                Safety {review.safety_rating}/5 &middot;{' '}
-                                Integration {review.integration_rating}/5
+                <div className="space-y-4">
+                  {reviews.map(
+                    (review: {
+                      id: string
+                      rating: number
+                      safety_rating: number
+                      integration_rating: number
+                      text: string
+                      created_at: string
+                    }) => {
+                      const date = new Date(
+                        review.created_at,
+                      ).toLocaleDateString('en-US', {
+                        month: 'long',
+                        year: 'numeric',
+                      })
+                      return (
+                        <Card key={review.id} className="border-stone-200">
+                          <CardContent className="p-5">
+                            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <StarRow rating={review.rating} />
+                                <span className="text-xs text-stone-400">
+                                  Safety {review.safety_rating}/5 &middot;{' '}
+                                  Integration {review.integration_rating}/5
+                                </span>
+                              </div>
+                              <span className="shrink-0 text-xs text-stone-400">
+                                {date}
                               </span>
                             </div>
-                            <span className="shrink-0 text-xs text-stone-400">
-                              {date}
-                            </span>
-                          </div>
-                          <p className="text-sm leading-relaxed text-stone-600">
-                            {review.text}
-                          </p>
-                        </CardContent>
-                      </Card>
-                    )
-                  }
-                )}
+                            <p className="text-sm leading-relaxed text-stone-600">
+                              {review.text}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      )
+                    },
+                  )}
+                </div>
               </div>
-            </section>
-          )}
+            ) : (
+              <div>
+                <h2
+                  id="reviews-heading"
+                  className="break-words text-lg font-semibold text-stone-900"
+                >
+                  Reviews
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-stone-600">
+                  No reviews have been published yet. Take time to ask questions
+                  and check relevant training before deciding whether to work
+                  together.
+                </p>
+              </div>
+            )}
+          </section>
         </div>
 
-        {/* ── Sticky sidebar ───────────────────────────────────────────────── */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-24 space-y-4">
-
+        {/* The form stays in normal flow so it remains reachable at high zoom. */}
+        <aside
+          aria-label="Contact and support"
+          className="min-w-0 lg:col-span-1"
+        >
+          <div className="space-y-4">
             {/* Request conversation card */}
-            <Card className="border-stone-200 shadow-sm">
+            <Card
+              id="contact"
+              tabIndex={-1}
+              className="scroll-mt-24 border-stone-200 shadow-sm focus-visible:outline-2 focus-visible:outline-emerald-700"
+            >
               <CardContent className="p-5">
-                <h3 className="font-semibold text-stone-900">
-                  Send a message
-                </h3>
-                <p className="mt-1 text-xs text-stone-500">
-                  Reach out to {facilitator.display_name} to discuss whether
-                  their support is the right fit for your needs. No account needed.
+                <h2
+                  tabIndex={-1}
+                  className="text-lg font-semibold text-stone-900"
+                >
+                  {isOwnProfile
+                    ? 'This is your public profile'
+                    : `Contact ${facilitator.display_name}`}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-stone-600">
+                  {isOwnProfile
+                    ? 'Visitors can use this space to send you a conversation request.'
+                    : 'Introduce yourself and ask whether this guide’s support could be right for you.'}
                 </p>
 
                 <Separator className="my-4" />
@@ -504,11 +700,41 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                     )}
                 </div>
 
-                <ContactRequestForm
-                  key={facilitator.id}
-                  facilitatorProfileId={facilitator.id}
-                  facilitatorDisplayName={facilitator.display_name}
-                />
+                {isOwnProfile ? (
+                  <Button
+                    asChild
+                    className="min-h-11 w-full bg-emerald-700 hover:bg-emerald-800"
+                  >
+                    <Link href="/facilitator">Open your dashboard</Link>
+                  </Button>
+                ) : (
+                  <>
+                    <div className="mb-5 rounded-lg bg-emerald-50 p-4 text-sm text-emerald-900">
+                      <h3 className="font-medium">What happens next</h3>
+                      <ol className="mt-2 list-decimal space-y-2 pl-4 leading-relaxed">
+                        <li>
+                          Your request is shared privately with this guide.
+                        </li>
+                        <li>
+                          They can reply to your email to discuss fit, fees, and
+                          availability.
+                        </li>
+                        <li>
+                          You decide together whether to arrange a session.
+                          Sending a request does not book one.
+                        </li>
+                      </ol>
+                    </div>
+                    <ContactRequestForm
+                      key={facilitator.id}
+                      facilitatorProfileId={facilitator.id}
+                      facilitatorDisplayName={facilitator.display_name}
+                      modalities={facilitator.modalities ?? []}
+                      remoteAvailable={facilitator.remote_available === true}
+                      location={facilitator.location}
+                    />
+                  </>
+                )}
               </CardContent>
             </Card>
 
@@ -530,12 +756,23 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                   ))}
                 </ul>
                 <div className="mt-4 border-t border-amber-200 pt-4 space-y-1">
-                  <p className="text-xs font-medium text-amber-800">Safety Library</p>
+                  <p className="text-xs font-medium text-amber-800">
+                    Safety Library
+                  </p>
                   {[
-                    { href: '/resources/questions-to-ask', label: 'Questions to ask a guide' },
-                    { href: '/resources/red-flags', label: 'Red flags to watch for' },
-                    { href: '/resources/contraindications', label: 'Contraindications & safety' },
-                    { href: '/resources/emergency', label: 'Emergency resources' },
+                    {
+                      href: '/resources/questions-to-ask',
+                      label: 'Questions to ask a guide',
+                    },
+                    {
+                      href: '/resources/red-flags',
+                      label: 'Red flags to watch for',
+                    },
+                    {
+                      href: '/resources/contraindications',
+                      label: 'Health Questions & Screening',
+                    },
+                    { href: '/resources/emergency', label: 'Get Urgent Help' },
                   ].map(({ href, label }) => (
                     <Link
                       key={href}
@@ -549,8 +786,14 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               </CardContent>
             </Card>
 
+            <Link
+              href={`/contact?profile=${encodeURIComponent(facilitator.id)}`}
+              className="inline-flex min-h-11 items-center text-sm font-medium text-stone-600 underline underline-offset-4 hover:text-stone-900"
+            >
+              Report this profile
+            </Link>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   )

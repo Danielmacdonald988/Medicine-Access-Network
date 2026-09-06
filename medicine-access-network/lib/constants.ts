@@ -4,9 +4,9 @@ export const SUPPORT_EMAIL = 'Dmacmedicine@pm.me'
 
 // Single source of truth for the site's absolute origin — used by
 // app/layout.tsx's metadataBase, app/robots.ts, and app/sitemap.ts. Set
-// NEXT_PUBLIC_APP_URL in production (see .env.local.example); falls back to
+// NEXT_PUBLIC_APP_URL in production (see .env.example); falls back to
 // the public production origin when no override is configured.
-export const SITE_URL = (process.env.NEXT_PUBLIC_APP_URL || 'https://medicine-access-network.vercel.app').replace(/\/$/, '')
+export const SITE_URL = (process.env.NEXT_PUBLIC_APP_URL || 'https://thefacilitatornetwork.com').replace(/\/$/, '')
 
 export const MODALITY_CATEGORIES = {
   preparation: 'Preparation',
