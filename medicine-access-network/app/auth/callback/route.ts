@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { dashboardPathForRole, getCurrentUser } from '@/lib/auth'
+import { safeRedirectPath } from '@/lib/safe-redirect'
 
 /**
  * Handles the OAuth / email-confirmation code exchange.
@@ -23,7 +24,7 @@ import { dashboardPathForRole, getCurrentUser } from '@/lib/auth'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/dashboard'
+  const next = safeRedirectPath(searchParams.get('next'))
 
   if (!code) {
     return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`)
@@ -33,13 +34,13 @@ export async function GET(request: Request) {
   const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
 
   if (exchangeError) {
-    console.error('[auth callback] code exchange failed:', exchangeError)
+    console.error('[auth callback] code exchange failed', { status: exchangeError.status })
     return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`)
   }
 
   // Password reset etc. — an explicit `next` wins outright.
   if (next !== '/dashboard') {
-    return NextResponse.redirect(`${origin}${next}`)
+    return NextResponse.redirect(new URL(next, origin))
   }
 
   // getCurrentUser() self-heals the public.users row if the signup trigger
@@ -66,9 +67,8 @@ export async function GET(request: Request) {
       // doesn't exist," which maybeSingle() reports as `data: null` with no
       // error. Must not be treated as "just needs onboarding."
       console.error(
-        '[auth callback] facilitator_profiles lookup failed for',
-        user.id,
-        facilitatorLookupError
+        '[auth callback] facilitator profile lookup failed',
+        { code: facilitatorLookupError.code }
       )
       return NextResponse.redirect(`${origin}/auth/error?reason=facilitator_profile_lookup_failed`)
     }

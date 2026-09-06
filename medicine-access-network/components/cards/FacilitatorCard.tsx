@@ -75,7 +75,7 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
               {typeof f.years_experience === 'number' && f.years_experience > 0 && (
                 <span className="flex items-center gap-1">
                   <Clock className="size-3" />
-                  {f.years_experience} yr{f.years_experience === 1 ? '' : 's'} exp.
+                  {f.years_experience} yr{f.years_experience === 1 ? '' : 's'} practice (self-reported)
                 </span>
               )}
             </div>

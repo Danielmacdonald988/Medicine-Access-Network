@@ -92,9 +92,11 @@ export function Navbar({ user }: NavbarProps) {
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem render={<Link href="/api/auth/signout" prefetch={false} />}>
-                  Sign out
-                </DropdownMenuItem>
+                <form action="/api/auth/signout" method="post">
+                  <DropdownMenuItem nativeButton render={<button type="submit" className="w-full" />}>
+                    Sign out
+                  </DropdownMenuItem>
+                </form>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -142,9 +144,11 @@ export function Navbar({ user }: NavbarProps) {
                 <Link href="/dashboard" className="flex min-h-11 items-center text-sm font-medium text-stone-700">
                   Dashboard
                 </Link>
-                <Link href="/api/auth/signout" prefetch={false} className="flex min-h-11 items-center text-sm font-medium text-stone-600">
-                  Sign out
-                </Link>
+                <form action="/api/auth/signout" method="post">
+                  <button type="submit" className="flex min-h-11 items-center text-sm font-medium text-stone-600">
+                    Sign out
+                  </button>
+                </form>
               </>
             ) : (
               <div className="flex flex-col gap-2 pt-2">

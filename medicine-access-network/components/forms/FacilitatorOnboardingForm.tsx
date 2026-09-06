@@ -43,9 +43,9 @@ const STEP_META: Record<number, { title: string; description: string }> = {
     description: 'Select every practice you actively provide to clients.',
   },
   6: {
-    title: 'How long have you been doing this work?',
+    title: 'How long have you practised?',
     description:
-      "Experience includes meaningful personal practice, not just formal credentials.",
+      'This self-reported total may include personal practice. Explain your experience supporting clients separately in your bio.',
   },
   7: {
     title: 'Training, lineage, and certifications',
@@ -149,8 +149,8 @@ function ConfirmationScreen() {
         Your facilitator application has been submitted for review.
       </p>
       <p className="mt-2 text-sm text-stone-500">
-        Our team reviews applications within 3–5 business days. You&apos;ll see your
-        verification status on your dashboard and will be notified when it changes.
+        Your profile stays hidden while it is pending review. Check your dashboard
+        for your application status and any updates.
       </p>
       <div className="mt-8">
         <Button asChild className="bg-emerald-700 hover:bg-emerald-800">
@@ -430,7 +430,7 @@ export function FacilitatorOnboardingForm() {
       {/* ── Step 6: Years of experience ──────────────────────────────────────── */}
       {step === 6 && (
         <div className="space-y-1.5">
-          <Label htmlFor="years_experience">Years of experience</Label>
+          <Label htmlFor="years_experience">Years of practice (self-reported)</Label>
           <Input
             id="years_experience"
             type="number"
@@ -444,7 +444,8 @@ export function FacilitatorOnboardingForm() {
             <p className="text-xs text-red-500">{errors.years_experience.message}</p>
           )}
           <p className="text-xs text-stone-400">
-            Optional. Include personal practice, not just formal roles.
+            Optional. May include personal practice. This is not a count of years
+            working with clients; describe that experience separately in your bio.
           </p>
         </div>
       )}
@@ -514,14 +515,16 @@ export function FacilitatorOnboardingForm() {
       {step === 9 && (
         <div className="space-y-4">
           <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900 leading-relaxed">
-            Certain medications, mental health conditions, and physical health factors can make
-            participation in plant medicine work, breathwork, and related practices unsafe —
-            including but not limited to: MAOIs, lithium, antipsychotics, cardiovascular
-            conditions, active psychosis, severe PTSD, pregnancy, and recent major surgery.
+            Screening must fit the specific service and stay within your qualifications.
+            A general checklist cannot establish whether a practice is appropriate for an
+            individual. Refer medical, medication, and clinical eligibility questions to
+            an appropriately qualified healthcare professional.
             <br />
             <br />
-            As a guide on this platform, you commit to conducting appropriate screening with
-            every client and declining to work with anyone where a contraindication is present.
+            As a guide on this platform, you commit to appropriate screening for every client,
+            respecting your scope, and declining work you cannot responsibly provide. Use
+            an agreed confidential process for any necessary health intake; the platform
+            contact form is for introductions.
           </div>
 
           <Controller

@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
+import { APP_NAME, APP_TAGLINE, SITE_URL } from '@/lib/constants'
 import {
   ArrowRight,
   BookOpen,
@@ -10,6 +12,17 @@ import {
   Wind,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+
+export const metadata: Metadata = {
+  title: 'Psychedelic Preparation & Integration',
+  description: APP_TAGLINE,
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: `Psychedelic Preparation & Integration — ${APP_NAME}`,
+    description: APP_TAGLINE,
+    url: SITE_URL,
+  },
+}
 
 const startingPoints = [
   {
@@ -66,6 +79,12 @@ const questions = [
 export default function Home() {
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: APP_NAME,
+        url: SITE_URL,
+      }).replace(/</g, '\\u003c') }} />
       <section className="relative overflow-hidden bg-emerald-950 text-white">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-20 lg:px-8">
           <div>
@@ -77,13 +96,14 @@ export default function Home() {
               Preparation. Integration. Connection.
             </p>
             <h1 className="max-w-2xl text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
-              Find support.
+              Psychedelic support.
               <br />
               <span className="text-emerald-200">At your own pace.</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-emerald-50/85">
-              Explore preparation coaches, integration guides, and wellness
-              practitioners. Make room for questions before making a commitment.
+              Connect with facilitators for psychedelic preparation and
+              integration. Explore their approaches, ask questions, and decide
+              whether to work together.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Button
@@ -104,7 +124,7 @@ export default function Home() {
             </div>
             <p className="mt-5 flex items-center gap-2 text-sm text-emerald-100/80">
               <Check className="size-4" aria-hidden /> No account needed to
-              explore
+              explore or contact a guide
             </p>
           </div>
           <div className="rounded-2xl border border-white/15 bg-white/[0.06] p-2 sm:p-3">

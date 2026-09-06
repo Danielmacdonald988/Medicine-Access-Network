@@ -13,6 +13,11 @@ export interface Resource {
   subtitle: string
   description: string // for <meta>
   blocks: Block[]
+  sourceCheck?: {
+    date: string
+    scope: string
+    sources: { title: string; url: string }[]
+  }
 }
 
 // ─── Articles ─────────────────────────────────────────────────────────────────
@@ -52,7 +57,7 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Guides on this platform offer coaching, preparation support, integration conversations, and related legal wellness services. They are not therapists, psychiatrists, or medical providers. Before working with anyone, confirm that what they offer matches what you need.',
+        text: 'Listings on this platform describe coaching, preparation support, integration conversations, and related legal wellness services. A listing does not establish a professional license or a clinical care relationship. Ask what capacity the guide is working in, check any claimed license with its issuing body, and confirm that the service matches your needs.',
       },
       {
         type: 'p',
@@ -64,15 +69,15 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Certain health conditions and medications affect how coaching and wellness work may land for you. This is especially true if your preparation relates to any kind of altered state practice. Talk with your doctor or psychiatrist about your plans before beginning. Be honest about your full health picture with any guide you consider working with.',
+        text: 'If you have health or medication questions about a practice you are considering, discuss the specific practice with your doctor or prescribing clinician. An introductory message through this platform is not a health assessment or a confidential clinical intake.',
       },
       {
         type: 'ul',
         items: [
-          'Disclose any psychiatric diagnosis, including depression, anxiety, bipolar disorder, PTSD, or psychosis',
-          'List all medications — including antidepressants, antipsychotics, mood stabilisers, and heart medications',
-          'Mention any relevant physical health conditions, especially cardiovascular',
-          'Be honest about your recent substance use history',
+          'Keep your first message to the support you are seeking, your preferred format, and practical questions',
+          'Leave diagnoses, medication lists, trauma details, and substance use history out of the platform contact form',
+          'Ask who conducts any necessary screening, what their qualifications are, and how they protect intake information',
+          'Share relevant health information honestly with the appropriately qualified professional through an agreed confidential intake process',
         ],
       },
       {
@@ -93,7 +98,7 @@ export const resources: Resource[] = [
           'Clear your schedule for recovery time after any session',
           'Avoid making major life decisions immediately following intensive work',
           'Have water, nourishing food, and a calm space available',
-          'Know your crisis resources in advance (see our Emergency Disclaimer)',
+          'Know your crisis resources in advance (see Get Urgent Help in the safety library)',
         ],
       },
       {
@@ -166,7 +171,7 @@ export const resources: Resource[] = [
       {
         type: 'callout',
         variant: 'warning',
-        text: 'If you are in acute distress or crisis, stop and reach out to a crisis service now. In the US, call or text 988. The Fireside Project (62-FIRESIDE) specialises in difficult psychedelic experiences.',
+        text: 'In the US, call or text 988 for emotional distress or suicidal crisis, 24/7. For immediate danger or a medical emergency, call 911. Fireside Project offers non-clinical psychedelic peer support at 623-473-7433, daily from 11 a.m. to 11 p.m. Pacific; it is not an emergency or suicide hotline.',
       },
       {
         type: 'h3',
@@ -185,9 +190,17 @@ export const resources: Resource[] = [
       {
         type: 'callout',
         variant: 'info',
-        text: 'Integration coaches are not licensed mental health professionals and cannot diagnose, treat, or prescribe. If you need clinical support, please see a licensed therapist or psychiatrist.',
+        text: 'Integration coaching is not a substitute for clinical care. A coach may hold a separate professional license, but the title alone does not establish clinical qualifications. Confirm the service being offered and independently check any claimed license. For clinical support, contact an appropriately licensed healthcare professional.',
       },
     ],
+    sourceCheck: {
+      date: '2026-09-06',
+      scope: 'Support-line numbers, hours, and service scope checked against the providers below.',
+      sources: [
+        { title: '988 Suicide & Crisis Lifeline', url: 'https://988lifeline.org/' },
+        { title: 'Fireside Project: Psychedelic Support Line', url: 'https://firesideproject.org/support-line' },
+      ],
+    },
   },
 
   {
@@ -250,7 +263,7 @@ export const resources: Resource[] = [
       {
         type: 'callout',
         variant: 'info',
-        text: 'Guides on this platform are not licensed therapists or medical providers. They offer coaching, preparation support, integration conversations, and related legal wellness services. If you need clinical care, please seek a licensed professional.',
+        text: 'A platform listing is not a clinical credential. Guides describe coaching, preparation support, integration conversations, and related legal wellness services here. If a guide holds a separate professional license, ask whether the proposed service is within that licensed role and check the license independently. Seek an appropriately licensed professional for clinical care.',
       },
       {
         type: 'h3',
@@ -350,7 +363,7 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'A guide who accepts anyone without any intake process — no questions about your history, your medications, your mental health, or your reasons for reaching out — is not operating safely. Screening is not a barrier; it is evidence of care.',
+        text: 'Ask how the guide decides whether the service fits your needs, what screening is appropriate, and when they refer to a qualified healthcare professional. Be cautious if they promise suitability without understanding what you are seeking. Any necessary health screening should use an agreed confidential intake process, not the platform contact form.',
       },
       {
         type: 'h3',
@@ -359,7 +372,7 @@ export const resources: Resource[] = [
       {
         type: 'callout',
         variant: 'warning',
-        text: 'Any guide who offers to source, provide, supply, or administer controlled substances is operating outside the law and outside the scope of what this platform supports. Remove yourself from that situation.',
+        text: 'This platform does not support sourcing, supplying, or administering controlled substances. Do not use it to arrange those activities. A claim of legality or professional status should be checked independently; rules depend on the substance, service, and location.',
       },
       {
         type: 'ul',
@@ -397,104 +410,66 @@ export const resources: Resource[] = [
 
   {
     slug: 'contraindications',
-    title: 'Contraindications & Safety',
-    subtitle: 'Health factors that increase risk in intensive wellness work',
+    title: 'Health Questions & Screening',
+    subtitle: 'What to discuss with a qualified healthcare professional',
     description:
-      'An overview of health conditions and medications that may interact with intensive wellness practices, and why honest disclosure to both your doctor and any guide matters.',
+      'Questions about health, screening, and privacy to discuss with an appropriately qualified professional before intensive wellness work.',
     blocks: [
       {
         type: 'callout',
         variant: 'warning',
-        text: 'This page is for general information only. It is not medical advice, diagnosis, or treatment. Always consult a licensed doctor, psychiatrist, or other qualified healthcare provider before pursuing any wellness or coaching work, especially if you have a health condition or take medications.',
+        text: 'This page helps you prepare questions; it does not assess your health or determine which practices are safe for you. Take individual health and medication questions to an appropriately qualified healthcare professional.',
       },
       {
         type: 'p',
-        text: 'A contraindication is a factor that increases the risk of harm in a given practice. Responsible guides screen for contraindications before working with anyone. You should also understand them yourself — so you can make informed decisions and have honest conversations with both your doctor and any guide you consider working with.',
+        text: 'Whether a practice is appropriate depends on the specific activity and your individual circumstances. A directory profile or general checklist cannot establish that it is safe for you. Discuss health and medication questions with an appropriately qualified healthcare professional.',
       },
       {
         type: 'h3',
-        text: 'Psychiatric and neurological conditions',
-      },
-      {
-        type: 'p',
-        text: 'Certain mental health conditions significantly affect how intensive wellness practices land. This does not mean people with these conditions can never engage in personal growth work — but they require more careful support, and some practices may not be appropriate at all.',
+        text: 'Questions for your clinician',
       },
       {
         type: 'ul',
         items: [
-          'Personal or family history of psychosis, schizophrenia, or schizoaffective disorder',
-          'Bipolar disorder — especially if unmedicated or recently destabilised',
-          'Active suicidal ideation or recent suicide attempt',
-          'Severe dissociative disorders',
-          'Active, untreated PTSD with significant instability',
-          'Borderline personality disorder in acute crisis',
+          'What information do you need about the specific practice I am considering?',
+          'Are there concerns related to my health history, current symptoms, or medications?',
+          'Do I need an assessment or a referral before deciding whether to participate?',
+          'What signs would mean I should stop and seek professional help?',
+          'What follow-up support should I arrange?',
         ],
       },
       {
         type: 'h3',
-        text: 'Medications',
+        text: 'Medication questions',
       },
       {
         type: 'p',
-        text: 'Many psychiatric and cardiovascular medications interact in ways that matter — both with altered state practices and with the physiological demands of intensive bodywork such as breathwork. The following are frequently cited in safety literature; this is not an exhaustive list.',
-      },
-      {
-        type: 'ul',
-        items: [
-          'MAOIs (monoamine oxidase inhibitors) — used for depression, social anxiety, and Parkinson\'s',
-          'Lithium — used for bipolar disorder',
-          'Antipsychotics (e.g. quetiapine, olanzapine, risperidone)',
-          'SSRIs and SNRIs — the most commonly prescribed antidepressants',
-          'Tricyclic antidepressants',
-          'Beta-blockers and other cardiovascular medications',
-          'Blood thinners',
-          'Stimulants (e.g. those prescribed for ADHD)',
-        ],
-      },
-      {
-        type: 'p',
-        text: 'Do not stop or adjust any medication without speaking to your prescribing doctor first. Do not assume a guide will know your full medication picture — tell them explicitly.',
+        text: 'Do not stop or adjust any medication without speaking to your prescribing clinician first. Discuss medication questions and relevant health history with that clinician; do not send medication lists through the platform contact form.',
       },
       {
         type: 'h3',
-        text: 'Physical health conditions',
+        text: 'Screening and privacy',
       },
       {
-        type: 'ul',
-        items: [
-          'Cardiovascular conditions, including heart disease, hypertension, or arrhythmias',
-          'Epilepsy or seizure disorders',
-          'Pregnancy or possibility of pregnancy',
-          'Active infection, fever, or significant illness',
-          'Recent surgery or acute physical injury',
-          'Severe respiratory conditions (particularly relevant for breathwork)',
-          'Glaucoma (particularly relevant for some body-based practices)',
-        ],
+        type: 'p',
+        text: 'Before sharing sensitive information, ask what screening the service requires, who conducts it, what their qualifications are, and how the information is stored and shared. Discuss necessary health information honestly with the appropriately qualified professional through an agreed confidential intake process.',
+      },
+      {
+        type: 'p',
+        text: 'Keep initial inquiries brief and leave out diagnoses, medications, trauma details, and substance use history. The platform contact form is for introductions, not clinical screening. Ask a guide to refer questions beyond their qualifications to an appropriate healthcare professional.',
       },
       {
         type: 'h3',
-        text: 'Why disclosure matters',
+        text: 'When you are uncertain',
       },
       {
         type: 'p',
-        text: 'Guides who conduct proper intake will ask about your health history. Answer honestly. Withholding information does not protect you — it removes the guide\'s ability to make an informed decision about whether and how to work with you, and removes your own ability to give informed consent.',
-      },
-      {
-        type: 'p',
-        text: 'A guide who agrees to work with you without gathering any health history is not operating safely, regardless of how skilled or experienced they appear.',
-      },
-      {
-        type: 'h3',
-        text: 'When to see a doctor first',
-      },
-      {
-        type: 'p',
-        text: 'If any of the above apply to you — or if you are uncertain — speak with your doctor or psychiatrist before beginning any intensive wellness work. Bring them specific information about what you are planning so they can give you informed guidance.',
+        text: 'You can pause or decline a proposed service while you seek advice. Ask for a clear description of the activity and bring it to your clinician. A profile approval, training certificate, or general information page is not personal medical clearance.',
       },
       {
         type: 'callout',
         variant: 'emergency',
-        text: 'If you or someone you know is in crisis: call 988 (US Suicide & Crisis Lifeline), text HOME to 741741 (Crisis Text Line), or call your local emergency services. Do not wait.',
+        text: 'In the US, call or text 988 for emotional distress or suicidal crisis. For immediate danger or a medical emergency, call 911 or your local emergency number. Do not wait for a response through this platform. See Get Urgent Help in the safety library for service details.',
       },
     ],
   },
@@ -573,7 +548,7 @@ export const resources: Resource[] = [
       {
         type: 'callout',
         variant: 'warning',
-        text: 'Guides on this platform are not licensed therapists, psychologists, or medical doctors. They do not diagnose or treat conditions, prescribe medication, or provide clinical mental health care. If you need those services, please seek a licensed professional.',
+        text: 'This platform presents coaching and support services, not clinical care. Some guides may hold a separate professional license; neither the guide title nor platform approval verifies it. Confirm the capacity in which a person is offering services and independently check any license. Diagnosis, treatment, and medication decisions belong with an appropriately licensed healthcare professional.',
       },
       {
         type: 'h3',
@@ -605,7 +580,7 @@ export const resources: Resource[] = [
 
   {
     slug: 'emergency',
-    title: 'Emergency Disclaimer',
+    title: 'Get Urgent Help',
     subtitle: 'What to do if you or someone else is in crisis',
     description:
       'Crisis resources and clear guidance on what to do if you or someone else is in distress or danger. This platform is not an emergency service.',
@@ -617,20 +592,36 @@ export const resources: Resource[] = [
       },
       {
         type: 'h3',
-        text: 'Crisis resources',
+        text: 'US crisis support — available 24/7',
       },
       {
         type: 'p',
-        text: 'If you are in the United States and are experiencing a mental health crisis — including suicidal thoughts, severe distress, or a difficult psychedelic or altered-state experience — the following services are available around the clock:',
+        text: 'For emotional distress or a suicidal crisis in the United States, contact one of these services. If you are outside the US, use the crisis and emergency services in your location.',
       },
       {
         type: 'ul',
         items: [
           '988 Suicide & Crisis Lifeline — call or text 988 (US). Available 24/7 for anyone in emotional distress or suicidal crisis.',
-          'Crisis Text Line — text HOME to 741741 to reach a trained crisis counsellor.',
-          'Fireside Project — call or text 62-FIRESIDE (623-473-7433). Specialises in supporting people through difficult psychedelic and non-ordinary state experiences.',
-          'Zendo Project — psychedelic harm reduction support and training. zendoproject.org',
-          'SAMHSA Helpline — 1-800-662-4357. Free, confidential treatment referrals and information about mental health and substance use.',
+          'Crisis Text Line — text HOME to 741741 in the US for free crisis support, available 24/7.',
+        ],
+      },
+      {
+        type: 'h3',
+        text: 'Psychedelic peer support — limited hours',
+      },
+      {
+        type: 'p',
+        text: 'Fireside Project — call or text 623-473-7433 in the US, daily from 11 a.m. to 11 p.m. Pacific. It offers non-clinical emotional support during or after psychedelic experiences. It is not an emergency service, a suicide hotline, or medical care. For immediate danger or a medical emergency, call 911; for suicidal crisis, call or text 988.',
+      },
+      {
+        type: 'h3',
+        text: 'Treatment information and event support',
+      },
+      {
+        type: 'ul',
+        items: [
+          'SAMHSA National Helpline — 1-800-662-4357. A free, confidential US treatment referral and information service, available 24/7. Use 988 for immediate crisis support.',
+          'Zendo Project — peer support at participating events, plus harm reduction training and educational resources. It is not a general emergency phone line; check its website for current event services.',
         ],
       },
       {
@@ -639,7 +630,7 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Guides on this platform are coaches and practitioners offering legal wellness services. They are not emergency responders, licensed therapists, or medical providers. They cannot provide emergency intervention, crisis stabilisation, or clinical assessment.',
+        text: 'This platform and its contact forms do not provide emergency intervention, crisis stabilisation, or clinical assessment. A guide may hold separate professional qualifications, but a listing here does not establish an emergency or clinical care relationship.',
       },
       {
         type: 'p',
@@ -685,9 +676,20 @@ export const resources: Resource[] = [
       {
         type: 'callout',
         variant: 'warning',
-        text: 'This platform does not coordinate, facilitate, source, or have any involvement in the use of controlled substances. If you have consumed a substance and are experiencing a medical emergency, call 911 (or your local emergency number) immediately. Many jurisdictions have medical amnesty laws — your safety is more important than legal concerns in a medical emergency.',
+        text: 'If you have consumed a substance and are experiencing a medical emergency, call 911 in the US (or your local emergency number) immediately. Tell emergency responders what you know so they can help. Do not wait for a reply through this platform.',
       },
     ],
+    sourceCheck: {
+      date: '2026-09-06',
+      scope: 'Support-line numbers, hours, and service scope checked against the providers below.',
+      sources: [
+        { title: '988 Suicide & Crisis Lifeline', url: 'https://988lifeline.org/' },
+        { title: 'Crisis Text Line', url: 'https://www.crisistextline.org/' },
+        { title: 'Fireside Project: Psychedelic Support Line', url: 'https://firesideproject.org/support-line' },
+        { title: 'SAMHSA National Helpline', url: 'https://www.samhsa.gov/find-help/helplines/national-helpline' },
+        { title: 'Zendo Project: Event Services', url: 'https://zendoproject.org/volunteer/' },
+      ],
+    },
   },
 ]
 

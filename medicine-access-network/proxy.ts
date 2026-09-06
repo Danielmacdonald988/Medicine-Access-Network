@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { safeRedirectPath } from '@/lib/safe-redirect'
 
 // Seekers no longer have accounts — browse/search/filter/facilitator-detail
 // pages are fully public and intentionally NOT listed here (see the SEO
@@ -50,6 +51,12 @@ export async function proxy(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
+  function redirectWithCookies(url: URL) {
+    const response = NextResponse.redirect(url)
+    for (const cookie of supabaseResponse.cookies.getAll()) response.cookies.set(cookie)
+    return response
+  }
+
   const isProtected = PROTECTED_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
   )
@@ -57,18 +64,14 @@ export async function proxy(request: NextRequest) {
   if (!user && isProtected) {
     const loginUrl = request.nextUrl.clone()
     loginUrl.pathname = '/login'
-    loginUrl.searchParams.set('next', pathname)
-    return NextResponse.redirect(loginUrl)
+    loginUrl.search = ''
+    loginUrl.searchParams.set('next', `${pathname}${request.nextUrl.search}`)
+    return redirectWithCookies(loginUrl)
   }
 
   if (user && AUTH_ONLY_PATHS.some((path) => pathname.startsWith(path))) {
-    const redirectPath = request.nextUrl.searchParams.get('next') ?? '/dashboard'
-    const safeRedirect =
-      redirectPath.startsWith('/') && !redirectPath.startsWith('//') ? redirectPath : '/dashboard'
-    const dashUrl = request.nextUrl.clone()
-    dashUrl.pathname = safeRedirect
-    dashUrl.search = ''
-    return NextResponse.redirect(dashUrl)
+    const destination = safeRedirectPath(request.nextUrl.searchParams.get('next'))
+    return redirectWithCookies(new URL(destination, request.url))
   }
 
   return supabaseResponse

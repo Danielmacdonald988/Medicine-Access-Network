@@ -44,9 +44,11 @@ export default async function AuthErrorPage({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button asChild className="w-full bg-emerald-700 hover:bg-emerald-800">
-            <a href="/api/auth/signout">Sign out and try again</a>
-          </Button>
+          <form action="/api/auth/signout" method="post">
+            <Button type="submit" className="w-full bg-emerald-700 hover:bg-emerald-800">
+              Sign out and try again
+            </Button>
+          </form>
         </CardContent>
         <CardFooter className="flex justify-center border-t border-stone-100 pt-4">
           <p className="text-sm text-stone-500">

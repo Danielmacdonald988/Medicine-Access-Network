@@ -1,7 +1,7 @@
 /**
  * Isolated PostgreSQL regression tests; never connects to a Supabase project.
- * Install @electric-sql/pglite in a scratch directory, then run:
- * PGLITE_PACKAGE_JSON=/absolute/scratch/package.json node db/tests/security-regression.mjs
+ * Run npm run test:db after npm ci. PGLITE_PACKAGE_JSON may optionally
+ * point to a separate test runtime; no production credentials are required.
  */
 import assert from 'node:assert/strict'
 import { createRequire } from 'node:module'

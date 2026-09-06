@@ -2,10 +2,17 @@ import { NextResponse } from 'next/server'
 import type Stripe from 'stripe'
 import { constructWebhookEvent } from '@/lib/stripe'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
+import { PAYMENTS_ENABLED } from '@/lib/payments'
 
 // Stripe requires the raw request body for signature verification.
 // Next.js App Router gives us it via request.text().
 export async function POST(request: Request) {
+  if (!PAYMENTS_ENABLED) {
+    return NextResponse.json(
+      { error: 'Payments are not yet enabled on this platform.' },
+      { status: 503 }
+    )
+  }
   const sig = request.headers.get('stripe-signature')
   if (!sig) {
     return NextResponse.json({ error: 'Missing stripe-signature header' }, { status: 400 })

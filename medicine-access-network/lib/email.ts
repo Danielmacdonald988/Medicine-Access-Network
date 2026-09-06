@@ -8,9 +8,8 @@ import 'server-only'
 // RESEND_FROM_EMAIL to activate.
 //
 // Without them, notification is skipped without logging personal information —
-// fine for local development, but be aware: the contact-request flow has no
-// other delivery path. If these aren't configured in production, inquiries
-// are still stored (see app/api/contact-requests/route.ts — storage and
+// fine for local development. If these aren't configured in production,
+// inquiries are still stored (see app/api/contact-requests/route.ts — storage and
 // email are independent; a facilitator can still see requests in their
 // dashboard) but the facilitator will not be notified by email.
 
@@ -31,7 +30,8 @@ export async function sendFacilitatorInquiryEmail(
   const apiKey = process.env.RESEND_API_KEY
   const fromEmail = process.env.RESEND_FROM_EMAIL
 
-  const subject = `New conversation request from ${input.seekerName}`
+  // Keep visitor-identifying information out of email subject lines.
+  const subject = 'New conversation request — The Facilitator Network'
   const text = [
     `${input.seekerName} sent you a conversation request through The Facilitator Network.`,
     '',
@@ -58,6 +58,7 @@ export async function sendFacilitatorInquiryEmail(
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
+      cache: 'no-store',
       signal: AbortSignal.timeout(10_000),
       headers: {
         Authorization: `Bearer ${apiKey}`,

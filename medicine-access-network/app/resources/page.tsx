@@ -35,18 +35,18 @@ export default function ResourcesIndexPage() {
         <CardContent className="flex items-start gap-3 p-4">
           <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-600" />
           <p className="text-sm text-amber-900">
-            If you are in crisis right now, please stop and contact a crisis service.
             In the US, call or text{' '}
             <a href="tel:988" className="font-semibold underline">
               988
             </a>
-            {' '}or call{' '}
+            {' '}for emotional distress or suicidal crisis. For immediate danger or
+            a medical emergency, call{' '}
             <a href="tel:911" className="font-semibold underline">
               911
             </a>
             . See our{' '}
             <Link href="/resources/emergency" className="font-semibold underline">
-              Emergency Disclaimer
+              Get Urgent Help
             </Link>
             {' '}for more resources.
           </p>

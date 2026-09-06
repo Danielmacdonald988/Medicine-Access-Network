@@ -4,6 +4,7 @@ import { isIP } from 'node:net'
 import { createAdminSupabaseClient } from '@/lib/supabaseAdmin'
 import { sendFacilitatorInquiryEmail } from '@/lib/email'
 import { contactRequestSchema } from '@/lib/validations'
+import { readSmallJson } from '@/lib/request-body'
 
 export const runtime = 'nodejs'
 
@@ -17,32 +18,12 @@ function getClientIp(request: Request): string | null {
   return process.env.NODE_ENV !== 'production' ? '127.0.0.1' : null
 }
 
-async function readSmallJson(request: Request): Promise<unknown> {
-  const reader = request.body?.getReader()
-  if (!reader) return null
-  const chunks: Uint8Array[] = []
-  let size = 0
-  try {
-    while (true) {
-      const { done, value } = await reader.read()
-      if (done) break
-      size += value.byteLength
-      if (size > 16_384) {
-        await reader.cancel()
-        return null
-      }
-      chunks.push(value)
-    }
-    return JSON.parse(Buffer.concat(chunks).toString('utf8'))
-  } catch {
-    return null
-  } finally {
-    reader.releaseLock()
-  }
-}
-
 export async function POST(request: Request) {
-  const body = await readSmallJson(request)
+  const result = await readSmallJson(request)
+  if (!result.ok) {
+    return NextResponse.json({ error: result.error }, { status: result.status })
+  }
+  const body = result.data
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
@@ -99,16 +80,22 @@ export async function POST(request: Request) {
     }
 
     // Storage has committed. Notification failure must not invite a duplicate.
-    await sendFacilitatorInquiryEmail({
-      facilitatorEmail: contact.facilitator_email,
-      facilitatorDisplayName: contact.facilitator_display_name,
-      seekerName: input.seeker_name,
-      seekerEmail: input.seeker_email,
-      requestedService: input.requested_service,
-      message: input.message,
-      preferredFormat: input.preferred_format,
-      preferredTimeWindow: input.preferred_time_window,
-    })
+    try {
+      await sendFacilitatorInquiryEmail({
+        facilitatorEmail: contact.facilitator_email,
+        facilitatorDisplayName: contact.facilitator_display_name,
+        seekerName: input.seeker_name,
+        seekerEmail: input.seeker_email,
+        requestedService: input.requested_service,
+        message: input.message,
+        preferredFormat: input.preferred_format,
+        preferredTimeWindow: input.preferred_time_window,
+      })
+    } catch {
+      // The notification boundary must stay safe even if its implementation
+      // changes. A saved inquiry is successful and must not invite a duplicate.
+      console.error('[contact-requests] Notification failed; inquiry remains in the dashboard.')
+    }
     return NextResponse.json({ success: true }, { status: 201 })
   } catch {
     console.error('[contact-requests] service unavailable')

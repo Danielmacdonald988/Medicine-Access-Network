@@ -33,6 +33,16 @@ export interface SessionUser {
  * app/auth/callback/route.ts) should not rely on this function alone.
  */
 export async function getCurrentUser(): Promise<SessionUser | null> {
+  try {
+    return await loadCurrentUser()
+  } catch {
+    // Public pages must remain readable during an authentication outage.
+    console.error('[getCurrentUser] authentication service unavailable')
+    return null
+  }
+}
+
+async function loadCurrentUser(): Promise<SessionUser | null> {
   const supabase = await createServerSupabaseClient()
 
   const {
@@ -49,7 +59,7 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
     .single()
 
   if (profileError && profileError.code !== 'PGRST116') {
-    console.error('[getCurrentUser] users lookup failed for', user.id, profileError)
+    console.error('[getCurrentUser] users lookup failed', { code: profileError.code })
     return null
   }
 
@@ -66,7 +76,7 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
     )
 
     if (insertError && insertError.code !== '23505') {
-      console.error('[getCurrentUser] self-heal insert failed for', user.id, insertError)
+      console.error('[getCurrentUser] profile recovery failed', { code: insertError.code })
       return null
     }
 
@@ -77,7 +87,7 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
       .single())
 
     if (profileError) {
-      console.error('[getCurrentUser] users re-fetch after self-heal failed for', user.id, profileError)
+      console.error('[getCurrentUser] profile reload failed', { code: profileError.code })
       return null
     }
   }
