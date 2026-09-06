@@ -15,11 +15,12 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Logomark } from '@/components/icons/logomark'
 import { Menu, X } from 'lucide-react'
 import { useRef, useState } from 'react'
+import { SavedGuidesLink } from '@/components/saved/SavedGuidesLink'
 
 const navLinks = [
-  { href: '/facilitators', label: 'Find a Guide' },
+  { href: '/facilitators', label: 'Find a guide' },
   { href: '/resources', label: 'Safety library' },
-  { href: '/onboarding/facilitator', label: 'Become a Guide' },
+  { href: '/about', label: 'About' },
 ]
 
 interface NavbarProps {
@@ -50,7 +51,7 @@ export function Navbar({ user }: NavbarProps) {
         </Link>
 
         {/* Desktop nav */}
-        <nav aria-label="Main navigation" className="hidden items-center gap-6 md:flex">
+        <nav aria-label="Main navigation" className="hidden items-center gap-5 lg:flex">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
@@ -63,10 +64,11 @@ export function Navbar({ user }: NavbarProps) {
               {label}
             </Link>
           ))}
+          <SavedGuidesLink className="text-sm font-medium text-stone-600 hover:text-emerald-700" />
         </nav>
 
         {/* Auth actions */}
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           {user ? (
             <DropdownMenu>
               {/* Base UI Trigger — renders a <button> directly, no asChild needed */}
@@ -104,8 +106,8 @@ export function Navbar({ user }: NavbarProps) {
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/login">Guide sign in</Link>
               </Button>
-              <Button size="sm" className="bg-emerald-700 hover:bg-emerald-800" asChild>
-                <Link href="/signup">Join as a guide</Link>
+              <Button size="sm" variant="outline" asChild>
+                <Link href="/onboarding/facilitator">List your practice</Link>
               </Button>
             </>
           )}
@@ -115,7 +117,7 @@ export function Navbar({ user }: NavbarProps) {
         <button
           ref={menuButton}
           type="button"
-          className="flex size-11 items-center justify-center rounded-lg text-stone-600 md:hidden"
+          className="flex size-11 items-center justify-center rounded-lg text-stone-600 lg:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileOpen}
@@ -127,18 +129,20 @@ export function Navbar({ user }: NavbarProps) {
 
       {/* Mobile nav */}
       {mobileOpen && (
-        <div id="mobile-navigation" className="border-t border-stone-200 bg-white px-4 pb-4 pt-2 md:hidden" onKeyDown={(event) => { if (event.key === 'Escape') { setMobileOpen(false); menuButton.current?.focus() } }} onClick={(event) => { if ((event.target as HTMLElement).closest('a')) setMobileOpen(false) }}>
+        <div id="mobile-navigation" className="border-t border-stone-200 bg-white px-4 pb-4 pt-2 lg:hidden" onKeyDown={(event) => { if (event.key === 'Escape') { setMobileOpen(false); menuButton.current?.focus() } }} onClick={(event) => { if ((event.target as HTMLElement).closest('a')) setMobileOpen(false) }}>
           <nav aria-label="Mobile navigation" className="flex flex-col gap-1">
             {navLinks.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
+                aria-current={pathname.startsWith(href) ? 'page' : undefined}
                 className="flex min-h-11 items-center text-sm font-medium text-stone-700"
                 onClick={() => setMobileOpen(false)}
               >
                 {label}
               </Link>
             ))}
+            <SavedGuidesLink className="flex min-h-11 items-center text-sm font-medium text-stone-700" />
             {user ? (
               <>
                 <Link href="/dashboard" className="flex min-h-11 items-center text-sm font-medium text-stone-700">
@@ -155,8 +159,8 @@ export function Navbar({ user }: NavbarProps) {
                 <Button variant="outline" size="sm" asChild>
                   <Link href="/login">Guide sign in</Link>
                 </Button>
-                <Button size="sm" className="bg-emerald-700 hover:bg-emerald-800" asChild>
-                  <Link href="/signup">Join as a guide</Link>
+                <Button size="sm" variant="outline" asChild>
+                  <Link href="/onboarding/facilitator">List your practice</Link>
                 </Button>
               </div>
             )}

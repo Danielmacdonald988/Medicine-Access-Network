@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { FacilitatorSearchResult } from '@/lib/types'
+import { SaveGuideButton } from '@/components/saved/SaveGuideButton'
 
 interface FacilitatorCardProps {
   facilitator: FacilitatorSearchResult
@@ -18,7 +19,7 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
     .slice(0, 2)
 
   const rateDisplay = f.donation_based
-    ? f.minimum_donation
+    ? typeof f.minimum_donation === 'number'
       ? `Donation from $${f.minimum_donation}`
       : 'Donation-based'
     : typeof f.hourly_rate === 'number'
@@ -31,20 +32,20 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
       <div className="flex flex-1 flex-col gap-4 p-5">
         {/* Top row: avatar + identity */}
         <div className="flex items-start gap-3">
-          <Avatar className="size-11 shrink-0">
+          <Link href={`/facilitators/${f.id}`} tabIndex={-1} aria-hidden="true" className="shrink-0"><Avatar className="size-12 shrink-0">
             {f.avatar_url && (
               <AvatarImage src={f.avatar_url} alt={f.display_name} />
             )}
             <AvatarFallback className="bg-emerald-100 text-sm font-medium text-emerald-800">
               {initials}
             </AvatarFallback>
-          </Avatar>
+          </Avatar></Link>
 
           <div className="min-w-0 flex-1">
             {/* Name + verification badge */}
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="break-words font-semibold text-stone-900">
-                {f.display_name}
+                <Link href={`/facilitators/${f.id}`} className="underline-offset-4 hover:text-emerald-800 hover:underline">{f.display_name}</Link>
               </h3>
               {(
                 <Link
@@ -69,7 +70,7 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
               {f.remote_available && (
                 <span className="flex items-center gap-1 text-emerald-700">
                   <Video className="size-3" />
-                  Remote available
+                  Online sessions
                 </span>
               )}
               {typeof f.years_experience === 'number' && f.years_experience > 0 && (
@@ -127,8 +128,11 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
       </div>
 
       {/* Card footer */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-stone-100 px-5 py-3">
-        <span className="text-xs font-medium text-stone-500">{rateDisplay}</span>
+      <div className="border-t border-stone-100 px-5 py-4">
+        <p className="text-sm font-semibold text-stone-800">{rateDisplay}</p>
+        <p className="mt-1 text-xs text-stone-500">Confirm fees and availability with the guide.</p>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+        <SaveGuideButton profileId={f.id} displayName={f.display_name} compact />
         <Button
           size="sm"
           variant="outline"
@@ -137,6 +141,7 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
         >
           <Link href={`/facilitators/${f.id}`} aria-label={`View ${f.display_name}'s profile`}>View profile</Link>
         </Button>
+        </div>
       </div>
     </article>
   )

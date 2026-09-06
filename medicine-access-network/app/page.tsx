@@ -12,9 +12,10 @@ import {
   Wind,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { HomeSearch } from '@/components/search/HomeSearch'
 
 export const metadata: Metadata = {
-  title: 'Psychedelic Preparation & Integration',
+  title: `Psychedelic Preparation & Integration — ${APP_NAME}`,
   description: APP_TAGLINE,
   alternates: { canonical: '/' },
   openGraph: {
@@ -86,9 +87,9 @@ export default function Home() {
         url: SITE_URL,
       }).replace(/</g, '\\u003c') }} />
       <section className="relative overflow-hidden bg-emerald-950 text-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-20 lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-7 px-4 py-8 sm:px-6 sm:py-16 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16 lg:px-8">
           <div>
-            <p className="mb-6 flex items-center gap-2 text-sm font-medium tracking-wide text-emerald-200">
+            <p className="mb-4 flex items-center gap-2 text-sm font-medium tracking-wide text-emerald-200 sm:mb-6">
               <span
                 className="size-2 rounded-full bg-emerald-300"
                 aria-hidden
@@ -100,21 +101,12 @@ export default function Home() {
               <br />
               <span className="text-emerald-200">At your own pace.</span>
             </h1>
-            <p className="mt-6 max-w-lg text-lg leading-relaxed text-emerald-50/85">
-              Connect with facilitators for psychedelic preparation and
-              integration. Explore their approaches, ask questions, and decide
-              whether to work together.
+            <p className="mt-4 max-w-lg text-base leading-relaxed text-emerald-50/85 sm:mt-6 sm:text-lg">
+              Find facilitators for psychedelic preparation and integration.
+              Compare approaches and fees, then start a conversation.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Button
-                asChild
-                size="lg"
-                className="h-12 bg-white px-6 text-base text-emerald-950 hover:bg-emerald-50"
-              >
-                <Link href="/facilitators">
-                  Browse guides <ArrowRight aria-hidden />
-                </Link>
-              </Button>
+            <div className="mt-8 hidden flex-wrap items-center gap-4 lg:flex">
+              <Link href="#process-heading" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white underline underline-offset-4">How it works <ArrowRight className="size-4" aria-hidden /></Link>
               <Link
                 href="/about#profile-review"
                 className="rounded text-sm font-medium text-emerald-100 underline underline-offset-4 hover:text-white"
@@ -122,44 +114,12 @@ export default function Home() {
                 What does profile review mean?
               </Link>
             </div>
-            <p className="mt-5 flex items-center gap-2 text-sm text-emerald-100/80">
+            <p className="mt-5 hidden items-center gap-2 text-sm text-emerald-100/80 lg:flex">
               <Check className="size-4" aria-hidden /> No account needed to
               explore or contact a guide
             </p>
           </div>
-          <div className="rounded-2xl border border-white/15 bg-white/[0.06] p-2 sm:p-3">
-            <h2 className="px-4 pt-3 pb-4 text-sm font-medium text-emerald-100">
-              Where would you like to start?
-            </h2>
-            <div className="space-y-2">
-              {startingPoints.map(
-                ({ number, title, description, action, href, icon: Icon }) => (
-                  <Link
-                    key={number}
-                    href={href}
-                    className="group flex items-start gap-4 rounded-xl bg-white p-5 text-stone-900 transition-colors hover:bg-emerald-50"
-                  >
-                    <span className="mt-1 flex size-10 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-800">
-                      <Icon className="size-5" strokeWidth={1.5} aria-hidden />
-                    </span>
-                    <div className="min-w-0">
-                      <h3 className="text-lg font-semibold">{title}</h3>
-                      <p className="mt-1 text-sm leading-relaxed text-stone-600">
-                        {description}
-                      </p>
-                      <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-emerald-800">
-                        {action}
-                        <ArrowRight
-                          className="size-4 shrink-0 transition-transform group-hover:translate-x-1"
-                          aria-hidden
-                        />
-                      </p>
-                    </div>
-                  </Link>
-                ),
-              )}
-            </div>
-          </div>
+          <HomeSearch />
         </div>
         <div className="border-t border-white/15">
           <div className="mx-auto flex max-w-7xl flex-wrap gap-x-8 gap-y-3 px-4 py-5 text-sm text-emerald-100 sm:px-6 lg:px-8">
@@ -167,6 +127,21 @@ export default function Home() {
             <span>Education, preparation & integration</span>
             <span>No substance sales or sourcing</span>
           </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="starting-point-heading" className="mx-auto max-w-7xl px-4 pt-12 sm:px-6 lg:px-8">
+        <h2 id="starting-point-heading" className="text-2xl font-semibold tracking-tight">Not sure where to start?</h2>
+        <p className="mt-2 text-stone-600">Choose the step that feels closest to where you are.</p>
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          {startingPoints.map(({ number, title, description, action, href, icon: Icon }) => (
+            <Link key={number} href={href} className="group flex flex-col rounded-2xl border border-stone-200 bg-white p-6 transition-colors hover:border-emerald-600">
+              <Icon className="mb-4 size-6 text-emerald-700" aria-hidden />
+              <h3 className="text-lg font-semibold">{title}</h3>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-stone-600">{description}</p>
+              <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-emerald-800">{action}<ArrowRight className="size-4 shrink-0" aria-hidden /></span>
+            </Link>
+          ))}
         </div>
       </section>
 

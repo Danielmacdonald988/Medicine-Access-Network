@@ -3,7 +3,7 @@ import { validateEnv } from './lib/env'
 
 validateEnv()
 
-const privateRoutes = ['api', 'admin', 'dashboard', 'facilitator', 'onboarding', 'auth', 'login', 'signup', 'forgot-password', 'update-password']
+const privateRoutes = ['api', 'admin', 'dashboard', 'facilitator', 'onboarding', 'auth', 'login', 'signup', 'forgot-password', 'update-password', 'saved']
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,

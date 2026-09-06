@@ -1,51 +1,76 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useRef, useTransition } from 'react'
+import { useTransition } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Search } from 'lucide-react'
+import { MapPin, Search } from 'lucide-react'
 import { directoryHref, filterSearchParams, parseFacilitatorFilters } from '@/lib/facilitator-search'
 
 export function SearchBar() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const inputRef = useRef<HTMLInputElement>(null)
   const [isPending, startTransition] = useTransition()
   const filters = parseFacilitatorFilters(searchParams)
+  const preserved = filterSearchParams(filters)
+  preserved.delete('q')
+  preserved.delete('location')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const value = inputRef.current?.value.trim()
-    const params = filterSearchParams(filters)
-    if (value) {
-      params.set('q', value)
-    } else {
-      params.delete('q')
-    }
-    startTransition(() => router.push(directoryHref(params), { scroll: false }))
+    const form = new FormData(e.currentTarget)
+    const params = new URLSearchParams(preserved)
+    params.set('q', String(form.get('q') ?? ''))
+    params.set('location', String(form.get('location') ?? ''))
+    const normalized = filterSearchParams(parseFacilitatorFilters(params))
+    startTransition(() => router.push(directoryHref(normalized), { scroll: false }))
   }
 
   return (
-    <form role="search" aria-label="Guide directory" onSubmit={handleSubmit} className="flex gap-2" aria-busy={isPending}>
-      <div className="relative flex-1">
-        <label htmlFor="guide-search" className="sr-only">Search guides by name, modality, or location</label>
-        <Search aria-hidden="true" className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
-        <Input
-          id="guide-search"
-          name="q"
-          type="search"
-          key={filters.q}
-          ref={inputRef}
-          defaultValue={filters.q}
-          maxLength={120}
-          placeholder="Name, modality, or location…"
-          className="h-11 bg-white pl-9"
-        />
+    <form action="/facilitators" method="get" role="search" aria-label="Guide directory" onSubmit={handleSubmit} className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5" aria-busy={isPending}>
+      {Array.from(preserved).map(([name, value]) => <input key={`${name}-${value}`} type="hidden" name={name} value={value} />)}
+      <div className="grid gap-4 md:grid-cols-[1.3fr_1fr_auto] md:items-end">
+        <div>
+          <label htmlFor="guide-search" className="mb-2 block text-sm font-medium text-stone-900">Support or guide</label>
+          <div className="relative">
+            <Search aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-stone-400" />
+            <Input id="guide-search" name="q" type="search" key={filters.q} defaultValue={filters.q} maxLength={120} placeholder="Preparation, integration, or a name" className="h-12 bg-white pl-9" />
+          </div>
+        </div>
+        <div>
+          <label htmlFor="guide-location" className="mb-2 block text-sm font-medium text-stone-900">Location <span className="font-normal text-stone-500">(optional)</span></label>
+          <div className="relative">
+            <MapPin aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-stone-400" />
+            <Input id="guide-location" name="location" key={filters.location} defaultValue={filters.location} maxLength={100} placeholder="City, state, or country" className="h-12 bg-white pl-9" />
+          </div>
+        </div>
+        <Button type="submit" disabled={isPending} className="h-12 bg-emerald-700 px-6 hover:bg-emerald-800">
+          {isPending ? 'Searching…' : 'Find a guide'}
+        </Button>
       </div>
-      <Button type="submit" disabled={isPending} className="h-11 bg-emerald-700 hover:bg-emerald-800">
-        {isPending ? 'Searching…' : 'Search'}
-      </Button>
+      <p className="mt-3 text-xs leading-relaxed text-stone-500">Search the location listed on a profile. For online support, leave location blank and use the online filter; confirm the guide can work with you where you live.</p>
     </form>
+  )
+}
+
+export function SearchSort() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const filters = parseFacilitatorFilters(searchParams)
+  const [isPending, startTransition] = useTransition()
+
+  return (
+    <div className="flex shrink-0 items-center gap-2" aria-busy={isPending}>
+      <label htmlFor="guide-sort" className="text-sm text-stone-600">Sort by</label>
+      <select id="guide-sort" value={filters.sort} disabled={isPending} onChange={(event) => {
+        const params = filterSearchParams(filters)
+        params.set('sort', event.target.value)
+        startTransition(() => router.push(directoryHref(filterSearchParams(parseFacilitatorFilters(params))), { scroll: false }))
+      }} className="min-h-11 min-w-0 rounded-lg border border-stone-300 bg-white px-3 text-sm text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
+        <option value="newest">Newest profiles</option>
+        <option value="name">Name A–Z</option>
+      </select>
+      <span role="status" className="sr-only">{isPending ? 'Sorting guide results…' : ''}</span>
+    </div>
   )
 }

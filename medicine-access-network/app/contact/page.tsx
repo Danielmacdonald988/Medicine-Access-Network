@@ -1,15 +1,26 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Mail, ArrowUpRight } from 'lucide-react'
-import { SUPPORT_EMAIL } from '@/lib/constants'
+import { SITE_URL, SUPPORT_EMAIL } from '@/lib/constants'
+import { z } from 'zod'
 
 export const metadata: Metadata = {
   title: 'Contact & report a concern',
   description:
     'Contact The Facilitator Network for website help, listing questions, or concerns about a guide.',
+  alternates: { canonical: '/contact' },
 }
 
-export default function ContactPage() {
+export default async function ContactPage({ searchParams }: { searchParams: Promise<{ profile?: string | string[] }> }) {
+  const query = await searchParams
+  const parsed = z.string().uuid().safeParse(query.profile)
+  const profileId = parsed.success ? parsed.data : null
+  const profilePath = profileId ? `/facilitators/${profileId}` : null
+  const emailParams = profilePath ? new URLSearchParams({
+    subject: 'Concern about a guide profile',
+    body: `Profile: ${SITE_URL}${profilePath}\n\nPlease describe the concern and how you would like us to respond. Include only the information needed to understand the issue.\n\n`,
+  }) : null
+  const emailHref = `mailto:${SUPPORT_EMAIL}${emailParams ? `?${emailParams}` : ''}`
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
       <p className="text-sm font-medium text-emerald-800">Help & concerns</p>
@@ -20,11 +31,18 @@ export default function ContactPage() {
         For a website issue, a question about your profile, or a concern about a
         guide, email us directly.
       </p>
+      {profilePath && (
+        <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+          <h2 className="font-semibold text-emerald-950">Report a concern about this profile</h2>
+          <p className="mt-2 text-sm leading-relaxed text-emerald-900">The email link below includes the profile address. You can review and edit your email before sending it.</p>
+          <Link href={profilePath} className="mt-3 inline-block text-sm font-medium text-emerald-800 underline underline-offset-4">Return to the guide’s profile</Link>
+        </div>
+      )}
       <div className="mt-8 rounded-2xl border border-stone-200 bg-white p-6 sm:p-8">
         <Mail className="mb-4 size-7 text-emerald-800" aria-hidden />
         <h2 className="text-xl font-semibold">Email support</h2>
         <a
-          href={`mailto:${SUPPORT_EMAIL}`}
+          href={emailHref}
           className="mt-3 inline-flex max-w-full items-center gap-2 break-all text-lg font-medium text-emerald-800 underline underline-offset-4"
         >
           {SUPPORT_EMAIL}

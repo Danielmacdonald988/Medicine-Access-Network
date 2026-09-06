@@ -7,6 +7,7 @@ import {
   buildFacilitatorQuery,
   directoryHref,
   filterSearchParams,
+  hasActiveFilters,
   literalSearchPattern,
   parseFacilitatorFilters,
   textSearchExpression,
@@ -38,7 +39,7 @@ test('repeated URL parameters normalize safely, round-trip, and discard stale pa
     min_exp: '5junk',
     page: '99',
   }))
-  assert.deepEqual(filters, { q: 'breathwork', location: 'New  York', modalities: ['Breathwork'], remote: true, donation: false, minExperience: 0 })
+  assert.deepEqual(filters, { q: 'breathwork', location: 'New  York', modalities: ['Breathwork'], remote: true, donation: false, minExperience: 0, sort: 'newest' })
   assert.deepEqual(parseFacilitatorFilters(filterSearchParams(filters)), filters)
   assert.equal(filterSearchParams(filters).has('page'), false)
   assert.equal(directoryHref(new URLSearchParams()), '/facilitators')
@@ -67,6 +68,46 @@ test('punctuation and wildcard characters search literally instead of becoming p
 test('modality keywords participate in database text search', () => {
   const expression = textSearchExpression('integration')
   assert.match(expression, /modalities\.ov\.\{"Integration Coaching","Psychedelic Integration"\}/)
+})
+
+test('plain-language preparation and integration searches expand only to their catalog categories', () => {
+  assert.match(textSearchExpression('prep'), /modalities\.ov\.\{"Preparation Coaching","Ceremony Preparation"\}/)
+  assert.match(textSearchExpression('  after   a journey  '), /modalities\.ov\.\{"Integration Coaching","Psychedelic Integration"\}/)
+  for (const term of ['depression', 'trauma', 'therapy', 'a name with prep in it', 'constructor', '__proto__']) {
+    assert.equal(textSearchExpression(term).includes('modalities.ov.'), false, `must not infer a support need from ${term}`)
+  }
+})
+
+test('sort survives search refinements and pagination resets without becoming an active filter', () => {
+  const filters = parseFacilitatorFilters(new URLSearchParams({ sort: 'name', page: '4' }))
+  assert.equal(filters.sort, 'name')
+  assert.equal(hasActiveFilters(filters), false)
+  assert.equal(filterSearchParams(filters).toString(), 'sort=name')
+  const refined = { ...filters, q: 'integration', location: 'Boston', remote: true, modalities: ['Breathwork'] }
+  const params = filterSearchParams(refined)
+  assert.equal(params.has('page'), false)
+  assert.deepEqual(parseFacilitatorFilters(params), refined)
+  params.delete('modality', 'Breathwork')
+  assert.equal(params.get('sort'), 'name')
+  assert.equal(params.get('location'), 'Boston')
+  assert.equal(params.get('remote'), 'true')
+  for (const sort of ['rating', 'name.desc', 'created_at', 'name,id', 'NEWEST']) {
+    assert.equal(parseFacilitatorFilters(new URLSearchParams({ sort })).sort, 'newest')
+  }
+})
+
+test('alphabetical sorting happens before database pagination with a stable ID tiebreaker', async () => {
+  const supabase = clientWithFetch(async (input) => {
+    const params = new URL(String(input)).searchParams
+    assert.equal(params.get('order'), 'display_name.asc,id.asc')
+    assert.equal(params.get('offset'), '18')
+    assert.equal(params.get('limit'), '18')
+    assert.equal(params.get('remote_available'), 'eq.true')
+    return jsonResponse([])
+  })
+  const filters = parseFacilitatorFilters(new URLSearchParams({ sort: 'name', remote: 'true' }))
+  const result = await buildFacilitatorQuery(supabase, filters, { limit: 18, offset: 18 })
+  assert.equal(result.error, null)
 })
 
 test('database search finds older matching profiles beyond the original 50-row cutoff and counts before paging', async () => {
