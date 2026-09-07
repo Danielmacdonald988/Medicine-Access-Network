@@ -1,8 +1,7 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useTransition } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ChevronDown, SlidersHorizontal } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -19,7 +18,6 @@ const EXPERIENCE_OPTIONS = [
 export function SearchFilters() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
   const filters = parseFacilitatorFilters(searchParams)
   const activeCount = filters.modalities.length + Number(filters.remote) + Number(filters.donation) + Number(Boolean(filters.minExperience))
@@ -50,18 +48,7 @@ export function SearchFilters() {
   return (
     <aside aria-label="Filter guides" className="w-full shrink-0 rounded-2xl border border-stone-200 bg-[#f0f1e9] p-5 lg:w-64 lg:p-6">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="hidden text-base font-medium tracking-tight text-stone-900 lg:block">Refine your search</h2>
-        <button
-          type="button"
-          aria-expanded={open}
-          aria-controls="guide-filter-options"
-          onClick={() => setOpen(!open)}
-          className="flex min-h-9 flex-1 items-center gap-2 text-sm font-semibold text-stone-900 lg:hidden"
-        >
-          <SlidersHorizontal aria-hidden="true" className="size-4" />
-          Filters {activeCount > 0 && `(${activeCount})`}
-          <ChevronDown aria-hidden="true" className={cn('ml-auto size-4 transition-transform', open && 'rotate-180')} />
-        </button>
+        <h2 className="text-base font-medium tracking-tight text-stone-900">Refine your search</h2>
         {activeCount > 0 && (
           <Button variant="ghost" size="sm" disabled={isPending} onClick={clearFilters} className="text-xs text-emerald-800">
             Clear filters
@@ -69,7 +56,7 @@ export function SearchFilters() {
         )}
       </div>
 
-      <fieldset id="guide-filter-options" disabled={isPending} aria-busy={isPending} className={cn('mt-6 min-w-0 space-y-6', !open && 'hidden lg:block')}>
+      <fieldset disabled={isPending} aria-busy={isPending} className="mt-6 min-w-0 space-y-6">
         <legend className="sr-only">Guide search filters</legend>
         <fieldset className="space-y-3">
           <legend className="mb-2 text-xs font-semibold uppercase tracking-wider text-stone-600">Format and pricing</legend>

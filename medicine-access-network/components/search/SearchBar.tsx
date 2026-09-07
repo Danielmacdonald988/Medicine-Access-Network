@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { MapPin, Search } from 'lucide-react'
 import { directoryHref, filterSearchParams, parseFacilitatorFilters } from '@/lib/facilitator-search'
 
-export function SearchBar() {
+export function SearchBar({ onSearch }: { onSearch?: () => void }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
@@ -24,6 +24,7 @@ export function SearchBar() {
     params.set('location', String(form.get('location') ?? ''))
     const normalized = filterSearchParams(parseFacilitatorFilters(params))
     startTransition(() => router.push(directoryHref(normalized), { scroll: false }))
+    onSearch?.()
   }
 
   return (
