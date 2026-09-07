@@ -7,6 +7,8 @@ const privateRoutes = ['api', 'admin', 'dashboard', 'facilitator', 'onboarding',
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Recompile each release: restored compiler caches served stale theme CSS in preview.
+  experimental: { turbopackFileSystemCacheForBuild: false },
   turbopack: { root: __dirname },
 
   // Moved out of proxy.ts: these used to be set in middleware, which meant
