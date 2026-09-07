@@ -296,11 +296,21 @@ test('production accepts complete configuration and identifies email-only degrad
 
   const completeLogs = []
   const complete = loadModule('lib/env.ts', {
-    env: { ...productionConfig, RESEND_API_KEY: 'test-email-key', RESEND_FROM_EMAIL: 'notifications@directory.test' },
+    env: { ...productionConfig, RESEND_API_KEY: 'test-email-key', RESEND_FROM_EMAIL: 'notifications@directory.test', ADMIN_NOTIFICATION_EMAIL: 'admin@directory.test' },
     logs: completeLogs,
   })
   assert.doesNotThrow(complete.validateEnv)
   assert.deepEqual(completeLogs, [])
+
+  const noAdminLogs = []
+  const noAdmin = loadModule('lib/env.ts', {
+    env: { ...productionConfig, RESEND_API_KEY: 'test-email-key', RESEND_FROM_EMAIL: 'notifications@directory.test' },
+    logs: noAdminLogs,
+  })
+  assert.doesNotThrow(noAdmin.validateEnv)
+  assert.equal(noAdminLogs.length, 1)
+  assert.match(noAdminLogs[0].args[0], /Admin application email alerts are not configured/)
+  assert.equal(JSON.stringify(noAdminLogs).includes('test-email-key'), false)
 })
 
 test('local development, preview, and isolated CI builds do not require production credentials', () => {

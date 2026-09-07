@@ -16,6 +16,7 @@ import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { getProfileImageUrl } from '@/lib/profile-media'
 import { getDirectContactLinks } from '@/lib/direct-contact'
+import { isAdminNotificationConfigured } from '@/lib/admin-notifications'
 
 export const metadata: Metadata = { title: 'Admin' }
 
@@ -31,12 +32,17 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   const supabase = await createServerSupabaseClient()
   const params = await searchParams
   const notice = Array.isArray(params.notice) ? params.notice[0] : params.notice
+  const notificationsConfigured = isAdminNotificationConfigured()
   const notices: Record<string, string> = {
     published: 'Profile approved and published in the public directory.',
     hidden: 'Review decision saved. The profile is hidden from the public directory.',
     invalid: 'The review decision was not valid. Please try again.',
     update_failed: 'The review decision could not be saved. Please try again.',
     note_failed: 'The review decision was saved, but the optional note could not be recorded.',
+    notifications_sent: 'The email service accepted this batch of alerts. Other alerts may still be queued or delayed. Check your inbox and spam folder; inbox delivery is not confirmed here.',
+    notifications_not_ready: 'No alerts were ready to send in this attempt. Delayed alerts may still be waiting; retry later.',
+    notifications_pending: 'Some application alerts could not be sent yet. The applications remain available below. Please retry later.',
+    notifications_unconfigured: 'Admin email alerts are not configured yet. Applications are still saved here for review.',
   }
 
   const [
@@ -84,10 +90,24 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   return (
     <div className="space-y-8">
       {notice && notices[notice] && (
-        <p role={notice === 'published' || notice === 'hidden' ? 'status' : 'alert'} className="rounded-xl border border-stone-200 bg-white p-4 text-sm text-stone-700">
+        <p role={['published', 'hidden', 'notifications_sent', 'notifications_not_ready'].includes(notice) ? 'status' : 'alert'} className="rounded-xl border border-stone-200 bg-white p-4 text-sm text-stone-700">
           {notices[notice]}
         </p>
       )}
+      <div className="flex flex-col gap-4 rounded-xl border border-stone-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-sm font-semibold text-stone-900">Application email alerts</h2>
+          <p className="mt-1 max-w-2xl text-sm text-stone-600">
+            {notificationsConfigured
+              ? 'New applications and submitted changes alert the configured admin inbox. If an email is delayed, you can still review the application here.'
+              : 'Admin email alerts are not configured yet. Applications are still saved here for review.'}
+            {' '}Retry attempts a small batch of queued alerts.
+          </p>
+        </div>
+        <form action="/api/admin/notifications" method="POST" className="shrink-0">
+          <Button type="submit" name="action" value="retry" variant="outline" size="sm">Retry pending alerts</Button>
+        </form>
+      </div>
       {/* Stats grid */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
@@ -165,7 +185,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         ) : (
           <div className="space-y-6">
             {pendingFacilitators.map((f) => (
-              <Card key={f.id} className="border-stone-200">
+              <Card key={f.id} id={`application-${f.id}`} className="scroll-mt-24 border-stone-200">
                 <CardHeader className="pb-2">
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div>

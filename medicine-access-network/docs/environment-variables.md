@@ -15,6 +15,7 @@ Set these in the Vercel project, scoped to **Production**:
 | `NEXT_PUBLIC_PAYMENTS_ENABLED` | Keep `false`. Checkout and webhook processing are disabled for this launch. |
 | `RESEND_API_KEY` | Server-only email-sending key restricted to the verified sender domain. |
 | `RESEND_FROM_EMAIL` | Sender address on the verified Resend domain. |
+| `ADMIN_NOTIFICATION_EMAIL` | Single inbox for application-review alerts. Server-only; does not grant an account the admin role. |
 | `CONTACT_RATE_LIMIT_SECRET` | Optional independent secret for contact-rate key hashing; otherwise the server credential is used. |
 
 When `VERCEL_ENV=production`, invalid required configuration fails the build. Local/CI builds may use placeholder public settings and do not require production credentials. A successful build with missing Resend configuration warns that email notifications will not be sent; inquiries still persist in facilitator dashboards.
@@ -32,11 +33,11 @@ When `VERCEL_ENV=production`, invalid required configuration fails the build. Lo
 ## Two separate email paths
 
 - **Supabase custom SMTP** sends account confirmation and password-reset emails. Configure this separately in the Supabase dashboard. Its default test sender cannot deliver to arbitrary new facilitator addresses.
-- **Resend API** sends inquiry notifications. Configure the two Vercel variables above after verifying the sender domain's DNS records. The visitor's email is used as Reply-To.
+- **Resend API** sends inquiry notifications to the selected facilitator and application-review alerts to `ADMIN_NOTIFICATION_EMAIL`. Configure the three email variables after verifying the sender domain. The visitor's email is used as Reply-To only on their inquiry notification. Admin alerts contain a review link, not application text or visitor messages. Admin dispatch is disabled on Vercel preview/development deployments; keep production keys scoped to Production.
 
 Use the provider's exact DNS values for DKIM/SPF and configure DMARC. Keep click/open tracking disabled for account messages so authentication links are not rewritten. Keep email confirmation enabled. Set practical email rate limits for the invited cohort and the provider's sending quota.
 
-Test confirmation, password reset, an authorized inquiry, notification receipt, and a reply before distributing invitations. Provider acceptance alone does not establish inbox delivery. Failed notifications leave the inquiry in the dashboard; automatic retry is not implemented in this release.
+Test confirmation, password reset, an authorized inquiry, notification receipt, and a reply before distributing invitations. Provider acceptance alone does not establish inbox delivery. Failed inquiry notifications leave the inquiry in the facilitator dashboard; automatic inquiry-email retry is not implemented. Application alerts have a private durable queue: submission attempts delivery after saving, and the admin dashboard offers **Retry pending alerts** for eligible queued messages. Edits are coalesced, with a 15-minute delivery cooldown and backoff after failures. There is no scheduled retry worker. Check the dashboard directly while email is unavailable. Provider idempotency lasts 24 hours, so an uncertain send whose acknowledgement was lost can still duplicate if retried after that window.
 
 ## Monitoring and recovery
 
@@ -44,7 +45,7 @@ Test confirmation, password reset, an authorized inquiry, notification receipt, 
 
 Configure an external uptime monitor to check the endpoint and alert the operator. Keep backups and test restoration in a separate database. Supabase Free can pause inactive projects; use an appropriate production plan for continuous availability. Keep spending controls enabled and review the bill before activating additional projects or services.
 
-No database migrations are required for the launch-hardening application changes. Migrations 0001–0004 must already be applied. Roll back only to an application version compatible with those database permissions. The previous production commit is recorded in the release notes.
+Apply migration 0006 after migrations 0001–0005 before deploying application notifications. It backfills existing pending applications without sending mail by itself. Roll back only to an application version compatible with those database permissions; queued alerts remain private during rollback. The previous production commit is recorded in the release notes.
 
 ## Payments
 
