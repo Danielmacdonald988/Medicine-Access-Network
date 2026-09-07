@@ -48,9 +48,9 @@ export function SearchFilters() {
   }
 
   return (
-    <aside aria-label="Filter guides" className="w-full shrink-0 rounded-2xl border border-stone-200 bg-white p-5 lg:w-64">
+    <aside aria-label="Filter guides" className="w-full shrink-0 rounded-2xl border border-stone-200 bg-[#f0f1e9] p-5 lg:w-64 lg:p-6">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="hidden text-sm font-semibold text-stone-900 lg:block">Refine your search</h2>
+        <h2 className="hidden text-base font-medium tracking-tight text-stone-900 lg:block">Refine your search</h2>
         <button
           type="button"
           aria-expanded={open}
@@ -69,7 +69,7 @@ export function SearchFilters() {
         )}
       </div>
 
-      <fieldset id="guide-filter-options" disabled={isPending} aria-busy={isPending} className={cn('mt-5 min-w-0 space-y-5', !open && 'hidden lg:block')}>
+      <fieldset id="guide-filter-options" disabled={isPending} aria-busy={isPending} className={cn('mt-6 min-w-0 space-y-6', !open && 'hidden lg:block')}>
         <legend className="sr-only">Guide search filters</legend>
         <fieldset className="space-y-3">
           <legend className="mb-2 text-xs font-semibold uppercase tracking-wider text-stone-600">Format and pricing</legend>
@@ -81,10 +81,10 @@ export function SearchFilters() {
             <Checkbox id="donation" checked={filters.donation} onCheckedChange={(checked) => toggle('donation', 'true', checked)} />
             <label htmlFor="donation" className="cursor-pointer text-sm text-stone-700">Donation-based pricing</label>
           </div>
-          <p className="text-xs leading-relaxed text-stone-500">Online support depends on where you live. Donation-based guides may set a minimum. Confirm both before arranging a session.</p>
+          <p className="text-xs leading-relaxed text-stone-600">Online support depends on where you live. Donation-based guides may set a minimum. Confirm both before arranging a session.</p>
         </fieldset>
 
-        <fieldset className="border-t border-stone-100 pt-4">
+        <fieldset className="border-t border-stone-200 pt-5">
           <legend className="text-xs font-semibold uppercase tracking-wider text-stone-600">Self-reported practice</legend>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {EXPERIENCE_OPTIONS.map(({ label, value }) => (
@@ -93,18 +93,18 @@ export function SearchFilters() {
               </button>
             ))}
           </div>
-          <p className="mt-2 text-xs leading-relaxed text-stone-500">Years may include personal practice. This is not a measure of training or professional experience.</p>
+          <p className="mt-2 text-xs leading-relaxed text-stone-600">Years may include personal practice. This is not a measure of training or professional experience.</p>
         </fieldset>
 
-        <div className="border-t border-stone-100 pt-4">
+        <div className="border-t border-stone-200 pt-5">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-stone-600">Type of support</h3>
-          <p className="mt-1 text-xs text-stone-500">Matches any selected type.</p>
+          <p className="mt-1 text-xs text-stone-600">Matches any selected type.</p>
           <div className="mt-3 space-y-2">
             {Object.entries(MODALITY_CATEGORIES).map(([key, label]) => {
               const modalities = MODALITIES.filter((modality) => modality.category === key)
               const selected = modalities.filter((modality) => filters.modalities.includes(modality.name)).length
               return (
-                <details key={key} open={selected > 0 ? true : undefined} className="rounded-lg border border-stone-100 px-3">
+                <details key={key} open={selected > 0 ? true : undefined} className="rounded-lg border border-stone-200 bg-white/60 px-3">
                   <summary className="cursor-pointer py-3 text-sm font-medium text-stone-700">{label}{selected > 0 && ` (${selected})`}</summary>
                   <div className="space-y-2 pb-3">
                     {modalities.map((modality) => (

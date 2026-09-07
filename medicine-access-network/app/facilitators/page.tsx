@@ -35,7 +35,7 @@ interface PageProps {
 
 function SupportResources() {
   return (
-    <div className="mt-6 rounded-xl border border-stone-200 bg-stone-50 p-6">
+    <div className="mt-5 rounded-2xl border border-stone-200 bg-[#e9eee5] p-6 sm:p-8">
       <p className="font-medium text-stone-900">Still finding your starting point?</p>
       <p className="mt-2 text-sm leading-relaxed text-stone-600">Explore the different kinds of support and questions to ask before choosing a guide.</p>
       <Link href="/resources" className="mt-4 inline-flex min-h-9 items-center gap-2 text-sm font-medium text-emerald-800 underline underline-offset-4">
@@ -50,11 +50,11 @@ function EmptyResults({ filters, page }: { filters: FacilitatorFilters; page: nu
   const firstPageHref = directoryHref(filterSearchParams(filters))
   return (
     <>
-      <div className="rounded-2xl border border-stone-200 bg-white px-6 py-12 text-center">
-        <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-stone-100">
+      <div className="rounded-2xl border border-stone-200 bg-white px-6 py-14 text-center sm:py-20">
+        <div className="mx-auto mb-6 flex size-16 items-center justify-center rounded-full bg-[#e9eee5]">
           {active ? <SlidersHorizontal aria-hidden="true" className="size-5 text-stone-500" /> : <Users aria-hidden="true" className="size-5 text-stone-500" />}
         </div>
-        <h2 className="text-lg font-semibold text-stone-900">
+        <h2 className="text-2xl font-medium tracking-tight text-stone-900">
           {page > 1 ? 'You’ve reached the end of these results' : active ? 'No guides match your search yet' : 'Guides coming soon'}
         </h2>
         <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-stone-600">
@@ -115,7 +115,7 @@ async function FacilitatorGrid({ filters, page }: { filters: FacilitatorFilters;
       <>
         <div role="alert" className="rounded-2xl border border-stone-200 bg-white p-8">
           <Search aria-hidden="true" className="mb-4 size-6 text-stone-500" />
-          <h2 className="text-lg font-semibold text-stone-900">The directory is temporarily unavailable</h2>
+          <h2 className="text-2xl font-medium tracking-tight text-stone-900">The directory is temporarily unavailable</h2>
           <p className="mt-2 mb-5 text-sm leading-relaxed text-stone-600">We couldn’t load guide profiles. Your search is saved in the address bar; try again or browse the resource library while you wait.</p>
           <SearchRecovery />
         </div>
@@ -139,7 +139,7 @@ async function FacilitatorGrid({ filters, page }: { filters: FacilitatorFilters;
         {total} {total === 1 ? 'guide' : 'guides'} found
         {pageCount > 1 && ` · Showing ${offset + 1}–${offset + facilitators.length}`}
       </p>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         {facilitators.map((facilitator) => <FacilitatorCard key={facilitator.id} facilitator={facilitator} />)}
       </div>
       {pageCount > 1 && (
@@ -157,8 +157,8 @@ function GridSkeleton() {
   return (
     <div role="status" aria-label="Loading guides">
       <span className="sr-only">Loading guides…</span>
-      <div aria-hidden="true" className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-64 animate-pulse rounded-xl bg-stone-100 motion-reduce:animate-none" />)}
+      <div aria-hidden="true" className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        {Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-[34rem] animate-pulse rounded-2xl bg-stone-100 motion-reduce:animate-none" />)}
       </div>
     </div>
   )
@@ -170,17 +170,21 @@ export default async function FacilitatorsPage({ searchParams }: PageProps) {
   const page = boundedInteger(params.get('page'), 1, 1, 10000)
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mb-8">
-        <p className="text-sm font-medium text-emerald-800">Find your support</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-stone-900 sm:text-4xl">Find a guide for your next step.</h1>
-        <p className="mt-4 max-w-2xl leading-relaxed text-stone-600">Compare preparation, integration, breathwork, and somatic support. Read profiles and ask questions directly. No explorer account is needed.</p>
-        <Link href="/about#profile-review" className="mt-3 inline-block text-sm text-emerald-800 underline underline-offset-4">What does profile review mean?</Link>
+    <div className="network-shell py-10 sm:py-14">
+      <div className="mb-8 max-w-3xl sm:mb-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">Find your support</p>
+        <h1 className="mt-5 text-4xl font-medium leading-[1.08] tracking-[-0.045em] text-stone-900 sm:text-5xl lg:text-6xl">A guide for <em className="font-medium text-[#657f48]">your next step.</em></h1>
+        <p className="mt-5 max-w-2xl leading-7 text-stone-600">Explore preparation, integration, breathwork, and somatic support. Get to know each guide’s approach, then start a conversation when you feel ready.</p>
+        <p className="mt-4 text-sm text-emerald-800">No explorer account needed. Browse at your own pace.</p>
       </div>
-      <div className="mb-6"><Suspense><SearchBar /></Suspense></div>
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+      <div className="mb-8"><Suspense><SearchBar /></Suspense></div>
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
         <Suspense><SearchFilters /></Suspense>
         <section aria-label="Guide search results" className="min-w-0 flex-1">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-x-5 gap-y-2">
+            <h2 className="text-2xl font-medium tracking-tight text-stone-900">Meet the guides</h2>
+            <Link href="/about#profile-review" className="inline-flex min-h-11 items-center text-xs font-medium text-emerald-800 underline underline-offset-4">What does profile review mean?</Link>
+          </div>
           <ActiveFilters filters={filters} />
           <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <details className="max-w-md text-sm text-stone-600">

@@ -8,18 +8,18 @@ export const metadata: Metadata = { title: 'Sign in' }
 
 export default function LoginPage() {
   return (
-    <Card className="border-stone-200">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">Welcome back</CardTitle>
-        <CardDescription>Sign in to your account to continue</CardDescription>
+    <Card className="gap-6 rounded-2xl border border-border bg-card py-7 shadow-[0_12px_45px_#203e3406] ring-0 sm:py-8">
+      <CardHeader className="gap-3 px-6 sm:px-8">
+        <CardTitle className="font-heading text-[40px] leading-[1.05] tracking-[-0.035em]"><h1>Welcome back</h1></CardTitle>
+        <CardDescription className="text-sm leading-relaxed">Sign in to manage your facilitator profile and connections.</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-6 sm:px-8">
         <Suspense>
           <LoginForm />
         </Suspense>
       </CardContent>
-      <CardFooter className="flex justify-center border-t border-stone-100 pt-4">
-        <p className="text-sm text-stone-500">
+      <CardFooter className="justify-center border-t border-border bg-muted/50 px-6 py-5 text-center sm:px-8">
+        <p className="text-sm text-muted-foreground">
           Don&apos;t have an account?{' '}
           <Link href="/signup" className="font-medium text-emerald-700 hover:underline">
             Sign up

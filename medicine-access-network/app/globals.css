@@ -7,7 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-dm-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -49,38 +49,64 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: #faf9f4;
+  --foreground: #203e34;
+  --card: #fffefa;
+  --card-foreground: #203e34;
+  --popover: #fffefa;
+  --popover-foreground: #203e34;
+  --primary: #244c3e;
+  --primary-foreground: #ffffff;
+  --secondary: #e9eee5;
+  --secondary-foreground: #203e34;
+  --muted: #f0f1e9;
+  --muted-foreground: #606b5d;
+  --accent: #e9efdf;
+  --accent-foreground: #203e34;
+  --destructive: #a53627;
+  --border: #d9ded1;
+  --input: #bbc5b1;
+  --ring: #657f48;
+  --chart-1: #244c3e;
+  --chart-2: #657f48;
+  --chart-3: #78533d;
+  --chart-4: #71692f;
+  --chart-5: #645578;
+  --radius: 0.75rem;
+  --sidebar: #f0f1e9;
+  --sidebar-foreground: #203e34;
+  --sidebar-primary: #244c3e;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e9efdf;
+  --sidebar-accent-foreground: #203e34;
+  --sidebar-border: #d9ded1;
+  --sidebar-ring: #657f48;
+}
+
+/* Keep existing application screens in the same forest and cream palette. */
+@theme {
+  --color-stone-50: #faf9f4;
+  --color-stone-100: #f0f1e9;
+  --color-stone-200: #d9ded1;
+  --color-stone-300: #bbc5b1;
+  --color-stone-400: #7b8774;
+  --color-stone-500: #65715e;
+  --color-stone-600: #56644f;
+  --color-stone-700: #43583e;
+  --color-stone-800: #2d4738;
+  --color-stone-900: #203e34;
+  --color-stone-950: #152c24;
+  --color-emerald-50: #f0f4eb;
+  --color-emerald-100: #e3ebdc;
+  --color-emerald-200: #cadbb9;
+  --color-emerald-300: #adca97;
+  --color-emerald-400: #7fa266;
+  --color-emerald-500: #62864d;
+  --color-emerald-600: #4e7346;
+  --color-emerald-700: #3c6249;
+  --color-emerald-800: #244c3e;
+  --color-emerald-900: #1c3e32;
+  --color-emerald-950: #153127;
 }
 
 .dark {
@@ -133,7 +159,7 @@
 
 /* Grain overlay — place inside a relative parent with overflow-hidden */
 .grain::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: -50%;
   width: 200%;
@@ -151,18 +177,45 @@
 }
 /* Visible keyboard focus across links, disclosures, and form controls. */
 @layer base {
-  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
-    outline: 3px solid #059669;
+  :where(
+    a,
+    button,
+    input,
+    textarea,
+    select,
+    summary,
+    [tabindex]
+  ):focus-visible {
+    outline: 3px solid #657f48;
     outline-offset: 4px;
   }
-  html { scroll-padding-top: 5rem; }
+  html {
+    scroll-padding-top: 8rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+.network-shell {
+  width: min(1240px, calc(100% - 96px));
+  margin-inline: auto;
+}
+@media (max-width: 1050px) {
+  .network-shell {
+    width: calc(100% - 48px);
+  }
+}
+@media (max-width: 600px) {
+  .network-shell {
+    width: calc(100% - 40px);
   }
 }

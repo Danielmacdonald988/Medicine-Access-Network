@@ -4,17 +4,17 @@ import { SafetyDisclaimer } from './SafetyDisclaimer'
 import { APP_NAME } from '@/lib/constants'
 
 const footerLinks = {
-  Platform: [
-    { href: '/facilitators', label: 'Find a guide' },
+  'Explore the network': [
+    { href: '/facilitators', label: 'Explore support' },
     { href: '/saved', label: 'Saved guides' },
-    { href: '/#process-heading', label: 'How it works' },
+    { href: '/#how-it-works', label: 'How it works' },
     { href: '/onboarding/facilitator', label: 'List your practice' },
   ],
-  'Safety Library': [
+  'Safety library': [
     { href: '/resources', label: 'Browse resources' },
     { href: '/resources/preparation-basics', label: 'Preparation' },
     { href: '/resources/integration-basics', label: 'Integration' },
-    { href: '/resources/red-flags', label: 'Red Flags' },
+    { href: '/resources/red-flags', label: 'Red flags' },
     { href: '/resources/emergency', label: 'Urgent support' },
   ],
   'About & help': [
@@ -26,31 +26,35 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-stone-200 bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+    <footer className="mt-auto bg-background pt-14 text-foreground sm:pt-16">
+      <div className="network-shell">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-9 pb-10 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-12">
           {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 font-semibold text-stone-900">
-              <Logomark className="h-4 w-4 text-emerald-700" />
-              <span className="text-sm">{APP_NAME}</span>
+          <div className="col-span-2 lg:col-span-1">
+            <Link href="/" aria-label={`${APP_NAME} home`} className="inline-flex items-center gap-2">
+              <Logomark className="size-11" />
+              <span aria-hidden="true" className="text-lg leading-[1.02] tracking-[-0.035em]">
+                the facilitator<br /><strong className="font-semibold">network</strong><span className="text-[#829656]">.</span>
+              </span>
             </Link>
-            <p className="mt-3 text-sm leading-relaxed text-stone-600">
-              A discovery platform for preparation and integration facilitators, coaches, and
-              guides. Education, preparation, and integration only.
+            <p className="mt-5 font-heading text-[26px] italic leading-[1.2] text-[#687b59]">
+              A little more connection.<br />A world of possibility.
+            </p>
+            <p className="mt-4 max-w-70 text-sm leading-relaxed text-muted-foreground">
+              Find support for preparation, integration, and the path in between.
             </p>
           </div>
 
           {/* Link columns */}
           {Object.entries(footerLinks).map(([heading, links]) => (
             <div key={heading}>
-              <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-stone-600">
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground">
                 {heading}
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-1">
                 {links.map(({ href, label }) => (
                   <li key={href}>
-                    <Link href={href} className="text-sm text-stone-600 hover:text-stone-900 transition-colors">
+                    <Link href={href} className="inline-flex min-h-9 items-center text-sm leading-relaxed text-foreground underline-offset-4 transition-colors hover:underline">
                       {label}
                     </Link>
                   </li>
@@ -60,10 +64,13 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-10 border-t border-stone-200 pt-6">
-          <p className="text-center text-xs text-stone-400">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border py-6">
+          <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} {APP_NAME}. All rights reserved.
           </p>
+          <Link href="/contact" className="text-xs text-muted-foreground underline-offset-4 hover:underline">
+            Questions? Get in touch
+          </Link>
         </div>
       </div>
 

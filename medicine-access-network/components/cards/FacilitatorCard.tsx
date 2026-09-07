@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Video, Star, ShieldCheck, Clock } from 'lucide-react'
+import { ArrowUpRight, MapPin, Video, Star, ShieldCheck, Clock } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -29,120 +29,68 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
       : 'Rate on request'
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-xl border border-stone-200 bg-white transition-shadow hover:shadow-md">
-      {/* Card body */}
-      <div className="flex flex-1 flex-col gap-4 p-5">
-        {/* Top row: avatar + identity */}
-        <div className="flex items-start gap-3">
-          <Link href={`/facilitators/${f.id}`} tabIndex={-1} aria-hidden="true" className="shrink-0"><Avatar className="size-20 shrink-0 rounded-xl">
-            {photoUrl && (
-              <AvatarImage src={photoUrl} alt={f.display_name} className="object-cover" />
-            )}
-            <AvatarFallback className="bg-emerald-100 text-sm font-medium text-emerald-800">
+    <article className="group flex flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white transition-shadow hover:shadow-[0_12px_32px_-16px_rgba(32,62,52,0.3)]">
+      <div className="p-4 pb-0">
+        <Link href={`/facilitators/${f.id}`} tabIndex={-1} aria-hidden="true" className="block">
+          <Avatar className="h-52 w-full overflow-hidden rounded-[76px_76px_10px_10px] after:rounded-[inherit] sm:h-56">
+            {photoUrl && <AvatarImage src={photoUrl} alt={f.display_name} className="rounded-none object-cover" />}
+            <AvatarFallback className="rounded-none bg-emerald-100 text-4xl font-medium text-emerald-800">
               {initials}
             </AvatarFallback>
-          </Avatar></Link>
+          </Avatar>
+        </Link>
+      </div>
 
-          <div className="min-w-0 flex-1">
-            {/* Name + verification badge */}
-            <div className="flex flex-wrap items-center gap-2">
-              <h3 className="break-words font-semibold text-stone-900">
-                <Link href={`/facilitators/${f.id}`} className="underline-offset-4 hover:text-emerald-800 hover:underline">{f.display_name}</Link>
-              </h3>
-              {(
-                <Link
-                  href={`/facilitators/${f.id}#profile-review`}
-                  aria-label={`What profile review means for ${f.display_name}`}
-                  className="inline-flex shrink-0 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 underline-offset-2 hover:underline"
-                >
-                  <ShieldCheck aria-hidden="true" className="size-3" />
-                  Profile reviewed
-                </Link>
-              )}
-            </div>
-
-            {/* Meta row: location / remote / experience */}
-            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-stone-500">
-              {f.location && (
-                <span className="flex items-center gap-1">
-                  <MapPin className="size-3" />
-                  {f.location}
-                </span>
-              )}
-              {f.remote_available && (
-                <span className="flex items-center gap-1 text-emerald-700">
-                  <Video className="size-3" />
-                  Online sessions
-                </span>
-              )}
-              {typeof f.years_experience === 'number' && f.years_experience > 0 && (
-                <span className="flex items-center gap-1">
-                  <Clock className="size-3" />
-                  {f.years_experience} yr{f.years_experience === 1 ? '' : 's'} practice (self-reported)
-                </span>
-              )}
-            </div>
-
-            {/* Rating */}
-            {typeof f.avg_rating === 'number' && Number.isFinite(f.avg_rating) && (f.review_count ?? 0) > 0 ? (
-              <div className="mt-1 flex items-center gap-1 text-xs">
-                <Star aria-hidden="true" className="size-3 fill-amber-400 text-amber-400" />
-                <span className="font-medium text-stone-700">
-                  {f.avg_rating.toFixed(1)}<span className="sr-only"> out of 5</span>
-                </span>
-                <span className="text-stone-400">
-                  ({f.review_count} {f.review_count === 1 ? 'review' : 'reviews'})
-                </span>
-              </div>
-            ) : (
-              <p className="mt-1 text-xs text-stone-500">No reviews yet</p>
+      <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
+        <div>
+          <Link
+            href={`/facilitators/${f.id}#profile-review`}
+            aria-label={`What profile review means for ${f.display_name}`}
+            className="inline-flex min-h-8 items-center gap-1.5 text-xs font-medium text-emerald-700 underline-offset-4 hover:underline"
+          >
+            <ShieldCheck aria-hidden="true" className="size-3.5" />
+            Profile reviewed
+          </Link>
+          <h3 className="mt-1 break-words text-2xl font-medium tracking-tight text-stone-900">
+            <Link href={`/facilitators/${f.id}`} className="underline-offset-4 hover:text-emerald-800 hover:underline">{f.display_name}</Link>
+          </h3>
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs leading-relaxed text-stone-600">
+            {f.location && <span className="flex max-w-full items-center gap-1.5"><MapPin aria-hidden="true" className="size-3.5 shrink-0" /><span className="min-w-0 break-words">{f.location}</span></span>}
+            {f.remote_available && <span className="flex items-center gap-1.5 text-emerald-700"><Video aria-hidden="true" className="size-3.5 shrink-0" />Online sessions</span>}
+            {typeof f.years_experience === 'number' && f.years_experience > 0 && (
+              <span className="flex items-center gap-1.5"><Clock aria-hidden="true" className="size-3.5 shrink-0" />{f.years_experience} yr{f.years_experience === 1 ? '' : 's'} practice (self-reported)</span>
             )}
           </div>
         </div>
 
-        {/* Bio excerpt */}
-        <p className="line-clamp-3 text-sm leading-relaxed text-stone-600">
-          {f.bio}
-        </p>
+        <p className="line-clamp-3 text-sm leading-7 text-stone-600">{f.bio}</p>
 
-        {/* Modality badges */}
         {f.modalities.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {f.modalities.slice(0, 3).map((modality) => (
-              <Badge
-                key={modality}
-                variant="secondary"
-                className="bg-stone-100 text-xs text-stone-600 hover:bg-stone-100"
-              >
-                {modality}
-              </Badge>
+              <Badge key={modality} variant="secondary" className="rounded-full bg-stone-100 px-2.5 py-1 text-xs font-normal text-stone-700 hover:bg-stone-100">{modality}</Badge>
             ))}
-            {f.modalities.length > 3 && (
-              <Badge
-                variant="secondary"
-                className="bg-stone-100 text-xs text-stone-400 hover:bg-stone-100"
-              >
-                +{f.modalities.length - 3} more
-              </Badge>
-            )}
+            {f.modalities.length > 3 && <Badge variant="secondary" className="rounded-full bg-stone-100 px-2.5 py-1 text-xs font-normal text-stone-600 hover:bg-stone-100">+{f.modalities.length - 3} more</Badge>}
           </div>
         )}
+
+        {typeof f.avg_rating === 'number' && Number.isFinite(f.avg_rating) && (f.review_count ?? 0) > 0 ? (
+          <div className="mt-auto flex items-center gap-1.5 text-xs">
+            <Star aria-hidden="true" className="size-3.5 fill-amber-400 text-amber-400" />
+            <span className="font-medium text-stone-700">{f.avg_rating.toFixed(1)}<span className="sr-only"> out of 5</span></span>
+            <span className="text-stone-500">({f.review_count} {f.review_count === 1 ? 'review' : 'reviews'})</span>
+          </div>
+        ) : <p className="mt-auto text-xs text-stone-500">No reviews yet</p>}
       </div>
 
-      {/* Card footer */}
-      <div className="border-t border-stone-100 px-5 py-4">
-        <p className="text-sm font-semibold text-stone-800">{rateDisplay}</p>
-        <p className="mt-1 text-xs text-stone-500">Confirm fees and availability with the guide.</p>
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
-        <SaveGuideButton profileId={f.id} displayName={f.display_name} compact />
-        <Button
-          size="sm"
-          variant="outline"
-          className="min-h-11 border-emerald-600 text-xs text-emerald-700 hover:bg-emerald-50"
-          asChild
-        >
-          <Link href={`/facilitators/${f.id}`} aria-label={`View ${f.display_name}'s profile`}>View profile</Link>
-        </Button>
+      <div className="border-t border-stone-200 bg-stone-50/70 px-5 py-5 sm:px-6">
+        <p className="text-sm font-semibold text-stone-900">{rateDisplay}</p>
+        <p className="mt-1 text-xs leading-relaxed text-stone-600">Confirm fees and availability with the guide.</p>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <SaveGuideButton profileId={f.id} displayName={f.display_name} compact />
+          <Button size="sm" className="min-h-11 bg-emerald-700 px-4 text-sm text-white hover:bg-emerald-800" asChild>
+            <Link href={`/facilitators/${f.id}`} aria-label={`View ${f.display_name}'s profile`}>View profile <ArrowUpRight aria-hidden="true" className="size-4" /></Link>
+          </Button>
         </div>
       </div>
     </article>

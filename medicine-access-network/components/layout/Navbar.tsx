@@ -13,14 +13,14 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Logomark } from '@/components/icons/logomark'
-import { Menu, X } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Menu, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { SavedGuidesLink } from '@/components/saved/SavedGuidesLink'
 
 const navLinks = [
-  { href: '/facilitators', label: 'Find a guide' },
+  { href: '/facilitators', label: 'Explore support' },
   { href: '/resources', label: 'Safety library' },
-  { href: '/about', label: 'About' },
+  { href: '/about', label: 'Our approach' },
 ]
 
 interface NavbarProps {
@@ -42,12 +42,33 @@ export function Navbar({ user }: NavbarProps) {
     : '??'
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-stone-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <>
+      {pathname === '/' && (
+        <div className="flex min-h-9 flex-wrap items-center justify-center gap-x-2 gap-y-1 bg-[#e8eddf] px-4 py-2 text-center text-xs text-foreground">
+          <span className="size-1.5 rounded-full bg-[#6f8654]" aria-hidden="true" />
+          <span>A new way to find your people.</span>
+          <Link href="/facilitators" className="inline-flex items-center gap-1.5 border-b border-[#779070] font-medium hover:text-primary">
+            Explore the network <ArrowRight className="size-3.5" aria-hidden="true" />
+          </Link>
+        </div>
+      )}
+    <header
+      className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/95 backdrop-blur"
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && mobileOpen) {
+          event.preventDefault()
+          setMobileOpen(false)
+          menuButton.current?.focus()
+        }
+      }}
+    >
+      <div className="network-shell flex h-20 items-center justify-between gap-5 lg:h-24">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-semibold text-stone-900">
-          <Logomark className="h-5 w-5 text-emerald-700" />
-          <span className="text-sm sm:text-base">{APP_NAME}</span>
+        <Link href="/" aria-label={`${APP_NAME} home`} className="flex shrink-0 items-center gap-2 text-foreground">
+          <Logomark className="size-9 sm:size-11" />
+          <span aria-hidden="true" className="text-base leading-[1.02] tracking-[-0.035em] sm:text-lg">
+            the facilitator<br /><strong className="font-semibold">network</strong><span className="text-[#829656]">.</span>
+          </span>
         </Link>
 
         {/* Desktop nav */}
@@ -57,14 +78,14 @@ export function Navbar({ user }: NavbarProps) {
               key={href}
               href={href}
               aria-current={pathname.startsWith(href) ? 'page' : undefined}
-              className={`text-sm font-medium transition-colors hover:text-emerald-700 ${
-                pathname.startsWith(href) ? 'text-emerald-700' : 'text-stone-600'
+              className={`text-sm transition-colors hover:text-primary ${
+                pathname.startsWith(href) ? 'font-semibold text-primary' : 'text-foreground'
               }`}
             >
               {label}
             </Link>
           ))}
-          <SavedGuidesLink className="text-sm font-medium text-stone-600 hover:text-emerald-700" />
+          <SavedGuidesLink className="text-sm text-foreground hover:text-primary" />
         </nav>
 
         {/* Auth actions */}
@@ -103,11 +124,11 @@ export function Navbar({ user }: NavbarProps) {
             </DropdownMenu>
           ) : (
             <>
-              <Button variant="ghost" size="sm" asChild>
-                <Link href="/login">Guide sign in</Link>
+              <Button variant="ghost" size="sm" className="text-foreground" asChild>
+                <Link href="/login">Sign in</Link>
               </Button>
-              <Button size="sm" variant="outline" asChild>
-                <Link href="/onboarding/facilitator">List your practice</Link>
+              <Button variant="outline" className="h-12 gap-2.5 rounded-lg border-[#a7b3a0] bg-transparent px-4 text-foreground hover:bg-secondary" asChild>
+                <Link href="/onboarding/facilitator">For facilitators <ArrowUpRight className="size-4" aria-hidden="true" /></Link>
               </Button>
             </>
           )}
@@ -117,7 +138,7 @@ export function Navbar({ user }: NavbarProps) {
         <button
           ref={menuButton}
           type="button"
-          className="flex size-11 items-center justify-center rounded-lg text-stone-600 lg:hidden"
+          className="flex size-11 items-center justify-center rounded-lg text-foreground hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring lg:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileOpen}
@@ -129,25 +150,31 @@ export function Navbar({ user }: NavbarProps) {
 
       {/* Mobile nav */}
       {mobileOpen && (
-        <div id="mobile-navigation" className="border-t border-stone-200 bg-white px-4 pb-4 pt-2 lg:hidden" onKeyDown={(event) => { if (event.key === 'Escape') { setMobileOpen(false); menuButton.current?.focus() } }} onClick={(event) => { if ((event.target as HTMLElement).closest('a')) setMobileOpen(false) }}>
+        <div id="mobile-navigation" className="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-border bg-background py-4 lg:hidden" onClick={(event) => { if ((event.target as HTMLElement).closest('a')) setMobileOpen(false) }}>
+          <div className="network-shell">
           <nav aria-label="Mobile navigation" className="flex flex-col gap-1">
             {navLinks.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
                 aria-current={pathname.startsWith(href) ? 'page' : undefined}
-                className="flex min-h-11 items-center text-sm font-medium text-stone-700"
+                className="flex min-h-11 items-center text-sm font-medium text-foreground"
                 onClick={() => setMobileOpen(false)}
               >
                 {label}
               </Link>
             ))}
-            <SavedGuidesLink className="flex min-h-11 items-center text-sm font-medium text-stone-700" />
+            <SavedGuidesLink className="flex min-h-11 items-center text-sm font-medium text-foreground" />
             {user ? (
               <>
                 <Link href="/dashboard" className="flex min-h-11 items-center text-sm font-medium text-stone-700">
                   Dashboard
                 </Link>
+                {user.role === 'admin' && (
+                  <Link href="/admin" className="flex min-h-11 items-center text-sm font-medium text-foreground">
+                    Admin
+                  </Link>
+                )}
                 <form action="/api/auth/signout" method="post">
                   <button type="submit" className="flex min-h-11 items-center text-sm font-medium text-stone-600">
                     Sign out
@@ -156,17 +183,19 @@ export function Navbar({ user }: NavbarProps) {
               </>
             ) : (
               <div className="flex flex-col gap-2 pt-2">
-                <Button variant="outline" size="sm" asChild>
-                  <Link href="/login">Guide sign in</Link>
+                <Button variant="outline" className="h-11 bg-transparent" asChild>
+                  <Link href="/login">Facilitator sign in</Link>
                 </Button>
-                <Button size="sm" variant="outline" asChild>
-                  <Link href="/onboarding/facilitator">List your practice</Link>
+                <Button className="h-11" asChild>
+                  <Link href="/onboarding/facilitator">List your practice <ArrowUpRight className="size-4" aria-hidden="true" /></Link>
                 </Button>
               </div>
             )}
           </nav>
+          </div>
         </div>
       )}
     </header>
+    </>
   )
 }
