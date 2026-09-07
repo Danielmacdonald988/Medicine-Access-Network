@@ -1,3 +1,5 @@
+import { getTranslation } from '@/lib/i18n/server'
+import type { Locale } from '@/lib/i18n/config'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import {
@@ -56,7 +58,7 @@ function StatusFormButton({
   return (
     <form action={`/api/booking-requests/${requestId}`} method="POST">
       <input type="hidden" name="status" value={status} />
-      <Button type="submit" size="sm" variant={variant} className={`text-xs ${className}`}>
+      <Button type="submit" size="sm" variant={variant} className={`h-auto min-h-11 whitespace-normal text-xs ${className}`}>
         {label}
       </Button>
     </form>
@@ -65,8 +67,8 @@ function StatusFormButton({
 
 // ─── Format helpers ───────────────────────────────────────────────────────────
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('en-US', {
+function formatDate(iso: string, locale: Locale) {
+  return new Date(iso).toLocaleDateString(locale, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -74,7 +76,8 @@ function formatDate(iso: string) {
 }
 
 function formatPreferredFormat(f: string) {
-  return f.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+  const labels: Record<string, string> = { async: 'Email', video: 'Video call', voice: 'Voice call', in_person: 'In person' }
+  return labels[f] ?? f
 }
 
 function StarRow({ rating }: { rating: number }) {
@@ -92,7 +95,7 @@ function StarRow({ rating }: { rating: number }) {
 
 // ─── Request card ─────────────────────────────────────────────────────────────
 
-function RequestCard({
+async function RequestCard({
   req,
   showActions,
 }: {
@@ -109,6 +112,7 @@ function RequestCard({
   }
   showActions: boolean
 }) {
+  const { t, locale } = await getTranslation()
   const config = requestStatusConfig[req.status as keyof typeof requestStatusConfig]
 
   return (
@@ -116,22 +120,18 @@ function RequestCard({
       className={`border-stone-200 ${req.status === 'pending' ? 'ring-1 ring-amber-200' : ''}`}
     >
       <CardContent className="p-4">
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-col items-start justify-between gap-3 sm:flex-row">
           <div className="min-w-0 flex-1 space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
               <p className="truncate text-sm font-medium text-stone-900">
-                {req.requested_service}
+                {t(req.requested_service)}
               </p>
               <Badge variant="outline" className={`text-xs ${config.color}`}>
-                {config.label}
+                {t(config.label)}
               </Badge>
             </div>
             {(req.seeker_name || req.seeker_email) && (
-              <p className="text-xs text-stone-500">
-                From{' '}
-                <span className="font-medium text-stone-700">
-                  {req.seeker_name ?? 'Unknown'}
-                </span>
+              <p className="text-xs text-stone-500"><span dir="auto" className="font-medium text-stone-700">{t('From {name}', { name: req.seeker_name ?? t('Unknown') })}</span>
                 {req.seeker_email && (
                   <>
                     {' — '}
@@ -147,32 +147,32 @@ function RequestCard({
               </p>
             )}
             <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-stone-400">
-              <span>{formatPreferredFormat(req.preferred_format)}</span>
+              <span>{t(formatPreferredFormat(req.preferred_format))}</span>
               {req.preferred_time_window && (
                 <span className="flex items-center gap-1">
                   <Calendar className="size-3" />
-                  {req.preferred_time_window}
+                  {t(req.preferred_time_window)}
                 </span>
               )}
-              <span>{formatDate(req.created_at)}</span>
+              <span>{formatDate(req.created_at, locale)}</span>
             </div>
-            <p className="line-clamp-2 text-sm text-stone-600">{req.message}</p>
+            <p dir="auto" className="line-clamp-2 text-sm text-stone-600">{req.message}</p>
           </div>
 
           {showActions && (
-            <div className="flex shrink-0 flex-col gap-2">
+            <div className="flex w-full shrink-0 flex-wrap gap-2 sm:w-auto sm:flex-col">
               {req.status === 'pending' && (
                 <>
                   <StatusFormButton
                     requestId={req.id}
                     status="accepted"
-                    label="Accept"
+                    label={t("Accept")}
                     className="bg-emerald-700 hover:bg-emerald-800"
                   />
                   <StatusFormButton
                     requestId={req.id}
                     status="declined"
-                    label="Decline"
+                    label={t("Decline")}
                     variant="outline"
                   />
                 </>
@@ -181,7 +181,7 @@ function RequestCard({
                 <StatusFormButton
                   requestId={req.id}
                   status="completed"
-                  label="Mark completed"
+                  label={t("Mark completed")}
                   variant="outline"
                   className="text-stone-500"
                 />
@@ -197,6 +197,7 @@ function RequestCard({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function FacilitatorDashboard() {
+  const { t, locale } = await getTranslation()
   const user = await requireRole('facilitator')
   const supabase = await createServerSupabaseClient()
 
@@ -228,7 +229,7 @@ export default async function FacilitatorDashboard() {
   ])
 
   const hasProfile = !!facilitatorProfile
-  const firstName = user.full_name.split(' ')[0] || 'there'
+  const firstName = user.full_name.split(' ')[0]
 
   const avgRating =
     reviews && reviews.length > 0
@@ -260,22 +261,19 @@ export default async function FacilitatorDashboard() {
             </AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-2xl font-bold text-stone-900">
-              Welcome, {firstName}
+            <h1 className="text-2xl font-bold text-stone-900">{firstName ? t('Welcome, {name}', { name: firstName }) : t('Welcome')}
             </h1>
-            <p className="text-sm text-stone-500">Guide dashboard</p>
+            <p className="text-sm text-stone-500">{t("Guide dashboard")}</p>
           </div>
         </div>
         {hasProfile && (
           <div className="flex w-full shrink-0 flex-wrap gap-2 sm:w-auto">
             <Button className="min-h-11 flex-1 bg-emerald-700 hover:bg-emerald-800 sm:flex-none" asChild>
-              <Link href="/facilitator/edit">Edit my profile</Link>
+              <Link href="/facilitator/edit">{t("Edit my profile")}</Link>
             </Button>
             {facilitatorProfile?.verification_status === 'approved' && (
               <Button variant="outline" className="min-h-11 flex-1 sm:flex-none" asChild>
-                <Link href={`/facilitators/${facilitatorProfile.id}`}>
-                  Public profile
-                  <ArrowRight className="ml-1 size-3" />
+                <Link href={`/facilitators/${facilitatorProfile.id}`}>{t("Public profile")}<ArrowRight className="ml-1 size-3" />
                 </Link>
               </Button>
             )}
@@ -286,16 +284,12 @@ export default async function FacilitatorDashboard() {
       {/* No profile nudge */}
       {!hasProfile && (
         <Card className="border-amber-200 bg-amber-50">
-          <CardContent className="flex items-center justify-between gap-4 p-4">
+          <CardContent className="flex flex-col items-start justify-between gap-4 p-4 sm:flex-row sm:items-center">
             <div className="flex items-start gap-3">
               <AlertCircle className="mt-0.5 size-4 shrink-0 text-amber-600" />
               <div>
-                <p className="text-sm font-medium text-amber-900">
-                  Complete your guide application
-                </p>
-                <p className="mt-0.5 text-xs text-amber-700">
-                  Submit your profile for admin review to appear publicly.
-                </p>
+                <p className="text-sm font-medium text-amber-900">{t("Complete your guide application")}</p>
+                <p className="mt-0.5 text-xs text-amber-700">{t("Submit your profile for admin review to appear publicly.")}</p>
               </div>
             </div>
             <Button
@@ -303,7 +297,7 @@ export default async function FacilitatorDashboard() {
               className="shrink-0 bg-emerald-700 hover:bg-emerald-800"
               asChild
             >
-              <Link href="/onboarding/facilitator">Apply now</Link>
+              <Link href="/onboarding/facilitator">{t("Apply now")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -345,7 +339,7 @@ export default async function FacilitatorDashboard() {
               <CardContent className="p-4">
                 <div className="mb-1 flex items-center gap-2 text-stone-400">
                   <Icon className="size-3.5" />
-                  <span className="text-xs">{label}</span>
+                  <span className="text-xs">{t(label)}</span>
                 </div>
                 <p
                   className={`text-2xl font-bold ${
@@ -373,30 +367,20 @@ export default async function FacilitatorDashboard() {
                 <CardContent className="flex items-center gap-3 p-4">
                   <Icon className={`size-5 shrink-0 ${cfg.color}`} />
                   <div>
-                    <p className="text-sm font-medium text-stone-900">
-                      Profile status:{' '}
-                      <span className={cfg.color}>{cfg.label}</span>
+                    <p className="text-sm font-medium text-stone-900"><span className={cfg.color}>{t('Profile status: {status}', { status: t(cfg.label) })}</span>
                     </p>
                     {status === 'pending' && (
-                      <p className="mt-0.5 text-xs text-stone-500">
-                        Your profile is hidden while it is being reviewed. Check here for updates.
-                      </p>
+                      <p className="mt-0.5 text-xs text-stone-500">{t("Your profile is hidden while it is being reviewed. Check here for updates.")}</p>
                     )}
                     {status === 'approved' && (
-                      <p className="mt-0.5 text-sm text-stone-600">
-                        Your profile is live. You can edit your photos, messaging links, and
-                        practice details any time. Submitted changes go through review again.
-                      </p>
+                      <p className="mt-0.5 text-sm text-stone-600">{t("Your profile is live. You can edit your photos, messaging links, and practice details any time. Submitted changes go through review again.")}</p>
                     )}
                     {status === 'rejected' && (
-                      <p className="mt-0.5 text-xs text-stone-500">
-                        Your profile is hidden. Contact the platform team for feedback, or{' '}
+                      <p className="mt-0.5 text-xs text-stone-500">{t('Your profile is hidden. Contact the platform team for feedback.')} {' '}
                         <Link
                           href="/facilitator/edit"
                           className="underline hover:text-emerald-700"
-                        >
-                          update your application
-                        </Link>
+                        >{t('Update your application')}</Link>
                         .
                       </p>
                     )}
@@ -413,9 +397,7 @@ export default async function FacilitatorDashboard() {
       {/* Pending requests */}
       {hasProfile && (
         <div>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-stone-900">
-            New requests
-            {pendingRequests.length > 0 && (
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-stone-900">{t("New requests")}{pendingRequests.length > 0 && (
               <Badge
                 variant="outline"
                 className="border-amber-200 bg-amber-50 text-xs text-amber-700"
@@ -429,11 +411,9 @@ export default async function FacilitatorDashboard() {
             <Card className="border-dashed border-stone-200">
               <CardContent className="py-10 text-center">
                 <MessageSquare className="mx-auto mb-3 size-8 text-stone-300" />
-                <p className="text-stone-500">No new requests.</p>
+                <p className="text-stone-500">{t("No new requests.")}</p>
                 {facilitatorProfile?.verification_status !== 'approved' && (
-                  <p className="mt-1 text-sm text-stone-400">
-                    Once your profile is approved, seekers can send you requests.
-                  </p>
+                  <p className="mt-1 text-sm text-stone-400">{t("Once your profile is approved, seekers can send you requests.")}</p>
                 )}
               </CardContent>
             </Card>
@@ -450,9 +430,7 @@ export default async function FacilitatorDashboard() {
       {/* Accepted requests */}
       {hasProfile && acceptedRequests.length > 0 && (
         <div>
-          <h2 className="mb-4 text-lg font-semibold text-stone-900">
-            Accepted
-          </h2>
+          <h2 className="mb-4 text-lg font-semibold text-stone-900">{t("Accepted")}</h2>
           <div className="space-y-3">
             {acceptedRequests.map((req) => (
               <RequestCard key={req.id} req={req} showActions />
@@ -464,9 +442,7 @@ export default async function FacilitatorDashboard() {
       {/* Past requests */}
       {hasProfile && pastRequests.length > 0 && (
         <div>
-          <h2 className="mb-4 text-lg font-semibold text-stone-900">
-            Past requests
-          </h2>
+          <h2 className="mb-4 text-lg font-semibold text-stone-900">{t("Past requests")}</h2>
           <div className="space-y-3">
             {pastRequests.map((req) => (
               <RequestCard key={req.id} req={req} showActions={false} />
@@ -481,7 +457,7 @@ export default async function FacilitatorDashboard() {
           <Separator />
           <div>
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-stone-900">Reviews</h2>
+              <h2 className="text-lg font-semibold text-stone-900">{t("Reviews")}</h2>
               {avgRating && (
                 <div className="flex items-center gap-2">
                   <StarRow rating={Math.round(avgRating)} />
@@ -499,10 +475,8 @@ export default async function FacilitatorDashboard() {
               <Card className="border-dashed border-stone-200">
                 <CardContent className="py-10 text-center">
                   <Star className="mx-auto mb-3 size-8 text-stone-300" />
-                  <p className="text-stone-500">No reviews yet.</p>
-                  <p className="mt-1 text-sm text-stone-400">
-                    Reviews appear here after seekers complete a conversation.
-                  </p>
+                  <p className="text-stone-500">{t('No reviews yet')}</p>
+                  <p className="mt-1 text-sm text-stone-400">{t("Reviews appear here after seekers complete a conversation.")}</p>
                 </CardContent>
               </Card>
             ) : (
@@ -514,18 +488,16 @@ export default async function FacilitatorDashboard() {
                         <div className="flex items-center justify-between gap-3">
                           <StarRow rating={r.rating} />
                           <span className="text-xs text-stone-400">
-                            {formatDate(r.created_at)}
+                            {formatDate(r.created_at, locale)}
                           </span>
                         </div>
-                        <p className="text-sm text-stone-700">{r.text}</p>
+                        <p dir="auto" className="text-sm text-stone-700">{r.text}</p>
                         <div className="flex gap-4 text-xs text-stone-400">
                           <span className="flex items-center gap-1">
-                            <Shield className="size-3" />
-                            Safety: {r.safety_rating}/5
+                            <Shield className="size-3" />{t('Safety {rating}/5', { rating: r.safety_rating })}
                           </span>
                           <span className="flex items-center gap-1">
-                            <Users className="size-3" />
-                            Integration: {r.integration_rating}/5
+                            <Users className="size-3" />{t('Integration {rating}/5', { rating: r.integration_rating })}
                           </span>
                         </div>
                       </div>
@@ -547,7 +519,7 @@ export default async function FacilitatorDashboard() {
             className="text-stone-400 hover:text-stone-700"
             asChild
           >
-            <Link href="/facilitator/edit">Edit profile, photos &amp; messaging links</Link>
+            <Link href="/facilitator/edit">{t("Edit profile, photos & messaging links")}</Link>
           </Button>
         </div>
       )}

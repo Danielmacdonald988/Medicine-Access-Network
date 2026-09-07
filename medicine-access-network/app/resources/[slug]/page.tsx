@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { getTranslation } from '@/lib/i18n/server'
+import { resourceSummaries } from '@/lib/i18n/resource-summaries'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, AlertTriangle, Info, Siren } from 'lucide-react'
@@ -16,7 +18,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params
   const resource = getResource(slug)
   if (!resource) return { title: 'Not found' }
-  return { title: resource.title, description: resource.description }
+  const { t, locale } = await getTranslation()
+  return { title: t(resource.title), description: locale === 'en' ? resource.description : t(resourceSummaries[slug]) }
 }
 
 // ─── Block renderer ───────────────────────────────────────────────────────────
@@ -100,6 +103,7 @@ function RenderBlock({ block }: { block: Block }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function ResourcePage({ params }: PageProps) {
+  const { t, locale } = await getTranslation()
   const { slug } = await params
   const resource = getResource(slug)
   if (!resource) notFound()
@@ -112,15 +116,22 @@ export default async function ResourcePage({ params }: PageProps) {
         className="inline-flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-700"
       >
         <ArrowLeft className="size-3.5" />
-        Safety library
+        {t('Safety library')}
       </Link>
 
       {/* Header */}
       <div className="border-b border-stone-100 pb-6">
-        <h1 className="text-3xl font-bold text-stone-900">{resource.title}</h1>
-        <p className="mt-2 text-lg text-stone-500">{resource.subtitle}</p>
+        <h1 className="text-3xl font-bold text-stone-900">{t(resource.title)}</h1>
+        <p lang="en" className="mt-2 text-lg text-stone-500">{resource.subtitle}</p>
       </div>
 
+      {locale !== 'en' && <section className="space-y-3 rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+        <p className="text-sm text-stone-600">{t('The full safety articles are currently available in English. The summary below is in your selected language.')}</p>
+        <p className="leading-relaxed text-stone-800">{t(resourceSummaries[slug])}</p>
+        <a href="#original-article" className="inline-flex min-h-11 items-center font-medium text-emerald-800 underline underline-offset-4">{t('Read the full article in English')}</a>
+      </section>}
+      <div id="original-article" lang="en" className="scroll-mt-28 space-y-5">
+      {locale !== 'en' && <h2 className="text-lg font-semibold">Original English article</h2>}
       {/* Content */}
       <div className="space-y-4">
         {resource.blocks.map((block, i) => (
@@ -162,6 +173,7 @@ export default async function ResourcePage({ params }: PageProps) {
           situation. Guides on this platform offer legal coaching and support services — not
           therapy, diagnosis, or medical care.
         </p>
+      </div>
       </div>
     </article>
   )

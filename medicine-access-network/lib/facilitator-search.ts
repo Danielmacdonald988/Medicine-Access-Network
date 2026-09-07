@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import translatedSearchAliases from './i18n/search-aliases.json'
 import { MODALITIES } from './constants'
 import type { FacilitatorSearchResult } from './types'
 
@@ -104,7 +105,13 @@ export function textSearchExpression(q: string): string {
   }
   const term = q.toLowerCase().trim().replace(/\s+/g, ' ')
   const category = Object.hasOwn(aliases, term) ? aliases[term] : undefined
-  const modalities = MODALITIES.filter((modality) => modality.name.toLowerCase().includes(term) || modality.category === category)
+  // Match translated catalog labels without rewriting the visitor's words or
+  // losing matches against biographies/names written in their original language.
+  const normalized = term.normalize('NFKD').replace(/\p{M}/gu, '')
+  const translatedNames: string[] = Object.hasOwn(translatedSearchAliases, normalized)
+    ? translatedSearchAliases[normalized as keyof typeof translatedSearchAliases]
+    : []
+  const modalities = MODALITIES.filter((modality) => modality.name.toLowerCase().includes(term) || modality.category === category || translatedNames.includes(modality.name))
   if (modalities.length) {
     // Modality names come from the same catalog used by the application form.
     clauses.push(`modalities.ov.{${modalities.map((modality) => quoteFilterValue(modality.name)).join(',')}}`)

@@ -1,3 +1,4 @@
+import { getTranslation } from '@/lib/i18n/server'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -6,12 +7,16 @@ import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import type { FacilitatorProfile } from '@/lib/types'
 import { FacilitatorOnboardingForm } from '@/components/forms/FacilitatorOnboardingForm'
 
-export const metadata: Metadata = {
-  title: 'Edit your guide profile',
-  robots: { index: false, follow: false },
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getTranslation()
+  return {
+    title: t('Edit your guide profile'),
+    robots: { index: false, follow: false },
+  }
 }
 
 export default async function EditFacilitatorProfilePage() {
+  const { t } = await getTranslation()
   const user = await requireRole('facilitator')
   const supabase = await createServerSupabaseClient()
   const { data: profile, error } = await supabase
@@ -23,11 +28,11 @@ export default async function EditFacilitatorProfilePage() {
   if (error) {
     return (
       <div className="mx-auto max-w-2xl space-y-4">
-        <h1 className="text-2xl font-bold text-stone-900">Your profile could not be loaded</h1>
-        <p className="text-stone-600">Please try again before making changes.</p>
+        <h1 className="text-2xl font-bold text-stone-900">{t("Your profile could not be loaded")}</h1>
+        <p className="text-stone-600">{t("Please try again before making changes.")}</p>
         <div className="flex gap-5 text-sm font-medium text-emerald-800">
-          <Link href="/facilitator/edit" className="underline">Try again</Link>
-          <Link href="/facilitator" className="underline">Back to dashboard</Link>
+          <Link href="/facilitator/edit" className="underline">{t("Try again")}</Link>
+          <Link href="/facilitator" className="underline">{t("Back to dashboard")}</Link>
         </div>
       </div>
     )
@@ -36,16 +41,10 @@ export default async function EditFacilitatorProfilePage() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <Link href="/facilitator" className="text-sm font-medium text-emerald-800 underline">
-        Back to dashboard
-      </Link>
+      <Link href="/facilitator" className="text-sm font-medium text-emerald-800 underline">{t("Back to dashboard")}</Link>
       <div className="mb-8 mt-5">
-        <h1 className="text-2xl font-bold text-stone-900">Edit your guide profile</h1>
-        <p className="mt-2 text-stone-600">
-          Update your photos, messaging links, or practice details. Your current information
-          is filled in below. Choose the section you want to change, then select
-          “Finish editing” to confirm and submit your updates for review.
-        </p>
+        <h1 className="text-2xl font-bold text-stone-900">{t("Edit your guide profile")}</h1>
+        <p className="mt-2 text-stone-600">{t("Update your photos, messaging links, or practice details. Your current information is filled in below. Choose the section you want to change, then select “Finish editing” to confirm and submit your updates for review.")}</p>
       </div>
       <FacilitatorOnboardingForm existingProfile={profile as FacilitatorProfile} />
     </div>

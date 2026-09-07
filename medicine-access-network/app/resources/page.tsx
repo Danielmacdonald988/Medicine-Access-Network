@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { getTranslation } from '@/lib/i18n/server'
+import { resourceSummaries } from '@/lib/i18n/resource-summaries'
 import Link from 'next/link'
 import {
   BookOpen,
@@ -20,14 +22,14 @@ export const metadata: Metadata = {
 
 const icons = [BookOpen, HeartHandshake, HelpCircle, AlertTriangle, ShieldCheck, Scale, Siren]
 
-export default function ResourcesIndexPage() {
+export default async function ResourcesIndexPage() {
+  const { t, locale } = await getTranslation()
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-stone-900">Safety Library</h1>
+        <h1 className="text-3xl font-bold text-stone-900">{t('Safety library')}</h1>
         <p className="mt-3 max-w-2xl text-stone-600">
-          Grounded, practical information about preparation, integration, finding the right guide,
-          and knowing when to seek clinical or emergency support. Nothing here is medical advice.
+          {t('Practical information about preparation, integration, and choosing support. This is not medical advice.')}
         </p>
       </div>
 
@@ -35,24 +37,17 @@ export default function ResourcesIndexPage() {
         <CardContent className="flex items-start gap-3 p-4">
           <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-600" />
           <p className="text-sm text-amber-900">
-            In the US, call or text{' '}
-            <a href="tel:988" className="font-semibold underline">
-              988
-            </a>
-            {' '}for emotional distress or suicidal crisis. For immediate danger or
-            a medical emergency, call{' '}
-            <a href="tel:911" className="font-semibold underline">
-              911
-            </a>
-            . See our{' '}
-            <Link href="/resources/emergency" className="font-semibold underline">
-              Get Urgent Help
-            </Link>
-            {' '}for more resources.
+            {t('In the US, call or text 988 for emotional distress or suicidal crisis. For immediate danger or a medical emergency, call 911. Outside the US, contact your local emergency or crisis service.')}
+            <span className="mt-2 flex flex-wrap gap-4">
+              <a href="tel:988" className="font-semibold underline">988 (US)</a>
+              <a href="tel:911" className="font-semibold underline">911 (US)</a>
+              <Link href="/resources/emergency" className="font-semibold underline">{t('Get Urgent Help')}</Link>
+            </span>
           </p>
         </CardContent>
       </Card>
 
+      {locale !== 'en' && <p className="text-sm leading-relaxed text-stone-600">{t('The full safety articles are currently available in English. The summary below is in your selected language.')}</p>}
       <div className="grid gap-4 sm:grid-cols-2">
         {resources.map((resource, i) => {
           const Icon = icons[i] ?? BookOpen
@@ -65,10 +60,10 @@ export default function ResourcesIndexPage() {
                       <Icon className="size-4 text-stone-500 group-hover:text-emerald-700" />
                     </div>
                     <h2 className="font-semibold text-stone-900 group-hover:text-emerald-800">
-                      {resource.title}
+                      {t(resource.title)}
                     </h2>
                   </div>
-                  <p className="text-sm text-stone-500">{resource.subtitle}</p>
+                  <p className="text-sm text-stone-500">{locale === 'en' ? resource.subtitle : t(resourceSummaries[resource.slug])}</p>
                 </CardContent>
               </Card>
             </Link>
@@ -77,12 +72,9 @@ export default function ResourcesIndexPage() {
       </div>
 
       <div className="rounded-xl border border-stone-200 bg-stone-50 p-5 text-sm text-stone-500">
-        <p className="font-medium text-stone-700">A note on this library</p>
+        <p className="font-medium text-stone-700">{t('A note on this library')}</p>
         <p className="mt-1">
-          These guides are for information and orientation only. They are not a substitute for
-          professional medical or mental health advice. Always consult a qualified healthcare
-          provider about your individual situation. Guides on this platform offer legal coaching
-          and support services — not therapy, diagnosis, or medical care.
+          {t('These guides are for information only. Consult a qualified healthcare professional about your individual situation.')}
         </p>
       </div>
     </div>

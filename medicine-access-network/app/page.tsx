@@ -1,3 +1,4 @@
+import { getTranslation } from "@/lib/i18n/server";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -17,16 +18,19 @@ import { APP_NAME, APP_TAGLINE, SITE_URL } from "@/lib/constants";
 import { HomeSearch } from "@/components/search/HomeSearch";
 import styles from "./home.module.css";
 
-export const metadata: Metadata = {
-  title: `Psychedelic Preparation & Integration — ${APP_NAME}`,
-  description: APP_TAGLINE,
-  alternates: { canonical: "/" },
-  openGraph: {
-    title: `Psychedelic Preparation & Integration — ${APP_NAME}`,
-    description: APP_TAGLINE,
-    url: SITE_URL,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getTranslation();
+  const title = t("Psychedelic Preparation & Integration — {appName}", {
+    appName: APP_NAME,
+  });
+  const description = t(APP_TAGLINE);
+  return {
+    title,
+    description,
+    alternates: { canonical: "/" },
+    openGraph: { title, description, url: SITE_URL },
+  };
+}
 
 const practices = [
   {
@@ -105,7 +109,8 @@ const faqs = [
   ],
 ];
 
-export default function Home() {
+export default async function Home() {
+  const { t } = await getTranslation();
   return (
     <div className={styles.home}>
       <script
@@ -125,27 +130,31 @@ export default function Home() {
       >
         <div className={styles.heroCopy}>
           <p className={styles.eyebrow}>
-            <span className={styles.dot} aria-hidden />
-            Human connection. New possibilities.
+            <span className={styles.dot} aria-hidden />{" "}
+            {t("Human connection. New possibilities.")}{" "}
           </p>
           <h1 id="hero-title">
-            Your next chapter.
-            <br />
-            The right <em>support.</em>
+            {" "}
+            {t("Your next chapter.")} <br />
+            <em>{t("The right support.")}</em>
           </h1>
           <p className={styles.heroDescription}>
-            Find your people in psychedelic preparation, integration,
-            breathwork, and beyond. A more personal path starts here.
+            {" "}
+            {t(
+              "Find your people in psychedelic preparation, integration, breathwork, and beyond. A more personal path starts here.",
+            )}{" "}
           </p>
           <p className={styles.heroNote}>
-            <HeartHandshake size={20} strokeWidth={1.5} aria-hidden />
-            Wherever you are in your journey, you belong.
+            <HeartHandshake size={20} strokeWidth={1.5} aria-hidden />{" "}
+            {t("Wherever you are in your journey, you belong.")}{" "}
           </p>
         </div>
         <div className={styles.heroImage}>
           <Image
             src="/forest-path-hero.webp"
-            alt="Morning sunlight across a quiet forest path with a distant walker"
+            alt={t(
+              "Morning sunlight across a quiet forest path with a distant walker",
+            )}
             fill
             sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 1340px) 42vw, 510px"
             preload
@@ -156,11 +165,12 @@ export default function Home() {
               <Flower2 size={24} strokeWidth={1.4} aria-hidden />
             </span>
             <p>
-              A little guidance.
-              <br />A world of possibility.
+              {" "}
+              {t("A little guidance.")} <br />
+              {t("A world of possibility.")}{" "}
             </p>
           </div>
-          <span className={styles.imageOverline}>Room to grow</span>
+          <span className={styles.imageOverline}>{t("Room to grow")}</span>
         </div>
         <HomeSearch />
       </section>
@@ -172,12 +182,14 @@ export default function Home() {
       >
         <div className={styles.sectionHeading}>
           <div>
-            <p className={styles.eyebrow}>Many paths. One place to begin.</p>
+            <p className={styles.eyebrow}>
+              {t("Many paths. One place to begin.")}
+            </p>
             <h2 id="practice-heading">
-              Support that meets you <em>where you are.</em>
+              <em>{t("Support that meets you where you are.")}</em>
             </h2>
           </div>
-          <p className={styles.aside}>Follow your curiosity.</p>
+          <p className={styles.aside}>{t("Follow your curiosity.")}</p>
         </div>
         <div className={styles.practiceGrid}>
           {practices.map(({ name, icon: Icon, color, description, href }) => (
@@ -192,19 +204,22 @@ export default function Home() {
                 </span>
                 <ArrowUpRight size={22} aria-hidden />
               </div>
-              <h3>{name}</h3>
-              <p>{description}</p>
+              <h3>{t(name)}</h3>
+              <p>{t(description)}</p>
               <span className={styles.cardLink}>
-                Explore {name.toLowerCase()}{" "}
+                {t("Explore {practice}", { practice: t(name) })}{" "}
                 <ArrowRight size={16} aria-hidden />
               </span>
             </Link>
           ))}
         </div>
         <p className={styles.exploreFootnote}>
-          You don’t need to have it all figured out.{" "}
+          {" "}
+          {t("You don’t need to have it all figured out.")}{" "}
           <Link href="/resources" className={styles.inlineLink}>
-            Start with a little curiosity <ArrowRight size={16} aria-hidden />
+            {" "}
+            {t("Start with a little curiosity")}{" "}
+            <ArrowRight size={16} aria-hidden />
           </Link>
         </p>
       </section>
@@ -217,26 +232,30 @@ export default function Home() {
         <div className="network-shell">
           <div className={styles.sectionHeading}>
             <div>
-              <p className={styles.eyebrow}>Less searching. More connecting.</p>
+              <p className={styles.eyebrow}>
+                {t("Less searching. More connecting.")}
+              </p>
               <h2 id="process-heading">
-                A human way <em>forward.</em>
+                <em>{t("A human way forward.")}</em>
               </h2>
             </div>
             <p className={styles.sectionIntro}>
-              A little clarity.
-              <br />A connection on your terms.
+              {" "}
+              {t("A little clarity.")} <br />
+              {t("A connection on your terms.")}{" "}
             </p>
           </div>
           <div className={styles.steps}>
             {steps.map(({ title, body, href, action }, i) => (
               <article key={title}>
                 <span className={styles.stepNumber} aria-hidden>
+                  {" "}
                   0{i + 1}
                 </span>
-                <h3>{title}</h3>
-                <p>{body}</p>
+                <h3>{t(title)}</h3>
+                <p>{t(body)}</p>
                 <Link href={href} className={styles.inlineLink}>
-                  {action}
+                  {t(action)}
                   <ArrowRight size={15} aria-hidden />
                 </Link>
               </article>
@@ -251,50 +270,58 @@ export default function Home() {
         aria-labelledby="approach-heading"
       >
         <div className={styles.approachCopy}>
-          <p className={styles.eyebrow}>Open minds. Grounded values.</p>
+          <p className={styles.eyebrow}>{t("Open minds. Grounded values.")}</p>
           <h2 id="approach-heading">
-            Big possibilities.
-            <br />
-            <em>Human first. Always.</em>
+            {" "}
+            {t("Big possibilities.")} <br />
+            <em>{t("Human first. Always.")}</em>
           </h2>
           <p>
-            Finding support is personal. The process should feel clear,
-            welcoming, and entirely yours.
+            {" "}
+            {t(
+              "Finding support is personal. The process should feel clear, welcoming, and entirely yours.",
+            )}{" "}
           </p>
           <Link href="/about#profile-review" className={styles.inlineLink}>
-            Our approach to profile review <ArrowRight size={17} aria-hidden />
+            {" "}
+            {t("Our approach to profile review")}{" "}
+            <ArrowRight size={17} aria-hidden />
           </Link>
         </div>
         <div className={styles.values}>
           <article>
             <ShieldCheck aria-hidden />
             <div>
-              <h3>Clarity before commitment</h3>
+              <h3>{t("Clarity before commitment")}</h3>
               <p>
-                Ask about training, boundaries, costs, and consent. Profile
-                review is a starting point, not a guarantee of safety or
-                qualifications.
+                {" "}
+                {t(
+                  "Ask about training, boundaries, costs, and consent. Profile review is a starting point, not a guarantee of safety or qualifications.",
+                )}{" "}
               </p>
             </div>
           </article>
           <article>
             <HeartHandshake aria-hidden />
             <div>
-              <h3>Your pace. Your choice.</h3>
+              <h3>{t("Your pace. Your choice.")}</h3>
               <p>
-                Explore without pressure. You decide what fits, who you connect
-                with, and when. It’s always okay to pause or say no.
+                {" "}
+                {t(
+                  "Explore without pressure. You decide what fits, who you connect with, and when. It’s always okay to pause or say no.",
+                )}{" "}
               </p>
             </div>
           </article>
           <article>
             <Sprout aria-hidden />
             <div>
-              <h3>Room for different paths</h3>
+              <h3>{t("Room for different paths")}</h3>
               <p>
-                From a first breathwork session to integration support, your
-                starting point is welcome. Services and legal availability vary
-                by location.
+                {" "}
+                {t(
+                  "From a first breathwork session to integration support, your starting point is welcome. Services and legal availability vary by location.",
+                )}{" "}
               </p>
             </div>
           </article>
@@ -307,27 +334,31 @@ export default function Home() {
       >
         <div className={styles.facilitatorBanner}>
           <div>
-            <p className={styles.eyebrow}>For the people who hold space</p>
+            <p className={styles.eyebrow}>
+              {t("For the people who hold space")}
+            </p>
             <h2 id="facilitator-heading">
-              Your work matters.
-              <br />
-              <em>Let’s help people find you.</em>
+              {" "}
+              {t("Your work matters.")} <br />
+              <em>{t("Let’s help people find you.")}</em>
             </h2>
             <p>
-              Bring your practice to a growing community.
-              <br />
-              Free to apply. Every profile is reviewed before publication.
+              {" "}
+              {t("Bring your practice to a growing community.")} <br />{" "}
+              {t(
+                "Free to apply. Every profile is reviewed before publication.",
+              )}{" "}
             </p>
             <Link href="/onboarding/facilitator" className={styles.creamButton}>
-              List your practice <ArrowUpRight size={18} aria-hidden />
+              {" "}
+              {t("List your practice")} <ArrowUpRight size={18} aria-hidden />
             </Link>
           </div>
           <div className={styles.foundingNote}>
             <Flower2 strokeWidth={0.8} aria-hidden />
             <p>
-              Rooted in connection.
-              <br />
-              Growing together.
+              {" "}
+              {t("Rooted in connection.")} <br /> {t("Growing together.")}{" "}
             </p>
           </div>
         </div>
@@ -339,21 +370,22 @@ export default function Home() {
       >
         <div>
           <BookOpen size={25} strokeWidth={1.5} aria-hidden />
-          <p className={styles.eyebrow}>A little more clarity</p>
+          <p className={styles.eyebrow}>{t("A little more clarity")}</p>
           <h2 id="questions-heading">
-            Good questions.
-            <br />
-            <em>Clear answers.</em>
+            {" "}
+            {t("Good questions.")} <br />
+            <em>{t("Clear answers.")}</em>
           </h2>
           <Link href="/contact" className={styles.inlineLink}>
-            Contact us <ArrowRight size={16} aria-hidden />
+            {" "}
+            {t("Contact us")} <ArrowRight size={16} aria-hidden />
           </Link>
         </div>
         <div>
           {faqs.map(([question, answer]) => (
             <details key={question}>
-              <summary>{question}</summary>
-              <p>{answer}</p>
+              <summary>{t(question)}</summary>
+              <p>{t(answer)}</p>
             </details>
           ))}
         </div>
