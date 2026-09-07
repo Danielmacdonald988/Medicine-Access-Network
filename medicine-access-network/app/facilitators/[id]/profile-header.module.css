@@ -1,7 +1,7 @@
 .header {
   display: grid;
   grid-template-columns: 5rem minmax(0, 1fr);
-  grid-template-areas: 'photo identity' 'contact contact' 'bio bio' 'fee fee';
+  grid-template-areas: 'photo identity' 'contact contact' 'sections sections' 'bio bio' 'fee fee';
   align-items: start;
   gap: 1.25rem;
   padding: 1.25rem;
@@ -19,5 +19,7 @@
   .header { grid-template-columns: 7rem minmax(0, 1fr); padding: 2rem; gap: 1.5rem; }
 }
 @media (min-width: 1024px) {
-  .header { grid-template-columns: 9rem minmax(0, 1fr) 18rem; grid-template-areas: 'photo identity contact' 'photo bio contact' '. fee contact'; gap: 1.5rem 2rem; }
+  .header { grid-template-columns: 9rem minmax(0, 1fr) 18rem; grid-template-areas: 'photo identity contact' 'sections sections contact' 'bio bio contact' 'fee fee contact'; gap: 1.5rem 2rem; }
 }
+
+.sections { grid-area: sections; display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; border-bottom: 1px solid #e7e5e4; padding-bottom: .5rem; }
