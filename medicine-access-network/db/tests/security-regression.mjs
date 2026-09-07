@@ -173,8 +173,18 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
   check((await row('select verification_status from public.facilitator_profiles where user_id=$1',[applicant])).verification_status === 'approved','administrator can review and publish')
   await as('authenticated',applicant)
   await denied("update public.facilitator_profiles set bio=repeat('b',100) where user_id=$1",[applicant])
-  await db.query("insert into public.facilitator_profiles(user_id,display_name,bio,verification_status,visibility,image_paths) values($1,'Applicant',repeat('b',100),'pending','hidden',$2) on conflict (user_id) do update set display_name=excluded.display_name,bio=excluded.bio,verification_status=excluded.verification_status,visibility=excluded.visibility,image_paths=excluded.image_paths",[applicant,[imagePath(applicant)]])
-  check((await row('select verification_status from public.facilitator_profiles where user_id=$1',[applicant])).verification_status === 'pending','onboarding upsert resubmits existing profile for review')
+  const approvedProfileId = (await row('select id from public.facilitator_profiles where user_id=$1',[applicant])).id
+  // Match the application API's explicit owner/id UPDATE, including a photo
+  // replacement and contact-link edit after the profile has been published.
+  const updatedProfile = await row("update public.facilitator_profiles set bio=repeat('b',100),verification_status='pending',visibility='hidden',image_paths=$3,whatsapp_url=$4 where id=$1 and user_id=$2 returning id,bio,verification_status,visibility,image_paths,whatsapp_url",[approvedProfileId,applicant,[imagePath(applicant,2)],'https://wa.me/12025550123'])
+  check(updatedProfile.id === approvedProfileId,'editing an approved profile preserves its identity')
+  check(updatedProfile.bio === 'b'.repeat(100) && updatedProfile.image_paths[0] === imagePath(applicant,2) && updatedProfile.whatsapp_url === 'https://wa.me/12025550123','approved owner can update practice details, photos, and messaging links together')
+  check(updatedProfile.verification_status === 'pending' && updatedProfile.visibility === 'hidden','approved profile edits return to review without publishing unreviewed changes')
+  await as('anon')
+  check((await row('select count(*)::int as total from public.facilitator_public_profiles where id=$1',[approvedProfileId])).total === 0,'visitors cannot read an updated profile before another review')
+  await as('authenticated',otherGuide)
+  check((await db.query("update public.facilitator_profiles set bio=repeat('c',100),verification_status='pending',visibility='hidden' where id=$1 returning id",[approvedProfileId])).rows.length === 0,'another facilitator cannot edit the submitted profile')
+  await as('authenticated',applicant)
 
   const orderedImages = [imagePath(applicant,3),imagePath(applicant,1),imagePath(applicant,5),imagePath(applicant,2),imagePath(applicant,4)]
   await db.query('update public.facilitator_profiles set image_paths=$1 where user_id=$2',[orderedImages,applicant])

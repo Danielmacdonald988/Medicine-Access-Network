@@ -43,7 +43,8 @@ export default async function EditFacilitatorProfilePage() {
         <h1 className="text-2xl font-bold text-stone-900">Edit your guide profile</h1>
         <p className="mt-2 text-stone-600">
           Update your photos, messaging links, or practice details. Your current information
-          is filled in below. Changes are saved when you submit them for review.
+          is filled in below. Choose the section you want to change, then select
+          “Finish editing” to confirm and submit your updates for review.
         </p>
       </div>
       <FacilitatorOnboardingForm existingProfile={profile as FacilitatorProfile} />

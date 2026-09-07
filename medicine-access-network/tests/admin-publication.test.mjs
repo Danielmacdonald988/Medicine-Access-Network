@@ -11,7 +11,7 @@ function loadModule(path, mocks = {}) {
   const source = readFileSync(new URL(path, root), 'utf8')
   const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText
   const loadedModule = { exports: {} }
-  new Function('require', 'module', 'exports', code)((name) => name in mocks ? mocks[name] : require(name), loadedModule, loadedModule.exports)
+  new Function('require', 'module', 'exports', '__dirname', code)((name) => name in mocks ? mocks[name] : require(name), loadedModule, loadedModule.exports, root.pathname)
   return loadedModule.exports
 }
 
@@ -91,7 +91,7 @@ test('HTML review form reports publication or note failure after redirecting to 
 
 test('cross-site JSON and HTML approval requests cannot change publication or add notes', async () => {
   for (const method of ['PATCH', 'POST']) {
-    for (const headers of [{ Origin: 'https://unrelated.test' }, { 'Sec-Fetch-Site': 'cross-site' }]) {
+    for (const headers of [{ Origin: 'null' }, { Origin: 'https://unrelated.test' }, { 'Sec-Fetch-Site': 'cross-site' }]) {
       const { writes, routes } = fixture()
       const incoming = method === 'PATCH'
         ? request('approved', 'A review note', headers)
@@ -102,6 +102,48 @@ test('cross-site JSON and HTML approval requests cannot change publication or ad
       assert.deepEqual(writes, [])
     }
   }
+})
+
+test('private pages preserve same-origin form identity without sending referrers to other sites', async () => {
+  const config = loadModule('next.config.ts', { './lib/env': { validateEnv() {} } }).default
+  const rules = await config.headers()
+  for (const route of ['admin', 'facilitator', 'dashboard', 'onboarding', 'login']) {
+    const rule = rules.find(({ source }) => source === `/${route}/:path*`)
+    assert.ok(rule, `Missing private headers for ${route}`)
+    const headers = new Headers(rule.headers.map(({ key, value }) => [key, value]))
+    // no-referrer makes native POST forms send Origin:null, which the strict
+    // origin check correctly rejects. same-origin preserves local form posts.
+    assert.equal(headers.get('Referrer-Policy'), 'same-origin')
+    assert.match(headers.get('Cache-Control'), /private, no-store/)
+    assert.equal(headers.get('X-Robots-Tag'), 'noindex, nofollow')
+  }
+})
+
+test('native same-origin approval and rejection forms work with empty or populated notes', async () => {
+  for (const status of ['approved', 'rejected']) {
+    for (const note of ['', '  Reviewed application  ']) {
+      const { routes, writes } = fixture()
+      const response = await routes.POST(new Request('https://directory.test/api/admin/facilitators/profile-id', {
+        method: 'POST',
+        headers: { Origin: 'https://directory.test', 'Sec-Fetch-Site': 'same-origin' },
+        body: new URLSearchParams({ note, status }),
+      }), context())
+      assert.equal(response.status, 303)
+      assert.equal(new URL(response.headers.get('Location')).searchParams.get('notice'), status === 'approved' ? 'published' : 'hidden')
+      assert.deepEqual(writes[0].value, { verification_status: status, visibility: status === 'approved' ? 'public' : 'hidden' })
+      assert.equal(writes.length, note ? 2 : 1)
+      if (note) assert.equal(writes[1].value.note, note.trim())
+    }
+  }
+})
+
+test('a form without an explicit review decision never publishes a profile', async () => {
+  const { routes, writes } = fixture()
+  const response = await routes.POST(new Request('https://directory.test/api/admin/facilitators/profile-id', {
+    method: 'POST', headers: { Origin: 'https://directory.test' }, body: new URLSearchParams({ note: '' }),
+  }), context())
+  assert.equal(new URL(response.headers.get('Location')).searchParams.get('notice'), 'invalid')
+  assert.deepEqual(writes, [])
 })
 
 test('oversized approval bodies are rejected before any publication or note writes', async () => {

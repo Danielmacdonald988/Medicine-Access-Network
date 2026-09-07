@@ -267,12 +267,12 @@ export default async function FacilitatorDashboard() {
           </div>
         </div>
         {hasProfile && (
-          <div className="flex shrink-0 flex-wrap gap-2">
-            <Button size="sm" variant="outline" asChild>
-              <Link href="/facilitator/edit">Edit profile</Link>
+          <div className="flex w-full shrink-0 flex-wrap gap-2 sm:w-auto">
+            <Button className="min-h-11 flex-1 bg-emerald-700 hover:bg-emerald-800 sm:flex-none" asChild>
+              <Link href="/facilitator/edit">Edit my profile</Link>
             </Button>
             {facilitatorProfile?.verification_status === 'approved' && (
-              <Button size="sm" variant="outline" asChild>
+              <Button variant="outline" className="min-h-11 flex-1 sm:flex-none" asChild>
                 <Link href={`/facilitators/${facilitatorProfile.id}`}>
                   Public profile
                   <ArrowRight className="ml-1 size-3" />
@@ -380,6 +380,12 @@ export default async function FacilitatorDashboard() {
                     {status === 'pending' && (
                       <p className="mt-0.5 text-xs text-stone-500">
                         Your profile is hidden while it is being reviewed. Check here for updates.
+                      </p>
+                    )}
+                    {status === 'approved' && (
+                      <p className="mt-0.5 text-sm text-stone-600">
+                        Your profile is live. You can edit your photos, messaging links, and
+                        practice details any time. Submitted changes go through review again.
                       </p>
                     )}
                     {status === 'rejected' && (

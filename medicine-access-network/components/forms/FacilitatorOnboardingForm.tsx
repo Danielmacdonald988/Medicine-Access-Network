@@ -126,7 +126,7 @@ const groupedModalities = (
 
 // ─── Progress indicator ───────────────────────────────────────────────────────
 
-function StepIndicator({ current, total }: { current: number; total: number }) {
+function StepIndicator({ current, total, editing }: { current: number; total: number; editing: boolean }) {
   return (
     <div className="mb-8 space-y-2">
       <div className="flex gap-1">
@@ -141,7 +141,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
         ))}
       </div>
       <p className="text-xs text-stone-400">
-        Step {current} of {total}
+        {editing ? 'Section' : 'Step'} {current} of {total}
       </p>
     </div>
   )
@@ -175,7 +175,7 @@ function ConfirmationScreen({ editing }: { editing: boolean }) {
 // ─── Form ─────────────────────────────────────────────────────────────────────
 
 export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile?: FacilitatorProfile }) {
-  const [step, setStep] = useState(existingProfile ? 12 : 1)
+  const [step, setStep] = useState(1)
   const [uploading, setUploading] = useState(false)
   const [saveError, setSaveError] = useState('')
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -299,7 +299,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
             value={step}
             disabled={uploading || isSubmitting}
             onChange={(event) => goToStep(Number(event.target.value))}
-            className="min-h-10 w-full rounded-lg border border-stone-300 bg-white px-3 text-sm text-stone-800"
+            className="min-h-11 w-full rounded-lg border border-stone-300 bg-white px-3 text-base text-stone-800"
           >
             {Object.entries(STEP_META).map(([key, section]) => (
               <option key={key} value={key}>{key}. {section.title}</option>
@@ -307,7 +307,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
           </select>
         </div>
       )}
-      <StepIndicator current={step} total={TOTAL_STEPS} />
+      <StepIndicator current={step} total={TOTAL_STEPS} editing={Boolean(existingProfile)} />
 
       <div className="mb-6">
         <h2 ref={headingRef} tabIndex={-1} className="text-xl font-semibold text-stone-900 focus:outline-none">{title}</h2>
@@ -321,7 +321,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
           <Input
             id="display_name"
             placeholder="e.g. Maya Chen or James O."
-            autoFocus
+            autoFocus={!existingProfile}
             {...register('display_name')}
           />
           {errors.display_name && (
@@ -845,14 +845,29 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
       )}
 
       {/* ── Navigation ───────────────────────────────────────────────────────── */}
-      <div className="mt-8 flex items-center gap-3">
+      <div className="mt-8 flex flex-wrap items-center gap-3">
+        {existingProfile && step < TOTAL_STEPS && (
+          <Button
+            key="finish-editing"
+            type="button"
+            variant="outline"
+            onClick={(event) => {
+              event.preventDefault()
+              goToStep(TOTAL_STEPS)
+            }}
+            disabled={uploading || isSubmitting}
+            className="min-h-11 w-full"
+          >
+            Finish editing
+          </Button>
+        )}
         {step > 1 && (
           <Button
             type="button"
             variant="ghost"
             onClick={() => goToStep(step - 1)}
             disabled={uploading || isSubmitting}
-            className="text-stone-500"
+            className="min-h-11 text-stone-500"
           >
             Back
           </Button>
@@ -871,7 +886,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
               void advance()
             }}
             disabled={uploading || isSubmitting}
-            className="bg-emerald-700 hover:bg-emerald-800"
+            className="min-h-11 bg-emerald-700 hover:bg-emerald-800"
           >
             Continue
           </Button>
@@ -880,7 +895,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
             key="submit"
             type="submit"
             disabled={isSubmitting || uploading}
-            className="bg-emerald-700 hover:bg-emerald-800"
+            className="min-h-11 bg-emerald-700 hover:bg-emerald-800"
           >
             {isSubmitting ? 'Submitting…' : existingProfile ? 'Submit changes for review' : 'Submit application'}
           </Button>

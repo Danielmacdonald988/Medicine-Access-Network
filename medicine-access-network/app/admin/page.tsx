@@ -105,7 +105,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           </p>
         </div>
         <form action="/api/admin/notifications" method="POST" className="shrink-0">
-          <Button type="submit" name="action" value="retry" variant="outline" size="sm">Retry pending alerts</Button>
+          <Button type="submit" name="action" value="retry" variant="outline" className="min-h-11 w-full sm:w-auto">Retry pending alerts</Button>
         </form>
       </div>
       {/* Stats grid */}
@@ -287,16 +287,16 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                       maxLength={1000}
                       placeholder="Optional note to record with this decision…"
                       rows={2}
-                      className="text-sm"
+                      className="text-base sm:text-sm"
                     />
                     <p className="text-xs leading-relaxed text-stone-600">Approving publishes this profile so visitors can view it and send conversation requests. Rejecting keeps it hidden.</p>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col gap-3 sm:flex-row">
                       <Button
                         type="submit"
                         name="status"
                         value="approved"
                         size="sm"
-                        className="bg-emerald-700 text-xs hover:bg-emerald-800"
+                        className="min-h-12 w-full bg-emerald-700 text-sm hover:bg-emerald-800 sm:w-auto"
                       >
                         <CheckCircle className="mr-1.5 size-3.5" />
                         Approve &amp; publish
@@ -307,7 +307,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                         value="rejected"
                         size="sm"
                         variant="outline"
-                        className="text-xs text-red-600 hover:bg-red-50"
+                        className="min-h-12 w-full text-sm text-red-600 hover:bg-red-50 sm:w-auto"
                       >
                         <XCircle className="mr-1.5 size-3.5" />
                         Reject
@@ -333,12 +333,12 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
               {recentlyReviewed.map((f) => (
                 <div
                   key={f.id}
-                  className="flex items-center justify-between gap-3 rounded-lg border border-stone-100 px-3 py-2"
+                  className="flex flex-col items-start justify-between gap-3 rounded-lg border border-stone-100 px-3 py-3 sm:flex-row sm:items-center"
                 >
-                  <span className="text-sm font-medium text-stone-800">
+                  <span className="min-w-0 break-words text-sm font-medium text-stone-800">
                     {f.display_name}
                   </span>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge
                       variant="outline"
                       className={
@@ -351,7 +351,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                     </Badge>
                     {f.verification_status === 'approved' && f.visibility !== 'public' && (
                       <form action={`/api/admin/facilitators/${f.id}`} method="POST">
-                        <Button type="submit" name="status" value="approved" size="sm" variant="outline">Publish profile</Button>
+                        <Button type="submit" name="status" value="approved" variant="outline" className="min-h-11">Publish profile</Button>
                       </form>
                     )}
                     <span className="text-xs text-stone-400">
