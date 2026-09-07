@@ -202,32 +202,32 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
   const hasDirectContact = getDirectContactLinks(facilitator).length > 0
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+    <div className="network-shell py-8 sm:py-12">
       <Link
         href="/facilitators"
         className="mb-6 inline-flex min-h-11 items-center text-sm font-medium text-emerald-700 underline-offset-4 hover:underline"
       >
         ← Back to all guides
       </Link>
-      <div className="rounded-2xl border border-stone-200 bg-white p-5 sm:p-7">
-        <div className="grid items-start gap-6 md:grid-cols-[minmax(0,1fr)_minmax(240px,300px)]">
-          <div className="flex items-start gap-4 sm:gap-5">
-            <Avatar className="size-24 shrink-0 rounded-xl ring-2 ring-emerald-100 ring-offset-2 sm:size-32">
+      <div className="rounded-2xl border border-stone-200 bg-white p-5 sm:p-8 lg:p-10">
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(260px,320px)]">
+          <div className="flex flex-col items-start gap-6 sm:flex-row sm:gap-7">
+            <Avatar className="h-44 w-40 shrink-0 overflow-hidden rounded-[70px_70px_12px_12px] after:rounded-[inherit] sm:h-56 sm:w-44">
               {primaryPhotoUrl && (
                 <AvatarImage
                   src={primaryPhotoUrl}
                   alt={facilitator.display_name}
-                  className="object-cover"
+                  className="rounded-none object-cover"
                 />
               )}
-              <AvatarFallback className="bg-emerald-100 text-xl font-semibold text-emerald-800">
+              <AvatarFallback className="rounded-none bg-emerald-100 text-3xl font-medium text-emerald-800">
                 {initials}
               </AvatarFallback>
             </Avatar>
 
             <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <h1 className="break-words text-2xl font-bold text-stone-900">
+              <div className="flex flex-col items-start gap-3">
+                <h1 className="break-words text-4xl font-medium leading-tight tracking-[-0.04em] text-stone-900 sm:text-5xl">
                   {facilitator.display_name}
                 </h1>
                 <a
@@ -283,7 +283,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             </div>
           </div>
 
-          <div className="rounded-xl bg-stone-50 p-4">
+          <div className="rounded-xl border border-stone-200 bg-[#f0f1e9] p-5">
             <p className="text-xs font-medium uppercase tracking-wide text-stone-500">
               Listed fee · USD
             </p>
@@ -319,7 +319,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
       <nav
         aria-label="Profile sections"
-        className="my-6 flex flex-wrap gap-x-5 gap-y-1 border-b border-stone-200 pb-2"
+        className="my-8 flex flex-wrap gap-x-6 gap-y-1 border-b border-stone-200 pb-3"
       >
         {[
           { href: '#about', label: 'About & approach' },
@@ -343,12 +343,64 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
         ))}
       </nav>
 
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
-        <div className="min-w-0 space-y-10 lg:col-span-2">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-3 lg:gap-12">
+        <div className="min-w-0 space-y-10 lg:col-span-2 lg:space-y-12">
+          {/* Modalities */}
+          <section
+            id="about"
+            aria-labelledby="about-heading"
+            className="scroll-mt-24"
+          >
+            <h2
+              id="about-heading"
+              className="mb-3 text-2xl font-medium tracking-tight text-stone-900"
+            >
+              About &amp; approach
+            </h2>
+            <p className="mb-3 text-sm font-medium text-stone-600">
+              Listed areas of practice
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {facilitator.modalities.map((m: string) => (
+                <Badge
+                  key={m}
+                  variant="secondary"
+                  className="rounded-full bg-stone-100 px-3 py-1.5 text-sm font-normal text-stone-700 hover:bg-stone-100"
+                >
+                  {m}
+                </Badge>
+              ))}
+            </div>
+            <p className="mt-5 whitespace-pre-line leading-relaxed text-stone-600">
+              {facilitator.bio}
+            </p>
+          </section>
+
+          {photoUrls.length > 0 && (
+            <section id="photos" aria-labelledby="photos-heading" className="scroll-mt-24">
+              <h2 id="photos-heading" className="text-2xl font-medium tracking-tight text-stone-900">Photos</h2>
+              <p className="mt-2 text-sm text-stone-600">Provided by {facilitator.display_name}. Select a photo to view it in a new tab.</p>
+              <div className={`mt-4 grid gap-3 ${photoUrls.length > 1 ? 'sm:grid-cols-2' : ''}`}>
+                {photoUrls.map((url: string, index: number) => (
+                  <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-xl border border-stone-200 bg-stone-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
+                    <Image
+                      src={url}
+                      alt={`${facilitator.display_name} — ${index === 0 ? 'profile photo' : `additional photo ${index}`}`}
+                      width={960}
+                      height={720}
+                      unoptimized
+                      className="aspect-[4/3] max-h-96 w-full object-contain"
+                    />
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+
           <section
             id="profile-review"
             aria-labelledby="profile-review-heading"
-            className="scroll-mt-24 rounded-xl border border-emerald-200 bg-emerald-50/60 p-5"
+            className="scroll-mt-24 rounded-2xl border border-stone-200 bg-[#e9eee5] p-6"
           >
             <h2
               id="profile-review-heading"
@@ -370,60 +422,6 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             </Link>
           </section>
 
-          <Separator />
-
-          {/* Modalities */}
-          <section
-            id="about"
-            aria-labelledby="about-heading"
-            className="scroll-mt-24"
-          >
-            <h2
-              id="about-heading"
-              className="mb-3 text-lg font-semibold text-stone-900"
-            >
-              About &amp; approach
-            </h2>
-            <p className="mb-3 text-sm font-medium text-stone-600">
-              Listed areas of practice
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {facilitator.modalities.map((m: string) => (
-                <Badge
-                  key={m}
-                  variant="secondary"
-                  className="bg-stone-100 text-sm text-stone-700 hover:bg-stone-100"
-                >
-                  {m}
-                </Badge>
-              ))}
-            </div>
-            <p className="mt-5 whitespace-pre-line leading-relaxed text-stone-600">
-              {facilitator.bio}
-            </p>
-          </section>
-
-          {photoUrls.length > 0 && (
-            <section id="photos" aria-labelledby="photos-heading" className="scroll-mt-24">
-              <h2 id="photos-heading" className="text-lg font-semibold text-stone-900">Photos</h2>
-              <p className="mt-2 text-sm text-stone-600">Provided by {facilitator.display_name}. Select a photo to view it in a new tab.</p>
-              <div className={`mt-4 grid gap-3 ${photoUrls.length > 1 ? 'sm:grid-cols-2' : ''}`}>
-                {photoUrls.map((url: string, index: number) => (
-                  <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-xl border border-stone-200 bg-stone-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
-                    <Image
-                      src={url}
-                      alt={`${facilitator.display_name} — ${index === 0 ? 'profile photo' : `additional photo ${index}`}`}
-                      width={960}
-                      height={720}
-                      unoptimized
-                      className="aspect-[4/3] max-h-96 w-full object-contain"
-                    />
-                  </a>
-                ))}
-              </div>
-            </section>
-          )}
-
           {/* Training, lineage & certifications */}
           <section
             id="training"
@@ -432,11 +430,11 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
           >
             <h2
               id="training-heading"
-              className="mb-3 flex items-center gap-2 text-lg font-semibold text-stone-900"
+              className="mb-3 flex items-center gap-2 text-2xl font-medium tracking-tight text-stone-900"
             >
               <GraduationCap
                 aria-hidden="true"
-                className="size-5 text-stone-400"
+                className="size-5 text-stone-500"
               />
               Training &amp; lineage
             </h2>
@@ -481,7 +479,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
           >
             <h2
               id="safety-heading"
-              className="mb-3 flex items-center gap-2 text-lg font-semibold text-stone-900"
+              className="mb-3 flex items-center gap-2 text-2xl font-medium tracking-tight text-stone-900"
             >
               <ShieldCheck className="size-5 text-amber-500" />
               Safety practices &amp; screening
@@ -553,7 +551,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
           >
             <h2
               id="fees-heading"
-              className="mb-3 text-lg font-semibold text-stone-900"
+              className="mb-3 text-2xl font-medium tracking-tight text-stone-900"
             >
               Fees &amp; practical details
             </h2>
@@ -587,7 +585,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 <div className="mb-5 flex flex-wrap items-center gap-4">
                   <h2
                     id="reviews-heading"
-                    className="text-lg font-semibold text-stone-900"
+                    className="text-2xl font-medium tracking-tight text-stone-900"
                   >
                     Recent reviews
                   </h2>
@@ -597,7 +595,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                       <span className="text-sm font-medium text-stone-700">
                         {avgRating.toFixed(1)}
                       </span>
-                      <span className="text-sm text-stone-400">
+                      <span className="text-sm text-stone-500">
                         ({reviews.length}{' '}
                         {reviews.length === 1 ? 'review' : 'reviews'})
                       </span>
@@ -615,7 +613,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 {avgSafetyRating !== null && avgIntegrationRating !== null && (
                   <div className="mb-5 flex flex-wrap gap-6 rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm">
                     <div>
-                      <p className="text-xs text-stone-400">Safety</p>
+                      <p className="text-xs text-stone-500">Safety</p>
                       <div className="mt-1 flex items-center gap-1.5">
                         <StarRow rating={Math.round(avgSafetyRating)} />
                         <span className="font-medium text-stone-700">
@@ -624,7 +622,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                       </div>
                     </div>
                     <div>
-                      <p className="text-xs text-stone-400">Integration</p>
+                      <p className="text-xs text-stone-500">Integration</p>
                       <div className="mt-1 flex items-center gap-1.5">
                         <StarRow rating={Math.round(avgIntegrationRating)} />
                         <span className="font-medium text-stone-700">
@@ -657,12 +655,12 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                             <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
                               <div className="flex flex-wrap items-center gap-2">
                                 <StarRow rating={review.rating} />
-                                <span className="text-xs text-stone-400">
+                                <span className="text-xs text-stone-500">
                                   Safety {review.safety_rating}/5 &middot;{' '}
                                   Integration {review.integration_rating}/5
                                 </span>
                               </div>
-                              <span className="shrink-0 text-xs text-stone-400">
+                              <span className="shrink-0 text-xs text-stone-500">
                                 {date}
                               </span>
                             </div>
@@ -680,7 +678,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               <div>
                 <h2
                   id="reviews-heading"
-                  className="break-words text-lg font-semibold text-stone-900"
+                  className="break-words text-2xl font-medium tracking-tight text-stone-900"
                 >
                   Reviews
                 </h2>
@@ -704,12 +702,12 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             <Card
               id="contact"
               tabIndex={-1}
-              className="scroll-mt-24 border-stone-200 shadow-sm focus-visible:outline-2 focus-visible:outline-emerald-700"
+              className="scroll-mt-24 rounded-2xl border border-stone-200 bg-white py-1 shadow-none ring-0 focus-visible:outline-2 focus-visible:outline-emerald-700"
             >
               <CardContent className="p-5">
                 <h2
                   tabIndex={-1}
-                  className="text-lg font-semibold text-stone-900"
+                  className="break-words text-2xl font-medium tracking-tight text-stone-900"
                 >
                   {isOwnProfile
                     ? 'This is your public profile'
@@ -731,7 +729,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                   </p>
                   {typeof facilitator.years_experience === 'number' &&
                     facilitator.years_experience > 0 && (
-                      <p className="mt-0.5 text-xs text-stone-400">
+                      <p className="mt-0.5 text-xs text-stone-500">
                         {facilitator.years_experience} year
                         {facilitator.years_experience === 1 ? '' : 's'} of
                         practice, self-reported; may include personal practice
@@ -779,7 +777,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             </Card>
 
             {/* Legal / safety sidebar */}
-            <Card className="border-amber-200 bg-amber-50/60">
+            <Card className="rounded-2xl border border-[#e2d4c7] bg-[#f3e6dc]/70 py-1 ring-0">
               <CardContent className="p-5">
                 <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-amber-700">
                   Important to know

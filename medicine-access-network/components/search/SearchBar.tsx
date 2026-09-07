@@ -27,28 +27,28 @@ export function SearchBar() {
   }
 
   return (
-    <form action="/facilitators" method="get" role="search" aria-label="Guide directory" onSubmit={handleSubmit} className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5" aria-busy={isPending}>
+    <form action="/facilitators" method="get" role="search" aria-label="Guide directory" onSubmit={handleSubmit} className="rounded-xl border border-stone-300 bg-white p-4 shadow-[0_10px_30px_#1e37260c] sm:p-6" aria-busy={isPending}>
       {Array.from(preserved).map(([name, value]) => <input key={`${name}-${value}`} type="hidden" name={name} value={value} />)}
       <div className="grid gap-4 md:grid-cols-[1.3fr_1fr_auto] md:items-end">
         <div>
-          <label htmlFor="guide-search" className="mb-2 block text-sm font-medium text-stone-900">Support or guide</label>
+          <label htmlFor="guide-search" className="mb-2 block text-xs font-medium text-stone-600">Support or guide</label>
           <div className="relative">
             <Search aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-stone-400" />
-            <Input id="guide-search" name="q" type="search" key={filters.q} defaultValue={filters.q} maxLength={120} placeholder="Preparation, integration, or a name" className="h-12 bg-white pl-9" />
+            <Input id="guide-search" name="q" type="search" key={filters.q} defaultValue={filters.q} maxLength={120} placeholder="Preparation, integration, or a name" className="h-12 border-stone-200 bg-stone-50/60 pl-9 text-base shadow-none" />
           </div>
         </div>
         <div>
-          <label htmlFor="guide-location" className="mb-2 block text-sm font-medium text-stone-900">Location <span className="font-normal text-stone-500">(optional)</span></label>
+          <label htmlFor="guide-location" className="mb-2 block text-xs font-medium text-stone-600">Location <span className="font-normal text-stone-500">(optional)</span></label>
           <div className="relative">
             <MapPin aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-stone-400" />
-            <Input id="guide-location" name="location" key={filters.location} defaultValue={filters.location} maxLength={100} placeholder="City, state, or country" className="h-12 bg-white pl-9" />
+            <Input id="guide-location" name="location" key={filters.location} defaultValue={filters.location} maxLength={100} placeholder="City, state, or country" className="h-12 border-stone-200 bg-stone-50/60 pl-9 text-base shadow-none" />
           </div>
         </div>
-        <Button type="submit" disabled={isPending} className="h-12 bg-emerald-700 px-6 hover:bg-emerald-800">
+        <Button type="submit" disabled={isPending} className="h-12 bg-emerald-700 px-7 hover:bg-emerald-800">
           {isPending ? 'Searching…' : 'Find a guide'}
         </Button>
       </div>
-      <p className="mt-3 text-xs leading-relaxed text-stone-500">Search the location listed on a profile. For online support, leave location blank and use the online filter; confirm the guide can work with you where you live.</p>
+      <p className="mt-4 text-xs leading-relaxed text-stone-600">Search the location listed on a profile. For online support, leave location blank and use the online filter; confirm the guide can work with you where you live.</p>
     </form>
   )
 }
