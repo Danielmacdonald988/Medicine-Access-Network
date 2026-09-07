@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslation } from '@/components/i18n/TranslationProvider'
+
 import { useEffect, useId, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useForm, Controller } from 'react-hook-form'
@@ -52,6 +54,7 @@ export function ContactRequestForm({
   remoteAvailable,
   location,
 }: ContactRequestFormProps) {
+  const { t } = useTranslation()
   const [submitted, setSubmitted] = useState(false)
   const [submissionError, setSubmissionError] = useState<string | null>(null)
   const honeypot = useRef<HTMLInputElement>(null)
@@ -126,27 +129,14 @@ export function ContactRequestForm({
         }}
         className="space-y-3 rounded-lg py-4 text-center focus-visible:ring-2 focus-visible:ring-emerald-600"
       >
-        <p className="font-medium text-emerald-700">
-          Conversation request received
-        </p>
-        <p className="text-sm leading-relaxed text-stone-600">
-          Your request is available to {facilitatorDisplayName}. The guide can
-          reply to the email address you provided. A response or session is not
-          guaranteed.
-        </p>
-        <p className="text-sm leading-relaxed text-stone-600">
-          Check your inbox and spam folder. Timing, fees, and fit still need to
-          be agreed with the guide.
-        </p>
-        <p className="text-sm text-stone-600">
-          No account was created and no payment was taken.
-        </p>
+        <p className="font-medium text-emerald-700">{t("Conversation request received")}</p>
+        <p className="text-sm leading-relaxed text-stone-600">{t('Your request is available to {name}. The guide can reply to the email address you provided. A response or session is not guaranteed.', { name: facilitatorDisplayName })}</p>
+        <p className="text-sm leading-relaxed text-stone-600">{t("Check your inbox and spam folder. Timing, fees, and fit still need to be agreed with the guide.")}</p>
+        <p className="text-sm text-stone-600">{t("No account was created and no payment was taken.")}</p>
         <Link
           href="/resources/questions-to-ask"
           className="inline-block text-sm font-medium text-emerald-800 underline underline-offset-4"
-        >
-          Prepare for your first conversation
-        </Link>
+        >{t("Prepare for your first conversation")}</Link>
       </div>
     )
   }
@@ -160,13 +150,10 @@ export function ContactRequestForm({
       noValidate
       aria-busy={isSubmitting}
     >
-      <p className="text-sm leading-relaxed text-stone-600">
-        Start with a brief introduction. All fields are required except your
-        preferred time window.
-      </p>
+      <p className="text-sm leading-relaxed text-stone-600">{t("Start with a brief introduction. All fields are required except your preferred time window.")}</p>
 
       <div aria-hidden="true" className="hidden">
-        <label htmlFor={`${id}-website`}>Website</label>
+        <label htmlFor={`${id}-website`}>{t("Website")}</label>
         <input
           ref={honeypot}
           id={`${id}-website`}
@@ -177,7 +164,7 @@ export function ContactRequestForm({
         />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor={`${id}-name`}>Your name</Label>
+        <Label htmlFor={`${id}-name`}>{t("Your name")}</Label>
         <Input
           id={`${id}-name`}
           autoComplete="name"
@@ -195,12 +182,12 @@ export function ContactRequestForm({
             role="alert"
             className="text-sm text-red-700"
           >
-            {errors.seeker_name.message}
+            {t(errors.seeker_name.message ?? 'Please enter your name')}
           </p>
         )}
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor={`${id}-email`}>Your email</Label>
+        <Label htmlFor={`${id}-email`}>{t("Your email")}</Label>
         <Input
           id={`${id}-email`}
           type="email"
@@ -219,21 +206,17 @@ export function ContactRequestForm({
             role="alert"
             className="text-sm text-red-700"
           >
-            {errors.seeker_email.message}
+            {t(errors.seeker_email.message ?? 'Please enter a valid email address')}
           </p>
         )}
       </div>
       <p
         id={`${id}-contact-help`}
         className="text-sm leading-relaxed text-stone-600"
-      >
-        Your name, email, and message are shared with this guide and processed
-        by the platform to deliver your request. They are not displayed
-        publicly. No account is created.
-      </p>
+      >{t("Your name, email, and message are shared with this guide and processed by the platform to deliver your request. They are not displayed publicly. No account is created.")}</p>
 
       <div className="space-y-1.5">
-        <Label htmlFor={`${id}-service`}>Type of support</Label>
+        <Label htmlFor={`${id}-service`}>{t("Type of support")}</Label>
         <Controller
           name="requested_service"
           control={control}
@@ -252,14 +235,14 @@ export function ContactRequestForm({
                 aria-describedby={
                   errors.requested_service ? `${id}-service-error` : undefined
                 }
-                className="min-h-11 w-full"
+                className="h-auto min-h-11 w-full whitespace-normal [&_[data-slot=select-value]]:line-clamp-none"
               >
-                <SelectValue placeholder="What are you looking for?" />
+                <SelectValue placeholder={t("What are you looking for?")}>{field.value ? t(field.value) : undefined}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {supportOptions.map((service) => (
-                  <SelectItem key={service} value={service}>
-                    {service}
+                  <SelectItem className="[&_[data-slot]]:whitespace-normal [&>span]:whitespace-normal" key={service} value={service}>
+                    {t(service)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -272,13 +255,13 @@ export function ContactRequestForm({
             role="alert"
             className="text-sm text-red-700"
           >
-            {errors.requested_service.message}
+            {t(errors.requested_service.message ?? 'Please select a type of support')}
           </p>
         )}
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor={`${id}-format`}>How would you prefer to connect?</Label>
+        <Label htmlFor={`${id}-format`}>{t("How would you prefer to connect?")}</Label>
         <Controller
           name="preferred_format"
           control={control}
@@ -295,20 +278,20 @@ export function ContactRequestForm({
                 aria-required="true"
                 aria-invalid={!!errors.preferred_format}
                 aria-describedby={`${id}-format-help${errors.preferred_format ? ` ${id}-format-error` : ''}`}
-                className="min-h-11 w-full"
+                className="h-auto min-h-11 w-full whitespace-normal [&_[data-slot=select-value]]:line-clamp-none"
               >
-                <SelectValue placeholder="How would you like to connect?">
+                <SelectValue placeholder={t("How would you like to connect?")}>
                   {field.value
-                    ? formatOptions.find(
+                    ? t(formatOptions.find(
                         (format) => format.value === field.value,
-                      )?.label
+                      )?.label ?? '')
                     : undefined}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {formatOptions.map(({ value, label }) => (
-                  <SelectItem key={value} value={value}>
-                    {label}
+                  <SelectItem className="[&>span]:whitespace-normal" key={value} value={value}>
+                    {t(label)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -318,34 +301,26 @@ export function ContactRequestForm({
         <p
           id={`${id}-format-help`}
           className="text-sm leading-relaxed text-stone-600"
-        >
-          The guide can reply to your email. These are preferences to discuss,
-          not confirmed session options.{' '}
-          {remoteAvailable
+        >{t("The guide can reply to your email. These are preferences to discuss, not confirmed session options.")}{' '}
+          {t(remoteAvailable
             ? 'Online support is listed; confirm whether they can work with you where you live.'
-            : 'Online sessions are not listed on this profile.'}
+            : 'Online sessions are not listed on this profile.')}
         </p>
         {errors.preferred_format && (
           <p
             id={`${id}-format-error`}
             role="alert"
             className="text-sm text-red-700"
-          >
-            Please select how you would like to connect.
-          </p>
+          >{t("Please select how you would like to connect.")}</p>
         )}
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor={`${id}-message`}>Brief introduction</Label>
+        <Label htmlFor={`${id}-message`}>{t("Brief introduction")}</Label>
         <p
           id={`${id}-message-help`}
           className="text-sm leading-relaxed text-stone-600"
-        >
-          This message is shared with the guide. Describe the support you want;
-          leave out medical records, medication details, trauma histories, and
-          other sensitive information. 20–1,000 characters.
-        </p>
+        >{t("This message is shared with the guide. Describe the support you want; leave out medical records, medication details, trauma histories, and other sensitive information. 20–1,000 characters.")}</p>
         <Textarea
           id={`${id}-message`}
           rows={4}
@@ -355,7 +330,7 @@ export function ContactRequestForm({
           aria-required="true"
           aria-invalid={!!errors.message}
           aria-describedby={`${id}-message-help${errors.message ? ` ${id}-message-error` : ''}`}
-          placeholder="I’m looking for integration support and would like to learn about your approach, availability, and fees."
+          placeholder={t("I’m looking for integration support and would like to learn about your approach, availability, and fees.")}
           {...register('message')}
         />
         {errors.message && (
@@ -364,13 +339,13 @@ export function ContactRequestForm({
             role="alert"
             className="text-sm text-red-700"
           >
-            {errors.message.message}
+            {t(errors.message.message ?? 'Please check your message')}
           </p>
         )}
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor={`${id}-time`}>Preferred time window (optional)</Label>
+        <Label htmlFor={`${id}-time`}>{t("Preferred time window (optional)")}</Label>
         <Controller
           name="preferred_time_window"
           control={control}
@@ -385,35 +360,30 @@ export function ContactRequestForm({
                 ref={field.ref}
                 onBlur={field.onBlur}
                 aria-describedby={`${id}-time-help`}
-                className="min-h-11 w-full"
+                className="h-auto min-h-11 w-full whitespace-normal [&_[data-slot=select-value]]:line-clamp-none"
               >
-                <SelectValue placeholder="When works for you?" />
+                <SelectValue placeholder={t("When works for you?")}>{field.value ? t(field.value) : undefined}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {TIME_WINDOWS.map((time) => (
-                  <SelectItem key={time} value={time}>
-                    {time}
+                  <SelectItem className="[&>span]:whitespace-normal" key={time} value={time}>
+                    {t(time)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           )}
         />
-        <p id={`${id}-time-help`} className="text-sm text-stone-500">
-          A preference, not a booking. Confirm your time zone with the guide.
-        </p>
+        <p id={`${id}-time-help`} className="text-sm text-stone-500">{t("A preference, not a booking. Confirm your time zone with the guide.")}</p>
       </div>
 
-      <p className="text-sm leading-relaxed text-stone-600">
-        Before you connect:{' '}
+      <p className="text-sm leading-relaxed text-stone-600">{t("Before you connect:")}{' '}
         <Link
           href="/resources/questions-to-ask"
           className="underline underline-offset-2 hover:text-stone-800"
           target="_blank"
           rel="noopener noreferrer"
-        >
-          Questions to ask a guide
-          <span className="sr-only"> (opens in a new tab)</span>
+        >{t("Questions to ask a guide")}<span className="sr-only">{' '}{t("(opens in a new tab)")}</span>
         </Link>{' '}
         ·{' '}
         <Link
@@ -421,8 +391,7 @@ export function ContactRequestForm({
           className="underline underline-offset-2 hover:text-stone-800"
           target="_blank"
           rel="noopener noreferrer"
-        >
-          Red flags<span className="sr-only"> (opens in a new tab)</span>
+        >{t("Red flags")}<span className="sr-only">{' '}{t("(opens in a new tab)")}</span>
         </Link>
       </p>
       <Controller
@@ -461,11 +430,7 @@ export function ContactRequestForm({
                 aria-hidden="true"
                 className="mt-0.5 size-3.5 shrink-0 text-stone-500"
               />
-              <span>
-                I understand this is not a medical service, guides are not
-                emergency providers, and this platform does not coordinate
-                access to controlled substances.
-              </span>
+              <span>{t("I understand this is not a medical service, guides are not emergency providers, and this platform does not coordinate access to controlled substances.")}</span>
             </Label>
           </div>
         )}
@@ -476,7 +441,7 @@ export function ContactRequestForm({
           role="alert"
           className="text-sm text-red-700"
         >
-          {errors.ack_safety.message}
+          {t('Please confirm before sending your message')}
         </p>
       )}
 
@@ -487,13 +452,11 @@ export function ContactRequestForm({
           ref={submissionErrorRef}
           className="space-y-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800"
         >
-          <p>{submissionError}</p>
+          <p>{t(submissionError)}</p>
           <Link
             href="/contact"
             className="inline-block font-medium underline underline-offset-2"
-          >
-            Contact platform support
-          </Link>
+          >{t("Contact platform support")}</Link>
         </div>
       )}
 
@@ -502,11 +465,9 @@ export function ContactRequestForm({
         className="min-h-11 w-full bg-emerald-700 hover:bg-emerald-800"
         disabled={isSubmitting}
       >
-        {isSubmitting ? 'Sending…' : 'Send conversation request'}
+        {t(isSubmitting ? 'Sending…' : 'Send conversation request')}
       </Button>
-      <p className="text-center text-sm text-stone-500">
-        No account or payment required. A request does not book a session.
-      </p>
+      <p className="text-center text-sm text-stone-500">{t("No account or payment required. A request does not book a session.")}</p>
     </form>
   )
 }

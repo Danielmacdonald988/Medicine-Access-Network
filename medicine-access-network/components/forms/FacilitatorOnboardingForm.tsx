@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslation } from '@/components/i18n/TranslationProvider'
 import { useRef, useState } from 'react'
 import { z } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
@@ -107,7 +108,7 @@ const STEP_FIELDS: Record<number, string[]> = {
 const PLATFORM_RULES = [
   'I offer only legal support services: preparation coaching, integration guidance, breathwork, somatic coaching, meditation guidance, spiritual coaching, harm reduction education, and related legal wellness work.',
   'I will not facilitate illegal ceremonies and will not source, supply, or coordinate access to controlled substances of any kind.',
-  `I understand my profile will not appear publicly until it has been reviewed and approved by ${APP_NAME}.`,
+  'I understand my profile will not appear publicly until it has been reviewed and approved by {appName}.',
   'I will keep my safety practices, contraindication screening process, and profile information accurate and up to date.',
   'I understand that approval is not an endorsement of any specific practice, product, or health outcome.',
 ]
@@ -127,6 +128,7 @@ const groupedModalities = (
 // ─── Progress indicator ───────────────────────────────────────────────────────
 
 function StepIndicator({ current, total, editing }: { current: number; total: number; editing: boolean }) {
+  const { t } = useTranslation()
   return (
     <div className="mb-8 space-y-2">
       <div className="flex gap-1">
@@ -141,7 +143,7 @@ function StepIndicator({ current, total, editing }: { current: number; total: nu
         ))}
       </div>
       <p className="text-xs text-stone-400">
-        {editing ? 'Section' : 'Step'} {current} of {total}
+        {t(editing ? 'Section {current} of {total}' : 'Step {current} of {total}', { current, total })}
       </p>
     </div>
   )
@@ -150,22 +152,20 @@ function StepIndicator({ current, total, editing }: { current: number; total: nu
 // ─── Confirmation screen ──────────────────────────────────────────────────────
 
 function ConfirmationScreen({ editing }: { editing: boolean }) {
+  const { t } = useTranslation()
   return (
     <div className="py-8 text-center">
       <div className="mx-auto mb-5 flex size-16 items-center justify-center rounded-full bg-emerald-100">
         <CheckCircle className="size-8 text-emerald-600" />
       </div>
-      <h2 className="text-xl font-semibold text-stone-900">{editing ? 'Profile changes submitted' : 'Application submitted'}</h2>
+      <h2 className="text-xl font-semibold text-stone-900">{t(editing ? 'Profile changes submitted' : 'Application submitted')}</h2>
       <p className="mt-3 text-stone-600">
-        {editing ? 'Your updated profile has been submitted for review.' : 'Your facilitator application has been submitted for review.'}
+        {t(editing ? 'Your updated profile has been submitted for review.' : 'Your facilitator application has been submitted for review.')}
       </p>
-      <p className="mt-2 text-sm text-stone-500">
-        Your profile stays hidden while it is pending review. Check your dashboard
-        for your application status and any updates.
-      </p>
+      <p className="mt-2 text-sm text-stone-500">{t("Your profile stays hidden while it is pending review. Check your dashboard for your application status and any updates.")}</p>
       <div className="mt-8">
         <Button asChild className="bg-emerald-700 hover:bg-emerald-800">
-          <Link href="/facilitator">Go to your dashboard</Link>
+          <Link href="/facilitator">{t("Go to your dashboard")}</Link>
         </Button>
       </div>
     </div>
@@ -175,6 +175,7 @@ function ConfirmationScreen({ editing }: { editing: boolean }) {
 // ─── Form ─────────────────────────────────────────────────────────────────────
 
 export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile?: FacilitatorProfile }) {
+  const { t } = useTranslation()
   const [step, setStep] = useState(1)
   const [uploading, setUploading] = useState(false)
   const [saveError, setSaveError] = useState('')
@@ -289,11 +290,11 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
       {existingProfile && (
         <div className="mb-6 space-y-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
           <p className="text-sm leading-relaxed text-amber-900">
-            {existingProfile.verification_status === 'approved'
+            {t(existingProfile.verification_status === 'approved'
               ? 'Submitting changes will hide your public profile until the updated profile is reviewed and approved.'
-              : 'Submitting changes sends your updated profile for review. It stays hidden until approved.'}
+              : 'Submitting changes sends your updated profile for review. It stays hidden until approved.')}
           </p>
-          <Label htmlFor="edit-profile-section">Jump to a section</Label>
+          <Label htmlFor="edit-profile-section">{t("Jump to a section")}</Label>
           <select
             id="edit-profile-section"
             value={step}
@@ -302,7 +303,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
             className="min-h-11 w-full rounded-lg border border-stone-300 bg-white px-3 text-base text-stone-800"
           >
             {Object.entries(STEP_META).map(([key, section]) => (
-              <option key={key} value={key}>{key}. {section.title}</option>
+              <option key={key} value={key}>{key}. {t(section.title)}</option>
             ))}
           </select>
         </div>
@@ -310,42 +311,38 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
       <StepIndicator current={step} total={TOTAL_STEPS} editing={Boolean(existingProfile)} />
 
       <div className="mb-6">
-        <h2 ref={headingRef} tabIndex={-1} className="text-xl font-semibold text-stone-900 focus:outline-none">{title}</h2>
-        <p className="mt-1 text-sm text-stone-500">{description}</p>
+        <h2 ref={headingRef} tabIndex={-1} className="text-xl font-semibold text-stone-900 focus:outline-none">{t(title)}</h2>
+        <p className="mt-1 text-sm text-stone-500">{t(description)}</p>
       </div>
 
       {/* ── Step 1: Display name ─────────────────────────────────────────────── */}
       {step === 1 && (
         <div className="space-y-1.5">
-          <Label htmlFor="display_name">Display name</Label>
+          <Label htmlFor="display_name">{t("Display name")}</Label>
           <Input
             id="display_name"
-            placeholder="e.g. Maya Chen or James O."
+            placeholder={t("e.g. Maya Chen or James O.")}
             autoFocus={!existingProfile}
             {...register('display_name')}
           />
           {errors.display_name && (
-            <p className="text-xs text-red-500">{errors.display_name.message}</p>
+            <p className="text-xs text-red-500">{t(errors.display_name.message ?? "")}</p>
           )}
-          <p className="text-xs text-stone-400">
-            This appears on your public profile. First name or initials is fine.
-          </p>
+          <p className="text-xs text-stone-400">{t("This appears on your public profile. First name or initials is fine.")}</p>
         </div>
       )}
 
       {/* ── Step 2: Location ─────────────────────────────────────────────────── */}
       {step === 2 && (
         <div className="space-y-1.5">
-          <Label htmlFor="location">Location</Label>
+          <Label htmlFor="location">{t("Location")}</Label>
           <Input
             id="location"
-            placeholder="City, State or Country"
+            placeholder={t("City, State or Country")}
             autoFocus
             {...register('location')}
           />
-          <p className="text-xs text-stone-400">
-            Optional — used to match you with seekers looking for in-person support.
-          </p>
+          <p className="text-xs text-stone-400">{t("Optional — used to match you with seekers looking for in-person support.")}</p>
         </div>
       )}
 
@@ -377,12 +374,8 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
                 {field.value && <CheckIcon className="size-3" />}
               </div>
               <div>
-                <p className="text-sm font-medium text-stone-900">
-                  Available for remote sessions
-                </p>
-                <p className="mt-0.5 text-xs text-stone-500">
-                  I can work with clients via video call, voice call, or async messaging.
-                </p>
+                <p className="text-sm font-medium text-stone-900">{t("Available for remote sessions")}</p>
+                <p className="mt-0.5 text-xs text-stone-500">{t("I can work with clients via video call, voice call, or async messaging.")}</p>
               </div>
             </button>
           )}
@@ -392,19 +385,19 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
       {/* ── Step 4: Bio ──────────────────────────────────────────────────────── */}
       {step === 4 && (
         <div className="space-y-1.5">
-          <Label htmlFor="bio">Bio</Label>
+          <Label htmlFor="bio">{t("Bio")}</Label>
           <Textarea
             id="bio"
             rows={8}
-            placeholder="Describe your background, your approach, and what working with you actually looks like. Be specific and genuine — seekers are looking for a real sense of who you are."
+            placeholder={t("Describe your background, your approach, and what working with you actually looks like. Be specific and genuine — seekers are looking for a real sense of who you are.")}
             autoFocus
             {...register('bio')}
           />
           {errors.bio && (
-            <p className="text-xs text-red-500">{errors.bio.message}</p>
+            <p className="text-xs text-red-500">{t(errors.bio.message ?? "")}</p>
           )}
           <div className="flex justify-between">
-            <p className="text-xs text-stone-400">Minimum 100 characters.</p>
+            <p className="text-xs text-stone-400">{t("Minimum 100 characters.")}</p>
             <p
               className={cn(
                 'text-xs',
@@ -427,7 +420,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
               {groupedModalities.map(({ category, label, items }) => (
                 <div key={category}>
                   <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-stone-400">
-                    {label}
+                    {t(label)}
                   </p>
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     {items.map((m) => {
@@ -461,7 +454,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
                           >
                             {selected && <CheckIcon className="size-2.5" />}
                           </div>
-                          {m.name}
+                          {t(m.name)}
                         </button>
                       )
                     })}
@@ -469,7 +462,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
                 </div>
               ))}
               {errors.modalities && (
-                <p className="text-xs text-red-500">{errors.modalities.message}</p>
+                <p className="text-xs text-red-500">{t(errors.modalities.message ?? "")}</p>
               )}
             </div>
           )}
@@ -479,7 +472,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
       {/* ── Step 6: Years of experience ──────────────────────────────────────── */}
       {step === 6 && (
         <div className="space-y-1.5">
-          <Label htmlFor="years_experience">Years of practice (self-reported)</Label>
+          <Label htmlFor="years_experience">{t("Years of practice (self-reported)")}</Label>
           <Input
             id="years_experience"
             type="number"
@@ -490,12 +483,9 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
             {...register('years_experience', { setValueAs: (value) => value === '' ? undefined : value })}
           />
           {errors.years_experience && (
-            <p className="text-xs text-red-500">{errors.years_experience.message}</p>
+            <p className="text-xs text-red-500">{t(errors.years_experience.message ?? "")}</p>
           )}
-          <p className="text-xs text-stone-400">
-            Optional. May include personal practice. This is not a count of years
-            working with clients; describe that experience separately in your bio.
-          </p>
+          <p className="text-xs text-stone-400">{t("Optional. May include personal practice. This is not a count of years working with clients; describe that experience separately in your bio.")}</p>
         </div>
       )}
 
@@ -503,29 +493,27 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
       {step === 7 && (
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="lineage_or_training">Training and lineage</Label>
+            <Label htmlFor="lineage_or_training">{t("Training and lineage")}</Label>
             <Textarea
               id="lineage_or_training"
               rows={3}
-              placeholder="e.g. IFS Level 2, Somatic Experiencing Practitioner (SEP), Grof Transpersonal Training — Holotropic Breathwork Certified"
+              placeholder={t("List relevant training and lineage.")}
               autoFocus
               {...register('lineage_or_training')}
             />
             {errors.lineage_or_training && (
-              <p className="text-xs text-red-500">{errors.lineage_or_training.message}</p>
+              <p className="text-xs text-red-500">{t(errors.lineage_or_training.message ?? "")}</p>
             )}
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="certifications">Certifications</Label>
+            <Label htmlFor="certifications">{t("Certifications")}</Label>
             <Input
               id="certifications"
-              placeholder="e.g. SEP, MAPS MDMA-AT, Certified Breathwork Facilitator"
+              placeholder={t("List certifications, separated by commas.")}
               {...register('certifications')}
             />
-            <p className="text-xs text-stone-400">
-              Optional. Comma-separated. These will be listed on your profile.
-            </p>
+            <p className="text-xs text-stone-400">{t("Optional. Comma-separated. These will be listed on your profile.")}</p>
           </div>
         </div>
       )}
@@ -533,21 +521,19 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
       {/* ── Step 8: Safety practices ─────────────────────────────────────────── */}
       {step === 8 && (
         <div className="space-y-1.5">
-          <Label htmlFor="safety_practices">Your safety practices and screening process</Label>
+          <Label htmlFor="safety_practices">{t("Your safety practices and screening process")}</Label>
           <Textarea
             id="safety_practices"
             rows={7}
-            placeholder="Describe your intake process, how you screen for contraindications, which conditions or medications you do not work with, and how you handle crises or emergencies. Be specific — this builds trust with seekers and is reviewed by our team."
+            placeholder={t("Describe your intake process, how you screen for contraindications, which conditions or medications you do not work with, and how you handle crises or emergencies. Be specific — this builds trust with seekers and is reviewed by our team.")}
             autoFocus
             {...register('safety_practices')}
           />
           {errors.safety_practices && (
-            <p className="text-xs text-red-500">{errors.safety_practices.message}</p>
+            <p className="text-xs text-red-500">{t(errors.safety_practices.message ?? "")}</p>
           )}
           <div className="flex justify-between">
-            <p className="text-xs text-stone-400">
-              Minimum 50 characters. Displayed publicly on your profile.
-            </p>
+            <p className="text-xs text-stone-400">{t("Minimum 50 characters. Displayed publicly on your profile.")}</p>
             <p
               className={cn(
                 'text-xs',
@@ -563,18 +549,8 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
       {/* ── Step 9: Contraindication awareness ──────────────────────────────── */}
       {step === 9 && (
         <div className="space-y-4">
-          <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900 leading-relaxed">
-            Screening must fit the specific service and stay within your qualifications.
-            A general checklist cannot establish whether a practice is appropriate for an
-            individual. Refer medical, medication, and clinical eligibility questions to
-            an appropriately qualified healthcare professional.
-            <br />
-            <br />
-            As a guide on this platform, you commit to appropriate screening for every client,
-            respecting your scope, and declining work you cannot responsibly provide. Use
-            an agreed confidential process for any necessary health intake; the platform
-            contact form is for introductions.
-          </div>
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900 leading-relaxed">{t("Screening must fit the specific service and stay within your qualifications. A general checklist cannot establish whether a practice is appropriate for an individual. Refer medical, medication, and clinical eligibility questions to an appropriately qualified healthcare professional.")}<br />
+            <br />{t("As a guide on this platform, you commit to appropriate screening for every client, respecting your scope, and declining work you cannot responsibly provide. Use an agreed confidential process for any necessary health intake; the platform contact form is for introductions.")}</div>
 
           <Controller
             name="contraindications_acknowledged"
@@ -597,15 +573,13 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
                   }
                   className="mt-0.5 shrink-0"
                 />
-                <span className="text-sm font-medium text-stone-800">
-                  I understand and commit to appropriate contraindication screening for every client.
-                </span>
+                <span className="text-sm font-medium text-stone-800">{t("I understand and commit to appropriate contraindication screening for every client.")}</span>
               </label>
             )}
           />
           {errors.contraindications_acknowledged && (
             <p className="text-xs text-red-500">
-              {errors.contraindications_acknowledged.message}
+              {t(errors.contraindications_acknowledged.message ?? "")}
             </p>
           )}
         </div>
@@ -657,18 +631,15 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
                       )}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-stone-900">{label}</p>
-                      <p className="mt-0.5 text-xs text-stone-500">{desc}</p>
+                      <p className="text-sm font-medium text-stone-900">{t(label)}</p>
+                      <p className="mt-0.5 text-xs text-stone-500">{t(desc)}</p>
                     </div>
                   </button>
                 ))}
               </>
             )}
           />
-          <p className="text-xs text-stone-400">
-            All payments are for legal services only: preparation, integration, breathwork,
-            coaching, and education.
-          </p>
+          <p className="text-xs text-stone-400">{t("All payments are for legal services only: preparation, integration, breathwork, coaching, and education.")}</p>
         </div>
       )}
 
@@ -677,7 +648,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
         <div className="space-y-1.5">
           {donationBased ? (
             <>
-              <Label htmlFor="minimum_donation">Suggested minimum donation (USD)</Label>
+              <Label htmlFor="minimum_donation">{t("Suggested minimum donation (USD)")}</Label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-stone-400">
                   $
@@ -692,13 +663,11 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
                   {...register('minimum_donation', { setValueAs: (value) => value === '' ? undefined : value })}
                 />
               </div>
-              <p className="text-xs text-stone-400">
-                Optional. Leave blank if you prefer not to set a minimum.
-              </p>
+              <p className="text-xs text-stone-400">{t("Optional. Leave blank if you prefer not to set a minimum.")}</p>
             </>
           ) : (
             <>
-              <Label htmlFor="hourly_rate">Session rate (USD)</Label>
+              <Label htmlFor="hourly_rate">{t("Session rate (USD)")}</Label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-stone-400">
                   $
@@ -713,16 +682,14 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
                   {...register('hourly_rate', { setValueAs: (value) => value === '' ? undefined : value })}
                 />
               </div>
-              <p className="text-xs text-stone-400">
-                Optional. Leave blank if you prefer to discuss rates privately.
-              </p>
+              <p className="text-xs text-stone-400">{t("Optional. Leave blank if you prefer to discuss rates privately.")}</p>
             </>
           )}
           {donationBased && errors.minimum_donation && (
-            <p role="alert" className="text-sm text-red-700">{errors.minimum_donation.message}</p>
+            <p role="alert" className="text-sm text-red-700">{t(errors.minimum_donation.message ?? "")}</p>
           )}
           {!donationBased && errors.hourly_rate && (
-            <p role="alert" className="text-sm text-red-700">{errors.hourly_rate.message}</p>
+            <p role="alert" className="text-sm text-red-700">{t(errors.hourly_rate.message ?? "")}</p>
           )}
         </div>
       )}
@@ -748,46 +715,35 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
 
       {step === 13 && (
         <div className="space-y-5">
-          <p className="rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm leading-relaxed text-stone-600">
-            These links will appear publicly on your approved profile. Visitors can open your
-            messaging app and contact you directly. WhatsApp links and phone-based Signal links
-            reveal your phone number. Conversations take place in that app, outside this site.
-          </p>
+          <p className="rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm leading-relaxed text-stone-600">{t("These links will appear publicly on your approved profile. Visitors can open your messaging app and contact you directly. WhatsApp links and phone-based Signal links reveal your phone number. Conversations take place in that app, outside this site.")}</p>
           <div className="space-y-1.5">
-            <Label htmlFor="whatsapp_url">WhatsApp link (optional)</Label>
+            <Label htmlFor="whatsapp_url">{t("WhatsApp link (optional)")}</Label>
             <Input id="whatsapp_url" type="url" inputMode="url" autoCapitalize="none" spellCheck={false}
               placeholder="https://wa.me/14155552671" maxLength={320}
               aria-describedby="whatsapp-help whatsapp-error" aria-invalid={Boolean(errors.whatsapp_url)}
               {...register('whatsapp_url')} />
-            <p id="whatsapp-help" className="text-xs text-stone-500">
-              Use https://wa.me/ followed by your country code and number, with no spaces or plus sign.
-            </p>
-            {errors.whatsapp_url && <p id="whatsapp-error" role="alert" className="text-sm text-red-700">{errors.whatsapp_url.message}</p>}
+            <p id="whatsapp-help" className="text-xs text-stone-500">{t("Use https://wa.me/ followed by your country code and number, with no spaces or plus sign.")}</p>
+            {errors.whatsapp_url && <p id="whatsapp-error" role="alert" className="text-sm text-red-700">{t(errors.whatsapp_url.message ?? "")}</p>}
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="signal_url">Signal link (optional)</Label>
+            <Label htmlFor="signal_url">{t("Signal link (optional)")}</Label>
             <Input id="signal_url" type="url" inputMode="url" autoCapitalize="none" spellCheck={false}
-              placeholder="Paste your https://signal.me/ share link" maxLength={320}
+              placeholder={t("Paste your https://signal.me/ share link")} maxLength={320}
               aria-describedby="signal-help signal-error" aria-invalid={Boolean(errors.signal_url)}
               {...register('signal_url')} />
-            <p id="signal-help" className="text-xs text-stone-500">
-              In Signal, open Settings → your profile → QR Code or Link, then copy your link.
-              A username share link lets you avoid listing your phone number here.
-            </p>
-            {errors.signal_url && <p id="signal-error" role="alert" className="text-sm text-red-700">{errors.signal_url.message}</p>}
+            <p id="signal-help" className="text-xs text-stone-500">{t("In Signal, open Settings → your profile → QR Code or Link, then copy your link. A username share link lets you avoid listing your phone number here.")}</p>
+            {errors.signal_url && <p id="signal-error" role="alert" className="text-sm text-red-700">{t(errors.signal_url.message ?? "")}</p>}
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="telegram_url">Telegram link (optional)</Label>
+            <Label htmlFor="telegram_url">{t("Telegram link (optional)")}</Label>
             <Input id="telegram_url" type="url" inputMode="url" autoCapitalize="none" spellCheck={false}
               placeholder="https://t.me/your_username" maxLength={320}
               aria-describedby="telegram-help telegram-error" aria-invalid={Boolean(errors.telegram_url)}
               {...register('telegram_url')} />
-            <p id="telegram-help" className="text-xs text-stone-500">
-              Add your personal account link, without an @ before the username. Use your own account, rather than a group or bot.
-            </p>
-            {errors.telegram_url && <p id="telegram-error" role="alert" className="text-sm text-red-700">{errors.telegram_url.message}</p>}
+            <p id="telegram-help" className="text-xs text-stone-500">{t("Add your personal account link, without an @ before the username. Use your own account, rather than a group or bot.")}</p>
+            {errors.telegram_url && <p id="telegram-error" role="alert" className="text-sm text-red-700">{t(errors.telegram_url.message ?? "")}</p>}
           </div>
-          <p className="text-xs text-stone-500">Adding a link does not send a message. Leave all fields blank to use only the website contact form.</p>
+          <p className="text-xs text-stone-500">{t("Adding a link does not send a message. Leave all fields blank to use only the website contact form.")}</p>
         </div>
       )}
 
@@ -800,7 +756,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
                 <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-stone-200 text-xs font-semibold text-stone-600">
                   {i + 1}
                 </span>
-                {rule}
+                {t(rule, { appName: APP_NAME })}
               </li>
             ))}
           </ul>
@@ -826,21 +782,19 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
                   }
                   className="mt-0.5 shrink-0"
                 />
-                <span className="text-sm font-medium text-stone-800">
-                  I have read and agree to all of the platform rules above.
-                </span>
+                <span className="text-sm font-medium text-stone-800">{t("I have read and agree to all of the platform rules above.")}</span>
               </label>
             )}
           />
           {errors.platform_agreement && (
-            <p className="text-xs text-red-500">{errors.platform_agreement.message}</p>
+            <p className="text-xs text-red-500">{t(errors.platform_agreement.message ?? "")}</p>
           )}
         </div>
       )}
 
       {saveError && (
         <p ref={errorRef} tabIndex={-1} role="alert" className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-          {saveError} <Link href="/facilitator" className="font-medium underline">Open dashboard</Link>
+          {t(saveError)} <Link href="/facilitator" className="font-medium underline">{t("Open dashboard")}</Link>
         </p>
       )}
 
@@ -857,9 +811,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
             }}
             disabled={uploading || isSubmitting}
             className="min-h-11 w-full"
-          >
-            Finish editing
-          </Button>
+          >{t("Finish editing")}</Button>
         )}
         {step > 1 && (
           <Button
@@ -868,9 +820,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
             onClick={() => goToStep(step - 1)}
             disabled={uploading || isSubmitting}
             className="min-h-11 text-stone-500"
-          >
-            Back
-          </Button>
+          >{t("Back")}</Button>
         )}
 
         <div className="flex-1" />
@@ -887,9 +837,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
             }}
             disabled={uploading || isSubmitting}
             className="min-h-11 bg-emerald-700 hover:bg-emerald-800"
-          >
-            Continue
-          </Button>
+          >{t("Continue")}</Button>
         ) : (
           <Button
             key="submit"
@@ -897,7 +845,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
             disabled={isSubmitting || uploading}
             className="min-h-11 bg-emerald-700 hover:bg-emerald-800"
           >
-            {isSubmitting ? 'Submitting…' : existingProfile ? 'Submit changes for review' : 'Submit application'}
+            {t(isSubmitting ? 'Submitting…' : existingProfile ? 'Submit changes for review' : 'Submit application')}
           </Button>
         )}
       </div>

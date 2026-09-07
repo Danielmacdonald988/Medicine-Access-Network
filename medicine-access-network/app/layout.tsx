@@ -7,6 +7,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { SkipLink } from "@/components/ui/skip-link";
 import { getCurrentUser } from "@/lib/auth";
 import { APP_NAME, APP_TAGLINE, SITE_URL } from "@/lib/constants";
+import { getTranslation } from "@/lib/i18n/server";
+import { TranslationProvider } from "@/components/i18n/TranslationProvider";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -43,14 +45,15 @@ export default async function RootLayout({
 }) {
   // Fetched at layout level so the Navbar knows whether a user is signed in.
   // This is a Server Component — no client-side fetch needed.
-  const user = await getCurrentUser();
+  const [user, { locale, preference, dictionary }] = await Promise.all([getCurrentUser(), getTranslation()]);
 
   return (
     <html
-      lang="en"
+      lang={locale}
       className={`${dmSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
+        <TranslationProvider locale={locale} preference={preference} dictionary={dictionary}>
         <SkipLink />
         <Navbar user={user} />
         <main id="main-content" tabIndex={-1} className="flex-1">
@@ -58,6 +61,7 @@ export default async function RootLayout({
         </main>
         <Footer />
         <Toaster position="top-right" />
+        </TranslationProvider>
       </body>
     </html>
   );

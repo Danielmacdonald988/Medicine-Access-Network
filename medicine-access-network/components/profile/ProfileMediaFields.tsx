@@ -1,5 +1,7 @@
 'use client'
 
+import type { TranslationParams } from '@/lib/i18n/config'
+import { useTranslation } from '@/components/i18n/TranslationProvider'
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import Image from 'next/image'
 import { ImagePlus, LoaderCircle } from 'lucide-react'
@@ -23,6 +25,8 @@ type ProfileMediaFieldsProps = {
 
 class UploadError extends Error {}
 
+type StatusMessage = string | { key: string; params: TranslationParams }
+
 export function ProfileMediaFields({
   value,
   onChange,
@@ -30,9 +34,12 @@ export function ProfileMediaFields({
   error,
   disabled = false,
 }: ProfileMediaFieldsProps) {
+  const { t } = useTranslation()
   const [busy, setBusy] = useState(false)
-  const [uploadError, setUploadError] = useState('')
-  const [status, setStatus] = useState('')
+  const [uploadError, setUploadError] = useState<StatusMessage>('')
+  const [status, setStatus] = useState<StatusMessage>('')
+  const translateMessage = (message: StatusMessage) =>
+    typeof message === 'string' ? t(message) : t(message.key, message.params)
   const fileInput = useRef<HTMLInputElement>(null)
   const activeUpload = useRef<AbortController | null>(null)
   const mounted = useRef(true)
@@ -52,7 +59,7 @@ export function ProfileMediaFields({
     setUploadError('')
     setStatus('')
     if (files.length + value.length > MAX_PROFILE_IMAGES) {
-      setUploadError(`You can add up to ${MAX_PROFILE_IMAGES} photos. Remove a photo before adding more.`)
+      setUploadError({ key: 'You can add up to {count} photos. Remove a photo before adding more.', params: { count: MAX_PROFILE_IMAGES } })
       return
     }
     if (files.some((file) => !(PROFILE_IMAGE_TYPES as readonly string[]).includes(file.type))) {
@@ -70,7 +77,7 @@ export function ProfileMediaFields({
     try {
       for (let index = 0; index < files.length; index += 1) {
         if (!mounted.current) return
-        setStatus(`Uploading photo ${index + 1} of ${files.length}…`)
+        setStatus({ key: 'Uploading photo {current} of {total}…', params: { current: index + 1, total: files.length } })
         const controller = new AbortController()
         activeUpload.current = controller
         const timeout = setTimeout(() => controller.abort(), 30_000)
@@ -110,7 +117,7 @@ export function ProfileMediaFields({
           activeUpload.current = null
         }
       }
-      setStatus(`${files.length === 1 ? 'Photo' : 'Photos'} uploaded. Submit your profile to save these changes.`)
+      setStatus('Photos uploaded. Submit your profile to save these changes.')
     } catch (cause) {
       if (!mounted.current) return
       setStatus('')
@@ -129,17 +136,11 @@ export function ProfileMediaFields({
   return (
     <div className="space-y-5" aria-busy={busy}>
       <div className="space-y-2">
-        <Label htmlFor="profile-photos">Profile photos (at least one required)</Label>
-        <p id="profile-photo-help" className="text-sm leading-relaxed text-stone-600">
-          Add one to five photos. Your first photo appears in search results. Use a clear
-          photo of yourself, then add other images that help people understand your practice.
-          Only upload images you have permission to share publicly.
-        </p>
-        <p className="text-xs text-stone-500">Portrait selfies and landscape photos keep their full frame. No need to crop them into a square.</p>
-        <p className="text-xs text-stone-500">JPG, PNG, or WebP. Up to 4 MB per photo. Still images under 20 megapixels.</p>
-        <p className="text-xs text-stone-500">
-          New uploads are visible to you and reviewers. Photos on your approved public profile are displayed publicly.
-        </p>
+        <Label htmlFor="profile-photos">{t("Profile photos (at least one required)")}</Label>
+        <p id="profile-photo-help" className="text-sm leading-relaxed text-stone-600">{t("Add one to five photos. Your first photo appears in search results. Use a clear photo of yourself, then add other images that help people understand your practice. Only upload images you have permission to share publicly.")}</p>
+        <p className="text-xs text-stone-500">{t("Portrait selfies and landscape photos keep their full frame. No need to crop them into a square.")}</p>
+        <p className="text-xs text-stone-500">{t("JPG, PNG, or WebP. Up to 4 MB per photo. Still images under 20 megapixels.")}</p>
+        <p className="text-xs text-stone-500">{t("New uploads are visible to you and reviewers. Photos on your approved public profile are displayed publicly.")}</p>
         <input
           ref={fileInput}
           id="profile-photos"
@@ -164,7 +165,7 @@ export function ProfileMediaFields({
                   {imageUrl && (
                     <Image
                       src={imageUrl}
-                      alt={`Your uploaded profile photo ${index + 1}`}
+                      alt={t('Your uploaded profile photo {number}', { number: index + 1 })}
                       fill
                       unoptimized
                       sizes="(max-width: 640px) 90vw, 300px"
@@ -174,9 +175,7 @@ export function ProfileMediaFields({
                 </div>
                 <div className="flex flex-wrap items-center gap-2 p-3">
                   {index === 0 && (
-                    <span className="rounded-md bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-800">
-                      Primary photo
-                    </span>
+                    <span className="rounded-md bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-800">{t("Primary photo")}</span>
                   )}
                   {index > 0 && (
                     <Button
@@ -184,14 +183,12 @@ export function ProfileMediaFields({
                       size="sm"
                       variant="outline"
                       disabled={disabled || busy}
-                      aria-label={`Make photo ${index + 1} primary`}
+                      aria-label={t('Make photo {number} primary', { number: index + 1 })}
                       onClick={() => {
                         onChange([path, ...value.filter((item) => item !== path)])
-                        setStatus(`Photo ${index + 1} is now your primary photo. Submit your profile to save.`)
+                        setStatus({ key: 'Photo {number} is now your primary photo. Submit your profile to save.', params: { number: index + 1 } })
                       }}
-                    >
-                      Make primary
-                    </Button>
+                    >{t("Make primary")}</Button>
                   )}
                   <Button
                     type="button"
@@ -199,7 +196,7 @@ export function ProfileMediaFields({
                     variant="ghost"
                     className="text-stone-600"
                     disabled={disabled || busy}
-                    aria-label={`Remove photo ${index + 1}`}
+                    aria-label={t('Remove photo {number}', { number: index + 1 })}
                       onClick={() => {
                         onChange(value.filter((item) => item !== path))
                         setUploadError('')
@@ -213,9 +210,7 @@ export function ProfileMediaFields({
                           body: JSON.stringify({ path }),
                         }).catch(() => undefined)
                       }}
-                  >
-                    Remove
-                  </Button>
+                  >{t("Remove")}</Button>
                 </div>
               </li>
             )
@@ -225,18 +220,16 @@ export function ProfileMediaFields({
 
       {value.length === 0 && (
         <div className="flex items-center gap-3 rounded-xl border border-dashed border-stone-300 p-5 text-sm text-stone-500">
-          <ImagePlus className="size-6 shrink-0" aria-hidden="true" />
-          No photos added yet.
-        </div>
+          <ImagePlus className="size-6 shrink-0" aria-hidden="true" />{t("No photos added yet.")}</div>
       )}
-      <p className="text-xs text-stone-500">{value.length} of {MAX_PROFILE_IMAGES} photos added</p>
+      <p className="text-xs text-stone-500">{t('{current} of {total} photos added', { current: value.length, total: MAX_PROFILE_IMAGES })}</p>
       <div role="status" className="flex items-center gap-2 text-sm text-emerald-800">
         {busy && <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />}
-        {status}
+        {translateMessage(status)}
       </div>
       {(uploadError || error) && (
         <p id="profile-photo-error" role="alert" className="text-sm text-red-700">
-          {uploadError || error}
+          {translateMessage(uploadError || error || "")}
         </p>
       )}
     </div>

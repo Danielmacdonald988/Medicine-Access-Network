@@ -1,3 +1,4 @@
+import { getTranslation } from '@/lib/i18n/server'
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import Link from 'next/link'
@@ -32,19 +33,20 @@ interface PageProps {
   searchParams: Promise<DirectorySearchParams>
 }
 
-function SupportResources() {
+async function SupportResources() {
+  const { t } = await getTranslation()
   return (
     <div className="mt-5 rounded-2xl border border-stone-200 bg-[#e9eee5] p-6 sm:p-8">
-      <p className="font-medium text-stone-900">Still finding your starting point?</p>
-      <p className="mt-2 text-sm leading-relaxed text-stone-600">Explore the different kinds of support and questions to ask before choosing a guide.</p>
-      <Link href="/resources" className="mt-4 inline-flex min-h-9 items-center gap-2 text-sm font-medium text-emerald-800 underline underline-offset-4">
-        Explore the resource library <ArrowRight aria-hidden="true" className="size-4" />
+      <p className="font-medium text-stone-900">{t("Still finding your starting point?")}</p>
+      <p className="mt-2 text-sm leading-relaxed text-stone-600">{t("Explore the different kinds of support and questions to ask before choosing a guide.")}</p>
+      <Link href="/resources" className="mt-4 inline-flex min-h-9 items-center gap-2 text-sm font-medium text-emerald-800 underline underline-offset-4">{t("Explore the resource library")}<ArrowRight aria-hidden="true" className="size-4" />
       </Link>
     </div>
   )
 }
 
-function EmptyResults({ filters, page }: { filters: FacilitatorFilters; page: number }) {
+async function EmptyResults({ filters, page }: { filters: FacilitatorFilters; page: number }) {
+  const { t } = await getTranslation()
   const active = hasActiveFilters(filters)
   const firstPageHref = directoryHref(filterSearchParams(filters))
   return (
@@ -54,14 +56,14 @@ function EmptyResults({ filters, page }: { filters: FacilitatorFilters; page: nu
           {active ? <SlidersHorizontal aria-hidden="true" className="size-5 text-stone-500" /> : <Users aria-hidden="true" className="size-5 text-stone-500" />}
         </div>
         <h2 className="text-2xl font-medium tracking-tight text-stone-900">
-          {page > 1 ? 'You’ve reached the end of these results' : active ? 'No guides match your search yet' : 'Guides coming soon'}
+          {t(page > 1 ? 'You’ve reached the end of these results' : active ? 'No guides match your search yet' : 'Guides coming soon')}
         </h2>
         <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-stone-600">
-          {page > 1 ? 'Profiles can change. Return to the first page to see the current results.' : active ? 'Try removing a filter, choosing a broader location, or exploring online sessions.' : 'There are no approved profiles to browse right now. New guides appear after their applications are reviewed.'}
+          {t(page > 1 ? 'Profiles can change. Return to the first page to see the current results.' : active ? 'Try removing a filter, choosing a broader location, or exploring online sessions.' : 'There are no approved profiles to browse right now. New guides appear after their applications are reviewed.')}
         </p>
         {(active || page > 1) && (
           <Button asChild variant="outline" className="mt-5">
-            <Link href={page > 1 ? firstPageHref : '/facilitators'}>{page > 1 ? 'Back to first page' : 'Clear search and filters'}</Link>
+            <Link href={page > 1 ? firstPageHref : '/facilitators'}>{t(page > 1 ? 'Back to first page' : 'Clear search and filters')}</Link>
           </Button>
         )}
       </div>
@@ -70,34 +72,36 @@ function EmptyResults({ filters, page }: { filters: FacilitatorFilters; page: nu
   )
 }
 
-function ActiveFilters({ filters }: { filters: FacilitatorFilters }) {
+async function ActiveFilters({ filters }: { filters: FacilitatorFilters }) {
+  const { t } = await getTranslation()
   const entries: { key: string; value: string; label: string }[] = [
-    ...(filters.q ? [{ key: 'q', value: filters.q, label: `Search: ${filters.q}` }] : []),
+    ...(filters.q ? [{ key: 'q', value: filters.q, label: t('Search: {query}', { query: filters.q }) }] : []),
     ...(filters.location ? [{ key: 'location', value: filters.location, label: filters.location }] : []),
-    ...(filters.remote ? [{ key: 'remote', value: 'true', label: 'Online available' }] : []),
-    ...(filters.donation ? [{ key: 'donation', value: 'true', label: 'Donation-based' }] : []),
-    ...(filters.minExperience ? [{ key: 'min_exp', value: String(filters.minExperience), label: `${filters.minExperience}+ years of self-reported practice` }] : []),
-    ...filters.modalities.map((value) => ({ key: 'modality', value, label: value })),
+    ...(filters.remote ? [{ key: 'remote', value: 'true', label: t('Online available') }] : []),
+    ...(filters.donation ? [{ key: 'donation', value: 'true', label: t('Donation-based') }] : []),
+    ...(filters.minExperience ? [{ key: 'min_exp', value: String(filters.minExperience), label: t('{years}+ years of self-reported practice', { years: filters.minExperience }) }] : []),
+    ...filters.modalities.map((value) => ({ key: 'modality', value, label: t(value) })),
   ]
   if (!entries.length) return null
 
   return (
-    <div className="mb-5 flex flex-wrap items-center gap-2" aria-label="Active search and filters">
+    <div className="mb-5 flex flex-wrap items-center gap-2" aria-label={t("Active search and filters")}>
       {entries.map(({ key, value, label }) => {
         const params = filterSearchParams(filters)
         params.delete(key, value)
         return (
-          <Link key={`${key}-${value}`} href={directoryHref(params)} scroll={false} aria-label={`Remove ${label}`} className="inline-flex min-h-9 max-w-full items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-900 hover:bg-emerald-100">
+          <Link key={`${key}-${value}`} href={directoryHref(params)} scroll={false} aria-label={t('Remove {label}', { label })} className="inline-flex min-h-9 max-w-full items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-900 hover:bg-emerald-100">
             <span className="break-words">{label}</span><X aria-hidden="true" className="size-3 shrink-0" />
           </Link>
         )
       })}
-      <Link href="/facilitators" scroll={false} className="px-2 py-2 text-xs font-medium text-stone-600 underline underline-offset-4">Clear all</Link>
+      <Link href="/facilitators" scroll={false} className="px-2 py-2 text-xs font-medium text-stone-600 underline underline-offset-4">{t("Clear all")}</Link>
     </div>
   )
 }
 
 async function FacilitatorGrid({ filters, page }: { filters: FacilitatorFilters; page: number }) {
+  const { t } = await getTranslation()
   const offset = (page - 1) * DIRECTORY_PAGE_SIZE
   let facilitators: FacilitatorSearchResult[] = []
   let total = 0
@@ -114,8 +118,8 @@ async function FacilitatorGrid({ filters, page }: { filters: FacilitatorFilters;
       <>
         <div role="alert" className="rounded-2xl border border-stone-200 bg-white p-8">
           <Search aria-hidden="true" className="mb-4 size-6 text-stone-500" />
-          <h2 className="text-2xl font-medium tracking-tight text-stone-900">The directory is temporarily unavailable</h2>
-          <p className="mt-2 mb-5 text-sm leading-relaxed text-stone-600">We couldn’t load guide profiles. Your search is saved in the address bar; try again or browse the resource library while you wait.</p>
+          <h2 className="text-2xl font-medium tracking-tight text-stone-900">{t("The directory is temporarily unavailable")}</h2>
+          <p className="mt-2 mb-5 text-sm leading-relaxed text-stone-600">{t("We couldn’t load guide profiles. Your search is saved in the address bar; try again or browse the resource library while you wait.")}</p>
           <SearchRecovery />
         </div>
         <SupportResources />
@@ -135,27 +139,28 @@ async function FacilitatorGrid({ filters, page }: { filters: FacilitatorFilters;
   return (
     <>
       <p role="status" className="mb-4 text-sm text-stone-600">
-        {total} {total === 1 ? 'guide' : 'guides'} found
-        {pageCount > 1 && ` · Showing ${offset + 1}–${offset + facilitators.length}`}
+        {t(total === 1 ? '{count} guide found' : '{count} guides found', { count: total })}
+        {pageCount > 1 && ` · ${t('Showing {start}–{end}', { start: offset + 1, end: offset + facilitators.length })}`}
       </p>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         {facilitators.map((facilitator) => <FacilitatorCard key={facilitator.id} facilitator={facilitator} />)}
       </div>
       {pageCount > 1 && (
-        <nav aria-label="Guide results pages" className="mt-8 flex items-center justify-between gap-3">
-          {page > 1 ? <Button asChild variant="outline"><Link href={pageHref(page - 1)}><ArrowLeft aria-hidden="true" className="size-4" /> Previous</Link></Button> : <span />}
-          <p className="text-sm text-stone-600">Page {page} of {pageCount}</p>
-          {page < pageCount ? <Button asChild variant="outline"><Link href={pageHref(page + 1)}>Next <ArrowRight aria-hidden="true" className="size-4" /></Link></Button> : <span />}
+        <nav aria-label={t("Guide results pages")} className="mt-8 flex items-center justify-between gap-3">
+          {page > 1 ? <Button asChild variant="outline"><Link href={pageHref(page - 1)}><ArrowLeft aria-hidden="true" className="size-4" />{' '}{t("Previous")}</Link></Button> : <span />}
+          <p className="text-sm text-stone-600">{t('Page {page} of {pages}', { page, pages: pageCount })}</p>
+          {page < pageCount ? <Button asChild variant="outline"><Link href={pageHref(page + 1)}>{t("Next")}{' '}<ArrowRight aria-hidden="true" className="size-4" /></Link></Button> : <span />}
         </nav>
       )}
     </>
   )
 }
 
-function GridSkeleton() {
+async function GridSkeleton() {
+  const { t } = await getTranslation()
   return (
-    <div role="status" aria-label="Loading guides">
-      <span className="sr-only">Loading guides…</span>
+    <div role="status" aria-label={t("Loading guides")}>
+      <span className="sr-only">{t("Loading guides…")}</span>
       <div aria-hidden="true" className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         {Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-[34rem] animate-pulse rounded-2xl bg-stone-100 motion-reduce:animate-none" />)}
       </div>
@@ -164,6 +169,7 @@ function GridSkeleton() {
 }
 
 export default async function FacilitatorsPage({ searchParams }: PageProps) {
+  const { t } = await getTranslation()
   const params = toSearchParams(await searchParams)
   const filters = parseFacilitatorFilters(params)
   const page = boundedInteger(params.get('page'), 1, 1, 10000)
@@ -171,24 +177,24 @@ export default async function FacilitatorsPage({ searchParams }: PageProps) {
   return (
     <div className="network-shell py-6 lg:py-14">
       <div className="mb-5 max-w-3xl lg:mb-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">Find your support</p>
-        <h1 className="mt-3 text-3xl font-medium leading-[1.08] tracking-[-0.045em] text-stone-900 sm:text-4xl lg:mt-5 lg:text-6xl">A guide for <em className="font-medium text-[#657f48]">your next step.</em></h1>
-        <p className="mt-5 hidden max-w-2xl leading-7 text-stone-600 lg:block">Explore preparation, integration, breathwork, and somatic support. Get to know each guide’s approach, then start a conversation when you feel ready.</p>
-        <p className="mt-3 text-sm text-emerald-800 lg:mt-4">No explorer account needed. Browse at your own pace.</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">{t("Find your support")}</p>
+        <h1 className="mt-3 text-3xl font-medium leading-[1.08] tracking-[-0.045em] text-stone-900 sm:text-4xl lg:mt-5 lg:text-6xl">{t('A guide for your next step.')}</h1>
+        <p className="mt-5 hidden max-w-2xl leading-7 text-stone-600 lg:block">{t("Explore preparation, integration, breathwork, and somatic support. Get to know each guide’s approach, then start a conversation when you feel ready.")}</p>
+        <p className="mt-3 text-sm text-emerald-800 lg:mt-4">{t("No explorer account needed. Browse at your own pace.")}</p>
       </div>
       <div className="grid gap-5 lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start lg:gap-8">
         <Suspense><DirectorySearchControls /></Suspense>
-        <section aria-label="Guide search results" className="min-w-0 flex-1">
-          <h2 className="mb-3 text-2xl font-medium tracking-tight text-stone-900">Meet the guides</h2>
+        <section aria-label={t("Guide search results")} className="min-w-0 flex-1">
+          <h2 className="mb-3 text-2xl font-medium tracking-tight text-stone-900">{t("Meet the guides")}</h2>
           <ActiveFilters filters={filters} />
           <Suspense key={`${filterSearchParams(filters)}:${page}`} fallback={<GridSkeleton />}>
             <FacilitatorGrid filters={filters} page={page} />
           </Suspense>
           <div className="mt-6 flex flex-col gap-2 border-t border-stone-200 pt-4">
-            <Link href="/about#profile-review" className="inline-flex min-h-11 items-center text-xs font-medium text-emerald-800 underline underline-offset-4">What does profile review mean?</Link>
+            <Link href="/about#profile-review" className="inline-flex min-h-11 items-center text-xs font-medium text-emerald-800 underline underline-offset-4">{t("What does profile review mean?")}</Link>
             <details className="max-w-md text-sm text-stone-600">
-              <summary className="cursor-pointer py-3 font-medium text-emerald-800 underline underline-offset-4">How profiles are ordered</summary>
-              <p className="leading-relaxed">Profiles are ordered by when they were created, newest first, or alphabetically when you choose Name A–Z. Placement is not a quality rating or a recommendation. Guides do not pay for placement.</p>
+              <summary className="cursor-pointer py-3 font-medium text-emerald-800 underline underline-offset-4">{t("How profiles are ordered")}</summary>
+              <p className="leading-relaxed">{t("Profiles are ordered by when they were created, newest first, or alphabetically when you choose Name A–Z. Placement is not a quality rating or a recommendation. Guides do not pay for placement.")}</p>
             </details>
           </div>
         </section>

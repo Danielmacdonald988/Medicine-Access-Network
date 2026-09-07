@@ -1,3 +1,4 @@
+import { getTranslation } from '@/lib/i18n/server'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -83,12 +84,13 @@ export async function generateMetadata({
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function StarRow({ rating, max = 5 }: { rating: number; max?: number }) {
+async function StarRow({ rating, max = 5 }: { rating: number; max?: number }) {
+  const { t } = await getTranslation()
   return (
     <div
       className="flex gap-0.5"
       role="img"
-      aria-label={`${rating} out of ${max} stars`}
+      aria-label={t('{rating} out of {max} stars', { rating, max })}
     >
       {Array.from({ length: max }).map((_, i) => (
         <Star
@@ -125,6 +127,7 @@ const LEGAL_NOTES = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function FacilitatorProfilePage({ params }: PageProps) {
+  const { t, locale } = await getTranslation()
   const { id } = await params
 
   const supabase = await createServerSupabaseClient()
@@ -187,11 +190,11 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
   const rateDisplay = facilitator.donation_based
     ? typeof facilitator.minimum_donation === 'number'
-      ? `Donation-based — suggested from $${facilitator.minimum_donation}`
-      : 'Donation-based / sliding scale'
+      ? t('Suggested donation from ${amount} USD', { amount: facilitator.minimum_donation })
+      : t('Donation-based / sliding scale')
     : typeof facilitator.hourly_rate === 'number'
-      ? `$${facilitator.hourly_rate} per session`
-      : 'Rate discussed on request'
+      ? t('${amount} USD per session', { amount: facilitator.hourly_rate })
+      : t('Rate discussed on request')
 
   const certifications: string[] = facilitator.certifications ?? []
   const photoUrls = (facilitator.image_paths ?? [])
@@ -206,9 +209,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
       <Link
         href="/facilitators"
         className="mb-6 inline-flex min-h-11 items-center text-sm font-medium text-emerald-700 underline-offset-4 hover:underline"
-      >
-        ← Back to all guides
-      </Link>
+      >{t("← Back to all guides")}</Link>
       <div className="rounded-2xl border border-stone-200 bg-white p-5 sm:p-8 lg:p-10">
         <div className="grid items-start gap-6 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-8">
           <Avatar className="h-56 w-44 shrink-0 overflow-hidden rounded-xl bg-[#eef0e8] p-1.5 after:rounded-[inherit] sm:h-64 sm:w-48">
@@ -229,19 +230,16 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               <h1 id="profile-name" className="break-words text-4xl font-medium leading-tight tracking-[-0.04em] text-stone-900 sm:text-5xl">
                 {facilitator.display_name}
               </h1>
-              <p className="mt-4 max-w-prose whitespace-pre-line break-words leading-7 text-stone-600">
+              <p dir="auto" className="mt-4 max-w-prose whitespace-pre-line break-words leading-7 text-stone-600">
                 {facilitator.bio}
               </p>
+              {locale !== 'en' && <p className="mt-3 text-xs text-stone-500">{t('Profile descriptions and reviews are shown in their original language.')}</p>}
             </section>
 
             <div className="mt-6 rounded-xl border border-stone-200 bg-[#f0f1e9] p-5">
-              <p className="text-xs font-medium uppercase tracking-wide text-stone-500">
-                Listed fee · USD
-              </p>
+              <p className="text-xs font-medium uppercase tracking-wide text-stone-500">{t("Listed fee · USD")}</p>
               <p className="mt-1 font-semibold text-stone-900">{rateDisplay}</p>
-              <p className="mt-1 text-xs leading-relaxed text-stone-600">
-                Confirm session length and total cost directly.
-              </p>
+              <p className="mt-1 text-xs leading-relaxed text-stone-600">{t("Confirm session length and total cost directly.")}</p>
               {hasDirectContact && <div className="mt-4"><DirectContactLinks profile={facilitator} /></div>}
               <Button
                 asChild
@@ -250,14 +248,12 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               >
                 <a href="#contact">
                   {isOwnProfile
-                    ? 'View your profile options'
-                    : hasDirectContact ? 'Send a website inquiry'
-                    : `Contact ${facilitator.display_name}`}
+                    ? t('View your profile options')
+                    : hasDirectContact ? t('Send a website inquiry')
+                    : t('Contact {name}', { name: facilitator.display_name })}
                 </a>
               </Button>
-              <p className="mt-2 text-center text-xs text-stone-600">
-                No account needed. No payment to reach out.
-              </p>
+              <p className="mt-2 text-center text-xs text-stone-600">{t("No account needed. No payment to reach out.")}</p>
               <div className="mt-3 flex justify-center">
                 <SaveGuideButton
                   profileId={facilitator.id}
@@ -271,9 +267,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 href="#profile-review"
                 className="inline-flex min-h-9 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 underline-offset-4 hover:underline"
               >
-                <ShieldCheck aria-hidden="true" className="size-3" />
-                Profile reviewed
-              </a>
+                <ShieldCheck aria-hidden="true" className="size-3" />{t("Profile reviewed")}</a>
               <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-stone-500">
                 {facilitator.location && (
                   <span className="flex items-center gap-1.5">
@@ -283,18 +277,13 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 )}
                 {facilitator.remote_available && (
                   <span className="flex items-center gap-1.5 text-emerald-700">
-                    <Video className="size-3.5" />
-                    Remote available
-                  </span>
+                    <Video className="size-3.5" />{t("Remote available")}</span>
                 )}
                 {typeof facilitator.years_experience === 'number' &&
                   facilitator.years_experience > 0 && (
                     <span className="flex items-center gap-1.5">
                       <Clock aria-hidden="true" className="size-3.5" />
-                      {facilitator.years_experience} yr
-                      {facilitator.years_experience === 1 ? '' : 's'} practice
-                      (self-reported)
-                    </span>
+                      {t('{years} years of practice (self-reported)', { years: facilitator.years_experience })}</span>
                   )}
               </div>
 
@@ -308,12 +297,11 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                     href="#reviews"
                     className="text-sm text-stone-600 underline underline-offset-4"
                   >
-                    {reviews.length} recent{' '}
-                    {reviews.length === 1 ? 'review' : 'reviews'}
+                    {t(reviews.length === 1 ? '{count} recent review' : '{count} recent reviews', { count: reviews.length })}
                   </a>
                 </div>
               ) : (
-                <p className="mt-2 text-sm text-stone-500">No reviews yet</p>
+                <p className="mt-2 text-sm text-stone-500">{t("No reviews yet")}</p>
               )}
             </div>
           </div>
@@ -321,7 +309,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
       </div>
 
       <nav
-        aria-label="Profile sections"
+        aria-label={t("Profile sections")}
         className="my-8 flex flex-wrap gap-x-6 gap-y-1 border-b border-stone-200 pb-3"
       >
         {[
@@ -342,7 +330,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             href={href}
             className="inline-flex min-h-11 items-center text-sm font-medium text-stone-700 underline-offset-4 hover:text-emerald-800 hover:underline"
           >
-            {label}
+            {t(label)}
           </a>
         ))}
       </nav>
@@ -358,9 +346,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             <h2
               id="approach-heading"
               className="mb-3 text-2xl font-medium tracking-tight text-stone-900"
-            >
-              Areas of practice
-            </h2>
+            >{t("Areas of practice")}</h2>
             <div className="flex flex-wrap gap-2">
               {facilitator.modalities.map((m: string) => (
                 <Badge
@@ -368,7 +354,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                   variant="secondary"
                   className="rounded-full bg-stone-100 px-3 py-1.5 text-sm font-normal text-stone-700 hover:bg-stone-100"
                 >
-                  {m}
+                  {t(m)}
                 </Badge>
               ))}
             </div>
@@ -376,14 +362,14 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
           {photoUrls.length > 0 && (
             <section id="photos" aria-labelledby="photos-heading" className="scroll-mt-24">
-              <h2 id="photos-heading" className="text-2xl font-medium tracking-tight text-stone-900">Photos</h2>
-              <p className="mt-2 text-sm text-stone-600">Provided by {facilitator.display_name}. Select a photo to view it in a new tab.</p>
+              <h2 id="photos-heading" className="text-2xl font-medium tracking-tight text-stone-900">{t("Photos")}</h2>
+              <p className="mt-2 text-sm text-stone-600">{t('Provided by {name}. Select a photo to view it in a new tab.', { name: facilitator.display_name })}</p>
               <div className={`mt-4 grid gap-3 ${photoUrls.length > 1 ? 'sm:grid-cols-2' : ''}`}>
                 {photoUrls.map((url: string, index: number) => (
                   <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-xl border border-stone-200 bg-stone-50 p-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
                     <Image
                       src={url}
-                      alt={`${facilitator.display_name} — ${index === 0 ? 'profile photo' : `additional photo ${index}`}`}
+                      alt={t(index === 0 ? '{name} — profile photo' : '{name} — additional photo {number}', { name: facilitator.display_name, number: index })}
                       width={960}
                       height={720}
                       unoptimized
@@ -403,21 +389,12 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             <h2
               id="profile-review-heading"
               className="font-semibold text-emerald-900"
-            >
-              What “profile reviewed” means
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-emerald-900">
-              The platform team has approved this profile for the directory.
-              Approval does not verify a clinical license or guarantee safety,
-              suitability, or an outcome. Training and practice details below
-              are provided by the guide.
-            </p>
+            >{t("What “profile reviewed” means")}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-emerald-900">{t("The platform team has approved this profile for the directory. Approval does not verify a clinical license or guarantee safety, suitability, or an outcome. Training and practice details below are provided by the guide.")}</p>
             <Link
               href="/resources/questions-to-ask"
               className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-emerald-800 underline underline-offset-4"
-            >
-              Questions to ask before choosing a guide
-            </Link>
+            >{t("Questions to ask before choosing a guide")}</Link>
           </section>
 
           {/* Training, lineage & certifications */}
@@ -433,17 +410,12 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               <GraduationCap
                 aria-hidden="true"
                 className="size-5 text-stone-500"
-              />
-              Training &amp; lineage
-            </h2>
+              />{t("Training & lineage")}</h2>
             {facilitator.lineage_or_training || certifications.length > 0 ? (
               <div>
-                <p className="mb-3 text-xs text-stone-500">
-                  Reported by the guide. Ask about the issuer, scope, and
-                  current status of any credential relevant to your needs.
-                </p>
+                <p className="mb-3 text-xs text-stone-500">{t("Reported by the guide. Ask about the issuer, scope, and current status of any credential relevant to your needs.")}</p>
                 {facilitator.lineage_or_training && (
-                  <p className="whitespace-pre-line leading-relaxed text-stone-600">
+                  <p dir="auto" className="whitespace-pre-line leading-relaxed text-stone-600">
                     {facilitator.lineage_or_training}
                   </p>
                 )}
@@ -462,11 +434,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 )}
               </div>
             ) : (
-              <p className="text-sm leading-relaxed text-stone-600">
-                Training details have not been provided. Ask about relevant
-                training, supervision, and the scope of their work before
-                deciding.
-              </p>
+              <p className="text-sm leading-relaxed text-stone-600">{t("Training details have not been provided. Ask about relevant training, supervision, and the scope of their work before deciding.")}</p>
             )}
           </section>
 
@@ -479,65 +447,40 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               id="safety-heading"
               className="mb-3 flex items-center gap-2 text-2xl font-medium tracking-tight text-stone-900"
             >
-              <ShieldCheck className="size-5 text-amber-500" />
-              Safety practices &amp; screening
-            </h2>
+              <ShieldCheck className="size-5 text-amber-500" />{t("Safety practices & screening")}</h2>
             {facilitator.safety_practices ? (
               <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
-                <p className="mb-2 text-xs font-medium text-amber-800">
-                  Described by the guide
-                </p>
-                <p className="whitespace-pre-line text-sm leading-relaxed text-amber-900">
+                <p className="mb-2 text-xs font-medium text-amber-800">{t("Described by the guide")}</p>
+                <p dir="auto" className="whitespace-pre-line text-sm leading-relaxed text-amber-900">
                   {facilitator.safety_practices}
                 </p>
               </div>
             ) : (
-              <p className="text-sm leading-relaxed text-stone-600">
-                This profile does not describe screening or safety practices.
-                Ask how consent, boundaries, screening, and referrals are
-                handled.
-              </p>
+              <p className="text-sm leading-relaxed text-stone-600">{t("This profile does not describe screening or safety practices. Ask how consent, boundaries, screening, and referrals are handled.")}</p>
             )}
 
             {/* Contraindication awareness */}
             {facilitator.contraindications_acknowledged && (
               <div>
-                <h3 className="mb-3 font-semibold text-stone-900">
-                  Screening commitment
-                </h3>
+                <h3 className="mb-3 font-semibold text-stone-900">{t("Screening commitment")}</h3>
                 <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
                   <div className="flex items-start gap-3">
                     <ShieldCheck className="mt-0.5 size-5 shrink-0 text-emerald-600" />
                     <div className="text-sm leading-relaxed text-emerald-900">
                       <p className="font-medium">
-                        {facilitator.display_name} has acknowledged a screening
-                        commitment
-                      </p>
-                      <p className="mt-2 text-emerald-800">
-                        During their application, this guide committed to
-                        appropriate screening and declining work where
-                        contraindications are present. This is a statement from
-                        the guide, not an independent assessment of their
-                        screening or clinical qualifications.
-                      </p>
-                      <p className="mt-2 text-emerald-800">
-                        Ask how screening works, what falls outside their scope,
-                        and how referrals are handled. Discuss medical questions
-                        with a licensed healthcare provider.
-                      </p>
+                        {t('{name} has acknowledged a screening commitment', { name: facilitator.display_name })}</p>
+                      <p className="mt-2 text-emerald-800">{t("During their application, this guide committed to appropriate screening and declining work where contraindications are present. This is a statement from the guide, not an independent assessment of their screening or clinical qualifications.")}</p>
+                      <p className="mt-2 text-emerald-800">{t("Ask how screening works, what falls outside their scope, and how referrals are handled. Discuss medical questions with a licensed healthcare provider.")}</p>
                     </div>
                   </div>
                 </div>
               </div>
             )}
-            <p className="text-sm leading-relaxed text-stone-600">
-              Discuss health questions with a licensed healthcare provider.{' '}
+            <p className="text-sm leading-relaxed text-stone-600">{t("Discuss health questions with a licensed healthcare provider.")}{' '}
               <Link
                 href="/resources/contraindications"
                 className="font-medium text-emerald-800 underline underline-offset-4"
-              >
-                Health Questions &amp; Screening
-              </Link>
+              >{t("Health Questions & Screening")}</Link>
             </p>
           </section>
 
@@ -550,26 +493,15 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             <h2
               id="fees-heading"
               className="mb-3 text-2xl font-medium tracking-tight text-stone-900"
-            >
-              Fees &amp; practical details
-            </h2>
+            >{t("Fees & practical details")}</h2>
             <div className="rounded-xl border border-stone-200 bg-stone-50 p-5">
               <p className="font-medium text-stone-900">{rateDisplay}</p>
-              <p className="mt-2 text-sm text-stone-600">
-                Confirm session length, total cost, cancellation terms, and any
-                sliding scale options before agreeing to a session.
-              </p>
-              <p className="mt-1.5 text-xs text-stone-500">
-                All payments are for legal support services only — preparation
-                coaching, integration guidance, breathwork, and consultation. No
-                payment is required to send a conversation request.
-              </p>
+              <p className="mt-2 text-sm text-stone-600">{t("Confirm session length, total cost, cancellation terms, and any sliding scale options before agreeing to a session.")}</p>
+              <p className="mt-1.5 text-xs text-stone-500">{t("All payments are for legal support services only — preparation coaching, integration guidance, breathwork, and consultation. No payment is required to send a conversation request.")}</p>
               <p className="mt-3 text-sm text-stone-600">
-                {facilitator.remote_available
+                {t(facilitator.remote_available
                   ? 'Online support is listed. Confirm formats, time zones, and whether the guide can work with you where you live.'
-                  : 'Online sessions are not listed. Ask which formats and locations are possible.'}{' '}
-                A listed location does not confirm in-person availability.
-              </p>
+                  : 'Online sessions are not listed. Ask which formats and locations are possible.') }{' '}{t("A listed location does not confirm in-person availability.")}</p>
             </div>
           </section>
 
@@ -584,9 +516,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                   <h2
                     id="reviews-heading"
                     className="text-2xl font-medium tracking-tight text-stone-900"
-                  >
-                    Recent reviews
-                  </h2>
+                  >{t("Recent reviews")}</h2>
                   {avgRating !== null && (
                     <div className="flex items-center gap-2">
                       <StarRow rating={Math.round(avgRating)} />
@@ -594,24 +524,18 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                         {avgRating.toFixed(1)}
                       </span>
                       <span className="text-sm text-stone-500">
-                        ({reviews.length}{' '}
-                        {reviews.length === 1 ? 'review' : 'reviews'})
+                        ({t(reviews.length === 1 ? '{count} review' : '{count} reviews', { count: reviews.length })})
                       </span>
                     </div>
                   )}
                 </div>
-                <p className="mb-5 text-xs leading-relaxed text-stone-500">
-                  Ratings summarize the{' '}
-                  {reviews.length === 20 ? '20 most recent' : reviews.length}{' '}
-                  reviews shown below. Reviews reflect individual experiences
-                  and do not establish safety or predict results.
-                </p>
+                <p className="mb-5 text-xs leading-relaxed text-stone-500">{t('Ratings summarize up to 20 recent reviews shown below. Reviews reflect individual experiences and do not establish safety or predict results.')}</p>
 
                 {/* Sub-ratings summary */}
                 {avgSafetyRating !== null && avgIntegrationRating !== null && (
                   <div className="mb-5 flex flex-wrap gap-6 rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm">
                     <div>
-                      <p className="text-xs text-stone-500">Safety</p>
+                      <p className="text-xs text-stone-500">{t("Safety")}</p>
                       <div className="mt-1 flex items-center gap-1.5">
                         <StarRow rating={Math.round(avgSafetyRating)} />
                         <span className="font-medium text-stone-700">
@@ -620,7 +544,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                       </div>
                     </div>
                     <div>
-                      <p className="text-xs text-stone-500">Integration</p>
+                      <p className="text-xs text-stone-500">{t("Integration")}</p>
                       <div className="mt-1 flex items-center gap-1.5">
                         <StarRow rating={Math.round(avgIntegrationRating)} />
                         <span className="font-medium text-stone-700">
@@ -643,7 +567,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                     }) => {
                       const date = new Date(
                         review.created_at,
-                      ).toLocaleDateString('en-US', {
+                      ).toLocaleDateString(locale, {
                         month: 'long',
                         year: 'numeric',
                       })
@@ -653,16 +577,14 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                             <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
                               <div className="flex flex-wrap items-center gap-2">
                                 <StarRow rating={review.rating} />
-                                <span className="text-xs text-stone-500">
-                                  Safety {review.safety_rating}/5 &middot;{' '}
-                                  Integration {review.integration_rating}/5
+                                <span className="text-xs text-stone-500">{t('Safety {safety}/5 · Integration {integration}/5', { safety: review.safety_rating, integration: review.integration_rating })}
                                 </span>
                               </div>
                               <span className="shrink-0 text-xs text-stone-500">
                                 {date}
                               </span>
                             </div>
-                            <p className="text-sm leading-relaxed text-stone-600">
+                            <p dir="auto" className="text-sm leading-relaxed text-stone-600">
                               {review.text}
                             </p>
                           </CardContent>
@@ -677,14 +599,8 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 <h2
                   id="reviews-heading"
                   className="break-words text-2xl font-medium tracking-tight text-stone-900"
-                >
-                  Reviews
-                </h2>
-                <p className="mt-3 text-sm leading-relaxed text-stone-600">
-                  No reviews have been published yet. Take time to ask questions
-                  and check relevant training before deciding whether to work
-                  together.
-                </p>
+                >{t("Reviews")}</h2>
+                <p className="mt-3 text-sm leading-relaxed text-stone-600">{t("No reviews have been published yet. Take time to ask questions and check relevant training before deciding whether to work together.")}</p>
               </div>
             )}
           </section>
@@ -692,7 +608,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
         {/* The form stays in normal flow so it remains reachable at high zoom. */}
         <aside
-          aria-label="Contact and support"
+          aria-label={t("Contact and support")}
           className="min-w-0 lg:col-span-1"
         >
           <div className="space-y-4">
@@ -708,13 +624,13 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                   className="break-words text-2xl font-medium tracking-tight text-stone-900"
                 >
                   {isOwnProfile
-                    ? 'This is your public profile'
-                    : `Contact ${facilitator.display_name}`}
+                    ? t('This is your public profile')
+                    : t('Contact {name}', { name: facilitator.display_name })}
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-stone-600">
                   {isOwnProfile
-                    ? 'Visitors can use your listed contact options or send you a website inquiry.'
-                    : 'Introduce yourself and ask whether this guide’s support could be right for you.'}
+                    ? t('Visitors can use your listed contact options or send you a website inquiry.')
+                    : t('Introduce yourself and ask whether this guide’s support could be right for you.')}
                 </p>
 
                 {hasDirectContact && <div className="mt-5"><DirectContactLinks profile={facilitator} /></div>}
@@ -728,10 +644,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                   {typeof facilitator.years_experience === 'number' &&
                     facilitator.years_experience > 0 && (
                       <p className="mt-0.5 text-xs text-stone-500">
-                        {facilitator.years_experience} year
-                        {facilitator.years_experience === 1 ? '' : 's'} of
-                        practice, self-reported; may include personal practice
-                      </p>
+                        {t('{years} years, self-reported; may include personal practice.', { years: facilitator.years_experience })}</p>
                     )}
                 </div>
 
@@ -740,25 +653,17 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                     asChild
                     className="min-h-11 w-full bg-emerald-700 hover:bg-emerald-800"
                   >
-                    <Link href="/facilitator">Open your dashboard</Link>
+                    <Link href="/facilitator">{t("Open your dashboard")}</Link>
                   </Button>
                 ) : (
                   <>
-                    {hasDirectContact && <h3 className="mb-3 font-semibold text-stone-900">Or send a website inquiry</h3>}
+                    {hasDirectContact && <h3 className="mb-3 font-semibold text-stone-900">{t("Or send a website inquiry")}</h3>}
                     <div className="mb-5 rounded-lg bg-emerald-50 p-4 text-sm text-emerald-900">
-                      <h3 className="font-medium">What happens next</h3>
+                      <h3 className="font-medium">{t("What happens next")}</h3>
                       <ol className="mt-2 list-decimal space-y-2 pl-4 leading-relaxed">
-                        <li>
-                          Your request is shared privately with this guide.
-                        </li>
-                        <li>
-                          They can reply to your email to discuss fit, fees, and
-                          availability.
-                        </li>
-                        <li>
-                          You decide together whether to arrange a session.
-                          Sending a request does not book one.
-                        </li>
+                        <li>{t("Your request is shared privately with this guide.")}</li>
+                        <li>{t("They can reply to your email to discuss fit, fees, and availability.")}</li>
+                        <li>{t("You decide together whether to arrange a session. Sending a request does not book one.")}</li>
                       </ol>
                     </div>
                     <ContactRequestForm
@@ -777,9 +682,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             {/* Legal / safety sidebar */}
             <Card className="rounded-2xl border border-[#e2d4c7] bg-[#f3e6dc]/70 py-1 ring-0">
               <CardContent className="p-5">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-amber-700">
-                  Important to know
-                </p>
+                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-amber-700">{t("Important to know")}</p>
                 <ul className="space-y-3">
                   {LEGAL_NOTES.map(({ icon: Icon, text }) => (
                     <li
@@ -787,14 +690,12 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                       className="flex items-start gap-2.5 text-xs leading-relaxed text-amber-900"
                     >
                       <Icon className="mt-0.5 size-3.5 shrink-0 text-amber-500" />
-                      {text}
+                      {t(text)}
                     </li>
                   ))}
                 </ul>
                 <div className="mt-4 border-t border-amber-200 pt-4 space-y-1">
-                  <p className="text-xs font-medium text-amber-800">
-                    Safety Library
-                  </p>
+                  <p className="text-xs font-medium text-amber-800">{t("Safety Library")}</p>
                   {[
                     {
                       href: '/resources/questions-to-ask',
@@ -815,7 +716,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                       href={href}
                       className="block text-xs text-amber-700 underline-offset-2 hover:underline"
                     >
-                      {label}
+                      {t(label)}
                     </Link>
                   ))}
                 </div>
@@ -825,9 +726,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             <Link
               href={`/contact?profile=${encodeURIComponent(facilitator.id)}`}
               className="inline-flex min-h-11 items-center text-sm font-medium text-stone-600 underline underline-offset-4 hover:text-stone-900"
-            >
-              Report this profile
-            </Link>
+            >{t("Report this profile")}</Link>
           </div>
         </aside>
       </div>

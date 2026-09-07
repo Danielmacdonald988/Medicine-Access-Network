@@ -1,3 +1,5 @@
+import { getTranslation } from '@/lib/i18n/server'
+import type { Locale } from '@/lib/i18n/config'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import {
@@ -20,8 +22,8 @@ import { isAdminNotificationConfigured } from '@/lib/admin-notifications'
 
 export const metadata: Metadata = { title: 'Admin' }
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('en-US', {
+function formatDate(iso: string, locale: Locale) {
+  return new Date(iso).toLocaleDateString(locale, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -29,6 +31,7 @@ function formatDate(iso: string) {
 }
 
 export default async function AdminPage({ searchParams }: { searchParams: Promise<{ notice?: string | string[] }> }) {
+  const { t, locale } = await getTranslation()
   const supabase = await createServerSupabaseClient()
   const params = await searchParams
   const notice = Array.isArray(params.notice) ? params.notice[0] : params.notice
@@ -91,21 +94,20 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     <div className="space-y-8">
       {notice && notices[notice] && (
         <p role={['published', 'hidden', 'notifications_sent', 'notifications_not_ready'].includes(notice) ? 'status' : 'alert'} className="rounded-xl border border-stone-200 bg-white p-4 text-sm text-stone-700">
-          {notices[notice]}
+          {t(notices[notice])}
         </p>
       )}
       <div className="flex flex-col gap-4 rounded-xl border border-stone-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-sm font-semibold text-stone-900">Application email alerts</h2>
+          <h2 className="text-sm font-semibold text-stone-900">{t("Application email alerts")}</h2>
           <p className="mt-1 max-w-2xl text-sm text-stone-600">
-            {notificationsConfigured
+            {t(notificationsConfigured
               ? 'New applications and submitted changes alert the configured admin inbox. If an email is delayed, you can still review the application here.'
-              : 'Admin email alerts are not configured yet. Applications are still saved here for review.'}
-            {' '}Retry attempts a small batch of queued alerts.
-          </p>
+              : 'Admin email alerts are not configured yet. Applications are still saved here for review.')}
+            {' '}{t("Retry attempts a small batch of queued alerts.")}</p>
         </div>
         <form action="/api/admin/notifications" method="POST" className="shrink-0">
-          <Button type="submit" name="action" value="retry" variant="outline" className="min-h-11 w-full sm:w-auto">Retry pending alerts</Button>
+          <Button type="submit" name="action" value="retry" variant="outline" className="min-h-11 w-full sm:w-auto">{t("Retry pending alerts")}</Button>
         </form>
       </div>
       {/* Stats grid */}
@@ -114,14 +116,14 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           {
             label: 'Total accounts',
             value: counts.users.total,
-            sub: `${counts.users.facilitators} guide accounts · visitors need no account`,
+            sub: t('{count} guide accounts · visitors need no account', { count: counts.users.facilitators }),
             icon: Users,
             color: 'text-stone-500',
           },
           {
             label: 'Pending review',
             value: counts.facilitators.pending,
-            sub: 'Applications awaiting decision',
+            sub: t('Applications awaiting decision'),
             icon: Clock,
             color: 'text-amber-600',
             highlight: counts.facilitators.pending > 0,
@@ -129,14 +131,14 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           {
             label: 'Published guides',
             value: counts.facilitators.published,
-            sub: `${counts.facilitators.rejected} rejected`,
+            sub: t('{count} rejected', { count: counts.facilitators.rejected }),
             icon: CheckCircle,
             color: 'text-emerald-600',
           },
           {
             label: 'Conversation requests',
             value: counts.bookings.total,
-            sub: `${counts.bookings.pending} pending · ${counts.bookings.accepted} accepted`,
+            sub: t('{pending} pending · {accepted} accepted', { pending: counts.bookings.pending, accepted: counts.bookings.accepted }),
             icon: CalendarDays,
             color: 'text-stone-500',
           },
@@ -148,7 +150,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
             <CardContent className="p-4">
               <div className="mb-1 flex items-center gap-2 text-stone-400">
                 <Icon className={`size-3.5 ${color}`} />
-                <span className="text-xs">{label}</span>
+                <span className="text-xs">{t(label)}</span>
               </div>
               <p className={`text-2xl font-bold ${highlight ? 'text-amber-600' : 'text-stone-900'}`}>
                 {value}
@@ -164,9 +166,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
       {/* Pending applications */}
       <div>
         <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-stone-900">
-          <Shield className="size-5 text-amber-500" />
-          Pending applications
-          {counts.facilitators.pending > 0 && (
+          <Shield className="size-5 text-amber-500" />{t("Pending applications")}{counts.facilitators.pending > 0 && (
             <Badge
               variant="outline"
               className="border-amber-200 bg-amber-50 text-xs text-amber-700"
@@ -178,9 +178,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
 
         {!pendingFacilitators || pendingFacilitators.length === 0 ? (
           <Card className="border-stone-200">
-            <CardContent className="py-10 text-center text-stone-500">
-              No pending applications — all caught up.
-            </CardContent>
+            <CardContent className="py-10 text-center text-stone-500">{t("No pending applications — all caught up.")}</CardContent>
           </Card>
         ) : (
           <div className="space-y-6">
@@ -196,33 +194,33 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                     </div>
                     <div className="flex items-center gap-2 text-xs text-stone-400">
                       <Clock className="size-3" />
-                      {formatDate(f.created_at)}
+                      {formatDate(f.created_at, locale)}
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-stone-500">Profile photos</h3>
+                    <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-stone-500">{t("Profile photos")}</h3>
                     {(f.image_paths ?? []).length > 0 ? (
                       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
                         {(f.image_paths as string[]).slice(0, 5).map((path, index) => {
                           const url = getProfileImageUrl(path)
                           return url ? <a key={path} href={url} target="_blank" rel="noopener noreferrer" className="overflow-hidden rounded-lg border border-stone-200 bg-stone-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
-                            <Image src={url} alt={`${f.display_name} — submitted photo ${index + 1}`} width={400} height={300} unoptimized className="aspect-[4/3] w-full object-contain" />
-                            <span className="block p-2 text-xs text-stone-600">{index === 0 ? 'Primary photo' : `Photo ${index + 1}`} · open in new tab</span>
+                            <Image src={url} alt={t('{name} — submitted photo {number}', { name: f.display_name, number: index + 1 })} width={400} height={300} unoptimized className="aspect-[4/3] w-full object-contain" />
+                            <span className="block p-2 text-xs text-stone-600">{index === 0 ? t('Primary photo') : t('Photo {number}', { number: index + 1 })} · {t('(opens in a new tab)')}</span>
                           </a> : null
                         })}
                       </div>
-                    ) : <p className="text-sm text-amber-800">A profile photo is required before publication.</p>}
+                    ) : <p className="text-sm text-amber-800">{t("A profile photo is required before publication.")}</p>}
                   </div>
                   <div>
-                    <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-stone-500">Public direct contact links</h3>
+                    <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-stone-500">{t("Public direct contact links")}</h3>
                     {getDirectContactLinks(f).length > 0 ? <>
                       <div className="flex flex-wrap gap-3">
-                        {getDirectContactLinks(f).map(({ platform, label, href }) => <a key={platform} href={href} target="_blank" rel="noopener noreferrer nofollow ugc" className="inline-flex min-h-11 items-center break-all rounded-lg border border-stone-200 px-3 py-2 text-sm font-medium text-emerald-800 underline underline-offset-4">{label} · open in app or new tab</a>)}
+                        {getDirectContactLinks(f).map(({ platform, label, href }) => <a key={platform} href={href} target="_blank" rel="noopener noreferrer nofollow ugc" className="inline-flex min-h-11 items-center break-all rounded-lg border border-stone-200 px-3 py-2 text-sm font-medium text-emerald-800 underline underline-offset-4">{label} {t('(opens the app or a new tab)')}</a>)}
                       </div>
-                      <p className="mt-2 text-xs text-stone-600">The link format is checked. Confirm the destination belongs to this guide during review.</p>
-                    </> : <p className="text-sm text-stone-600">No direct contact links supplied; the website inquiry form remains available.</p>}
+                      <p className="mt-2 text-xs text-stone-600">{t("The link format is checked. Confirm the destination belongs to this guide during review.")}</p>
+                    </> : <p className="text-sm text-stone-600">{t("No direct contact links supplied; the website inquiry form remains available.")}</p>}
                   </div>
                   {/* Modalities */}
                   {(f.modalities ?? []).length > 0 && (
@@ -233,7 +231,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                           variant="secondary"
                           className="bg-stone-100 text-xs text-stone-600"
                         >
-                          {m}
+                          {t(m)}
                         </Badge>
                       ))}
                     </div>
@@ -241,35 +239,28 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
 
                   {/* Bio */}
                   <div>
-                    <p className="mb-1 text-xs font-medium uppercase tracking-wide text-stone-400">
-                      Bio
-                    </p>
-                    <p className="text-sm text-stone-700">{f.bio}</p>
+                    <p className="mb-1 text-xs font-medium uppercase tracking-wide text-stone-400">{t("Bio")}</p>
+                    <p dir="auto" className="text-sm text-stone-700">{f.bio}</p>
                   </div>
 
                   {/* Training */}
                   {f.lineage_or_training && (
                     <div>
-                      <p className="mb-1 text-xs font-medium uppercase tracking-wide text-stone-400">
-                        Training / Lineage
-                      </p>
-                      <p className="text-sm text-stone-700">{f.lineage_or_training}</p>
+                      <p className="mb-1 text-xs font-medium uppercase tracking-wide text-stone-400">{t('Training & lineage')}</p>
+                      <p dir="auto" className="text-sm text-stone-700">{f.lineage_or_training}</p>
                     </div>
                   )}
 
                   {/* Safety */}
                   <div>
-                    <p className="mb-1 text-xs font-medium uppercase tracking-wide text-stone-400">
-                      Safety practices
-                    </p>
-                    <p className="text-sm text-stone-700">{f.safety_practices}</p>
+                    <p className="mb-1 text-xs font-medium uppercase tracking-wide text-stone-400">{t("Safety practices")}</p>
+                    <p dir="auto" className="text-sm text-stone-700">{f.safety_practices}</p>
                   </div>
 
                   {/* Experience */}
                   {f.years_experience != null && (
                     <p className="text-xs text-stone-400">
-                      {f.years_experience} year{f.years_experience !== 1 ? 's' : ''} experience
-                    </p>
+                      {t('{years} years of practice (self-reported)', { years: f.years_experience })}</p>
                   )}
 
                   <Separator />
@@ -280,38 +271,34 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                     method="POST"
                     className="space-y-3"
                   >
-                    <label htmlFor={`review-note-${f.id}`} className="text-sm font-medium text-stone-700">Review note (optional)</label>
+                    <label htmlFor={`review-note-${f.id}`} className="text-sm font-medium text-stone-700">{t("Review note (optional)")}</label>
                     <Textarea
                       id={`review-note-${f.id}`}
                       name="note"
                       maxLength={1000}
-                      placeholder="Optional note to record with this decision…"
+                      placeholder={t("Optional note to record with this decision…")}
                       rows={2}
                       className="text-base sm:text-sm"
                     />
-                    <p className="text-xs leading-relaxed text-stone-600">Approving publishes this profile so visitors can view it and send conversation requests. Rejecting keeps it hidden.</p>
+                    <p className="text-xs leading-relaxed text-stone-600">{t("Approving publishes this profile so visitors can view it and send conversation requests. Rejecting keeps it hidden.")}</p>
                     <div className="flex flex-col gap-3 sm:flex-row">
                       <Button
                         type="submit"
                         name="status"
                         value="approved"
                         size="sm"
-                        className="min-h-12 w-full bg-emerald-700 text-sm hover:bg-emerald-800 sm:w-auto"
+                        className="h-auto min-h-12 w-full whitespace-normal bg-emerald-700 text-sm hover:bg-emerald-800 sm:w-auto"
                       >
-                        <CheckCircle className="mr-1.5 size-3.5" />
-                        Approve &amp; publish
-                      </Button>
+                        <CheckCircle className="mr-1.5 size-3.5" />{t("Approve & publish")}</Button>
                       <Button
                         type="submit"
                         name="status"
                         value="rejected"
                         size="sm"
                         variant="outline"
-                        className="min-h-12 w-full text-sm text-red-600 hover:bg-red-50 sm:w-auto"
+                        className="h-auto min-h-12 w-full whitespace-normal text-sm text-red-600 hover:bg-red-50 sm:w-auto"
                       >
-                        <XCircle className="mr-1.5 size-3.5" />
-                        Reject
-                      </Button>
+                        <XCircle className="mr-1.5 size-3.5" />{t("Reject")}</Button>
                     </div>
                   </form>
                 </CardContent>
@@ -326,9 +313,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <>
           <Separator />
           <div>
-            <h2 className="mb-3 text-base font-semibold text-stone-900">
-              Recently reviewed
-            </h2>
+            <h2 className="mb-3 text-base font-semibold text-stone-900">{t("Recently reviewed")}</h2>
             <div className="space-y-2">
               {recentlyReviewed.map((f) => (
                 <div
@@ -347,15 +332,15 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                           : 'border-red-200 bg-red-50 text-xs text-red-600'
                       }
                     >
-                      {f.verification_status === 'approved' ? f.visibility === 'public' ? 'Published' : 'Approved · hidden' : 'Rejected · hidden'}
+                      {t(f.verification_status === 'approved' ? f.visibility === 'public' ? 'Published' : 'Approved · hidden' : 'Rejected · hidden')}
                     </Badge>
                     {f.verification_status === 'approved' && f.visibility !== 'public' && (
                       <form action={`/api/admin/facilitators/${f.id}`} method="POST">
-                        <Button type="submit" name="status" value="approved" variant="outline" className="min-h-11">Publish profile</Button>
+                        <Button type="submit" name="status" value="approved" variant="outline" className="min-h-11">{t("Publish profile")}</Button>
                       </form>
                     )}
                     <span className="text-xs text-stone-400">
-                      {formatDate(f.created_at)}
+                      {formatDate(f.created_at, locale)}
                     </span>
                   </div>
                 </div>

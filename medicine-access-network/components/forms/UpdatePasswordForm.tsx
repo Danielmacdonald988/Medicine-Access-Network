@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslation } from '@/components/i18n/TranslationProvider'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -21,6 +22,7 @@ const schema = z
   })
 
 export function UpdatePasswordForm() {
+  const { t } = useTranslation()
   const router = useRouter()
   const supabase = createClient()
 
@@ -34,11 +36,11 @@ export function UpdatePasswordForm() {
     const { error } = await supabase.auth.updateUser({ password: data.password })
 
     if (error) {
-      toast.error(error.message)
+      toast.error(t(error.message))
       return
     }
 
-    toast.success('Password updated. Signing you in…')
+    toast.success(t('Password updated. Signing you in…'))
     router.push('/dashboard')
     router.refresh()
   }
@@ -46,7 +48,7 @@ export function UpdatePasswordForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit as Parameters<typeof handleSubmit>[0])} className="space-y-4">
       <div className="space-y-1.5">
-        <Label htmlFor="password">New password</Label>
+        <Label htmlFor="password">{t("New password")}</Label>
         <Input
           id="password"
           type="password"
@@ -54,12 +56,12 @@ export function UpdatePasswordForm() {
           {...register('password')}
         />
         {errors.password && (
-          <p className="text-xs text-red-500">{errors.password.message as string}</p>
+          <p className="text-xs text-red-500">{t(errors.password.message ?? "")}</p>
         )}
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="confirm">Confirm password</Label>
+        <Label htmlFor="confirm">{t("Confirm password")}</Label>
         <Input
           id="confirm"
           type="password"
@@ -67,7 +69,7 @@ export function UpdatePasswordForm() {
           {...register('confirm')}
         />
         {errors.confirm && (
-          <p className="text-xs text-red-500">{errors.confirm.message as string}</p>
+          <p className="text-xs text-red-500">{t(errors.confirm.message ?? "")}</p>
         )}
       </div>
 
@@ -76,7 +78,7 @@ export function UpdatePasswordForm() {
         className="w-full bg-emerald-700 hover:bg-emerald-800"
         disabled={isSubmitting}
       >
-        {isSubmitting ? 'Updating…' : 'Update password'}
+        {isSubmitting ? t('Updating…') : t('Update password')}
       </Button>
     </form>
   )

@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslation } from '@/components/i18n/TranslationProvider'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -15,6 +16,7 @@ const schema = z.object({
 })
 
 export function ForgotPasswordForm() {
+  const { t } = useTranslation()
   const [sent, setSent] = useState(false)
   const supabase = createClient()
 
@@ -30,7 +32,7 @@ export function ForgotPasswordForm() {
     })
 
     if (error) {
-      toast.error(error.message)
+      toast.error(t(error.message))
       return
     }
 
@@ -40,10 +42,8 @@ export function ForgotPasswordForm() {
   if (sent) {
     return (
       <div className="py-4 text-center space-y-2">
-        <p className="font-medium text-emerald-700">Check your email</p>
-        <p className="text-sm text-stone-500">
-          We sent a password reset link. It expires in 1 hour.
-        </p>
+        <p className="font-medium text-emerald-700">{t("Check your email")}</p>
+        <p className="text-sm text-stone-500">{t("We sent a password reset link. It expires in 1 hour.")}</p>
       </div>
     )
   }
@@ -51,10 +51,10 @@ export function ForgotPasswordForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit as Parameters<typeof handleSubmit>[0])} className="space-y-4">
       <div className="space-y-1.5">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("Email")}</Label>
         <Input id="email" type="email" autoComplete="email" {...register('email')} />
         {errors.email && (
-          <p className="text-xs text-red-500">{errors.email.message as string}</p>
+          <p className="text-xs text-red-500">{t(errors.email.message ?? "")}</p>
         )}
       </div>
 
@@ -63,7 +63,7 @@ export function ForgotPasswordForm() {
         className="w-full bg-emerald-700 hover:bg-emerald-800"
         disabled={isSubmitting}
       >
-        {isSubmitting ? 'Sending…' : 'Send reset link'}
+        {isSubmitting ? t('Sending…') : t('Send reset link')}
       </Button>
     </form>
   )
