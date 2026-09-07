@@ -210,35 +210,70 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
         ← Back to all guides
       </Link>
       <div className="rounded-2xl border border-stone-200 bg-white p-5 sm:p-8 lg:p-10">
-        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(260px,320px)]">
-          <div className="flex flex-col items-start gap-6 sm:flex-row sm:gap-7">
-            <Avatar className="h-56 w-44 shrink-0 overflow-hidden rounded-xl bg-[#eef0e8] p-1.5 after:rounded-[inherit] sm:h-64 sm:w-48">
-              {primaryPhotoUrl && (
-                <AvatarImage
-                  src={primaryPhotoUrl}
-                  alt={facilitator.display_name}
-                  className="rounded-none object-contain"
-                />
-              )}
-              <AvatarFallback className="rounded-none bg-emerald-100 text-3xl font-medium text-emerald-800">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
+        <div className="grid items-start gap-6 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-8">
+          <Avatar className="h-56 w-44 shrink-0 overflow-hidden rounded-xl bg-[#eef0e8] p-1.5 after:rounded-[inherit] sm:h-64 sm:w-48">
+            {primaryPhotoUrl && (
+              <AvatarImage
+                src={primaryPhotoUrl}
+                alt={facilitator.display_name}
+                className="rounded-none object-contain"
+              />
+            )}
+            <AvatarFallback className="rounded-none bg-emerald-100 text-3xl font-medium text-emerald-800">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
 
-            <div className="min-w-0">
-              <div className="flex flex-col items-start gap-3">
-                <h1 className="break-words text-4xl font-medium leading-tight tracking-[-0.04em] text-stone-900 sm:text-5xl">
-                  {facilitator.display_name}
-                </h1>
-                <a
-                  href="#profile-review"
-                  className="inline-flex min-h-9 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 underline-offset-4 hover:underline"
-                >
-                  <ShieldCheck aria-hidden="true" className="size-3" />
-                  Profile reviewed
+          <div className="min-w-0">
+            <section id="about" aria-labelledby="profile-name" className="scroll-mt-24">
+              <h1 id="profile-name" className="break-words text-4xl font-medium leading-tight tracking-[-0.04em] text-stone-900 sm:text-5xl">
+                {facilitator.display_name}
+              </h1>
+              <p className="mt-4 max-w-prose whitespace-pre-line break-words leading-7 text-stone-600">
+                {facilitator.bio}
+              </p>
+            </section>
+
+            <div className="mt-6 rounded-xl border border-stone-200 bg-[#f0f1e9] p-5">
+              <p className="text-xs font-medium uppercase tracking-wide text-stone-500">
+                Listed fee · USD
+              </p>
+              <p className="mt-1 font-semibold text-stone-900">{rateDisplay}</p>
+              <p className="mt-1 text-xs leading-relaxed text-stone-600">
+                Confirm session length and total cost directly.
+              </p>
+              {hasDirectContact && <div className="mt-4"><DirectContactLinks profile={facilitator} /></div>}
+              <Button
+                asChild
+                variant={hasDirectContact ? 'outline' : 'default'}
+                className={`mt-4 h-auto min-h-11 w-full whitespace-normal ${hasDirectContact ? 'border-emerald-700 text-emerald-800 hover:bg-emerald-50' : 'bg-emerald-700 hover:bg-emerald-800'}`}
+              >
+                <a href="#contact">
+                  {isOwnProfile
+                    ? 'View your profile options'
+                    : hasDirectContact ? 'Send a website inquiry'
+                    : `Contact ${facilitator.display_name}`}
                 </a>
+              </Button>
+              <p className="mt-2 text-center text-xs text-stone-600">
+                No account needed. No payment to reach out.
+              </p>
+              <div className="mt-3 flex justify-center">
+                <SaveGuideButton
+                  profileId={facilitator.id}
+                  displayName={facilitator.display_name}
+                />
               </div>
+            </div>
 
+            <div className="mt-6 border-t border-stone-200 pt-5">
+              <a
+                href="#profile-review"
+                className="inline-flex min-h-9 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 underline-offset-4 hover:underline"
+              >
+                <ShieldCheck aria-hidden="true" className="size-3" />
+                Profile reviewed
+              </a>
               <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-stone-500">
                 {facilitator.location && (
                   <span className="flex items-center gap-1.5">
@@ -282,38 +317,6 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               )}
             </div>
           </div>
-
-          <div className="rounded-xl border border-stone-200 bg-[#f0f1e9] p-5">
-            <p className="text-xs font-medium uppercase tracking-wide text-stone-500">
-              Listed fee · USD
-            </p>
-            <p className="mt-1 font-semibold text-stone-900">{rateDisplay}</p>
-            <p className="mt-1 text-xs leading-relaxed text-stone-600">
-              Confirm session length and total cost directly.
-            </p>
-            {hasDirectContact && <div className="mt-4"><DirectContactLinks profile={facilitator} /></div>}
-            <Button
-              asChild
-              variant={hasDirectContact ? 'outline' : 'default'}
-              className={`mt-4 h-auto min-h-11 w-full whitespace-normal ${hasDirectContact ? 'border-emerald-700 text-emerald-800 hover:bg-emerald-50' : 'bg-emerald-700 hover:bg-emerald-800'}`}
-            >
-              <a href="#contact">
-                {isOwnProfile
-                  ? 'View your profile options'
-                  : hasDirectContact ? 'Send a website inquiry'
-                  : `Contact ${facilitator.display_name}`}
-              </a>
-            </Button>
-            <p className="mt-2 text-center text-xs text-stone-600">
-              No account needed. No payment to reach out.
-            </p>
-            <div className="mt-3 flex justify-center">
-              <SaveGuideButton
-                profileId={facilitator.id}
-                displayName={facilitator.display_name}
-              />
-            </div>
-          </div>
         </div>
       </div>
 
@@ -322,7 +325,8 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
         className="my-8 flex flex-wrap gap-x-6 gap-y-1 border-b border-stone-200 pb-3"
       >
         {[
-          { href: '#about', label: 'About & approach' },
+          { href: '#about', label: 'About' },
+          { href: '#approach', label: 'Approach' },
           ...(photoUrls.length ? [{ href: '#photos', label: 'Photos' }] : []),
           { href: '#training', label: 'Training' },
           { href: '#safety', label: 'Safety' },
@@ -347,19 +351,16 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
         <div className="min-w-0 space-y-10 lg:col-span-2 lg:space-y-12">
           {/* Modalities */}
           <section
-            id="about"
-            aria-labelledby="about-heading"
+            id="approach"
+            aria-labelledby="approach-heading"
             className="scroll-mt-24"
           >
             <h2
-              id="about-heading"
+              id="approach-heading"
               className="mb-3 text-2xl font-medium tracking-tight text-stone-900"
             >
-              About &amp; approach
+              Areas of practice
             </h2>
-            <p className="mb-3 text-sm font-medium text-stone-600">
-              Listed areas of practice
-            </p>
             <div className="flex flex-wrap gap-2">
               {facilitator.modalities.map((m: string) => (
                 <Badge
@@ -371,9 +372,6 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 </Badge>
               ))}
             </div>
-            <p className="mt-5 whitespace-pre-line leading-relaxed text-stone-600">
-              {facilitator.bio}
-            </p>
           </section>
 
           {photoUrls.length > 0 && (
