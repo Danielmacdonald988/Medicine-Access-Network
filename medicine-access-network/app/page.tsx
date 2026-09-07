@@ -129,15 +129,16 @@ export default async function Home() {
         aria-labelledby="hero-title"
       >
         <div className={styles.heroCopy}>
-          <p className={styles.eyebrow}>
-            <span className={styles.dot} aria-hidden />{" "}
-            {t("Human connection. New possibilities.")}{" "}
-          </p>
+
           <h1 id="hero-title">
             {" "}
             {t("Your next chapter.")} <br />
             <em>{t("The right support.")}</em>
           </h1>
+          <p className={styles.eyebrow}>
+            <span className={styles.dot} aria-hidden />{" "}
+            {t("Human connection. New possibilities.")}{" "}
+          </p>
           <p className={styles.heroDescription}>
             {" "}
             {t(
