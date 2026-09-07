@@ -212,12 +212,12 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
       <div className="rounded-2xl border border-stone-200 bg-white p-5 sm:p-8 lg:p-10">
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(260px,320px)]">
           <div className="flex flex-col items-start gap-6 sm:flex-row sm:gap-7">
-            <Avatar className="h-44 w-40 shrink-0 overflow-hidden rounded-[70px_70px_12px_12px] after:rounded-[inherit] sm:h-56 sm:w-44">
+            <Avatar className="h-56 w-44 shrink-0 overflow-hidden rounded-xl bg-[#eef0e8] p-1.5 after:rounded-[inherit] sm:h-64 sm:w-48">
               {primaryPhotoUrl && (
                 <AvatarImage
                   src={primaryPhotoUrl}
                   alt={facilitator.display_name}
-                  className="rounded-none object-cover"
+                  className="rounded-none object-contain"
                 />
               )}
               <AvatarFallback className="rounded-none bg-emerald-100 text-3xl font-medium text-emerald-800">
@@ -382,7 +382,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               <p className="mt-2 text-sm text-stone-600">Provided by {facilitator.display_name}. Select a photo to view it in a new tab.</p>
               <div className={`mt-4 grid gap-3 ${photoUrls.length > 1 ? 'sm:grid-cols-2' : ''}`}>
                 {photoUrls.map((url: string, index: number) => (
-                  <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-xl border border-stone-200 bg-stone-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
+                  <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-xl border border-stone-200 bg-stone-50 p-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
                     <Image
                       src={url}
                       alt={`${facilitator.display_name} — ${index === 0 ? 'profile photo' : `additional photo ${index}`}`}

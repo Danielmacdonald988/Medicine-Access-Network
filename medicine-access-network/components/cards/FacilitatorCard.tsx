@@ -32,8 +32,8 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white transition-shadow hover:shadow-[0_12px_32px_-16px_rgba(32,62,52,0.3)]">
       <div className="p-4 pb-0">
         <Link href={`/facilitators/${f.id}`} tabIndex={-1} aria-hidden="true" className="block">
-          <Avatar className="h-52 w-full overflow-hidden rounded-[76px_76px_10px_10px] after:rounded-[inherit] sm:h-56">
-            {photoUrl && <AvatarImage src={photoUrl} alt={f.display_name} className="rounded-none object-cover" />}
+          <Avatar className="h-60 w-full overflow-hidden rounded-xl bg-[#eef0e8] p-2 after:rounded-[inherit] sm:h-64">
+            {photoUrl && <AvatarImage src={photoUrl} alt={f.display_name} className="rounded-none object-contain" />}
             <AvatarFallback className="rounded-none bg-emerald-100 text-4xl font-medium text-emerald-800">
               {initials}
             </AvatarFallback>

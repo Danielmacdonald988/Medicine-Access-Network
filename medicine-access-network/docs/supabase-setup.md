@@ -25,7 +25,7 @@ This creates:
 - `get_my_role()` security definer function
 - `handle_new_user()` trigger on auth.users
 
-> If you already have some tables from a previous run, use the migration comments in each table section to add only the new columns.
+> For an existing database, follow the numbered migrations in `docs/deployment.md`; do not re-run the full schema over existing tables.
 
 ## 4. Configure Auth
 
@@ -55,15 +55,24 @@ All tables should show `rowsecurity = true`.
 
 ## 6. Create the first admin user
 
-After deploying the app, sign up with your admin email address normally. Then in the Supabase SQL Editor, manually update the role:
+Create a **separate** account using the administrator's email address through `/signup`, and confirm the email. Choose the password yourself. You do not need to submit a facilitator profile. Roles are exclusive: converting an existing facilitator account to admin removes its facilitator-only editing access.
+
+In Supabase Authentication → Users, find the exact account and verify that its email is confirmed. In the trusted SQL Editor, replace both placeholders below with that account's UUID and email. This deliberately checks the authenticated identity instead of a public profile email or signup metadata:
 
 ```sql
-update public.users
+update public.users as account
 set role = 'admin'
-where email = 'your-admin-email@example.com';
+from auth.users as identity
+where account.id = identity.id
+  and identity.id = 'CONFIRMED-ACCOUNT-UUID'::uuid
+  and lower(identity.email) = lower('your-admin-email@example.com')
+  and identity.email_confirmed_at is not null
+returning account.id, account.role;
 ```
 
-Only do this for known admin users. The admin role grants full access to facilitator verification.
+Exactly one row should be returned. If no row matches, resolve the account/confirmation mismatch; do not remove these checks. Sign in to that account and open `/admin`. Use **Approve & publish** after reviewing an application. The role is never granted through a public signup option or an email-address bypass in application code.
+
+Set the separate, server-only Vercel variable `ADMIN_NOTIFICATION_EMAIL` to the review inbox. An inbox setting does **not** grant administrative access. Apply migration 0006 and configure `RESEND_API_KEY` and `RESEND_FROM_EMAIL` to deliver application alerts. Supabase custom SMTP is configured separately for signup confirmations and password resets; its default sender has recipient restrictions.
 
 ## 7. Seed modalities (optional)
 

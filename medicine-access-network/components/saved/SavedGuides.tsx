@@ -65,8 +65,8 @@ function Comparison({ ids, onRemove }: { ids: string[]; onRemove: (id: string) =
               const profile = profiles[index]
               return <th scope="col" key={id} className="p-5 align-top font-normal">
                 {profile ? <>
-                  <Avatar className="mb-4 h-32 w-28 overflow-hidden rounded-[48px_48px_10px_10px] after:rounded-[inherit]">
-                    {getProfileImageUrl(profile.image_paths?.[0]) && <AvatarImage src={getProfileImageUrl(profile.image_paths?.[0])!} alt={profile.display_name} className="rounded-none object-cover" />}
+                  <Avatar className="mb-4 h-32 w-28 overflow-hidden rounded-xl bg-[#eef0e8] p-1.5 after:rounded-[inherit]">
+                    {getProfileImageUrl(profile.image_paths?.[0]) && <AvatarImage src={getProfileImageUrl(profile.image_paths?.[0])!} alt={profile.display_name} className="rounded-none object-contain" />}
                     <AvatarFallback className="rounded-none bg-emerald-100 text-2xl font-medium text-emerald-800">{profile.display_name.split(' ').map((part) => part[0]).join('').toUpperCase().slice(0, 2)}</AvatarFallback>
                   </Avatar>
                   <Link href={`/facilitators/${id}`} className="break-words text-2xl font-medium tracking-tight text-emerald-900 underline underline-offset-4">{profile.display_name}</Link>

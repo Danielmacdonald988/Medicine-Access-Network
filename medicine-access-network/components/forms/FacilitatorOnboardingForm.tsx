@@ -12,7 +12,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
-import { createClient } from '@/lib/supabase'
 import { facilitatorOnboardingSchema, type FacilitatorOnboardingInput } from '@/lib/validations'
 import type { FacilitatorProfile } from '@/lib/types'
 import { ProfileMediaFields } from '@/components/profile/ProfileMediaFields'
@@ -182,7 +181,6 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
   const headingRef = useRef<HTMLHeadingElement>(null)
   const errorRef = useRef<HTMLParagraphElement>(null)
   const [submitted, setSubmitted] = useState(false)
-  const supabase = createClient()
 
   const {
     register,
@@ -236,50 +234,18 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
     if (uploading) return
     setSaveError('')
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) {
-        setSaveError('Your sign-in has expired. Sign in again before submitting your profile.')
-        requestAnimationFrame(() => errorRef.current?.focus())
-        return
-      }
-
-      const certifications = data.certifications
-        ? data.certifications.split(',').map((entry) => entry.trim()).filter(Boolean)
-        : []
-      const profileData = {
-        user_id: user.id,
-        display_name: data.display_name,
-        bio: data.bio,
-        location: data.location || null,
-        remote_available: data.remote_available,
-        modalities: data.modalities,
-        years_experience: data.years_experience ?? null,
-        lineage_or_training: data.lineage_or_training || null,
-        certifications,
-        safety_practices: data.safety_practices,
-        contraindications_acknowledged: data.contraindications_acknowledged,
-        donation_based: data.donation_based,
-        minimum_donation: data.minimum_donation ?? null,
-        hourly_rate: data.hourly_rate ?? null,
-        image_paths: data.image_paths,
-        whatsapp_url: data.whatsapp_url || null,
-        signal_url: data.signal_url || null,
-        telegram_url: data.telegram_url || null,
-        verification_status: 'pending',
-        visibility: 'hidden',
-      }
-      // New applications never overwrite an existing profile. Editing is explicitly
-      // scoped to this profile and the authenticated owner; database policies enforce it.
-      const query = existingProfile
-        ? supabase.from('facilitator_profiles').update(profileData)
-            .eq('id', existingProfile.id).eq('user_id', user.id)
-        : supabase.from('facilitator_profiles').insert(profileData)
-      const { data: saved, error } = await query.select('id').single()
-      if (error || !saved) {
-        setSaveError(error?.code === '23505'
-          ? 'An application already exists for this account. Open your dashboard to edit it.'
+      const response = await fetch('/api/facilitator-applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          profileId: existingProfile?.id,
+          application: data,
+        }),
+      })
+      const result = await response.json().catch(() => null)
+      if (!response.ok || result?.success !== true) {
+        setSaveError(typeof result?.error === 'string'
+          ? result.error
           : 'Your profile could not be saved. Your entries are still here; please try again.')
         requestAnimationFrame(() => errorRef.current?.focus())
         return

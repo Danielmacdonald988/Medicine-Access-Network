@@ -606,22 +606,33 @@
     margin-top: -10px;
   }
   .searchBar {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 9px;
     padding: 9px;
   }
   .searchField {
+    display: grid;
+    grid-template-columns: 19px minmax(0, 1fr);
+    align-items: start;
     padding: 9px 6px;
     gap: 8px;
   }
   .searchField > svg {
     width: 19px;
+    height: 19px;
+    margin-top: 2px;
   }
   .searchField label {
     font-size: 0.875rem;
   }
   .searchField label span {
     display: none;
+  }
+  .searchField select,
+  .searchField input {
+    display: block;
+    min-height: 44px;
+    padding-block: 10px;
   }
   .searchSubmit {
     grid-column: 1 / -1;
@@ -691,6 +702,19 @@
     gap: 20px;
   }
 }
+@media (max-width: 600px) {
+  .searchBar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .locationField {
+    border-left: 0;
+    border-top: 1px solid #dce0d4;
+    padding-top: 18px;
+  }
+  .searchField label span {
+    display: inline;
+  }
+}
 @media (max-width: 420px) {
   .hero h1 {
     font-size: 2.75rem;
@@ -701,16 +725,6 @@
   .heroImage {
     height: 175px;
     margin-top: 23px;
-  }
-  .searchBar {
-    grid-template-columns: 1fr;
-  }
-  .searchField {
-    min-height: 72px;
-  }
-  .locationField {
-    border-left: 0;
-    border-top: 1px solid #dce0d4;
   }
   .practiceCard {
     min-height: 236px;

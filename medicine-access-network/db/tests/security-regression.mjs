@@ -16,6 +16,7 @@ const migrationNames = [
   '0001_facilitator_status_visibility.sql', '0002_facilitator_public_rls.sql',
   '0003_contact_without_account.sql', '0004_authorization_and_contact.sql',
   '0005_profile_media_links.sql',
+  '0006_admin_application_notifications.sql',
 ]
 const migrations = await Promise.all(migrationNames.map(name => readFile(new URL(`../migrations/${name}`, import.meta.url), 'utf8')))
 let assertions = 0
@@ -64,10 +65,25 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
       values ('10000000-0000-0000-0000-000000000070','Legacy guide',repeat('x',100),'approved','public');
     `)
     await db.exec(migrations[4])
+    // A pending application predates 0006; the upgrade must include it exactly
+    // once without generating a duplicate on later migration reapplications.
+    await db.exec(`
+      insert into auth.users(id,email) values ('10000000-0000-0000-0000-000000000071','pending-before-upgrade@example.test');
+      insert into storage.objects(id,bucket_id,name) values (
+        '10000000-0000-0000-0000-000000000072','profile-images',
+        '10000000-0000-0000-0000-000000000071/10000000-0000-0000-0000-000000000072.webp'
+      );
+      insert into public.facilitator_profiles(id,user_id,display_name,bio,image_paths)
+      values ('10000000-0000-0000-0000-000000000073','10000000-0000-0000-0000-000000000071',
+        'Existing applicant',repeat('x',100),
+        array['10000000-0000-0000-0000-000000000071/10000000-0000-0000-0000-000000000072.webp']);
+    `)
+    await db.exec(migrations[5])
   }
   // Reapplying the hardening migration must not fail or reopen access.
   await db.exec(migrations[3])
   await db.exec(migrations[4])
+  await db.exec(migrations[5])
 
   const id = n => `10000000-0000-0000-0000-${String(n).padStart(12, '0')}`
   const guide = id(1), otherGuide = id(2), seeker = id(3), admin = id(4), applicant = id(5), recovery = id(6)
@@ -92,6 +108,12 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
     check(legacy.image_paths.length === 0 && legacy.verification_status === 'approved' && legacy.visibility === 'public', 'existing empty profile remains unchanged during migration')
     await denied("update public.facilitator_profiles set display_name='Changed' where user_id=$1", [id(70)], '23514')
     await db.query('delete from public.facilitator_profiles where user_id=$1',[id(70)])
+    check((await row('select count(*)::int as total from public.admin_application_notifications where profile_id=$1',[id(73)])).total === 1, 'existing pending application is queued once after repeated migration')
+    await db.query('delete from public.facilitator_profiles where user_id=$1',[id(71)])
+    check((await row('select count(*)::int as total from public.admin_application_notifications where profile_id=$1',[id(73)])).total === 0, 'deleting a profile removes its private notification')
+    check((await row('select count(*)::int as total from public.admin_application_notification_limits where user_id=$1',[id(71)])).total === 1, 'deleting a profile preserves its account notification budget')
+    await db.query('delete from auth.users where id=$1',[id(71)])
+    check((await row('select count(*)::int as total from public.admin_application_notification_limits where user_id=$1',[id(71)])).total === 0, 'deleting an authentication account removes its notification budget')
   }
   const bucket = await row("select public,file_size_limit,allowed_mime_types from storage.buckets where id='profile-images'")
   check(!bucket.public && Number(bucket.file_size_limit) === 2097152 && bucket.allowed_mime_types.join() === 'image/webp', 'profile image bucket is private and limited to 2 MiB WebP files')
@@ -239,6 +261,168 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
   await denied(reviewSQL,[id(30),seeker,otherGuide])
   await db.query(reviewSQL,[id(30),seeker,guide])
   check((await row('select count(*)::int as total from public.reviews')).total === 1,'legacy review must match actual completed booking parties')
+
+  // Notification state never lives in owner-writable profile columns. Exercise
+  // the real trigger and claims in PostgreSQL rather than a mocked queue.
+  await as('postgres')
+  await db.query('delete from public.admin_application_notifications')
+  const notificationOwner = id(20001), notificationProfile = id(21001)
+  for (let n = 1; n <= 3; n++) {
+    const owner = id(20000 + n), profile = id(21000 + n)
+    await db.query('insert into auth.users(id,email) values($1,$2)',[owner,`notification-${n}@example.test`])
+    await db.query("insert into storage.objects(id,bucket_id,name) values($1,'profile-images',$2)",[id(22000 + n),imagePath(owner)])
+    await as('authenticated',owner)
+    await db.query("insert into public.facilitator_profiles(id,user_id,display_name,bio,image_paths) values($1,$2,'New application',repeat('x',100),$3)",[profile,owner,[imagePath(owner)]])
+    await as('postgres')
+  }
+  const claimSQL = 'select * from public.claim_admin_application_notifications($1,$2)'
+  const finishSQL = 'select public.finish_admin_application_notification($1,$2,$3) as finished'
+  const notificationSQL = 'select * from public.admin_application_notifications where profile_id=$1'
+  const budgetSQL = 'select * from public.admin_application_notification_limits where user_id=$1'
+  const initialNotification = await row(notificationSQL,[notificationProfile])
+  check(initialNotification.pending && initialNotification.attempts === 0, 'new application queues one unsent event atomically')
+  check((await row('select count(*)::int as total from public.admin_application_notifications')).total === 3, 'each submitted profile receives only one notification row')
+  check((await row("select relrowsecurity from pg_class where oid='public.admin_application_notifications'::regclass")).relrowsecurity, 'notification table has row level security enabled')
+  check((await row("select relrowsecurity from pg_class where oid='public.admin_application_notification_limits'::regclass")).relrowsecurity, 'account dispatch budgets have row level security enabled')
+  for (const [role,uid] of [['anon',''],['authenticated',notificationOwner],['authenticated',admin]]) {
+    await as(role,uid)
+    await denied('select * from public.admin_application_notifications')
+    await denied('insert into public.admin_application_notifications(profile_id) values($1)',[notificationProfile])
+    await denied('update public.admin_application_notifications set pending=false')
+    await denied('delete from public.admin_application_notifications')
+    await denied('select * from public.admin_application_notification_limits')
+    await denied('insert into public.admin_application_notification_limits(user_id) values($1)',[notificationOwner])
+    await denied('update public.admin_application_notification_limits set window_attempts=0')
+    await denied('delete from public.admin_application_notification_limits')
+    await denied(claimSQL,[5,notificationProfile])
+    await denied(finishSQL,[initialNotification.id,id(99999),true])
+    check(!(await row("select has_function_privilege(current_user,'public.enqueue_admin_application_notification()','EXECUTE') as allowed")).allowed, `${role} cannot invoke the definer enqueue function directly`)
+  }
+  await as('authenticated',otherGuide)
+  check((await db.query("update public.facilitator_profiles set display_name='Not the owner' where id=$1 returning id",[notificationProfile])).rows.length === 0, 'other facilitators cannot cause resubmission notifications for another profile')
+
+  await as('service_role')
+  for (const limit of [0,21,null]) await denied(claimSQL,[limit,notificationProfile],'22023')
+  check((await db.query(claimSQL,[5,id(99999)])).rows.length === 0, 'a nonexistent profile cannot produce notifications')
+  const firstClaim = await row(claimSQL,[5,notificationProfile])
+  check(firstClaim.id === initialNotification.id && firstClaim.profile_id === notificationProfile && !!firstClaim.claim_token, 'service role claims the scoped event with an opaque token')
+  check((await db.query(claimSQL,[5,notificationProfile])).rows.length === 0, 'a concurrent dispatcher cannot claim an active lease')
+  check(!(await row(finishSQL,[firstClaim.id,id(99999),true])).finished, 'a forged completion token cannot mark an event delivered')
+  check(!(await row(finishSQL,[firstClaim.id,firstClaim.claim_token,null])).finished, 'a missing delivery result cannot acknowledge an event')
+  await as('authenticated',notificationOwner)
+  await db.query("update public.facilitator_profiles set display_name='Updated during delivery' where id=$1",[notificationProfile])
+  await as('service_role')
+  const coalesced = await row(notificationSQL,[notificationProfile])
+  check(coalesced.id === firstClaim.id && coalesced.claim_token === firstClaim.claim_token, 'edits during delivery coalesce without changing its event or lease')
+  await db.query("update public.admin_application_notifications set lease_expires_at=now()-interval '1 second' where profile_id=$1",[notificationProfile])
+  await db.query("update public.admin_application_notification_limits set lease_expires_at=now()-interval '1 second' where user_id=$1",[notificationOwner])
+  const reclaimed = await row(claimSQL,[5,notificationProfile])
+  check(reclaimed.id === firstClaim.id && reclaimed.claim_token !== firstClaim.claim_token, 'an abandoned lease is reclaimable with the same idempotency ID and a new token')
+  check(!(await row(finishSQL,[firstClaim.id,firstClaim.claim_token,true])).finished, 'a late worker cannot acknowledge a replacement claim')
+  check((await row(finishSQL,[reclaimed.id,reclaimed.claim_token,false])).finished, 'delivery failure releases the owned lease')
+  const failed = await row(notificationSQL,[notificationProfile])
+  check(failed.pending && failed.claim_token === null && failed.attempts === 2, 'failed events remain pending and retain attempt state')
+  check((await row("select next_attempt_at >= now()+interval '110 seconds' as backed_off from public.admin_application_notifications where profile_id=$1",[notificationProfile])).backed_off, 'successive failures impose exponential retry backoff')
+  check((await db.query(claimSQL,[5,notificationProfile])).rows.length === 0, 'retry requests cannot bypass delivery backoff')
+  await as('authenticated',notificationOwner)
+  await db.query("update public.facilitator_profiles set display_name='Updated while retrying' where id=$1",[notificationProfile])
+  await as('service_role')
+  const failedAfterEdit = await row(notificationSQL,[notificationProfile])
+  check(failedAfterEdit.id === failed.id && new Date(failedAfterEdit.next_attempt_at).getTime() === new Date(failed.next_attempt_at).getTime(), 'rapid profile edits do not reset a failed event or its retry backoff')
+  await db.query("update public.admin_application_notifications set next_attempt_at=now()-interval '1 second' where profile_id=$1",[notificationProfile])
+  await db.query("update public.admin_application_notification_limits set next_attempt_at=now()-interval '1 second' where user_id=$1",[notificationOwner])
+  const retry = await row(claimSQL,[5,notificationProfile])
+  check((await row(finishSQL,[retry.id,retry.claim_token,true])).finished, 'successful provider delivery can acknowledge the retried event')
+  check(!(await row(finishSQL,[retry.id,retry.claim_token,true])).finished, 'repeated acknowledgements cannot mutate a delivered event')
+  const delivered = await row(notificationSQL,[notificationProfile])
+  check(!delivered.pending && !!delivered.last_sent_at && delivered.claim_token === null, 'accepted delivery closes the event and clears the lease')
+
+  await as('authenticated',notificationOwner)
+  await db.query('update public.facilitator_profiles set display_name=display_name where id=$1',[notificationProfile])
+  await as('service_role')
+  check(!(await row(notificationSQL,[notificationProfile])).pending, 'unchanged resubmission does not send another email')
+  await as('authenticated',admin)
+  await db.query("update public.facilitator_profiles set verification_status='approved',visibility='public' where id=$1",[notificationProfile])
+  await db.query("update public.facilitator_profiles set verification_status='pending',visibility='hidden' where id=$1",[notificationProfile])
+  await as('service_role')
+  check(!(await row(notificationSQL,[notificationProfile])).pending, 'admin approval and a subsequent admin review decision do not enqueue application emails')
+  await as('authenticated',notificationOwner)
+  await db.query("update public.facilitator_profiles set display_name='A meaningful new revision' where id=$1",[notificationProfile])
+  await as('service_role')
+  const newEvent = await row(notificationSQL,[notificationProfile])
+  check(newEvent.pending && newEvent.id !== delivered.id && newEvent.attempts === 0, 'a meaningful owner revision after delivery queues a new event')
+  check((await row("select next_attempt_at >= last_sent_at+interval '15 minutes' as cooled_down from public.admin_application_notifications where profile_id=$1",[notificationProfile])).cooled_down, 'rapid resubmissions are retained behind a fifteen-minute delivery cooldown')
+  check((await db.query(claimSQL,[5,notificationProfile])).rows.length === 0, 'immediate dispatch cannot bypass the successful-send cooldown')
+  await db.query("update public.admin_application_notifications set next_attempt_at=now()-interval '1 second', window_attempts=8 where profile_id=$1",[notificationProfile])
+  await db.query("update public.admin_application_notification_limits set next_attempt_at=now()-interval '1 second', window_attempts=8 where user_id=$1",[notificationOwner])
+  check((await db.query(claimSQL,[5,notificationProfile])).rows.length === 0, 'a profile cannot be claimed more than eight times in one hour')
+  await db.query("update public.admin_application_notifications set attempt_window_started_at=now()-interval '61 minutes', attempts=8 where profile_id=$1",[notificationProfile])
+  await db.query("update public.admin_application_notification_limits set attempt_window_started_at=now()-interval '61 minutes', attempts=8 where user_id=$1",[notificationOwner])
+  const laterClaim = await row(claimSQL,[5,notificationProfile])
+  check(!!laterClaim && (await row(notificationSQL,[notificationProfile])).window_attempts === 1, 'retained work becomes claimable again when its hourly attempt window expires')
+  await as('postgres')
+  await db.exec(migrations[5])
+  const afterReapply = await row(notificationSQL,[notificationProfile])
+  check(afterReapply.id === laterClaim.id && afterReapply.claim_token === laterClaim.claim_token && afterReapply.attempts === 8, 'reapplying migration preserves pending IDs, leases and attempt counts')
+  await as('service_role')
+  await db.query(finishSQL,[laterClaim.id,laterClaim.claim_token,false])
+  check((await row("select next_attempt_at >= now()+interval '59 minutes' and next_attempt_at <= now()+interval '61 minutes' as bounded from public.admin_application_notifications where profile_id=$1",[notificationProfile])).bounded, 'retry backoff is capped at an hour without discarding pending work')
+
+  await as('authenticated',admin)
+  await db.query("update public.facilitator_profiles set verification_status='rejected',visibility='hidden' where id=$1",[id(21002)])
+  await as('service_role')
+  check((await db.query(claimSQL,[5,id(21002)])).rows.length === 0, 'already reviewed profiles are excluded even with an old pending notification')
+  await as('authenticated',id(20002))
+  await db.query("update public.facilitator_profiles set verification_status='pending',visibility='hidden' where id=$1",[id(21002)])
+  await as('service_role')
+  check((await db.query(claimSQL,[5,id(21002)])).rows.length === 1, 'owner resubmission after rejection makes coalesced work eligible again')
+  const boundedBatch = (await db.query(claimSQL,[1,null])).rows
+  check(boundedBatch.length === 1, 'unscoped dispatch respects its bounded batch size')
+
+  // Owners may delete their own profiles. Exercise that exact permission, not
+  // a privileged shortcut, to ensure new profile IDs cannot reset mail limits.
+  const recreatingOwner = id(20100)
+  await as('postgres')
+  await db.query('insert into auth.users(id,email) values($1,$2)',[recreatingOwner,'recreating-owner@example.test'])
+  await db.query("insert into storage.objects(id,bucket_id,name) values($1,'profile-images',$2)",[id(22100),imagePath(recreatingOwner)])
+  const recreate = async (profileId) => {
+    await as('authenticated',recreatingOwner)
+    await db.query('delete from public.facilitator_profiles where user_id=$1',[recreatingOwner])
+    await db.query("insert into public.facilitator_profiles(id,user_id,display_name,bio,image_paths) values($1,$2,'Recreated application',repeat('x',100),$3)",[profileId,recreatingOwner,[imagePath(recreatingOwner)]])
+    await as('service_role')
+  }
+  await recreate(id(21100))
+  const deletedClaim = await row(claimSQL,[5,id(21100)])
+  await recreate(id(21101))
+  check((await row('select count(*)::int as total from public.admin_application_notifications where id=$1',[deletedClaim.id])).total === 0, 'owner profile deletion removes the original event during an active send')
+  const duringDeletion = await row(budgetSQL,[recreatingOwner])
+  check(duringDeletion.claim_event_id === deletedClaim.id && duringDeletion.claim_token === deletedClaim.claim_token && duringDeletion.window_attempts === 1, 'account dispatch lease and hourly usage survive deletion and recreation')
+  check((await db.query(claimSQL,[5,id(21101)])).rows.length === 0, 'a recreated profile cannot overlap an in-flight send for the same account')
+  check((await row(finishSQL,[deletedClaim.id,deletedClaim.claim_token,true])).finished, 'accepted email can be acknowledged against its account after the profile was deleted')
+  const acceptedAfterDeletion = await row(budgetSQL,[recreatingOwner])
+  check(!!acceptedAfterDeletion.last_sent_at && acceptedAfterDeletion.claim_event_id === null, 'an accepted deleted-profile send still starts the account cooldown')
+  check((await db.query(claimSQL,[5,id(21101)])).rows.length === 0, 'recreation before acknowledgement cannot bypass the subsequent send cooldown')
+  await recreate(id(21102))
+  check((await db.query(claimSQL,[5,id(21102)])).rows.length === 0, 'recreation after acknowledgement also preserves the fifteen-minute send cooldown')
+  check((await row(budgetSQL,[recreatingOwner])).window_attempts === 1, 'repeated deletion cannot reset account claim usage')
+
+  await db.query("update public.admin_application_notifications set next_attempt_at=now()-interval '1 second' where profile_id=$1",[id(21102)])
+  await db.query("update public.admin_application_notification_limits set next_attempt_at=now()-interval '1 second' where user_id=$1",[recreatingOwner])
+  const recreatedClaim = await row(claimSQL,[5,id(21102)])
+  check(!!recreatedClaim && (await row(budgetSQL,[recreatingOwner])).window_attempts === 2, 'a legitimate recreated application becomes eligible after cooldown without losing prior usage')
+  await db.query(finishSQL,[recreatedClaim.id,recreatedClaim.claim_token,false])
+  const failureBeforeRecreation = await row(budgetSQL,[recreatingOwner])
+  await recreate(id(21103))
+  const failureAfterRecreation = await row(budgetSQL,[recreatingOwner])
+  check(failureAfterRecreation.attempts === failureBeforeRecreation.attempts && new Date(failureAfterRecreation.next_attempt_at).getTime() === new Date(failureBeforeRecreation.next_attempt_at).getTime(), 'deletion and recreation retain account failure backoff')
+  check((await db.query(claimSQL,[5,id(21103)])).rows.length === 0, 'a failed notification cannot bypass retry backoff through recreation')
+  await db.query("update public.admin_application_notification_limits set window_attempts=8,next_attempt_at=now()-interval '1 second' where user_id=$1",[recreatingOwner])
+  await recreate(id(21104))
+  check((await db.query(claimSQL,[5,id(21104)])).rows.length === 0, 'a recreated profile cannot bypass an exhausted account hourly budget')
+  await as('postgres')
+  await db.query('delete from auth.users where id=$1',[recreatingOwner])
+  check((await row('select count(*)::int as total from public.admin_application_notification_limits where user_id=$1',[recreatingOwner])).total === 0, 'deleting the authentication account cascades its private dispatch budget')
+  check((await row('select count(*)::int as total from public.admin_application_notification_limits where user_id=$1',[notificationOwner])).total === 1, 'account deletion leaves other accounts notification budgets intact')
 
   await as('postgres')
   for (const table of ['buckets', 'objects']) {

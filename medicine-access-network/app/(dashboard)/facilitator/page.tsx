@@ -384,7 +384,7 @@ export default async function FacilitatorDashboard() {
                     )}
                     {status === 'rejected' && (
                       <p className="mt-0.5 text-xs text-stone-500">
-                        Check your email for feedback, then{' '}
+                        Your profile is hidden. Contact the platform team for feedback, or{' '}
                         <Link
                           href="/facilitator/edit"
                           className="underline hover:text-emerald-700"

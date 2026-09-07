@@ -135,6 +135,7 @@ export function ProfileMediaFields({
           photo of yourself, then add other images that help people understand your practice.
           Only upload images you have permission to share publicly.
         </p>
+        <p className="text-xs text-stone-500">Portrait selfies and landscape photos keep their full frame. No need to crop them into a square.</p>
         <p className="text-xs text-stone-500">JPG, PNG, or WebP. Up to 4 MB per photo. Still images under 20 megapixels.</p>
         <p className="text-xs text-stone-500">
           New uploads are visible to you and reviewers. Photos on your approved public profile are displayed publicly.
@@ -167,16 +168,16 @@ export function ProfileMediaFields({
                       fill
                       unoptimized
                       sizes="(max-width: 640px) 90vw, 300px"
-                      className="object-cover"
+                      className="object-contain p-2"
                     />
-                  )}
-                  {index === 0 && (
-                    <span className="absolute bottom-2 left-2 rounded-md bg-white px-2 py-1 text-xs font-semibold text-emerald-800 shadow-sm">
-                      Primary photo
-                    </span>
                   )}
                 </div>
                 <div className="flex flex-wrap items-center gap-2 p-3">
+                  {index === 0 && (
+                    <span className="rounded-md bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-800">
+                      Primary photo
+                    </span>
+                  )}
                   {index > 0 && (
                     <Button
                       type="button"

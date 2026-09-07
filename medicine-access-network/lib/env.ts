@@ -20,6 +20,8 @@ export function validateEnv() {
     throw new Error(`Invalid production configuration: ${fields.join(', ')}. Payments must remain disabled for this release.`)
   }
   if (!process.env.RESEND_API_KEY || !process.env.RESEND_FROM_EMAIL) {
-    console.warn('[configuration] Email notifications are not configured; requests will only appear in facilitator dashboards.')
+    console.warn('[configuration] Email notifications are not configured; requests and applications remain available in their dashboards.')
+  } else if (!process.env.ADMIN_NOTIFICATION_EMAIL) {
+    console.warn('[configuration] Admin application email alerts are not configured; applications remain available in the admin dashboard.')
   }
 }
