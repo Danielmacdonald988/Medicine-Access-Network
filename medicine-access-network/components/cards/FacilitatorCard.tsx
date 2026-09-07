@@ -9,6 +9,9 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { FacilitatorSearchResult } from '@/lib/types'
 import { SaveGuideButton } from '@/components/saved/SaveGuideButton'
+import { DirectContactLinks } from '@/components/profile/DirectContactLinks'
+import { getDirectContactLinks } from '@/lib/direct-contact'
+import styles from './provider-row.module.css'
 import { getProfileImageUrl } from '@/lib/profile-media'
 
 interface FacilitatorCardProps {
@@ -17,6 +20,7 @@ interface FacilitatorCardProps {
 
 export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
   const { t, locale } = useTranslation()
+  const hasDirectContact = getDirectContactLinks(f).length > 0
   const photoUrl = getProfileImageUrl(f.image_paths?.[0])
   const initials = f.display_name
     .split(' ')
@@ -34,29 +38,24 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
       : t('Rate on request')
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white transition-shadow hover:shadow-[0_12px_32px_-16px_rgba(32,62,52,0.3)]">
-      <div className="p-4 pb-0">
-        <Link href={`/facilitators/${f.id}`} tabIndex={-1} aria-hidden="true" className="block">
-          <Avatar className="h-60 w-full overflow-hidden rounded-xl bg-[#eef0e8] p-2 after:rounded-[inherit] sm:h-64">
-            {photoUrl && <AvatarImage src={photoUrl} alt={f.display_name} className="rounded-none object-contain" />}
-            <AvatarFallback className="rounded-none bg-emerald-100 text-4xl font-medium text-emerald-800">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
-        </Link>
-      </div>
-
-      <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
+    <article className={styles.row}>
+      <Link href={`/facilitators/${f.id}`} tabIndex={-1} aria-hidden="true" className={styles.photo}>
+        <Avatar className="h-full w-full overflow-hidden rounded-xl bg-[#eef0e8] p-1 after:rounded-[inherit]">
+          {photoUrl && <AvatarImage src={photoUrl} alt={f.display_name} className="rounded-none object-contain" />}
+          <AvatarFallback className="rounded-none bg-emerald-100 text-2xl font-medium text-emerald-800">{initials}</AvatarFallback>
+        </Avatar>
+      </Link>
+      <div className={styles.identity}>
         <div>
+          <h3 className="mt-1 break-words text-2xl font-medium tracking-tight text-stone-900">
+            <Link href={`/facilitators/${f.id}`} className="underline-offset-4 hover:text-emerald-800 hover:underline">{f.display_name}</Link>
+          </h3>
           <Link
             href={`/facilitators/${f.id}#profile-review`}
             aria-label={t('What profile review means for {name}', { name: f.display_name })}
             className="inline-flex min-h-8 items-center gap-1.5 text-xs font-medium text-emerald-700 underline-offset-4 hover:underline"
           >
             <ShieldCheck aria-hidden="true" className="size-3.5" />{t("Profile reviewed")}</Link>
-          <h3 className="mt-1 break-words text-2xl font-medium tracking-tight text-stone-900">
-            <Link href={`/facilitators/${f.id}`} className="underline-offset-4 hover:text-emerald-800 hover:underline">{f.display_name}</Link>
-          </h3>
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs leading-relaxed text-stone-600">
             {f.location && <span className="flex max-w-full items-center gap-1.5"><MapPin aria-hidden="true" className="size-3.5 shrink-0" /><span className="min-w-0 break-words">{f.location}</span></span>}
             {f.remote_available && <span className="flex items-center gap-1.5 text-emerald-700"><Video aria-hidden="true" className="size-3.5 shrink-0" />{t("Online sessions")}</span>}
@@ -65,7 +64,15 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
             )}
           </div>
         </div>
-
+      </div>
+      <div className={styles.contact}>
+        {hasDirectContact ? <DirectContactLinks profile={f} compact /> : <Button asChild className="h-auto min-h-14 w-full whitespace-normal bg-emerald-700 text-base hover:bg-emerald-800"><Link href={`/facilitators/${f.id}#contact`}>{t('Contact {name}', { name: f.display_name })}</Link></Button>}
+        <Button asChild variant="outline" className="mt-3 h-auto min-h-11 w-full whitespace-normal border-stone-300">
+          <Link href={`/facilitators/${f.id}`} aria-label={t('View {name}’s profile', { name: f.display_name })}>{t('View profile')} <ArrowUpRight aria-hidden="true" className="size-4 shrink-0" /></Link>
+        </Button>
+        <div className="mt-3"><SaveGuideButton profileId={f.id} displayName={f.display_name} compact /></div>
+      </div>
+      <div className={styles.details}>
         <div>
           <p dir="auto" className="line-clamp-3 text-sm leading-7 text-stone-600">{f.bio}</p>
           {locale !== 'en' && <p className="mt-2 text-xs text-stone-500">{t('Profile text is shown in its original language.')}</p>}
@@ -87,16 +94,9 @@ export function FacilitatorCard({ facilitator: f }: FacilitatorCardProps) {
             <span className="text-stone-500">({t(f.review_count === 1 ? '{count} review' : '{count} reviews', { count: f.review_count ?? 0 })})</span>
           </div>
         ) : <p className="mt-auto text-xs text-stone-500">{t("No reviews yet")}</p>}
-      </div>
-
-      <div className="border-t border-stone-200 bg-stone-50/70 px-5 py-5 sm:px-6">
-        <p className="text-sm font-semibold text-stone-900">{rateDisplay}</p>
-        <p className="mt-1 text-xs leading-relaxed text-stone-600">{t("Confirm fees and availability with the guide.")}</p>
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-          <SaveGuideButton profileId={f.id} displayName={f.display_name} compact />
-          <Button size="sm" className="min-h-11 bg-emerald-700 px-4 text-sm text-white hover:bg-emerald-800" asChild>
-            <Link href={`/facilitators/${f.id}`} aria-label={t('View {name}’s profile', { name: f.display_name })}>{t("View profile")}{' '}<ArrowUpRight aria-hidden="true" className="size-4" /></Link>
-          </Button>
+        <div className="border-t border-stone-100 pt-4">
+          <p className="text-base font-semibold text-stone-900">{rateDisplay}</p>
+          <p className="mt-1 text-xs leading-relaxed text-stone-600">{t("Confirm fees and availability with the guide.")}</p>
         </div>
       </div>
     </article>

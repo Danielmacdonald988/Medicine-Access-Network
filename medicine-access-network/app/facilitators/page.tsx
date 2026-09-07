@@ -142,7 +142,7 @@ async function FacilitatorGrid({ filters, page }: { filters: FacilitatorFilters;
         {t(total === 1 ? '{count} guide found' : '{count} guides found', { count: total })}
         {pageCount > 1 && ` · ${t('Showing {start}–{end}', { start: offset + 1, end: offset + facilitators.length })}`}
       </p>
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5">
         {facilitators.map((facilitator) => <FacilitatorCard key={facilitator.id} facilitator={facilitator} />)}
       </div>
       {pageCount > 1 && (
@@ -161,8 +161,8 @@ async function GridSkeleton() {
   return (
     <div role="status" aria-label={t("Loading guides")}>
       <span className="sr-only">{t("Loading guides…")}</span>
-      <div aria-hidden="true" className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        {Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-[34rem] animate-pulse rounded-2xl bg-stone-100 motion-reduce:animate-none" />)}
+      <div aria-hidden="true" className="grid grid-cols-1 gap-5">
+        {Array.from({ length: 3 }).map((_, index) => <div key={index} className="h-72 animate-pulse rounded-2xl bg-stone-100 motion-reduce:animate-none" />)}
       </div>
     </div>
   )
@@ -175,10 +175,10 @@ export default async function FacilitatorsPage({ searchParams }: PageProps) {
   const page = boundedInteger(params.get('page'), 1, 1, 10000)
 
   return (
-    <div className="network-shell py-6 lg:py-14">
-      <div className="mb-5 max-w-3xl lg:mb-10">
+    <div className="network-shell py-6 lg:py-8">
+      <div className="mb-5 max-w-3xl lg:mb-6">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">{t("Find your support")}</p>
-        <h1 className="mt-3 text-3xl font-medium leading-[1.08] tracking-[-0.045em] text-stone-900 sm:text-4xl lg:mt-5 lg:text-6xl">{t('A guide for your next step.')}</h1>
+        <h1 className="mt-3 text-3xl font-medium leading-[1.08] tracking-[-0.045em] text-stone-900 sm:text-4xl lg:text-4xl">{t('A guide for your next step.')}</h1>
         <p className="mt-5 hidden max-w-2xl leading-7 text-stone-600 lg:block">{t("Explore preparation, integration, breathwork, and somatic support. Get to know each guide’s approach, then start a conversation when you feel ready.")}</p>
         <p className="mt-3 text-sm text-emerald-800 lg:mt-4">{t("No explorer account needed. Browse at your own pace.")}</p>
       </div>

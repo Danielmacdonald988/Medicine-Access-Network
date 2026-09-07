@@ -28,7 +28,7 @@ export async function GET(request: Request) {
     const { data, error, count } = await buildFacilitatorQuery(supabase, filters, {
       limit,
       offset,
-      columns: 'id, display_name, bio, location, remote_available, modalities, donation_based, minimum_donation, hourly_rate, avatar_url, years_experience, image_paths',
+      columns: 'id, display_name, bio, location, remote_available, modalities, donation_based, minimum_donation, hourly_rate, avatar_url, years_experience, image_paths, whatsapp_url, signal_url, telegram_url',
     })
     if (error?.code === 'PGRST103') {
       return NextResponse.json({ error: 'This results page is out of range. Start again with offset 0.' }, { status: 400 })

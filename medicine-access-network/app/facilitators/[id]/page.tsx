@@ -1,3 +1,4 @@
+import headerStyles from './profile-header.module.css'
 import { getTranslation } from '@/lib/i18n/server'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -210,9 +211,9 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
         href="/facilitators"
         className="mb-6 inline-flex min-h-11 items-center text-sm font-medium text-emerald-700 underline-offset-4 hover:underline"
       >{t("← Back to all guides")}</Link>
-      <div className="rounded-2xl border border-stone-200 bg-white p-5 sm:p-8 lg:p-10">
-        <div className="grid items-start gap-6 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-8">
-          <Avatar className="h-56 w-44 shrink-0 overflow-hidden rounded-xl bg-[#eef0e8] p-1.5 after:rounded-[inherit] sm:h-64 sm:w-48">
+      <div className={headerStyles.header}>
+        <div className={headerStyles.photo}>
+          <Avatar className="h-28 w-20 shrink-0 overflow-hidden rounded-xl bg-[#eef0e8] p-1.5 after:rounded-[inherit] sm:h-40 sm:w-28 lg:h-48 lg:w-36">
             {primaryPhotoUrl && (
               <AvatarImage
                 src={primaryPhotoUrl}
@@ -224,45 +225,11 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               {initials}
             </AvatarFallback>
           </Avatar>
-
-          <div className="min-w-0">
-            <section id="about" aria-labelledby="profile-name" className="scroll-mt-24">
-              <h1 id="profile-name" className="break-words text-4xl font-medium leading-tight tracking-[-0.04em] text-stone-900 sm:text-5xl">
+        </div>
+        <div className={headerStyles.identity}>
+          <h1 id="profile-name" className="break-words text-3xl font-medium leading-tight tracking-[-0.04em] text-stone-900 sm:text-4xl">
                 {facilitator.display_name}
               </h1>
-              <p dir="auto" className="mt-4 max-w-prose whitespace-pre-line break-words leading-7 text-stone-600">
-                {facilitator.bio}
-              </p>
-              {locale !== 'en' && <p className="mt-3 text-xs text-stone-500">{t('Profile descriptions and reviews are shown in their original language.')}</p>}
-            </section>
-
-            <div className="mt-6 rounded-xl border border-stone-200 bg-[#f0f1e9] p-5">
-              <p className="text-xs font-medium uppercase tracking-wide text-stone-500">{t("Listed fee · USD")}</p>
-              <p className="mt-1 font-semibold text-stone-900">{rateDisplay}</p>
-              <p className="mt-1 text-xs leading-relaxed text-stone-600">{t("Confirm session length and total cost directly.")}</p>
-              {hasDirectContact && <div className="mt-4"><DirectContactLinks profile={facilitator} /></div>}
-              <Button
-                asChild
-                variant={hasDirectContact ? 'outline' : 'default'}
-                className={`mt-4 h-auto min-h-11 w-full whitespace-normal ${hasDirectContact ? 'border-emerald-700 text-emerald-800 hover:bg-emerald-50' : 'bg-emerald-700 hover:bg-emerald-800'}`}
-              >
-                <a href="#contact">
-                  {isOwnProfile
-                    ? t('View your profile options')
-                    : hasDirectContact ? t('Send a website inquiry')
-                    : t('Contact {name}', { name: facilitator.display_name })}
-                </a>
-              </Button>
-              <p className="mt-2 text-center text-xs text-stone-600">{t("No account needed. No payment to reach out.")}</p>
-              <div className="mt-3 flex justify-center">
-                <SaveGuideButton
-                  profileId={facilitator.id}
-                  displayName={facilitator.display_name}
-                />
-              </div>
-            </div>
-
-            <div className="mt-6 border-t border-stone-200 pt-5">
               <a
                 href="#profile-review"
                 className="inline-flex min-h-9 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 underline-offset-4 hover:underline"
@@ -303,9 +270,40 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               ) : (
                 <p className="mt-2 text-sm text-stone-500">{t("No reviews yet")}</p>
               )}
-            </div>
-          </div>
         </div>
+        <aside className={headerStyles.contact} aria-label={t('Contact {name}', { name: facilitator.display_name })}>
+          {hasDirectContact && <DirectContactLinks profile={facilitator} compact />}
+              <Button
+                asChild
+                variant={hasDirectContact ? 'outline' : 'default'}
+                className={`mt-4 h-auto min-h-11 w-full whitespace-normal ${hasDirectContact ? 'border-emerald-700 text-emerald-800 hover:bg-emerald-50' : 'bg-emerald-700 hover:bg-emerald-800'}`}
+              >
+                <a href="#contact">
+                  {isOwnProfile
+                    ? t('View your profile options')
+                    : hasDirectContact ? t('Send a website inquiry')
+                    : t('Contact {name}', { name: facilitator.display_name })}
+                </a>
+              </Button>
+              <p className="mt-2 text-center text-xs text-stone-600">{t("No account needed. No payment to reach out.")}</p>
+              <div className="mt-3 flex justify-center">
+                <SaveGuideButton
+                  profileId={facilitator.id}
+                  displayName={facilitator.display_name}
+                />
+              </div>
+        </aside>
+        <section id="about" aria-labelledby="profile-name" className={headerStyles.bio}>
+          <p dir="auto" className="mt-4 max-w-prose whitespace-pre-line break-words leading-7 text-stone-600">
+                {facilitator.bio}
+              </p>
+              {locale !== 'en' && <p className="mt-3 text-xs text-stone-500">{t('Profile descriptions and reviews are shown in their original language.')}</p>}
+        </section>
+        <div className={headerStyles.fee}>
+          <p className="text-xs font-medium uppercase tracking-wide text-stone-500">{t("Listed fee · USD")}</p>
+              <p className="mt-1 font-semibold text-stone-900">{rateDisplay}</p>
+              <p className="mt-1 text-xs leading-relaxed text-stone-600">{t("Confirm session length and total cost directly.")}</p>
+</div>
       </div>
 
       <nav
