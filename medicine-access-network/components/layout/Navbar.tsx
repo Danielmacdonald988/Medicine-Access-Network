@@ -48,7 +48,7 @@ export function Navbar({ user }: NavbarProps) {
   return (
     <>
       {pathname === "/" && (
-        <div className="flex min-h-9 flex-wrap items-center justify-center gap-x-2 gap-y-1 bg-[#e8eddf] px-4 py-2 text-center text-xs text-foreground">
+        <div className="hidden min-h-9 flex-wrap items-center justify-center gap-x-2 gap-y-1 bg-[#e8eddf] px-4 py-2 text-center text-xs text-foreground min-[761px]:flex">
           <span
             className="size-1.5 rounded-full bg-[#6f8654]"
             aria-hidden="true"
