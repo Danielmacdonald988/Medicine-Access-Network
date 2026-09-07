@@ -2,8 +2,7 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Search, SlidersHorizontal, Users, X } from 'lucide-react'
-import { SearchBar, SearchSort } from '@/components/search/SearchBar'
-import { SearchFilters } from '@/components/search/SearchFilters'
+import { DirectorySearchControls } from '@/components/search/DirectorySearchControls'
 import { SearchRecovery } from '@/components/search/SearchRecovery'
 import { FacilitatorCard } from '@/components/cards/FacilitatorCard'
 import { SafetyDisclaimer } from '@/components/layout/SafetyDisclaimer'
@@ -170,32 +169,28 @@ export default async function FacilitatorsPage({ searchParams }: PageProps) {
   const page = boundedInteger(params.get('page'), 1, 1, 10000)
 
   return (
-    <div className="network-shell py-10 sm:py-14">
-      <div className="mb-8 max-w-3xl sm:mb-10">
+    <div className="network-shell py-6 lg:py-14">
+      <div className="mb-5 max-w-3xl lg:mb-10">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">Find your support</p>
-        <h1 className="mt-5 text-4xl font-medium leading-[1.08] tracking-[-0.045em] text-stone-900 sm:text-5xl lg:text-6xl">A guide for <em className="font-medium text-[#657f48]">your next step.</em></h1>
-        <p className="mt-5 max-w-2xl leading-7 text-stone-600">Explore preparation, integration, breathwork, and somatic support. Get to know each guide’s approach, then start a conversation when you feel ready.</p>
-        <p className="mt-4 text-sm text-emerald-800">No explorer account needed. Browse at your own pace.</p>
+        <h1 className="mt-3 text-3xl font-medium leading-[1.08] tracking-[-0.045em] text-stone-900 sm:text-4xl lg:mt-5 lg:text-6xl">A guide for <em className="font-medium text-[#657f48]">your next step.</em></h1>
+        <p className="mt-5 hidden max-w-2xl leading-7 text-stone-600 lg:block">Explore preparation, integration, breathwork, and somatic support. Get to know each guide’s approach, then start a conversation when you feel ready.</p>
+        <p className="mt-3 text-sm text-emerald-800 lg:mt-4">No explorer account needed. Browse at your own pace.</p>
       </div>
-      <div className="mb-8"><Suspense><SearchBar /></Suspense></div>
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
-        <Suspense><SearchFilters /></Suspense>
+      <div className="grid gap-5 lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start lg:gap-8">
+        <Suspense><DirectorySearchControls /></Suspense>
         <section aria-label="Guide search results" className="min-w-0 flex-1">
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-x-5 gap-y-2">
-            <h2 className="text-2xl font-medium tracking-tight text-stone-900">Meet the guides</h2>
-            <Link href="/about#profile-review" className="inline-flex min-h-11 items-center text-xs font-medium text-emerald-800 underline underline-offset-4">What does profile review mean?</Link>
-          </div>
+          <h2 className="mb-3 text-2xl font-medium tracking-tight text-stone-900">Meet the guides</h2>
           <ActiveFilters filters={filters} />
-          <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <Suspense key={`${filterSearchParams(filters)}:${page}`} fallback={<GridSkeleton />}>
+            <FacilitatorGrid filters={filters} page={page} />
+          </Suspense>
+          <div className="mt-6 flex flex-col gap-2 border-t border-stone-200 pt-4">
+            <Link href="/about#profile-review" className="inline-flex min-h-11 items-center text-xs font-medium text-emerald-800 underline underline-offset-4">What does profile review mean?</Link>
             <details className="max-w-md text-sm text-stone-600">
               <summary className="cursor-pointer py-3 font-medium text-emerald-800 underline underline-offset-4">How profiles are ordered</summary>
               <p className="leading-relaxed">Profiles are ordered by when they were created, newest first, or alphabetically when you choose Name A–Z. Placement is not a quality rating or a recommendation. Guides do not pay for placement.</p>
             </details>
-            <Suspense><SearchSort /></Suspense>
           </div>
-          <Suspense key={`${filterSearchParams(filters)}:${page}`} fallback={<GridSkeleton />}>
-            <FacilitatorGrid filters={filters} page={page} />
-          </Suspense>
         </section>
       </div>
       <div className="mt-16"><SafetyDisclaimer compact /></div>
