@@ -90,6 +90,11 @@ export function Navbar({ user }: NavbarProps) {
 
         {/* Auth actions */}
         <div className="hidden items-center gap-2 lg:flex">
+          {user?.role === 'facilitator' && (
+            <Button variant="outline" className="h-11 bg-transparent" asChild>
+              <Link href="/facilitator/edit">Edit my profile</Link>
+            </Button>
+          )}
           {user ? (
             <DropdownMenu>
               {/* Base UI Trigger — renders a <button> directly, no asChild needed */}
@@ -170,6 +175,11 @@ export function Navbar({ user }: NavbarProps) {
                 <Link href="/dashboard" className="flex min-h-11 items-center text-sm font-medium text-stone-700">
                   Dashboard
                 </Link>
+                {user.role === 'facilitator' && (
+                  <Link href="/facilitator/edit" className="flex min-h-11 items-center text-sm font-semibold text-emerald-800">
+                    Edit my profile
+                  </Link>
+                )}
                 {user.role === 'admin' && (
                   <Link href="/admin" className="flex min-h-11 items-center text-sm font-medium text-foreground">
                     Admin

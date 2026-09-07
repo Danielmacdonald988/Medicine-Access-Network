@@ -40,7 +40,9 @@ const nextConfig: NextConfig = {
         headers: [
           { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
           { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
-          { key: 'Referrer-Policy', value: 'no-referrer' },
+          // Native POST forms need their same-origin Origin header for CSRF
+          // validation. Keep private-page referrers hidden from other sites.
+          { key: 'Referrer-Policy', value: 'same-origin' },
         ],
       })),
       ...(process.env.VERCEL_ENV === 'preview' ? [{
