@@ -1,9 +1,6 @@
-// Analytics stub — swap the implementation without changing call sites.
-//
-// To activate Vercel Analytics:
-//   1. npm install @vercel/analytics
-//   2. Add <Analytics /> to app/layout.tsx (see comment there)
-//   3. No changes needed to this file — event tracking goes through track() below.
+// Custom event stubs — swap the implementation without changing call sites.
+// Page views are collected by TrafficAnalytics in app/layout.tsx.
+// These custom events remain development-only; they are not sent to Vercel.
 //
 // To activate PostHog, Plausible, or another provider:
 //   Replace the track() body with the appropriate SDK call.
