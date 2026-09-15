@@ -69,10 +69,10 @@ function callbackFixture({ exchangeError = null } = {}) {
     logs,
     mocks: {
       '@/lib/safe-redirect': redirectModule,
-      '@/lib/supabaseServer': {
-        createServerSupabaseClient: async () => {
+      '@/lib/supabase-callback': {
+        createCallbackSupabaseClient: (request) => {
           calls.clients += 1
-          return {
+          return { redirect: (path) => require('next/server').NextResponse.redirect(new URL(path, request.url)), supabase: {
             auth: {
               verifyOtp: async (input) => {
                 calls.emailTokens.push(input)
@@ -83,7 +83,7 @@ function callbackFixture({ exchangeError = null } = {}) {
                 return { error: exchangeError }
               },
             },
-          }
+          } }
         },
       },
       '@/lib/auth': {
@@ -406,4 +406,27 @@ test('unsupported token types are rejected and email links cannot redirect outsi
   const { routes } = callbackFixture()
   const response = await routes.GET(new Request('https://directory.test/auth/callback?token_hash=test&type=email&next=https://outside.example'))
   assert.equal(response.headers.get('location'), 'https://directory.test/admin')
+})
+
+
+test('callback session cookies survive redirects with every option and chunk intact', () => {
+  let adapter
+  const { createCallbackSupabaseClient } = loadModule('lib/supabase-callback.ts', {
+    mocks: { '@supabase/ssr': { createServerClient: (_url, _key, options) => { adapter = options.cookies; return {} } } },
+  })
+  const callback = createCallbackSupabaseClient(new Request('https://directory.test/auth/callback', { headers: { cookie: 'old=session' } }))
+  const options = { path: '/', secure: true, httpOnly: true, sameSite: 'lax', maxAge: 3600 }
+  adapter.setAll([
+    { name: 'session.0', value: 'chunk-1', options },
+    { name: 'session.1', value: 'chunk-2', options },
+    { name: 'old', value: '', options: { path: '/', maxAge: 0 } },
+  ])
+  assert.equal(adapter.getAll().find(cookie => cookie.name === 'session.0').value, 'chunk-1')
+  const response = callback.redirect('/onboarding/facilitator')
+  assert.equal(response.headers.get('location'), 'https://directory.test/onboarding/facilitator')
+  for (const name of ['session.0', 'session.1']) {
+    const cookie = response.cookies.get(name)
+    for (const [key, expected] of Object.entries(options)) assert.equal(cookie[key], expected)
+  }
+  assert.equal(response.cookies.get('old').maxAge, 0)
 })

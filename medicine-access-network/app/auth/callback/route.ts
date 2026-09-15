@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createServerSupabaseClient } from '@/lib/supabaseServer'
+import { createCallbackSupabaseClient } from '@/lib/supabase-callback'
 import { dashboardPathForRole, getCurrentUser } from '@/lib/auth'
 import { safeRedirectPath } from '@/lib/safe-redirect'
 
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`)
   }
 
-  const supabase = await createServerSupabaseClient()
+  const { supabase, redirect } = createCallbackSupabaseClient(request)
   // Token hashes work across browsers, including Instagram → an email app.
   // Only email tokens are accepted here; recovery keeps its existing code flow.
   const { error: exchangeError } = isEmailToken
@@ -41,12 +41,12 @@ export async function GET(request: Request) {
 
   if (exchangeError) {
     console.error('[auth callback] code exchange failed', { status: exchangeError.status })
-    return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`)
+    return redirect(`${origin}/login?error=auth_callback_failed`)
   }
 
   // Password reset etc. — an explicit `next` wins outright.
   if (next !== '/dashboard') {
-    return NextResponse.redirect(new URL(next, origin))
+    return redirect(next)
   }
 
   // getCurrentUser() self-heals the public.users row if the signup trigger
@@ -54,11 +54,11 @@ export async function GET(request: Request) {
   // A null return at this point means a real failure occurred — "no row
   // yet" is not possible here, since getCurrentUser() self-heals that case
   // internally. Do not reinterpret null as "new user, needs onboarding."
-  const user = await getCurrentUser()
+  const user = await getCurrentUser(supabase)
 
   if (!user) {
     console.error('[auth callback] authenticated but no user profile could be loaded or created')
-    return NextResponse.redirect(`${origin}/auth/error?reason=profile_lookup_failed`)
+    return redirect(`${origin}/auth/error?reason=profile_lookup_failed`)
   }
 
   if (user.role === 'facilitator') {
@@ -76,15 +76,15 @@ export async function GET(request: Request) {
         '[auth callback] facilitator profile lookup failed',
         { code: facilitatorLookupError.code }
       )
-      return NextResponse.redirect(`${origin}/auth/error?reason=facilitator_profile_lookup_failed`)
+      return redirect(`${origin}/auth/error?reason=facilitator_profile_lookup_failed`)
     }
 
-    return NextResponse.redirect(
+    return redirect(
       `${origin}${facilitatorProfile ? '/facilitator' : '/onboarding/facilitator'}`
     )
   }
 
   // Admins (and any pre-existing legacy 'seeker' rows, pending cleanup)
   // fall back to the standard role-based dashboard redirect.
-  return NextResponse.redirect(`${origin}${dashboardPathForRole(user.role)}`)
+  return redirect(`${origin}${dashboardPathForRole(user.role)}`)
 }

@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import type { UserRole } from '@/lib/types'
 
@@ -32,9 +33,9 @@ export interface SessionUser {
  * server logs, and callers that need to tell the two cases apart (see
  * app/auth/callback/route.ts) should not rely on this function alone.
  */
-export async function getCurrentUser(): Promise<SessionUser | null> {
+export async function getCurrentUser(client?: SupabaseClient): Promise<SessionUser | null> {
   try {
-    return await loadCurrentUser()
+    return await loadCurrentUser(client)
   } catch {
     // Public pages must remain readable during an authentication outage.
     console.error('[getCurrentUser] authentication service unavailable')
@@ -42,8 +43,8 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
   }
 }
 
-async function loadCurrentUser(): Promise<SessionUser | null> {
-  const supabase = await createServerSupabaseClient()
+async function loadCurrentUser(client?: SupabaseClient): Promise<SessionUser | null> {
+  const supabase = client ?? await createServerSupabaseClient()
 
   const {
     data: { user },
