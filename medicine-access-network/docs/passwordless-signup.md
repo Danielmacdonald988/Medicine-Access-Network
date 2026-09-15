@@ -8,9 +8,9 @@ Returning users can request an email link at `/login`; existing password login r
 
 In Supabase Authentication → Email Templates, use `passwordless-email-template.html` for **Confirm signup** and **Magic link**, with subject `Your secure link — The Facilitator Network`. Both templates must support the new-account and returning-account cases. Preserve any other templates, including password recovery.
 
-The template uses `.RedirectTo` (supplied with a `next` query parameter by both forms), `.TokenHash`, and `type=email`. The callback verifies the email token directly, so it does not depend on cookies from Instagram’s in-app browser being available in the browser that opens the email. Keep the existing code exchange for password resets and older links.
+The template uses `.SiteURL` with a fixed `/auth/callback?token_hash=` address, `.TokenHash`, and `type=email`. This remains valid even when an older client omits a return URL or query string. After email sign-in, the callback chooses the appropriate application or dashboard from the authenticated account. The callback verifies the email token directly, so it does not depend on cookies from Instagram’s in-app browser being available in the browser that opens the email. Keep the existing code exchange for password resets and older links.
 
-Allow the production and preview `/auth/callback` URLs including query parameters in Supabase URL Configuration. Confirm SMTP delivery is configured. This repository has no deployment credentials or local environment file; deploying code does not install the email template.
+Allow the production and preview `/auth/callback` URLs including query parameters in Supabase URL Configuration. Confirm SMTP delivery is configured. Deploying code does not install the email template. Both live templates were activated separately on September 15, 2026, after the signup deployment succeeded. The production callback allowlist includes both www and non-www origins. Inbox delivery testing requires an approved test recipient.
 
 ## Release acceptance checks
 
