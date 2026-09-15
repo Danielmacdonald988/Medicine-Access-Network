@@ -24,14 +24,20 @@ import { safeRedirectPath } from '@/lib/safe-redirect'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
+  const tokenHash = searchParams.get('token_hash')
+  const isEmailToken = !!tokenHash && searchParams.get('type') === 'email'
   const next = safeRedirectPath(searchParams.get('next'))
 
-  if (!code) {
+  if (!code && !isEmailToken) {
     return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`)
   }
 
   const supabase = await createServerSupabaseClient()
-  const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+  // Token hashes work across browsers, including Instagram → an email app.
+  // Only email tokens are accepted here; recovery keeps its existing code flow.
+  const { error: exchangeError } = isEmailToken
+    ? await supabase.auth.verifyOtp({ token_hash: tokenHash!, type: 'email' })
+    : await supabase.auth.exchangeCodeForSession(code!)
 
   if (exchangeError) {
     console.error('[auth callback] code exchange failed', { status: exchangeError.status })

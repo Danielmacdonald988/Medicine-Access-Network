@@ -6,7 +6,7 @@ import { SignUpForm } from '@/components/forms/SignUpForm'
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getTranslation()
-  return { title: t('Create account') }
+  return { title: t('Join the network') }
 }
 
 export default async function SignUpPage() {
@@ -14,8 +14,8 @@ export default async function SignUpPage() {
   return (
     <Card className="gap-6 rounded-2xl border border-border bg-card py-7 shadow-[0_12px_45px_#203e3406] ring-0 sm:py-8">
       <CardHeader className="gap-3 px-6 sm:px-8">
-        <CardTitle className="font-heading text-[40px] leading-[1.05] tracking-[-0.035em]"><h1>{t("Share your practice")}</h1></CardTitle>
-        <CardDescription className="text-sm leading-relaxed">{t("Create an account to submit your facilitator application. Looking for support instead? You don't need an account —")}{' '}
+        <CardTitle className="font-heading text-[40px] leading-[1.05] tracking-[-0.035em]"><h1>{t("Join the network")}</h1></CardTitle>
+        <CardDescription className="text-sm leading-relaxed">{t("Start with your name and email. We’ll send a secure link so you can complete your profile later. Looking for support?")}{' '}
           <Link href="/facilitators" className="font-medium text-emerald-700 hover:underline">{t("browse guides directly")}</Link>
           .
         </CardDescription>

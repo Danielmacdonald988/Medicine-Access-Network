@@ -6,7 +6,7 @@ A directory for preparation coaches, integration guides, breathwork practitioner
 
 - Visitors browse public profiles, compare support, location, online availability, and pricing, and request a conversation without creating an account.
 - A conversation request shares the visitor's name, email, and brief message with the chosen guide. It does not book a session or take payment.
-- Guides create an account, submit an application, and manage incoming requests in their dashboard. Email notifications require configured delivery credentials.
+- Guides join with their name, email and optional Instagram handle, then use a secure email link to finish their application and manage incoming requests. Existing password login remains available. Email notifications require configured delivery credentials.
 - Administrators review applications. **Approve & publish** makes a profile public; pending or rejected profiles remain hidden. Profile review is not independent clinical credentialing or a guarantee of outcomes.
 - The resource library offers educational guidance on preparation, integration, boundaries, and urgent support.
 
@@ -22,6 +22,8 @@ New seeker accounts, seeker onboarding, and the seeker dashboard have been remov
 | Inquiry notifications | Resend HTTP API |
 | Hosting | Existing Vercel project |
 | Payments | Legacy Stripe infrastructure; disabled by default |
+
+See [passwordless signup configuration](docs/passwordless-signup.md) for the required email templates and cross-browser release checks.
 
 ## Development
 

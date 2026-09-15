@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { LoginForm } from '@/components/forms/LoginForm'
+import { EmailLoginForm } from '@/components/forms/EmailLoginForm'
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getTranslation()
@@ -20,7 +20,7 @@ export default async function LoginPage() {
       </CardHeader>
       <CardContent className="px-6 sm:px-8">
         <Suspense>
-          <LoginForm />
+          <EmailLoginForm />
         </Suspense>
       </CardContent>
       <CardFooter className="justify-center border-t border-border bg-muted/50 px-6 py-5 text-center sm:px-8">

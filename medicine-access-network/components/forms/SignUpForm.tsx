@@ -12,8 +12,8 @@ import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase'
 import { signUpSchema, type SignUpInput } from '@/lib/validations'
 
-// Seekers have no accounts — this form only ever creates a facilitator
-// application. No role selector: there's nothing left to choose.
+// Save initial interest as an unconfirmed facilitator account.
+// The full application and publication review happen after email verification.
 export function SignUpForm() {
   const { t } = useTranslation()
   const supabase = createClient()
@@ -31,10 +31,10 @@ export function SignUpForm() {
     recordEngagement('signup_started')
     let error: { message: string } | null
     try {
-    ;({ error } = await supabase.auth.signUp({
+    ;({ error } = await supabase.auth.signInWithOtp({
       email: data.email,
-      password: data.password,
       options: {
+        shouldCreateUser: true,
         // Read by the handle_new_user() DB trigger to populate the
         // public.users row automatically. Always 'facilitator' — see
         // db/migrations/0001+ and lib/auth.ts's getCurrentUser() self-heal,
@@ -42,13 +42,14 @@ export function SignUpForm() {
         data: {
           full_name: data.full_name,
           role: 'facilitator',
+          instagram_handle: data.instagram_handle?.replace(/^@/, '') || null,
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
       },
     }))
     } catch {
       recordEngagement('signup_error')
-      toast.error(t('We could not create your account. Check your connection and try again.'))
+      toast.error(t('We could not send your link. Check your connection and try again.'))
       return
     }
 
@@ -64,10 +65,11 @@ export function SignUpForm() {
 
   if (confirmed) {
     return (
-      <div className="py-4 text-center space-y-2">
+      <div role="status" className="py-4 text-center space-y-2">
         <p className="font-medium text-emerald-700">{t("Check your inbox")}</p>
-        <p className="text-sm text-stone-500">{t("We sent a confirmation link to your email. Click it to activate your account and start your guide application.")}</p>
+        <p className="text-sm text-stone-500">{t("Check your email for a secure link to continue. If you’re new here, your details are saved so you can complete your profile later.")}</p>
         <p className="text-xs text-stone-400 pt-2">{t("Didn't receive it? Check your spam folder.")}</p>
+        <Button type="button" variant="outline" onClick={() => setConfirmed(false)}>{t("Edit email or request another link")}</Button>
       </div>
     )
   }
@@ -87,14 +89,9 @@ export function SignUpForm() {
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="password">{t("Password")}</Label>
-        <Input
-          id="password"
-          type="password"
-          autoComplete="new-password"
-          {...register('password')}
-        />
-        {errors.password && <p className="text-xs text-red-500">{t(errors.password.message ?? "")}</p>}
+        <Label htmlFor="instagram_handle">{t("Instagram handle (optional)")}</Label>
+        <Input id="instagram_handle" placeholder="@yourpractice" autoCapitalize="none" autoCorrect="off" spellCheck={false} {...register('instagram_handle')} />
+        {errors.instagram_handle && <p className="text-xs text-red-500">{t(errors.instagram_handle.message ?? "")}</p>}
       </div>
 
       <Button
@@ -102,10 +99,10 @@ export function SignUpForm() {
         className="w-full bg-emerald-700 hover:bg-emerald-800"
         disabled={isSubmitting}
       >
-        {isSubmitting ? t('Creating account…') : t('Create account')}
+        {isSubmitting ? t('Sending your link…') : t('Join the network')}
       </Button>
 
-      <p className="text-center text-xs text-stone-400">{t("Your account is for managing a guide profile. Profiles require review before publication.")}</p>
+      <p className="text-center text-xs text-stone-400">{t("No password needed. Complete your application later. Every profile is reviewed before publication.")}</p>
     </form>
   )
 }

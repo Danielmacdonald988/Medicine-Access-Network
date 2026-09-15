@@ -70,7 +70,7 @@ export default async function FacilitatorOnboardingPage() {
         </CardContent>
       </Card>
 
-      <FacilitatorOnboardingForm />
+      <FacilitatorOnboardingForm initialName={user.full_name} />
     </div>
   )
 }

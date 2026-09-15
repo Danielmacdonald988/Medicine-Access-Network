@@ -10,7 +10,7 @@ const footerLinks = {
     { href: "/facilitators", label: "Explore support" },
     { href: "/saved", label: "Saved guides" },
     { href: "/#how-it-works", label: "How it works" },
-    { href: "/onboarding/facilitator", label: "List your practice" },
+    { href: "/signup", label: "List your practice" },
   ],
   "Safety library": [
     { href: "/resources", label: "Browse resources" },

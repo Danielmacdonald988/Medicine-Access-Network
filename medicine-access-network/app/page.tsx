@@ -357,7 +357,7 @@ export default async function Home() {
                 "Free to apply. Every profile is reviewed before publication.",
               )}{" "}
             </p>
-            <Link href="/onboarding/facilitator" className={styles.creamButton}>
+            <Link href="/signup" className={styles.creamButton}>
               {" "}
               {t("List your practice")} <ArrowUpRight size={18} aria-hidden />
             </Link>

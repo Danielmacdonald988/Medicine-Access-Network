@@ -175,7 +175,7 @@ function ConfirmationScreen({ editing, contactsSaved }: { editing: boolean; cont
 
 // ─── Form ─────────────────────────────────────────────────────────────────────
 
-export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile?: FacilitatorProfile }) {
+export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }: { existingProfile?: FacilitatorProfile; initialName?: string }) {
   const { t } = useTranslation()
   const [step, setStep] = useState(1)
   const [uploading, setUploading] = useState(false)
@@ -197,7 +197,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
   } = useForm<z.input<typeof facilitatorOnboardingSchema>, unknown, FacilitatorOnboardingInput>({
     resolver: zodResolver(facilitatorOnboardingSchema),
     defaultValues: {
-      display_name: existingProfile?.display_name ?? '',
+      display_name: existingProfile?.display_name ?? initialName,
       location: existingProfile?.location ?? '',
       remote_available: existingProfile?.remote_available ?? true,
       bio: existingProfile?.bio ?? '',

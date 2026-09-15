@@ -9,9 +9,9 @@ import { isProfileImagePath, MAX_PROFILE_IMAGES } from './profile-media'
 // app/auth/callback/route.ts, which still tolerate a legacy 'seeker' role
 // value on old rows — this schema is only about what NEW signups can be.)
 export const signUpSchema = z.object({
-  full_name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  full_name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100),
+  email: z.string().trim().email('Please enter a valid email address'),
+  instagram_handle: z.string().trim().regex(/^@?[A-Za-z0-9._]{1,30}$|^$/, 'Enter your Instagram username, without a profile URL').optional(),
 })
 
 export const loginSchema = z.object({

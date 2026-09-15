@@ -63,7 +63,7 @@ test('post-auth destinations preserve password reset and ordinary local query st
 })
 
 function callbackFixture({ exchangeError = null } = {}) {
-  const calls = { clients: 0, exchangeCodes: [], profiles: 0 }
+  const calls = { clients: 0, exchangeCodes: [], emailTokens: [], profiles: 0 }
   const logs = []
   const routes = loadModule('app/auth/callback/route.ts', {
     logs,
@@ -74,6 +74,10 @@ function callbackFixture({ exchangeError = null } = {}) {
           calls.clients += 1
           return {
             auth: {
+              verifyOtp: async (input) => {
+                calls.emailTokens.push(input)
+                return { error: exchangeError }
+              },
               exchangeCodeForSession: async (code) => {
                 calls.exchangeCodes.push(code)
                 return { error: exchangeError }
@@ -373,4 +377,33 @@ test('failed signout returns a retryable 503 without claiming success or exposin
   assert.equal(response.status, 503)
   assert.equal(response.headers.get('location'), null)
   assert.deepEqual(await response.json(), { error: 'Could not sign out. Please try again.' })
+})
+
+
+test('email token links sign in without a code verifier from the original browser', async () => {
+  const { routes, calls } = callbackFixture()
+  const response = await routes.GET(new Request('https://directory.test/auth/callback?next=/dashboard&token_hash=one-use-token&type=email'))
+  assert.equal(response.headers.get('location'), 'https://directory.test/admin')
+  assert.deepEqual(calls.emailTokens, [{ token_hash: 'one-use-token', type: 'email' }])
+  assert.deepEqual(calls.exchangeCodes, [])
+})
+
+test('expired email tokens cannot grant access and do not leak token contents', async () => {
+  const { routes, calls, logs } = callbackFixture({ exchangeError: { status: 403, message: 'private-token' } })
+  const response = await routes.GET(new Request('https://directory.test/auth/callback?token_hash=private-token&type=email&next=/admin'))
+  assert.equal(response.headers.get('location'), 'https://directory.test/login?error=auth_callback_failed')
+  assert.equal(calls.profiles, 0)
+  assert.ok(!JSON.stringify(logs).includes('private-token'))
+})
+
+test('unsupported token types are rejected and email links cannot redirect outside the site', async () => {
+  for (const type of ['recovery', 'invite', 'email_change', '']) {
+    const { routes, calls } = callbackFixture()
+    const response = await routes.GET(new Request(`https://directory.test/auth/callback?token_hash=test&type=${type}`))
+    assert.equal(response.headers.get('location'), 'https://directory.test/login?error=auth_callback_failed')
+    assert.equal(calls.clients, 0)
+  }
+  const { routes } = callbackFixture()
+  const response = await routes.GET(new Request('https://directory.test/auth/callback?token_hash=test&type=email&next=https://outside.example'))
+  assert.equal(response.headers.get('location'), 'https://directory.test/admin')
 })
