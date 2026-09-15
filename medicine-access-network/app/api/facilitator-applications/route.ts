@@ -1,5 +1,6 @@
 import { after, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { createAdminSupabaseClient } from '@/lib/supabaseAdmin'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { facilitatorOnboardingSchema } from '@/lib/validations'
 import { hasCrossOriginSource, readSmallJson } from '@/lib/request-body'
@@ -9,6 +10,12 @@ import { dispatchAdminApplicationNotifications } from '@/lib/admin-notifications
 export const runtime = 'nodejs'
 export const maxDuration = 60
 
+const contactSchema = facilitatorOnboardingSchema.pick({
+  whatsapp_url: true, signal_url: true, telegram_url: true,
+}).strict()
+const contactSubmissionSchema = z.object({
+  profileId: z.string().uuid(), contacts: contactSchema,
+}).strict()
 const submissionSchema = z.object({
   profileId: z.string().uuid().optional(),
   application: facilitatorOnboardingSchema,
@@ -41,6 +48,11 @@ export async function POST(request: Request) {
 
     const body = await readSmallJson(request)
     if (!body.ok) return json({ error: body.error }, body.status)
+    // A dedicated contact save never accepts practice or moderation fields.
+    const contactSubmission = contactSubmissionSchema.safeParse(body.data)
+    if (contactSubmission.success) {
+      return await saveContacts(user.id, contactSubmission.data.profileId, contactSubmission.data.contacts)
+    }
     const parsed = submissionSchema.safeParse(body.data)
     if (!parsed.success) {
       return json({ error: 'Review your application fields, required photo, and platform agreement before submitting.' }, 400)
@@ -74,6 +86,16 @@ export async function POST(request: Request) {
       verification_status: 'pending',
       visibility: 'hidden',
     }
+    if (profileId) {
+      const { data: current, error: readError } = await supabase
+        .from('facilitator_profiles').select(Object.keys(profileData).join(','))
+        .eq('id', profileId).eq('user_id', user.id).single()
+      if (readError || !current) return json({ error: 'Your profile could not be loaded. Please try again.' }, 404)
+      const excluded = new Set(['whatsapp_url', 'signal_url', 'telegram_url', 'verification_status', 'visibility'])
+      const contactOnly = Object.entries(profileData).every(([key, value]) =>
+        excluded.has(key) || JSON.stringify(value) === JSON.stringify((current as unknown as Record<string, unknown>)[key]))
+      if (contactOnly) return await saveContacts(user.id, profileId, data)
+    }
     // A new application never overwrites an existing one. An edit requires both
     // the explicit profile ID and the authenticated owner, even before RLS.
     const query = profileId
@@ -105,4 +127,19 @@ export async function POST(request: Request) {
     console.error('[applications] submission service unavailable')
     return json({ error: 'Your profile could not be saved. Your entries are still here; please try again.' }, 500)
   }
+}
+
+/** Only this server-side, fixed-field write bypasses the resubmission policy.
+ * The authenticated owner is always a filter; status and visibility are never
+ * written, so a concurrent admin decision is preserved as well.
+ */
+async function saveContacts(userId: string, profileId: string, contacts: z.infer<typeof contactSchema>) {
+  const admin = createAdminSupabaseClient()
+  const { data: saved, error } = await admin.from('facilitator_profiles').update({
+    whatsapp_url: contacts.whatsapp_url || null,
+    signal_url: contacts.signal_url || null,
+    telegram_url: contacts.telegram_url || null,
+  }).eq('id', profileId).eq('user_id', userId).select('id').single()
+  if (error || !saved) return json({ error: 'Your messaging links could not be saved. Please try again.' }, 400)
+  return json({ success: true, profileId: saved.id, reviewRequired: false })
 }

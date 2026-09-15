@@ -174,6 +174,14 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
   await as('authenticated',applicant)
   await denied("update public.facilitator_profiles set bio=repeat('b',100) where user_id=$1",[applicant])
   const approvedProfileId = (await row('select id from public.facilitator_profiles where user_id=$1',[applicant])).id
+  // The contact-only server endpoint writes a fixed allowlist as service_role.
+  await as('service_role')
+  const contactUpdate = await row("update public.facilitator_profiles set whatsapp_url=$3,signal_url=null,telegram_url=null where id=$1 and user_id=$2 returning verification_status,visibility,whatsapp_url", [approvedProfileId,applicant,'https://wa.me/14155552671'])
+  check(contactUpdate.verification_status === 'approved' && contactUpdate.visibility === 'public', 'contact-only server saves preserve approval and publication')
+  check((await db.query('update public.facilitator_profiles set whatsapp_url=null where id=$1 and user_id=$2 returning id',[approvedProfileId,otherGuide])).rows.length === 0, 'contact-only server owner filter cannot modify another profile')
+  await as('anon')
+  check((await row('select whatsapp_url from public.facilitator_public_profiles where id=$1',[approvedProfileId])).whatsapp_url === 'https://wa.me/14155552671', 'new messaging number appears publicly immediately')
+  await as('authenticated',applicant)
   // Match the application API's explicit owner/id UPDATE, including a photo
   // replacement and contact-link edit after the profile has been published.
   const updatedProfile = await row("update public.facilitator_profiles set bio=repeat('b',100),verification_status='pending',visibility='hidden',image_paths=$3,whatsapp_url=$4 where id=$1 and user_id=$2 returning id,bio,verification_status,visibility,image_paths,whatsapp_url",[approvedProfileId,applicant,[imagePath(applicant,2)],'https://wa.me/12025550123'])

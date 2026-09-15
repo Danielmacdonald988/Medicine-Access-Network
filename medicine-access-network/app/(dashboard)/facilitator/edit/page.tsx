@@ -44,7 +44,7 @@ export default async function EditFacilitatorProfilePage() {
       <Link href="/facilitator" className="text-sm font-medium text-emerald-800 underline">{t("Back to dashboard")}</Link>
       <div className="mb-8 mt-5">
         <h1 className="text-2xl font-bold text-stone-900">{t("Edit your guide profile")}</h1>
-        <p className="mt-2 text-stone-600">{t("Update your photos, messaging links, or practice details. Your current information is filled in below. Choose the section you want to change, then select “Finish editing” to confirm and submit your updates for review.")}</p>
+        <p className="mt-2 text-stone-600">{t("WhatsApp, Signal, and Telegram updates do not need approval. Choose Messaging links and select “Save messaging links” to update them immediately. Photos and practice details still require review.")}</p>
       </div>
       <FacilitatorOnboardingForm existingProfile={profile as FacilitatorProfile} />
     </div>

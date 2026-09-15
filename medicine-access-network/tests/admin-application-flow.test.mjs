@@ -47,9 +47,10 @@ const application = (overrides = {}) => ({
 })
 
 function fixture({ authenticated = true, role = 'facilitator', authError = null,
-  accountError = null, saveError = null, saved = true, dispatchThrows = false,
+  accountError = null, saveError = null, saved = true, dispatchThrows = false, current = {},
   dispatchResult = { sent: 1, failed: 0, configured: true } } = {}) {
   const writes = []
+  const contactWrites = []
   const reads = []
   const afterCallbacks = []
   const dispatchCalls = []
@@ -65,6 +66,7 @@ function fixture({ authenticated = true, role = 'facilitator', authError = null,
         update(value) { write = { table, method: 'update', value, filters }; writes.push(write); return query },
         single: async () => table === 'users'
           ? { data: { role }, error: accountError }
+          : !write ? { data: current, error: null }
           : { data: saved && !saveError ? { id: profileId } : null, error: saveError },
       }
       return query
@@ -75,6 +77,18 @@ function fixture({ authenticated = true, role = 'facilitator', authError = null,
       ...require('next/server'),
       after: (callback) => { afterCallbacks.push(callback) },
     },
+    '@/lib/supabaseAdmin': { createAdminSupabaseClient: () => ({
+      from(table) {
+        const filters = []
+        const query = {
+          update(value) { contactWrites.push({ table, value, filters }); return query },
+          eq(field, value) { filters.push([field, value]); return query },
+          select() { return query },
+          single: async () => ({ data: saved && !saveError ? { id: profileId } : null, error: saveError }),
+        }
+        return query
+      },
+    }) },
     '@/lib/supabaseServer': { createServerSupabaseClient: async () => supabase },
     '@/lib/validations': schemas,
     '@/lib/profile-media': media,
@@ -88,7 +102,7 @@ function fixture({ authenticated = true, role = 'facilitator', authError = null,
     },
   }
   return {
-    writes, reads, afterCallbacks, dispatchCalls,
+    writes, contactWrites, reads, afterCallbacks, dispatchCalls,
     applications: loadModule('app/api/facilitator-applications/route.ts', mocks),
     notifications: loadModule('app/api/admin/notifications/route.ts', mocks),
   }
@@ -272,4 +286,61 @@ test('retry redirects distinguish accepted, pending, and unconfigured alerts wit
     assert.equal(new URL(response.headers.get('Location')).searchParams.get('notice'), notice)
     assert.equal(f.dispatchCalls.length, 1)
   }
+})
+
+function contactSubmission(contacts = { whatsapp_url: 'https://wa.me/14155552671', signal_url: '', telegram_url: '' }, extra = {}) {
+  return submission({ body: JSON.stringify({ profileId, contacts, ...extra }) })
+}
+
+test('contact saves update only allowed fields for the signed-in owner without review or alerts', async () => {
+  const f = fixture()
+  const response = await f.applications.POST(contactSubmission())
+  assert.equal(response.status, 200)
+  assert.deepEqual(await response.json(), { success: true, profileId, reviewRequired: false })
+  assert.deepEqual(f.writes, [])
+  assert.deepEqual(f.afterCallbacks, [])
+  assert.deepEqual(f.contactWrites, [{ table: 'facilitator_profiles', value: {
+    whatsapp_url: 'https://wa.me/14155552671', signal_url: null, telegram_url: null,
+  }, filters: [['id', profileId], ['user_id', userId]] }])
+})
+
+test('contact save rejects unsafe links, extra moderation fields, and absent owners', async () => {
+  for (const request of [
+    contactSubmission({ whatsapp_url: 'https://evil.test/123' }),
+    contactSubmission({ whatsapp_url: '', verification_status: 'approved' }),
+    contactSubmission(undefined, { user_id: otherUserId }),
+  ]) {
+    const f = fixture()
+    assert.equal((await f.applications.POST(request)).status, 400)
+    assert.deepEqual(f.contactWrites, [])
+  }
+  for (const [options, expected] of [[{ authenticated: false }, 401], [{ role: 'seeker' }, 403], [{ saved: false }, 400], [{ saveError: { code: '23514' } }, 400]]) {
+    const f = fixture(options)
+    assert.equal((await f.applications.POST(contactSubmission())).status, expected)
+    assert.deepEqual(f.afterCallbacks, [])
+  }
+})
+
+test('contact links can be removed without changing moderation fields', async () => {
+  const f = fixture()
+  assert.equal((await f.applications.POST(contactSubmission({ whatsapp_url: '', signal_url: '', telegram_url: '' }))).status, 200)
+  assert.deepEqual(f.contactWrites[0].value, { whatsapp_url: null, signal_url: null, telegram_url: null })
+})
+
+test('full form contact-only saves bypass review, but mixed practice edits still require review', async () => {
+  const initial = fixture()
+  await initial.applications.POST(submission())
+  const current = { ...initial.writes[0].value, verification_status: 'approved', visibility: 'public' }
+  const f = fixture({ current })
+  const response = await f.applications.POST(submission({ profileId, application: application({ whatsapp_url: 'https://wa.me/14155552671' }) }))
+  assert.equal((await response.json()).reviewRequired, false)
+  assert.equal(f.contactWrites.length, 1)
+  assert.deepEqual(f.writes, [])
+  assert.deepEqual(f.afterCallbacks, [])
+  const mixed = fixture({ current })
+  await mixed.applications.POST(submission({ profileId, application: application({ whatsapp_url: 'https://wa.me/14155552671', bio: 'Changed practice description. '.repeat(10) }) }))
+  assert.deepEqual(mixed.contactWrites, [])
+  assert.equal(mixed.writes[0].value.verification_status, 'pending')
+  assert.equal(mixed.writes[0].value.visibility, 'hidden')
+  assert.equal(mixed.afterCallbacks.length, 1)
 })

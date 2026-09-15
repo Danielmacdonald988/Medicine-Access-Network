@@ -152,18 +152,18 @@ function StepIndicator({ current, total, editing }: { current: number; total: nu
 
 // ─── Confirmation screen ──────────────────────────────────────────────────────
 
-function ConfirmationScreen({ editing }: { editing: boolean }) {
+function ConfirmationScreen({ editing, contactsSaved }: { editing: boolean; contactsSaved: boolean }) {
   const { t } = useTranslation()
   return (
     <div className="py-8 text-center">
       <div className="mx-auto mb-5 flex size-16 items-center justify-center rounded-full bg-emerald-100">
         <CheckCircle className="size-8 text-emerald-600" />
       </div>
-      <h2 className="text-xl font-semibold text-stone-900">{t(editing ? 'Profile changes submitted' : 'Application submitted')}</h2>
+      <h2 className="text-xl font-semibold text-stone-900">{t(contactsSaved ? 'Messaging links saved' : editing ? 'Profile changes submitted' : 'Application submitted')}</h2>
       <p className="mt-3 text-stone-600">
-        {t(editing ? 'Your updated profile has been submitted for review.' : 'Your facilitator application has been submitted for review.')}
+        {t(contactsSaved ? 'Your messaging links have been updated. No approval is needed.' : editing ? 'Your updated profile has been submitted for review.' : 'Your facilitator application has been submitted for review.')}
       </p>
-      <p className="mt-2 text-sm text-stone-500">{t("Your profile stays hidden while it is pending review. Check your dashboard for your application status and any updates.")}</p>
+      {!contactsSaved && <p className="mt-2 text-sm text-stone-500">{t("Your profile stays hidden while it is pending review. Check your dashboard for your application status and any updates.")}</p>}
       <div className="mt-8">
         <Button asChild className="bg-emerald-700 hover:bg-emerald-800">
           <Link href="/facilitator">{t("Go to your dashboard")}</Link>
@@ -183,6 +183,8 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
   const headingRef = useRef<HTMLHeadingElement>(null)
   const errorRef = useRef<HTMLParagraphElement>(null)
   const [submitted, setSubmitted] = useState(false)
+  const [contactsSaved, setContactsSaved] = useState(false)
+  const [savingContacts, setSavingContacts] = useState(false)
 
   const {
     register,
@@ -190,6 +192,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
     control,
     trigger,
     watch,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<z.input<typeof facilitatorOnboardingSchema>, unknown, FacilitatorOnboardingInput>({
     resolver: zodResolver(facilitatorOnboardingSchema),
@@ -242,7 +245,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
   }
 
   const onSubmit = async (data: FacilitatorOnboardingInput) => {
-    if (uploading) return
+    if (uploading || savingContacts) return
     trackProgress(step)
     setSaveError('')
     try {
@@ -275,6 +278,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
         }).catch(() => undefined)
       }
       if (!existingProfile) recordEngagement('application_submitted')
+      setContactsSaved(result.reviewRequired === false)
       setSubmitted(true)
     } catch {
       if (!existingProfile) recordEngagement('application_error')
@@ -283,7 +287,32 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
     }
   }
 
-  if (submitted) return <ConfirmationScreen editing={Boolean(existingProfile)} />
+  const saveMessagingLinks = async () => {
+    if (!existingProfile || savingContacts || isSubmitting) return
+    if (!await trigger(['whatsapp_url', 'signal_url', 'telegram_url'])) return
+    setSavingContacts(true)
+    setSaveError('')
+    try {
+      const response = await fetch('/api/facilitator-applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profileId: existingProfile.id, contacts: {
+          whatsapp_url: getValues('whatsapp_url'), signal_url: getValues('signal_url'), telegram_url: getValues('telegram_url'),
+        } }),
+      })
+      const result = await response.json().catch(() => null)
+      if (!response.ok || result?.success !== true) throw new Error('save failed')
+      setContactsSaved(true)
+      setSubmitted(true)
+    } catch {
+      setSaveError('Your messaging links could not be saved. Please try again.')
+      requestAnimationFrame(() => errorRef.current?.focus())
+    } finally {
+      setSavingContacts(false)
+    }
+  }
+
+  if (submitted) return <ConfirmationScreen editing={Boolean(existingProfile)} contactsSaved={contactsSaved} />
 
   const { title, description } = STEP_META[step]
 
@@ -305,14 +334,14 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
         <div className="mb-6 space-y-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
           <p className="text-sm leading-relaxed text-amber-900">
             {t(existingProfile.verification_status === 'approved'
-              ? 'Submitting changes will hide your public profile until the updated profile is reviewed and approved.'
-              : 'Submitting changes sends your updated profile for review. It stays hidden until approved.')}
+              ? 'WhatsApp, Signal, and Telegram updates save without approval. Changes to photos or practice details hide your profile until reviewed and approved.'
+              : 'Messaging links save without another review. Your profile stays hidden until your application is approved. Changes to practice details are submitted for review.')}
           </p>
           <Label htmlFor="edit-profile-section">{t("Jump to a section")}</Label>
           <select
             id="edit-profile-section"
             value={step}
-            disabled={uploading || isSubmitting}
+            disabled={uploading || isSubmitting || savingContacts}
             onChange={(event) => goToStep(Number(event.target.value))}
             className="min-h-11 w-full rounded-lg border border-stone-300 bg-white px-3 text-base text-stone-800"
           >
@@ -721,7 +750,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
               }}
               onBusyChange={setUploading}
               error={errors.image_paths?.message}
-              disabled={isSubmitting || uploading}
+              disabled={isSubmitting || uploading || savingContacts}
             />
           )}
         />
@@ -757,6 +786,12 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
             <p id="telegram-help" className="text-xs text-stone-500">{t("Add your personal account link, without an @ before the username. Use your own account, rather than a group or bot.")}</p>
             {errors.telegram_url && <p id="telegram-error" role="alert" className="text-sm text-red-700">{t(errors.telegram_url.message ?? "")}</p>}
           </div>
+          {existingProfile && <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 space-y-3">
+            <p className="text-sm text-stone-700">{t("Save just your messaging links without approval. Your profile keeps its current publication status. Other unsaved edits will not be submitted.")}</p>
+            <Button type="button" disabled={savingContacts || isSubmitting} onClick={saveMessagingLinks}>
+              {t(savingContacts ? 'Saving…' : 'Save messaging links')}
+            </Button>
+          </div>}
           <p className="text-xs text-stone-500">{t("Adding a link does not send a message. Leave all fields blank to use only the website contact form.")}</p>
         </div>
       )}
@@ -823,7 +858,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
               event.preventDefault()
               goToStep(TOTAL_STEPS)
             }}
-            disabled={uploading || isSubmitting}
+            disabled={uploading || isSubmitting || savingContacts}
             className="min-h-11 w-full"
           >{t("Finish editing")}</Button>
         )}
@@ -832,7 +867,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
             type="button"
             variant="ghost"
             onClick={() => goToStep(step - 1)}
-            disabled={uploading || isSubmitting}
+            disabled={uploading || isSubmitting || savingContacts}
             className="min-h-11 text-stone-500"
           >{t("Back")}</Button>
         )}
@@ -849,17 +884,17 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
               event.preventDefault()
               void advance()
             }}
-            disabled={uploading || isSubmitting}
+            disabled={uploading || isSubmitting || savingContacts}
             className="min-h-11 bg-emerald-700 hover:bg-emerald-800"
           >{t("Continue")}</Button>
         ) : (
           <Button
             key="submit"
             type="submit"
-            disabled={isSubmitting || uploading}
+            disabled={isSubmitting || uploading || savingContacts}
             className="min-h-11 bg-emerald-700 hover:bg-emerald-800"
           >
-            {t(isSubmitting ? 'Submitting…' : existingProfile ? 'Submit changes for review' : 'Submit application')}
+            {t(isSubmitting ? 'Saving…' : existingProfile ? 'Save changes' : 'Submit application')}
           </Button>
         )}
       </div>
