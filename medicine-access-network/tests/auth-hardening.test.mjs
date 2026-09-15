@@ -414,7 +414,7 @@ test('callback session cookies survive redirects with every option and chunk int
   const { createCallbackSupabaseClient } = loadModule('lib/supabase-callback.ts', {
     mocks: { '@supabase/ssr': { createServerClient: (_url, _key, options) => { adapter = options.cookies; return {} } } },
   })
-  const callback = createCallbackSupabaseClient(new Request('https://directory.test/auth/callback', { headers: { cookie: 'old=session' } }))
+  const callback = createCallbackSupabaseClient({ url: 'https://directory.test/auth/callback', headers: new Headers({ cookie: 'old=session' }) })
   const options = { path: '/', secure: true, httpOnly: true, sameSite: 'lax', maxAge: 3600 }
   adapter.setAll([
     { name: 'session.0', value: 'chunk-1', options },

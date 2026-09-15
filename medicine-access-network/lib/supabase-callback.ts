@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 /** Keep the newly verified session on the exact response sent to the browser. */
 export function createCallbackSupabaseClient(request: Request) {
-  const cookieJar = new NextRequest(request).cookies
+  const cookieJar = new NextRequest(request.url, { headers: request.headers }).cookies
   const pending = new Map<string, { name: string; value: string; options: CookieOptions }>()
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
