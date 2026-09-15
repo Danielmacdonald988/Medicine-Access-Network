@@ -1,3 +1,4 @@
+import { EngagementMetrics } from '@/components/admin/EngagementMetrics'
 import { getTranslation } from '@/lib/i18n/server'
 import type { Locale } from '@/lib/i18n/config'
 import type { Metadata } from 'next'
@@ -30,7 +31,7 @@ function formatDate(iso: string, locale: Locale) {
   })
 }
 
-export default async function AdminPage({ searchParams }: { searchParams: Promise<{ notice?: string | string[] }> }) {
+export default async function AdminPage({ searchParams }: { searchParams: Promise<{ notice?: string | string[]; days?: string }> }) {
   const { t, locale } = await getTranslation()
   const supabase = await createServerSupabaseClient()
   const params = await searchParams
@@ -110,6 +111,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           <Button type="submit" name="action" value="retry" variant="outline" className="min-h-11 w-full sm:w-auto">{t("Retry pending alerts")}</Button>
         </form>
       </div>
+      <EngagementMetrics days={[7, 30, 90].includes(Number(params.days)) ? Number(params.days) : 30} />
+      <Separator />
       {/* Stats grid */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[

@@ -88,6 +88,7 @@ export async function Footer() {
 
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border py-6">
           <LanguageSelector />
+          <Link href="/about#site-analytics" className="text-xs text-muted-foreground underline-offset-4 hover:underline">{t("Site analytics")}</Link>
           <p className="text-xs text-muted-foreground">
             {t("© {year} {appName}. All rights reserved.", {
               year: new Date().getFullYear(),

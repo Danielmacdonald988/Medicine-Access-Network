@@ -1,5 +1,6 @@
 'use client'
 
+import { recordEngagement } from '@/lib/engagement-client'
 import { useTranslation } from '@/components/i18n/TranslationProvider'
 
 import { useEffect, useId, useRef, useState } from 'react'
@@ -85,6 +86,7 @@ export function ContactRequestForm({
   })
 
   const onSubmit = async (data: ContactRequestFormInput) => {
+    recordEngagement('contact_started')
     setSubmissionError(null)
     try {
       const res = await fetch('/api/contact-requests', {
@@ -102,6 +104,7 @@ export function ContactRequestForm({
         }),
       })
       if (!res.ok) {
+        recordEngagement('contact_error')
         setSubmissionError(
           res.status === 429
             ? 'Too many requests from this connection. Please wait before trying again. Your message is still here.'
@@ -111,8 +114,10 @@ export function ContactRequestForm({
         )
         return
       }
+      if (!honeypot.current?.value) recordEngagement('contact_sent')
       setSubmitted(true)
     } catch {
+      recordEngagement('contact_error')
       setSubmissionError(
         'We could not confirm whether your request was received. Your message is still here. Retrying may send it twice; wait a moment or contact platform support if you need help.',
       )
@@ -143,6 +148,7 @@ export function ContactRequestForm({
 
   return (
     <form
+      onChange={() => recordEngagement('contact_started')}
       onSubmit={(event) => {
         void handleSubmit(onSubmit)(event)
       }}

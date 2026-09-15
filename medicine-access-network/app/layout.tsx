@@ -9,6 +9,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { APP_NAME, APP_TAGLINE, SITE_URL } from "@/lib/constants";
 import { getTranslation } from "@/lib/i18n/server";
 import { TranslationProvider } from "@/components/i18n/TranslationProvider";
+import { EngagementTracker } from "@/components/EngagementTracker";
 import { TrafficAnalytics } from "@/components/TrafficAnalytics";
 
 const dmSans = DM_Sans({
@@ -63,6 +64,7 @@ export default async function RootLayout({
         <Footer />
         <Toaster position="top-right" />
         </TranslationProvider>
+        <EngagementTracker isAdmin={user?.role === "admin"} />
         <TrafficAnalytics />
       </body>
     </html>

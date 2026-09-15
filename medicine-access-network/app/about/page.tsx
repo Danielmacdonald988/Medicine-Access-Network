@@ -24,6 +24,11 @@ export default async function AboutPage() {
         <p className="mt-4 leading-relaxed text-stone-600">{t('Ask about fees, qualifications, and boundaries. Decide whether the service fits your needs. You have the right to ask questions and decline.')}</p>
         <Link href="/resources/questions-to-ask" className="mt-5 inline-flex items-center gap-2 font-medium text-emerald-800 underline underline-offset-4">{t('Questions to ask a guide')} <ArrowRight className="size-4 shrink-0" aria-hidden /></Link>
       </section>
+      <section id="site-analytics" className="mt-10 scroll-mt-24">
+        <h2 className="text-2xl font-semibold">{t('How we measure site engagement')}</h2>
+        <p className="mt-4 leading-relaxed text-stone-600">{t('We use a temporary identifier in your browser tab to understand which features are used and where signup or applications stop. It lasts up to 24 hours. These engagement records contain action names, application step numbers, broad referral sources, and device types, without names, emails, messages, search text, or the identity of guides you view.')}</p>
+        <p className="mt-4 leading-relaxed text-stone-600">{t('Engagement reports are available only to platform administrators. Records expire after 90 days and are cleared when new activity is recorded. This measurement respects Do Not Track and Global Privacy Control browser settings. Separate page-traffic analytics are provided by Vercel.')}</p>
+      </section>
       <section className="mt-10">
         <h2 className="text-2xl font-semibold">{t('Keep the first conversation simple')}</h2>
         <p className="mt-4 leading-relaxed text-stone-600">{t('A request starts a conversation, not a confirmed booking. Share the support you want and your preferred format. Leave medical records and sensitive personal history out of introductory messages.')}</p>

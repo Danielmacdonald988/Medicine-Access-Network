@@ -1,5 +1,6 @@
 'use client'
 
+import { recordEngagement } from '@/lib/engagement-client'
 import { useTranslation } from '@/components/i18n/TranslationProvider'
 
 import Link from 'next/link'
@@ -18,6 +19,7 @@ export function SaveGuideButton({ profileId, displayName, compact = false }: { p
     <div className={compact ? 'text-xs' : 'text-sm'}>
       <button type="button" aria-pressed={saved} aria-label={t(saved ? 'Remove {name} from saved guides' : 'Save {name} for comparison', { name: displayName ?? t('this guide') })} onClick={() => {
         const failure = changeSavedGuide(profileId)
+        if (!failure && !saved) recordEngagement('guide_saved')
         setError(Boolean(failure))
         setStatus(failure ?? (saved ? 'Removed from saved guides.' : 'Saved in this browser tab.'))
       }} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-stone-300 bg-white/70 px-3 font-medium text-stone-700 hover:border-emerald-700 hover:text-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">

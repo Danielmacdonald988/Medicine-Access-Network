@@ -1,3 +1,4 @@
+import { SearchEngagement } from '@/components/EngagementTracker'
 import { getTranslation } from '@/lib/i18n/server'
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
@@ -127,7 +128,7 @@ async function FacilitatorGrid({ filters, page }: { filters: FacilitatorFilters;
     )
   }
 
-  if (!facilitators.length) return <EmptyResults filters={filters} page={page} />
+  if (!facilitators.length) return <><SearchEngagement active={hasActiveFilters(filters)} empty={true} /><EmptyResults filters={filters} page={page} /></>
 
   const pageCount = Math.ceil(total / DIRECTORY_PAGE_SIZE)
   const pageHref = (number: number) => {
@@ -138,6 +139,7 @@ async function FacilitatorGrid({ filters, page }: { filters: FacilitatorFilters;
 
   return (
     <>
+      <SearchEngagement active={hasActiveFilters(filters)} empty={false} />
       <p role="status" className="mb-4 text-sm text-stone-600">
         {t(total === 1 ? '{count} guide found' : '{count} guides found', { count: total })}
         {pageCount > 1 && ` · ${t('Showing {start}–{end}', { start: offset + 1, end: offset + facilitators.length })}`}

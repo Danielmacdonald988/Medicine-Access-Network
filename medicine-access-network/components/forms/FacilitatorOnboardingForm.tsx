@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslation } from '@/components/i18n/TranslationProvider'
+import { recordEngagement } from '@/lib/engagement-client'
 import { useRef, useState } from 'react'
 import { z } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
@@ -218,13 +219,22 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
   const safetyPractices = watch('safety_practices') ?? ''
   const donationBased = watch('donation_based')
 
+  const trackProgress = (currentStep: number) => {
+    if (!existingProfile) {
+      recordEngagement('application_started')
+      recordEngagement('application_step', currentStep)
+    }
+  }
+
   const goToStep = (nextStep: number) => {
+    trackProgress(nextStep)
     setStep(nextStep)
     requestAnimationFrame(() => headingRef.current?.focus())
   }
 
   const advance = async () => {
     if (uploading || isSubmitting) return
+    trackProgress(step)
     const valid = await trigger(
       STEP_FIELDS[step] as Parameters<typeof trigger>[0]
     )
@@ -233,6 +243,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
 
   const onSubmit = async (data: FacilitatorOnboardingInput) => {
     if (uploading) return
+    trackProgress(step)
     setSaveError('')
     try {
       const response = await fetch('/api/facilitator-applications', {
@@ -245,6 +256,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
       })
       const result = await response.json().catch(() => null)
       if (!response.ok || result?.success !== true) {
+        if (!existingProfile) recordEngagement('application_error')
         setSaveError(typeof result?.error === 'string'
           ? result.error
           : 'Your profile could not be saved. Your entries are still here; please try again.')
@@ -262,8 +274,10 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
           body: JSON.stringify({ path }),
         }).catch(() => undefined)
       }
+      if (!existingProfile) recordEngagement('application_submitted')
       setSubmitted(true)
     } catch {
+      if (!existingProfile) recordEngagement('application_error')
       setSaveError('Your profile could not be saved. Check your connection and try again; your entries are still here.')
       requestAnimationFrame(() => errorRef.current?.focus())
     }
@@ -274,7 +288,7 @@ export function FacilitatorOnboardingForm({ existingProfile }: { existingProfile
   const { title, description } = STEP_META[step]
 
   return (
-    <form onSubmit={(event) => {
+    <form onChange={() => trackProgress(step)} onSubmit={(event) => {
       if (step < TOTAL_STEPS) {
         event.preventDefault()
         void advance()

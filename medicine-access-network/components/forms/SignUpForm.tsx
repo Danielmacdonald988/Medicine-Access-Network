@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslation } from '@/components/i18n/TranslationProvider'
+import { recordEngagement } from '@/lib/engagement-client'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -27,7 +28,10 @@ export function SignUpForm() {
   })
 
   const onSubmit = async (data: SignUpInput) => {
-    const { error } = await supabase.auth.signUp({
+    recordEngagement('signup_started')
+    let error: { message: string } | null
+    try {
+    ;({ error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
       options: {
@@ -41,13 +45,20 @@ export function SignUpForm() {
         },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
-    })
+    }))
+    } catch {
+      recordEngagement('signup_error')
+      toast.error(t('We could not create your account. Check your connection and try again.'))
+      return
+    }
 
     if (error) {
+      recordEngagement('signup_error')
       toast.error(t(error.message))
       return
     }
 
+    recordEngagement('signup_accepted')
     setConfirmed(true)
   }
 
@@ -62,7 +73,7 @@ export function SignUpForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onChange={() => recordEngagement('signup_started')} onSubmit={handleSubmit(onSubmit, () => { recordEngagement('signup_started'); recordEngagement('signup_error') })} className="space-y-4">
       <div className="space-y-1.5">
         <Label htmlFor="full_name">{t("Full name")}</Label>
         <Input id="full_name" autoComplete="name" {...register('full_name')} />

@@ -1,5 +1,6 @@
 'use client'
 
+import { recordEngagement } from '@/lib/engagement-client'
 import { useTranslation } from '@/components/i18n/TranslationProvider'
 
 import { ExternalLink, MessageCircle } from 'lucide-react'
@@ -15,6 +16,7 @@ export function DirectContactLinks({ profile, compact = false }: { profile: Dire
     <div className="flex flex-col gap-2">
       {links.map(({ platform, label, href }) => (
         <a
+          onClick={() => recordEngagement('direct_contact')}
           key={platform}
           href={href}
           target="_blank"
