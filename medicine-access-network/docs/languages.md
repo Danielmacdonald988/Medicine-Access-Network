@@ -1,6 +1,8 @@
 # Website languages
 
-The site supports English, Spanish, French, Portuguese, German, Italian, Dutch, Simplified Chinese, Japanese, and Korean. It renders the chosen language on the server and shares that same language with client components.
+The site supports English, Spanish, French, Portuguese, German, Italian, Dutch, Simplified Chinese, Japanese, Korean, and Irish (Gaeilge). It renders the chosen language on the server and shares that same language with client components.
+
+Irish (`ga`) uses standard written Irish (An Caighdeán Oifigiúil). Readers of Connacht, Munster, and Ulster Irish share this catalog; separate dialect translations are not offered. Regional browser preferences such as `ga-IE` and `ga-GB`, including private-use dialect subtags, resolve to Irish. Scottish Gaelic (`gd`) is a separate language and is not mapped to Irish. See [Foras na Gaeilge’s explanation of Irish varieties and the written standard](https://www.focloir.ie/external/images/en/varieties-of-irish.pdf).
 
 Resolution order: a valid `tfn_language` cookie, then the request's quality-ranked `Accept-Language`, then English. Regional preferences such as `es-MX` and `pt-BR` map to the supported base language. Chinese variants currently use Simplified Chinese. The language menu lets visitors override the browser or return to its default. The cookie lasts one year and contains only a language code; it is not an account preference shared between devices.
 
@@ -21,7 +23,7 @@ These are AI-assisted translations of site copy. Medical/service disclaimers ret
 - Server components use `getTranslation()`; client components use `useTranslation()`. Translate display labels only, not `value`, `name`, `href`, IDs, or stored data.
 - Use complete messages with named placeholders, e.g. `t('Contact {name}', { name })`. Placeholders must appear unchanged in each translation. React escapes the output; never insert translations as HTML.
 - After changing translated modality/category labels, run `npx tsx scripts/generate-search-aliases.ts` and the unit tests. The generated small alias map prevents shipping every language's full catalog in the browser search bundle.
-- Catalog tests check all nine translated values and placeholder parity. Search tests check translated terms still select the correct stored practices.
+- Catalog tests check every supported translated value and placeholder parity. Search tests check translated terms still select the correct stored practices, including Irish searches with and without fada accents.
 - Adding another language requires completing its catalog entries and updating the typed locale/tuple definition, native name, and tests.
 
 URLs and canonical links remain stable. This release does not introduce separate indexed language URLs or `hreflang`. A future content-translation provider should handle approved public content only, use source-versioned caches, provide the original text, and keep all private forms/messages excluded. Do not infer spoken languages or clinical qualifications from a translated profile.

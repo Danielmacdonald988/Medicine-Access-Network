@@ -1,6 +1,6 @@
 import type { MessageCatalog } from '../config'
 
-// Spanish, French, Portuguese, German, Italian, Dutch, Chinese, Japanese, Korean.
+// Spanish, French, Portuguese, German, Italian, Dutch, Chinese, Japanese, Korean, Irish.
 export const accountsMessages = {
   "Check your inbox": [
     "Revisa tu bandeja de entrada",
@@ -11,7 +11,8 @@ export const accountsMessages = {
     "Controleer je inbox",
     "查看收件箱",
     "受信トレイを確認してください",
-    "받은편지함을 확인하세요"
+    "받은편지함을 확인하세요",
+    "Seiceáil do bhosca isteach"
   ],
   "Didn't receive it? Check your spam folder.": [
     "¿No lo recibiste? Revisa el correo no deseado.",
@@ -22,7 +23,8 @@ export const accountsMessages = {
     "Niet ontvangen? Controleer je spammap.",
     "没收到？请检查垃圾邮件。",
     "届かない場合は迷惑メールをご確認ください。",
-    "받지 못하셨나요? 스팸함을 확인하세요."
+    "받지 못하셨나요? 스팸함을 확인하세요.",
+    "Nach bhfuair tú é? Seiceáil d'fhillteán turscair."
   ],
   "Full name": [
     "Nombre completo",
@@ -33,7 +35,8 @@ export const accountsMessages = {
     "Volledige naam",
     "全名",
     "氏名",
-    "성명"
+    "성명",
+    "Ainm iomlán"
   ],
   "Email": [
     "Correo electrónico",
@@ -44,7 +47,8 @@ export const accountsMessages = {
     "E-mail",
     "电子邮箱",
     "メールアドレス",
-    "이메일"
+    "이메일",
+    "Ríomhphost"
   ],
   "Password": [
     "Contraseña",
@@ -55,7 +59,8 @@ export const accountsMessages = {
     "Wachtwoord",
     "密码",
     "パスワード",
-    "비밀번호"
+    "비밀번호",
+    "Pasfhocal"
   ],
   "Forgot password?": [
     "¿Olvidaste tu contraseña?",
@@ -66,7 +71,8 @@ export const accountsMessages = {
     "Wachtwoord vergeten?",
     "忘记密码？",
     "パスワードをお忘れですか？",
-    "비밀번호를 잊으셨나요?"
+    "비밀번호를 잊으셨나요?",
+    "Pasfhocal dearmadta?"
   ],
   "Check your email": [
     "Revisa tu correo",
@@ -77,7 +83,8 @@ export const accountsMessages = {
     "Controleer je e-mail",
     "查看电子邮件",
     "メールを確認してください",
-    "이메일을 확인하세요"
+    "이메일을 확인하세요",
+    "Seiceáil do ríomhphost"
   ],
   "New password": [
     "Nueva contraseña",
@@ -88,7 +95,8 @@ export const accountsMessages = {
     "Nieuw wachtwoord",
     "新密码",
     "新しいパスワード",
-    "새 비밀번호"
+    "새 비밀번호",
+    "Pasfhocal nua"
   ],
   "Confirm password": [
     "Confirmar contraseña",
@@ -99,7 +107,8 @@ export const accountsMessages = {
     "Bevestig wachtwoord",
     "确认密码",
     "パスワードの確認",
-    "비밀번호 확인"
+    "비밀번호 확인",
+    "Deimhnigh an pasfhocal"
   ],
   "Creating account…": [
     "Creando cuenta…",
@@ -110,7 +119,8 @@ export const accountsMessages = {
     "Account aanmaken…",
     "正在创建账户…",
     "アカウントを作成中…",
-    "계정 생성 중…"
+    "계정 생성 중…",
+    "Cuntas á chruthú…"
   ],
   "Create account": [
     "Crear cuenta",
@@ -121,7 +131,8 @@ export const accountsMessages = {
     "Account aanmaken",
     "创建账户",
     "アカウントを作成",
-    "계정 만들기"
+    "계정 만들기",
+    "Cruthaigh cuntas"
   ],
   "Signing in…": [
     "Iniciando sesión…",
@@ -132,7 +143,8 @@ export const accountsMessages = {
     "Inloggen…",
     "正在登录…",
     "ログイン中…",
-    "로그인 중…"
+    "로그인 중…",
+    "Ag síniú isteach…"
   ],
   "Sign in": [
     "Iniciar sesión",
@@ -143,7 +155,8 @@ export const accountsMessages = {
     "Inloggen",
     "登录",
     "ログイン",
-    "로그인"
+    "로그인",
+    "Sínigh isteach"
   ],
   "Sending…": [
     "Enviando…",
@@ -154,7 +167,8 @@ export const accountsMessages = {
     "Verzenden…",
     "正在发送…",
     "送信中…",
-    "전송 중…"
+    "전송 중…",
+    "Á sheoladh…"
   ],
   "Send reset link": [
     "Enviar enlace de recuperación",
@@ -165,7 +179,8 @@ export const accountsMessages = {
     "Stuur herstellink",
     "发送重置链接",
     "再設定リンクを送信",
-    "재설정 링크 보내기"
+    "재설정 링크 보내기",
+    "Seol nasc athshocraithe"
   ],
   "Updating…": [
     "Actualizando…",
@@ -176,7 +191,8 @@ export const accountsMessages = {
     "Bijwerken…",
     "正在更新…",
     "更新中…",
-    "업데이트 중…"
+    "업데이트 중…",
+    "Á nuashonrú…"
   ],
   "Update password": [
     "Actualizar contraseña",
@@ -187,7 +203,8 @@ export const accountsMessages = {
     "Wachtwoord wijzigen",
     "更新密码",
     "パスワードを更新",
-    "비밀번호 변경"
+    "비밀번호 변경",
+    "Nuashonraigh an pasfhocal"
   ],
   "Password updated. Signing you in…": [
     "Contraseña actualizada. Iniciando sesión…",
@@ -198,7 +215,8 @@ export const accountsMessages = {
     "Wachtwoord gewijzigd. Inloggen…",
     "密码已更新。正在登录…",
     "パスワードを更新しました。ログイン中…",
-    "비밀번호가 변경되었습니다. 로그인 중…"
+    "비밀번호가 변경되었습니다. 로그인 중…",
+    "Pasfhocal nuashonraithe. Ag síniú isteach thú…"
   ],
   "Name must be at least 2 characters": [
     "El nombre debe tener al menos 2 caracteres",
@@ -209,7 +227,8 @@ export const accountsMessages = {
     "De naam moet minimaal 2 tekens bevatten",
     "姓名至少需要2个字符",
     "名前は2文字以上で入力してください",
-    "이름은 2자 이상이어야 합니다"
+    "이름은 2자 이상이어야 합니다",
+    "Ní mór 2 charachtar ar a laghad a bheith san ainm"
   ],
   "Please enter a valid email address": [
     "Introduce un correo electrónico válido",
@@ -220,7 +239,8 @@ export const accountsMessages = {
     "Voer een geldig e-mailadres in",
     "请输入有效的电子邮箱",
     "有効なメールアドレスを入力してください",
-    "올바른 이메일 주소를 입력하세요"
+    "올바른 이메일 주소를 입력하세요",
+    "Cuir isteach seoladh ríomhphoist bailí"
   ],
   "Password must be at least 8 characters": [
     "La contraseña debe tener al menos 8 caracteres",
@@ -231,7 +251,8 @@ export const accountsMessages = {
     "Het wachtwoord moet minimaal 8 tekens bevatten",
     "密码至少需要8个字符",
     "パスワードは8文字以上で入力してください",
-    "비밀번호는 8자 이상이어야 합니다"
+    "비밀번호는 8자 이상이어야 합니다",
+    "Ní mór 8 gcarachtar ar a laghad a bheith sa phasfhocal"
   ],
   "Password is required": [
     "La contraseña es obligatoria",
@@ -242,7 +263,8 @@ export const accountsMessages = {
     "Wachtwoord is verplicht",
     "请输入密码",
     "パスワードを入力してください",
-    "비밀번호를 입력하세요"
+    "비밀번호를 입력하세요",
+    "Tá pasfhocal riachtanach"
   ],
   "Passwords do not match": [
     "Las contraseñas no coinciden",
@@ -253,7 +275,8 @@ export const accountsMessages = {
     "De wachtwoorden komen niet overeen",
     "两次密码不一致",
     "パスワードが一致しません",
-    "비밀번호가 일치하지 않습니다"
+    "비밀번호가 일치하지 않습니다",
+    "Ní hionann na pasfhocail"
   ],
   "Invalid login credentials": [
     "Correo o contraseña incorrectos",
@@ -264,7 +287,8 @@ export const accountsMessages = {
     "Ongeldige inloggegevens",
     "登录信息不正确",
     "ログイン情報が正しくありません",
-    "로그인 정보가 올바르지 않습니다"
+    "로그인 정보가 올바르지 않습니다",
+    "Sonraí sínithe isteach neamhbhailí"
   ],
   "Email not confirmed": [
     "Correo electrónico sin confirmar",
@@ -275,7 +299,8 @@ export const accountsMessages = {
     "E-mailadres niet bevestigd",
     "电子邮箱尚未验证",
     "メールアドレスが未確認です",
-    "이메일이 확인되지 않았습니다"
+    "이메일이 확인되지 않았습니다",
+    "Ríomhphost gan deimhniú"
   ],
   "User already registered": [
     "Este usuario ya está registrado",
@@ -286,7 +311,8 @@ export const accountsMessages = {
     "Gebruiker is al geregistreerd",
     "用户已注册",
     "このユーザーは登録済みです",
-    "이미 등록된 사용자입니다"
+    "이미 등록된 사용자입니다",
+    "Úsáideoir cláraithe cheana féin"
   ],
   "Section {current} of {total}": [
     "Sección {current} de {total}",
@@ -297,7 +323,8 @@ export const accountsMessages = {
     "Onderdeel {current} van {total}",
     "第{current}节，共{total}节",
     "セクション {current} / {total}",
-    "섹션 {current}/{total}"
+    "섹션 {current}/{total}",
+    "Cuid {current} as {total}"
   ],
   "Step {current} of {total}": [
     "Paso {current} de {total}",
@@ -308,7 +335,8 @@ export const accountsMessages = {
     "Stap {current} van {total}",
     "第{current}步，共{total}步",
     "ステップ {current} / {total}",
-    "단계 {current}/{total}"
+    "단계 {current}/{total}",
+    "Céim {current} as {total}"
   ],
   "Profile changes submitted": [
     "Cambios del perfil enviados",
@@ -319,7 +347,8 @@ export const accountsMessages = {
     "Profielwijzigingen ingediend",
     "资料修改已提交",
     "プロフィールの変更を送信しました",
-    "프로필 변경사항이 제출되었습니다"
+    "프로필 변경사항이 제출되었습니다",
+    "Athruithe próifíle curtha isteach"
   ],
   "Application submitted": [
     "Solicitud enviada",
@@ -330,7 +359,8 @@ export const accountsMessages = {
     "Aanvraag ingediend",
     "申请已提交",
     "申請を送信しました",
-    "신청이 제출되었습니다"
+    "신청이 제출되었습니다",
+    "Iarratas curtha isteach"
   ],
   "Your updated profile has been submitted for review.": [
     "Tu perfil actualizado se ha enviado a revisión.",
@@ -341,7 +371,8 @@ export const accountsMessages = {
     "Je bijgewerkte profiel is ingediend ter beoordeling.",
     "更新后的资料已提交审核。",
     "更新したプロフィールを審査に提出しました。",
-    "수정된 프로필이 검토를 위해 제출되었습니다."
+    "수정된 프로필이 검토를 위해 제출되었습니다.",
+    "Cuireadh do phróifíl nuashonraithe isteach le haghaidh athbhreithnithe."
   ],
   "Your facilitator application has been submitted for review.": [
     "Tu solicitud como facilitador se ha enviado a revisión.",
@@ -352,7 +383,8 @@ export const accountsMessages = {
     "Je aanvraag als begeleider is ingediend ter beoordeling.",
     "你的引导师申请已提交审核。",
     "ファシリテーターの申請を審査に提出しました。",
-    "퍼실리테이터 신청이 검토를 위해 제출되었습니다."
+    "퍼실리테이터 신청이 검토를 위해 제출되었습니다.",
+    "Cuireadh d'iarratas mar éascaitheoir isteach le haghaidh athbhreithnithe."
   ],
   "Go to your dashboard": [
     "Ir a tu panel",
@@ -363,7 +395,8 @@ export const accountsMessages = {
     "Ga naar je dashboard",
     "前往控制面板",
     "ダッシュボードへ",
-    "대시보드로 이동"
+    "대시보드로 이동",
+    "Téigh chuig do dheais"
   ],
   "Jump to a section": [
     "Ir a una sección",
@@ -374,7 +407,8 @@ export const accountsMessages = {
     "Ga naar een onderdeel",
     "跳转到某一节",
     "セクションを選択",
-    "섹션으로 이동"
+    "섹션으로 이동",
+    "Téigh chuig cuid"
   ],
   "Display name": [
     "Nombre público",
@@ -385,7 +419,8 @@ export const accountsMessages = {
     "Weergavenaam",
     "显示名称",
     "表示名",
-    "표시 이름"
+    "표시 이름",
+    "Ainm taispeána"
   ],
   "Display name must be at least 2 characters": [
     "El nombre público debe tener al menos 2 caracteres",
@@ -396,7 +431,8 @@ export const accountsMessages = {
     "De weergavenaam moet minimaal 2 tekens bevatten",
     "显示名称至少需要2个字符",
     "表示名は2文字以上で入力してください",
-    "표시 이름은 2자 이상이어야 합니다"
+    "표시 이름은 2자 이상이어야 합니다",
+    "Ní mór 2 charachtar ar a laghad a bheith san ainm taispeána"
   ],
   "Location": [
     "Ubicación",
@@ -407,7 +443,8 @@ export const accountsMessages = {
     "Locatie",
     "地点",
     "所在地",
-    "위치"
+    "위치",
+    "Suíomh"
   ],
   "City, State or Country": [
     "Ciudad, estado o país",
@@ -418,7 +455,8 @@ export const accountsMessages = {
     "Stad, regio of land",
     "城市、省州或国家",
     "市区町村、都道府県、国",
-    "도시, 지역 또는 국가"
+    "도시, 지역 또는 국가",
+    "Cathair, stát nó tír"
   ],
   "e.g. Maya Chen or James O.": [
     "p. ej., Maya Chen o James O.",
@@ -429,7 +467,8 @@ export const accountsMessages = {
     "bijv. Maya Chen of James O.",
     "例如 Maya Chen 或 James O.",
     "例：Maya Chen、James O.",
-    "예: Maya Chen 또는 James O."
+    "예: Maya Chen 또는 James O.",
+    "m.sh. Maya Chen nó James O."
   ],
   "Available for remote sessions": [
     "Disponible para sesiones a distancia",
@@ -440,7 +479,8 @@ export const accountsMessages = {
     "Beschikbaar voor sessies op afstand",
     "可提供远程咨询",
     "オンラインセッションに対応",
-    "원격 세션 가능"
+    "원격 세션 가능",
+    "Ar fáil le haghaidh seisiúin chianda"
   ],
   "Bio": [
     "Biografía",
@@ -451,7 +491,8 @@ export const accountsMessages = {
     "Biografie",
     "简介",
     "自己紹介",
-    "소개"
+    "소개",
+    "Beathaisnéis"
   ],
   "Minimum 100 characters.": [
     "Mínimo 100 caracteres.",
@@ -462,7 +503,8 @@ export const accountsMessages = {
     "Minimaal 100 tekens.",
     "至少100个字符。",
     "100文字以上。",
-    "최소 100자."
+    "최소 100자.",
+    "100 carachtar ar a laghad."
   ],
   "Bio must be at least 100 characters": [
     "La biografía debe tener al menos 100 caracteres",
@@ -473,7 +515,8 @@ export const accountsMessages = {
     "De biografie moet minimaal 100 tekens bevatten",
     "简介至少需要100个字符",
     "自己紹介は100文字以上で入力してください",
-    "소개는 100자 이상이어야 합니다"
+    "소개는 100자 이상이어야 합니다",
+    "Ní mór 100 carachtar ar a laghad a bheith sa bheathaisnéis"
   ],
   "Bio must be under 2000 characters": [
     "La biografía debe tener como máximo 2000 caracteres",
@@ -484,7 +527,8 @@ export const accountsMessages = {
     "De biografie mag maximaal 2000 tekens bevatten",
     "简介不得超过2000个字符",
     "自己紹介は2000文字以内で入力してください",
-    "소개는 2000자 이하여야 합니다"
+    "소개는 2000자 이하여야 합니다",
+    "Ní mór don bheathaisnéis a bheith faoi bhun 2000 carachtar"
   ],
   "Select at least one modality": [
     "Selecciona al menos una modalidad",
@@ -495,7 +539,8 @@ export const accountsMessages = {
     "Selecteer minimaal één werkwijze",
     "请至少选择一种服务方式",
     "少なくとも1つの手法を選択してください",
-    "방법을 하나 이상 선택하세요"
+    "방법을 하나 이상 선택하세요",
+    "Roghnaigh modh amháin ar a laghad"
   ],
   "Years of practice (self-reported)": [
     "Años de práctica (declarados)",
@@ -506,7 +551,8 @@ export const accountsMessages = {
     "Jaren praktijkervaring (zelf opgegeven)",
     "实践年数（自报）",
     "実践年数（自己申告）",
-    "활동 연수(본인 기재)"
+    "활동 연수(본인 기재)",
+    "Blianta cleachtais (féintuairiscithe)"
   ],
   "Training and lineage": [
     "Formación y linaje",
@@ -517,7 +563,8 @@ export const accountsMessages = {
     "Opleiding en traditie",
     "培训与传承",
     "研修・伝統",
-    "교육 및 계보"
+    "교육 및 계보",
+    "Oiliúint agus traidisiún múinteoireachta"
   ],
   "List relevant training and lineage.": [
     "Indica tu formación y linaje relevantes.",
@@ -528,7 +575,8 @@ export const accountsMessages = {
     "Vermeld relevante opleidingen en tradities.",
     "列出相关培训与传承。",
     "関連する研修や伝統を記載してください。",
-    "관련 교육 및 계보를 작성하세요."
+    "관련 교육 및 계보를 작성하세요.",
+    "Liostaigh oiliúint ábhartha agus traidisiún múinteoireachta."
   ],
   "Certifications": [
     "Certificaciones",
@@ -539,7 +587,8 @@ export const accountsMessages = {
     "Certificeringen",
     "认证",
     "資格・認定",
-    "자격증"
+    "자격증",
+    "Deimhnithe"
   ],
   "List certifications, separated by commas.": [
     "Lista las certificaciones separadas por comas.",
@@ -550,7 +599,8 @@ export const accountsMessages = {
     "Vermeld certificeringen, gescheiden door komma’s.",
     "列出认证，以逗号分隔。",
     "資格をコンマで区切って記載してください。",
-    "자격증을 쉼표로 구분하여 작성하세요."
+    "자격증을 쉼표로 구분하여 작성하세요.",
+    "Liostaigh deimhnithe, scartha le camóga."
   ],
   "Your safety practices and screening process": [
     "Tus prácticas de seguridad y proceso de evaluación",
@@ -561,7 +611,8 @@ export const accountsMessages = {
     "Je veiligheidsmaatregelen en screening",
     "你的安全措施与筛查流程",
     "安全対策とスクリーニングの手順",
-    "안전 수칙 및 사전 확인 절차"
+    "안전 수칙 및 사전 확인 절차",
+    "Do chleachtais sábháilteachta agus do phróiseas scagtha"
   ],
   "Minimum 50 characters. Displayed publicly on your profile.": [
     "Mínimo 50 caracteres. Se muestra públicamente en tu perfil.",
@@ -572,7 +623,8 @@ export const accountsMessages = {
     "Minimaal 50 tekens. Openbaar zichtbaar op je profiel.",
     "至少50个字符。将在资料页公开展示。",
     "50文字以上。プロフィールに公開されます。",
-    "최소 50자. 프로필에 공개됩니다."
+    "최소 50자. 프로필에 공개됩니다.",
+    "50 carachtar ar a laghad. Taispeántar go poiblí ar do phróifíl é."
   ],
   "Please describe your safety practices in at least 50 characters": [
     "Describe tus prácticas de seguridad con al menos 50 caracteres",
@@ -583,7 +635,8 @@ export const accountsMessages = {
     "Beschrijf je veiligheidsmaatregelen in minimaal 50 tekens",
     "请用至少50个字符说明安全措施",
     "安全対策を50文字以上で記載してください",
-    "안전 수칙을 50자 이상 작성하세요"
+    "안전 수칙을 50자 이상 작성하세요",
+    "Déan cur síos ar do chleachtais sábháilteachta i 50 carachtar ar a laghad"
   ],
   "You must acknowledge contraindication awareness": [
     "Debes confirmar que conoces las contraindicaciones",
@@ -594,7 +647,8 @@ export const accountsMessages = {
     "Bevestig je kennis van contra-indicaties",
     "请确认了解禁忌症",
     "禁忌事項の認識を確認してください",
-    "금기사항 인식을 확인해야 합니다"
+    "금기사항 인식을 확인해야 합니다",
+    "Ní mór duit feasacht ar fhritásca a admháil"
   ],
   "Suggested minimum donation (USD)": [
     "Donación mínima sugerida (USD)",
@@ -605,7 +659,8 @@ export const accountsMessages = {
     "Voorgestelde minimale donatie (USD)",
     "建议最低捐赠额（美元）",
     "推奨最低寄付額（USD）",
-    "권장 최소 기부금(USD)"
+    "권장 최소 기부금(USD)",
+    "Íos-síntiús molta (USD)"
   ],
   "Session rate (USD)": [
     "Tarifa por sesión (USD)",
@@ -616,7 +671,8 @@ export const accountsMessages = {
     "Tarief per sessie (USD)",
     "单次费用（美元）",
     "セッション料金（USD）",
-    "세션 요금(USD)"
+    "세션 요금(USD)",
+    "Ráta seisiúin (USD)"
   ],
   "WhatsApp link (optional)": [
     "Enlace de WhatsApp (opcional)",
@@ -627,7 +683,8 @@ export const accountsMessages = {
     "WhatsApp-link (optioneel)",
     "WhatsApp链接（可选）",
     "WhatsAppリンク（任意）",
-    "WhatsApp 링크(선택)"
+    "WhatsApp 링크(선택)",
+    "Nasc WhatsApp (roghnach)"
   ],
   "Signal link (optional)": [
     "Enlace de Signal (opcional)",
@@ -638,7 +695,8 @@ export const accountsMessages = {
     "Signal-link (optioneel)",
     "Signal链接（可选）",
     "Signalリンク（任意）",
-    "Signal 링크(선택)"
+    "Signal 링크(선택)",
+    "Nasc Signal (roghnach)"
   ],
   "Telegram link (optional)": [
     "Enlace de Telegram (opcional)",
@@ -649,7 +707,8 @@ export const accountsMessages = {
     "Telegram-link (optioneel)",
     "Telegram链接（可选）",
     "Telegramリンク（任意）",
-    "Telegram 링크(선택)"
+    "Telegram 링크(선택)",
+    "Nasc Telegram (roghnach)"
   ],
   "Paste your https://signal.me/ share link": [
     "Pega tu enlace de https://signal.me/",
@@ -660,7 +719,8 @@ export const accountsMessages = {
     "Plak je deellink van https://signal.me/",
     "粘贴你的https://signal.me/分享链接",
     "https://signal.me/ の共有リンクを貼り付け",
-    "https://signal.me/ 공유 링크 붙여넣기"
+    "https://signal.me/ 공유 링크 붙여넣기",
+    "Greamaigh do nasc comhroinnte https://signal.me/"
   ],
   "Open dashboard": [
     "Abrir panel",
@@ -671,7 +731,8 @@ export const accountsMessages = {
     "Dashboard openen",
     "打开控制面板",
     "ダッシュボードを開く",
-    "대시보드 열기"
+    "대시보드 열기",
+    "Oscail an deais"
   ],
   "Finish editing": [
     "Terminar edición",
@@ -682,7 +743,8 @@ export const accountsMessages = {
     "Bewerken afronden",
     "完成编辑",
     "編集を完了",
-    "수정 완료"
+    "수정 완료",
+    "Críochnaigh an eagarthóireacht"
   ],
   "Back": [
     "Atrás",
@@ -693,7 +755,8 @@ export const accountsMessages = {
     "Terug",
     "返回",
     "戻る",
-    "뒤로"
+    "뒤로",
+    "Siar"
   ],
   "Continue": [
     "Continuar",
@@ -704,7 +767,8 @@ export const accountsMessages = {
     "Doorgaan",
     "继续",
     "次へ",
-    "계속"
+    "계속",
+    "Lean ar aghaidh"
   ],
   "Submitting…": [
     "Enviando…",
@@ -715,7 +779,8 @@ export const accountsMessages = {
     "Indienen…",
     "正在提交…",
     "送信中…",
-    "제출 중…"
+    "제출 중…",
+    "Á chur isteach…"
   ],
   "Submit changes for review": [
     "Enviar cambios a revisión",
@@ -726,7 +791,8 @@ export const accountsMessages = {
     "Wijzigingen ter beoordeling indienen",
     "提交修改以供审核",
     "変更を審査に提出",
-    "변경사항 검토 요청"
+    "변경사항 검토 요청",
+    "Cuir athruithe isteach le haghaidh athbhreithnithe"
   ],
   "Submit application": [
     "Enviar solicitud",
@@ -737,7 +803,8 @@ export const accountsMessages = {
     "Aanvraag indienen",
     "提交申请",
     "申請を送信",
-    "신청 제출"
+    "신청 제출",
+    "Cuir iarratas isteach"
   ],
   "You must agree to the platform rules to apply": [
     "Debes aceptar las normas de la plataforma para solicitarlo",
@@ -748,7 +815,8 @@ export const accountsMessages = {
     "Je moet de platformregels accepteren om je aan te melden",
     "申请前须同意平台规则",
     "申請にはプラットフォームの規則への同意が必要です",
-    "신청하려면 플랫폼 규칙에 동의해야 합니다"
+    "신청하려면 플랫폼 규칙에 동의해야 합니다",
+    "Ní mór duit aontú le rialacha an ardáin chun iarratas a dhéanamh"
   ],
   "Profile photos (at least one required)": [
     "Fotos de perfil (al menos una obligatoria)",
@@ -759,7 +827,8 @@ export const accountsMessages = {
     "Profielfoto’s (minimaal één verplicht)",
     "资料照片（至少需要一张）",
     "プロフィール写真（1枚以上必須）",
-    "프로필 사진(최소 1장 필수)"
+    "프로필 사진(최소 1장 필수)",
+    "Grianghraif próifíle (ceann amháin ar a laghad riachtanach)"
   ],
   "Primary photo": [
     "Foto principal",
@@ -770,7 +839,8 @@ export const accountsMessages = {
     "Hoofdfoto",
     "主照片",
     "メイン写真",
-    "대표 사진"
+    "대표 사진",
+    "Príomhghrianghraf"
   ],
   "Make primary": [
     "Hacer principal",
@@ -781,7 +851,8 @@ export const accountsMessages = {
     "Als hoofdfoto instellen",
     "设为主照片",
     "メイン写真に設定",
-    "대표 사진으로 설정"
+    "대표 사진으로 설정",
+    "Déan príomhghrianghraf de"
   ],
   "Remove": [
     "Eliminar",
@@ -792,7 +863,8 @@ export const accountsMessages = {
     "Verwijderen",
     "移除",
     "削除",
-    "삭제"
+    "삭제",
+    "Bain"
   ],
   "No photos added yet.": [
     "Aún no has añadido fotos.",
@@ -803,7 +875,8 @@ export const accountsMessages = {
     "Nog geen foto’s toegevoegd.",
     "尚未添加照片。",
     "写真はまだ追加されていません。",
-    "아직 추가된 사진이 없습니다."
+    "아직 추가된 사진이 없습니다.",
+    "Níor cuireadh aon ghrianghraif leis fós."
   ],
   "{current} of {total} photos added": [
     "{current} de {total} fotos añadidas",
@@ -814,7 +887,8 @@ export const accountsMessages = {
     "{current} van {total} foto’s toegevoegd",
     "已添加{current}张，最多{total}张",
     "写真 {current} / {total} 枚を追加済み",
-    "사진 {current}/{total}장 추가됨"
+    "사진 {current}/{total}장 추가됨",
+    "{current} as {total} grianghraf curtha leis"
   ],
   "Your uploaded profile photo {number}": [
     "Tu foto de perfil {number}",
@@ -825,7 +899,8 @@ export const accountsMessages = {
     "Je geüploade profielfoto {number}",
     "你上传的第{number}张资料照片",
     "アップロードしたプロフィール写真 {number}",
-    "업로드한 프로필 사진 {number}"
+    "업로드한 프로필 사진 {number}",
+    "Do ghrianghraf próifíle uaslódáilte {number}"
   ],
   "Make photo {number} primary": [
     "Hacer principal la foto {number}",
@@ -836,7 +911,8 @@ export const accountsMessages = {
     "Foto {number} als hoofdfoto instellen",
     "将第{number}张设为主照片",
     "写真 {number} をメインに設定",
-    "사진 {number}을(를) 대표 사진으로 설정"
+    "사진 {number}을(를) 대표 사진으로 설정",
+    "Déan príomhghrianghraf de ghrianghraf {number}"
   ],
   "Remove photo {number}": [
     "Eliminar foto {number}",
@@ -847,7 +923,8 @@ export const accountsMessages = {
     "Foto {number} verwijderen",
     "移除第{number}张照片",
     "写真 {number} を削除",
-    "사진 {number} 삭제"
+    "사진 {number} 삭제",
+    "Bain grianghraf {number}"
   ],
   "Upload this photo again.": [
     "Vuelve a subir esta foto.",
@@ -858,7 +935,8 @@ export const accountsMessages = {
     "Upload deze foto opnieuw.",
     "请重新上传这张照片。",
     "この写真を再度アップロードしてください。",
-    "이 사진을 다시 업로드하세요."
+    "이 사진을 다시 업로드하세요.",
+    "Uaslódáil an grianghraf seo arís."
   ],
   "Add at least one profile photo.": [
     "Añade al menos una foto de perfil.",
@@ -869,7 +947,8 @@ export const accountsMessages = {
     "Voeg minimaal één profielfoto toe.",
     "请至少添加一张资料照片。",
     "プロフィール写真を1枚以上追加してください。",
-    "프로필 사진을 1장 이상 추가하세요."
+    "프로필 사진을 1장 이상 추가하세요.",
+    "Cuir grianghraf próifíle amháin ar a laghad leis."
   ],
   "Choose up to five photos.": [
     "Elige hasta cinco fotos.",
@@ -880,7 +959,8 @@ export const accountsMessages = {
     "Kies maximaal vijf foto’s.",
     "最多选择五张照片。",
     "写真は5枚まで選択できます。",
-    "사진을 최대 5장 선택하세요."
+    "사진을 최대 5장 선택하세요.",
+    "Roghnaigh suas le cúig ghrianghraf."
   ],
   "Each photo can only be added once.": [
     "Cada foto solo se puede añadir una vez.",
@@ -891,7 +971,8 @@ export const accountsMessages = {
     "Elke foto kan maar één keer worden toegevoegd.",
     "每张照片只能添加一次。",
     "同じ写真は1回のみ追加できます。",
-    "각 사진은 한 번만 추가할 수 있습니다."
+    "각 사진은 한 번만 추가할 수 있습니다.",
+    "Ní féidir gach grianghraf a chur leis ach uair amháin."
   ],
   "Rooted in connection": [
     "Con raíces en la conexión",
@@ -902,7 +983,8 @@ export const accountsMessages = {
     "Geworteld in verbinding",
     "以联结为根",
     "つながりを大切に",
-    "연결을 바탕으로"
+    "연결을 바탕으로",
+    "Fréamhaithe sa nasc"
   ],
   "A little guidance.": [
     "Un poco de orientación.",
@@ -913,7 +995,8 @@ export const accountsMessages = {
     "Een beetje begeleiding.",
     "一点指引。",
     "少しの導き。",
-    "작은 안내."
+    "작은 안내.",
+    "Beagán treorach."
   ],
   "A world of possibility.": [
     "Un mundo de posibilidades.",
@@ -924,7 +1007,8 @@ export const accountsMessages = {
     "Een wereld aan mogelijkheden.",
     "无限可能。",
     "広がる可能性。",
-    "넓어지는 가능성."
+    "넓어지는 가능성.",
+    "Domhan féidearthachtaí."
   ],
   "Explore support without an account": [
     "Explora apoyo sin una cuenta",
@@ -935,7 +1019,8 @@ export const accountsMessages = {
     "Ontdek ondersteuning zonder account",
     "无需账户即可探索支持",
     "アカウントなしでサポートを探す",
-    "계정 없이 지원 찾아보기"
+    "계정 없이 지원 찾아보기",
+    "Brabhsáil tacaíocht gan cuntas"
   ],
   "Welcome back": [
     "Te damos la bienvenida de nuevo",
@@ -946,7 +1031,8 @@ export const accountsMessages = {
     "Welkom terug",
     "欢迎回来",
     "おかえりなさい",
-    "다시 오신 것을 환영합니다"
+    "다시 오신 것을 환영합니다",
+    "Fáilte ar ais"
   ],
   "Don't have an account?": [
     "¿No tienes cuenta?",
@@ -957,7 +1043,8 @@ export const accountsMessages = {
     "Heb je nog geen account?",
     "还没有账户？",
     "アカウントをお持ちでない方",
-    "계정이 없으신가요?"
+    "계정이 없으신가요?",
+    "Nach bhfuil cuntas agat?"
   ],
   "Sign up": [
     "Registrarse",
@@ -968,7 +1055,8 @@ export const accountsMessages = {
     "Registreren",
     "注册",
     "新規登録",
-    "가입하기"
+    "가입하기",
+    "Cláraigh"
   ],
   "Share your practice": [
     "Comparte tu práctica",
@@ -979,7 +1067,8 @@ export const accountsMessages = {
     "Deel je praktijk",
     "分享你的实践",
     "あなたの活動を紹介",
-    "활동 소개하기"
+    "활동 소개하기",
+    "Roinn do chleachtas"
   ],
   "browse guides directly": [
     "explora guías directamente",
@@ -990,7 +1079,8 @@ export const accountsMessages = {
     "bekijk direct de begeleiders",
     "直接浏览引导师",
     "ガイドを直接見る",
-    "가이드 바로 찾아보기"
+    "가이드 바로 찾아보기",
+    "brabhsáil treoraithe go díreach"
   ],
   "Already have an account?": [
     "¿Ya tienes cuenta?",
@@ -1001,7 +1091,8 @@ export const accountsMessages = {
     "Heb je al een account?",
     "已有账户？",
     "すでにアカウントをお持ちの方",
-    "이미 계정이 있으신가요?"
+    "이미 계정이 있으신가요?",
+    "An bhfuil cuntas agat cheana féin?"
   ],
   "Reset your password": [
     "Restablece tu contraseña",
@@ -1012,7 +1103,8 @@ export const accountsMessages = {
     "Stel je wachtwoord opnieuw in",
     "重置密码",
     "パスワードを再設定",
-    "비밀번호 재설정"
+    "비밀번호 재설정",
+    "Athshocraigh do phasfhocal"
   ],
   "Remembered it?": [
     "¿La recuerdas?",
@@ -1023,7 +1115,8 @@ export const accountsMessages = {
     "Weet je het weer?",
     "想起来了？",
     "思い出しましたか？",
-    "기억나셨나요?"
+    "기억나셨나요?",
+    "Ar chuimhnigh tú air?"
   ],
   "Back to sign in": [
     "Volver al inicio de sesión",
@@ -1034,7 +1127,8 @@ export const accountsMessages = {
     "Terug naar inloggen",
     "返回登录",
     "ログインに戻る",
-    "로그인으로 돌아가기"
+    "로그인으로 돌아가기",
+    "Fill ar shíniú isteach"
   ],
   "Set a new password": [
     "Establece una nueva contraseña",
@@ -1045,7 +1139,8 @@ export const accountsMessages = {
     "Stel een nieuw wachtwoord in",
     "设置新密码",
     "新しいパスワードを設定",
-    "새 비밀번호 설정"
+    "새 비밀번호 설정",
+    "Socraigh pasfhocal nua"
   ],
   "We hit a snag setting up your account": [
     "Hubo un problema al configurar tu cuenta",
@@ -1056,7 +1151,8 @@ export const accountsMessages = {
     "Er ging iets mis bij het instellen van je account",
     "设置账户时出现了问题",
     "アカウントの設定中に問題が発生しました",
-    "계정 설정 중 문제가 발생했습니다"
+    "계정 설정 중 문제가 발생했습니다",
+    "Bhí fadhb againn agus do chuntas á chur ar bun"
   ],
   "Sign out and try again": [
     "Cierra sesión y vuelve a intentarlo",
@@ -1067,7 +1163,8 @@ export const accountsMessages = {
     "Uitloggen en opnieuw proberen",
     "退出后重试",
     "ログアウトして再試行",
-    "로그아웃 후 다시 시도"
+    "로그아웃 후 다시 시도",
+    "Sínigh amach agus bain triail eile as"
   ],
   "Still stuck?": [
     "¿Sigues con problemas?",
@@ -1078,7 +1175,8 @@ export const accountsMessages = {
     "Lukt het nog niet?",
     "仍然遇到问题？",
     "解決しませんか？",
-    "아직 문제가 있나요?"
+    "아직 문제가 있나요?",
+    "Fós i bponc?"
   ],
   "Return home": [
     "Volver al inicio",
@@ -1089,7 +1187,8 @@ export const accountsMessages = {
     "Terug naar home",
     "返回首页",
     "ホームに戻る",
-    "홈으로 돌아가기"
+    "홈으로 돌아가기",
+    "Fill ar an mbaile"
   ],
   "or contact support.": [
     "o contacta con soporte.",
@@ -1100,7 +1199,8 @@ export const accountsMessages = {
     "of neem contact op met ondersteuning.",
     "或联系支持团队。",
     "またはサポートにお問い合わせください。",
-    "또는 지원팀에 문의하세요."
+    "또는 지원팀에 문의하세요.",
+    "nó déan teagmháil leis an bhfoireann tacaíochta."
   ],
   "Your application could not be loaded": [
     "No se pudo cargar tu solicitud",
@@ -1111,7 +1211,8 @@ export const accountsMessages = {
     "Je aanvraag kon niet worden geladen",
     "无法加载申请",
     "申請を読み込めませんでした",
-    "신청을 불러올 수 없습니다"
+    "신청을 불러올 수 없습니다",
+    "Níorbh fhéidir d'iarratas a lódáil"
   ],
   "Please try again before starting an application.": [
     "Vuelve a intentarlo antes de iniciar una solicitud.",
@@ -1122,7 +1223,8 @@ export const accountsMessages = {
     "Probeer opnieuw voordat je een aanvraag start.",
     "请先重试，再开始申请。",
     "申請を始める前に再試行してください。",
-    "신청을 시작하기 전에 다시 시도하세요."
+    "신청을 시작하기 전에 다시 시도하세요.",
+    "Bain triail eile as sula dtosaíonn tú iarratas."
   ],
   "Try again": [
     "Volver a intentar",
@@ -1133,7 +1235,8 @@ export const accountsMessages = {
     "Opnieuw proberen",
     "重试",
     "再試行",
-    "다시 시도"
+    "다시 시도",
+    "Bain triail eile as"
   ],
   "Facilitator application": [
     "Solicitud de facilitador",
@@ -1144,7 +1247,8 @@ export const accountsMessages = {
     "Aanvraag als begeleider",
     "引导师申请",
     "ファシリテーター申請",
-    "퍼실리테이터 신청"
+    "퍼실리테이터 신청",
+    "Iarratas éascaitheora"
   ],
   "Apply as a guide": [
     "Solicitar ser guía",
@@ -1155,7 +1259,8 @@ export const accountsMessages = {
     "Aanmelden als begeleider",
     "申请成为引导师",
     "ガイドに応募",
-    "가이드로 신청"
+    "가이드로 신청",
+    "Déan iarratas mar threoraí"
   ],
   "Platform requirements": [
     "Requisitos de la plataforma",
@@ -1166,7 +1271,8 @@ export const accountsMessages = {
     "Platformvereisten",
     "平台要求",
     "プラットフォームの要件",
-    "플랫폼 요건"
+    "플랫폼 요건",
+    "Riachtanais an ardáin"
   ],
   "Your profile could not be loaded": [
     "No se pudo cargar tu perfil",
@@ -1177,7 +1283,8 @@ export const accountsMessages = {
     "Je profiel kon niet worden geladen",
     "无法加载资料",
     "プロフィールを読み込めませんでした",
-    "프로필을 불러올 수 없습니다"
+    "프로필을 불러올 수 없습니다",
+    "Níorbh fhéidir do phróifíl a lódáil"
   ],
   "Please try again before making changes.": [
     "Vuelve a intentarlo antes de hacer cambios.",
@@ -1188,7 +1295,8 @@ export const accountsMessages = {
     "Probeer opnieuw voordat je wijzigingen maakt.",
     "请先重试，再进行修改。",
     "変更する前に再試行してください。",
-    "변경하기 전에 다시 시도하세요."
+    "변경하기 전에 다시 시도하세요.",
+    "Bain triail eile as sula ndéanann tú athruithe."
   ],
   "Back to dashboard": [
     "Volver al panel",
@@ -1199,7 +1307,8 @@ export const accountsMessages = {
     "Terug naar dashboard",
     "返回控制面板",
     "ダッシュボードに戻る",
-    "대시보드로 돌아가기"
+    "대시보드로 돌아가기",
+    "Fill ar an deais"
   ],
   "Edit your guide profile": [
     "Editar tu perfil de guía",
@@ -1210,7 +1319,8 @@ export const accountsMessages = {
     "Bewerk je begeleidersprofiel",
     "编辑引导师资料",
     "ガイドプロフィールを編集",
-    "가이드 프로필 수정"
+    "가이드 프로필 수정",
+    "Cuir do phróifíl treoraí in eagar"
   ],
   "We sent a confirmation link to your email. Click it to activate your account and start your guide application.": [
     "Te enviamos un enlace de confirmación. Ábrelo para activar tu cuenta e iniciar tu solicitud de guía.",
@@ -1221,7 +1331,8 @@ export const accountsMessages = {
     "We hebben een bevestigingslink gemaild. Open die om je account te activeren en je aanvraag als begeleider te starten.",
     "我们已发送确认链接。点击链接激活账户，开始引导师申请。",
     "確認リンクをメールで送りました。リンクからアカウントを有効にして、ガイドの申請を始めてください。",
-    "확인 링크를 이메일로 보냈습니다. 링크를 열어 계정을 활성화하고 가이드 신청을 시작하세요."
+    "확인 링크를 이메일로 보냈습니다. 링크를 열어 계정을 활성화하고 가이드 신청을 시작하세요.",
+    "Sheolamar nasc deimhnithe chuig do ríomhphost. Cliceáil air chun do chuntas a ghníomhachtú agus d'iarratas treoraí a thosú."
   ],
   "Your account is for managing a guide profile. Profiles require review before publication.": [
     "Tu cuenta sirve para gestionar un perfil de guía. Los perfiles se revisan antes de publicarse.",
@@ -1232,7 +1343,8 @@ export const accountsMessages = {
     "Je account is bedoeld om een begeleidersprofiel te beheren. Profielen worden vóór publicatie beoordeeld.",
     "账户用于管理引导师资料。资料须经审核后才能公开。",
     "アカウントはガイドプロフィールの管理用です。公開前に審査が必要です。",
-    "계정은 가이드 프로필 관리용입니다. 프로필은 공개 전에 검토가 필요합니다."
+    "계정은 가이드 프로필 관리용입니다. 프로필은 공개 전에 검토가 필요합니다.",
+    "Is chun próifíl treoraí a bhainistiú atá do chuntas. Teastaíonn athbhreithniú ar phróifílí sula bhfoilsítear iad."
   ],
   "We sent a password reset link. It expires in 1 hour.": [
     "Te enviamos un enlace para restablecer la contraseña. Caduca en 1 hora.",
@@ -1243,7 +1355,8 @@ export const accountsMessages = {
     "We hebben een herstellink gestuurd. Deze verloopt over 1 uur.",
     "密码重置链接已发送，1小时后失效。",
     "パスワード再設定リンクを送りました。有効期限は1時間です。",
-    "비밀번호 재설정 링크를 보냈습니다. 1시간 후 만료됩니다."
+    "비밀번호 재설정 링크를 보냈습니다. 1시간 후 만료됩니다.",
+    "Sheolamar nasc athshocraithe pasfhocail. Rachaidh sé in éag i gceann 1 uair an chloig."
   ],
   "How should seekers address you?": [
     "¿Cómo quieres que te llamen?",
@@ -1254,7 +1367,8 @@ export const accountsMessages = {
     "Hoe mogen mensen je aanspreken?",
     "希望大家如何称呼你？",
     "どのようにお呼びすればよいですか？",
-    "어떤 이름으로 불러드릴까요?"
+    "어떤 이름으로 불러드릴까요?",
+    "Cén t-ainm ba cheart do dhaoine a úsáid ort?"
   ],
   "Your display name will appear on your public profile.": [
     "Tu nombre público aparecerá en tu perfil.",
@@ -1265,7 +1379,8 @@ export const accountsMessages = {
     "Je weergavenaam verschijnt op je openbare profiel.",
     "显示名称会出现在公开资料中。",
     "表示名は公開プロフィールに掲載されます。",
-    "표시 이름은 공개 프로필에 표시됩니다."
+    "표시 이름은 공개 프로필에 표시됩니다.",
+    "Beidh d'ainm taispeána ar do phróifíl phoiblí."
   ],
   "Where are you based?": [
     "¿Dónde estás?",
@@ -1276,7 +1391,8 @@ export const accountsMessages = {
     "Waar ben je gevestigd?",
     "你在哪里？",
     "活動拠点はどこですか？",
-    "어디에서 활동하시나요?"
+    "어디에서 활동하시나요?",
+    "Cá bhfuil tú lonnaithe?"
   ],
   "Helps seekers find in-person support in their area.": [
     "Ayuda a encontrar apoyo presencial en la zona.",
@@ -1287,7 +1403,8 @@ export const accountsMessages = {
     "Helpt mensen ondersteuning in hun omgeving te vinden.",
     "帮助人们找到当地的线下支持。",
     "近くで対面サポートを探す方のための情報です。",
-    "근처에서 대면 지원을 찾는 데 도움이 됩니다."
+    "근처에서 대면 지원을 찾는 데 도움이 됩니다.",
+    "Cabhraíonn sé le daoine tacaíocht duine le duine a aimsiú ina gceantar."
   ],
   "Do you offer remote sessions?": [
     "¿Ofreces sesiones a distancia?",
@@ -1298,7 +1415,8 @@ export const accountsMessages = {
     "Bied je sessies op afstand aan?",
     "是否提供远程咨询？",
     "オンラインセッションを提供していますか？",
-    "원격 세션을 제공하시나요?"
+    "원격 세션을 제공하시나요?",
+    "An dtairgeann tú seisiúin chianda?"
   ],
   "Remote work can include video, voice, and async support.": [
     "El trabajo a distancia puede incluir vídeo, voz y mensajes asincrónicos.",
@@ -1309,7 +1427,8 @@ export const accountsMessages = {
     "Ondersteuning op afstand kan via video, spraak of asynchrone berichten.",
     "远程服务可以包括视频、语音和异步消息支持。",
     "ビデオ、音声、時間を合わせないメッセージでの対応などを含みます。",
-    "원격 지원에는 영상, 음성 및 비동기 메시지가 포함될 수 있습니다."
+    "원격 지원에는 영상, 음성 및 비동기 메시지가 포함될 수 있습니다.",
+    "D'fhéadfadh físeán, guth agus tacaíocht aisioncrónach a bheith san áireamh in obair chianda."
   ],
   "Tell us about your practice": [
     "Cuéntanos sobre tu práctica",
@@ -1320,7 +1439,8 @@ export const accountsMessages = {
     "Vertel over je praktijk",
     "介绍你的实践",
     "あなたの活動を教えてください",
-    "활동에 대해 알려주세요"
+    "활동에 대해 알려주세요",
+    "Inis dúinn faoi do chleachtas"
   ],
   "Your bio is the centrepiece of your public profile. Be specific, honest, and human.": [
     "Tu biografía es el centro de tu perfil público. Sé concreto, honesto y cercano.",
@@ -1331,7 +1451,8 @@ export const accountsMessages = {
     "Je biografie is de kern van je openbare profiel. Wees concreet, eerlijk en persoonlijk.",
     "简介是公开资料的核心。请具体、真实、自然地介绍自己。",
     "自己紹介は公開プロフィールの中心です。具体的かつ誠実に、あなたらしく書いてください。",
-    "소개는 공개 프로필의 핵심입니다. 구체적이고 솔직하게 작성하세요."
+    "소개는 공개 프로필의 핵심입니다. 구체적이고 솔직하게 작성하세요.",
+    "Tá do bheathaisnéis i gcroílár do phróifíle poiblí. Bí sonrach, macánta agus daonna."
   ],
   "What modalities do you offer?": [
     "¿Qué modalidades ofreces?",
@@ -1342,7 +1463,8 @@ export const accountsMessages = {
     "Welke werkwijzen bied je aan?",
     "提供哪些服务方式？",
     "どのような手法を提供していますか？",
-    "어떤 방법을 제공하시나요?"
+    "어떤 방법을 제공하시나요?",
+    "Cad iad na modhanna a thairgeann tú?"
   ],
   "Select every practice you actively provide to clients.": [
     "Selecciona todas las prácticas que ofreces actualmente.",
@@ -1353,7 +1475,8 @@ export const accountsMessages = {
     "Selecteer alle werkwijzen die je momenteel aan cliënten biedt.",
     "请选择目前实际提供的所有服务。",
     "現在クライアントに提供している手法をすべて選んでください。",
-    "현재 고객에게 제공하는 모든 방법을 선택하세요."
+    "현재 고객에게 제공하는 모든 방법을 선택하세요.",
+    "Roghnaigh gach cleachtas a sholáthraíonn tú go gníomhach do chliaint."
   ],
   "How long have you practised?": [
     "¿Cuánto tiempo llevas practicando?",
@@ -1364,7 +1487,8 @@ export const accountsMessages = {
     "Hoelang beoefen je dit?",
     "实践了多久？",
     "何年ほど実践していますか？",
-    "활동하신 지 얼마나 되었나요?"
+    "활동하신 지 얼마나 되었나요?",
+    "Cá fhad atá tú ag cleachtadh?"
   ],
   "This self-reported total may include personal practice. Explain your experience supporting clients separately in your bio.": [
     "Este total declarado puede incluir práctica personal. Describe por separado en tu biografía tu experiencia con clientes.",
@@ -1375,7 +1499,8 @@ export const accountsMessages = {
     "Dit zelf opgegeven totaal mag persoonlijke beoefening omvatten. Beschrijf je ervaring met cliënten apart in je biografie.",
     "自报年数可包括个人实践。请在简介中另行说明支持客户的经验。",
     "自己申告の年数には個人の実践も含められます。クライアント支援の経験は自己紹介に別途記載してください。",
-    "본인 기재 연수에는 개인적인 실천이 포함될 수 있습니다. 고객 지원 경험은 소개에 별도로 작성하세요."
+    "본인 기재 연수에는 개인적인 실천이 포함될 수 있습니다. 고객 지원 경험은 소개에 별도로 작성하세요.",
+    "D'fhéadfadh cleachtas pearsanta a bheith san áireamh san iomlán féintuairiscithe seo. Mínigh do thaithí ag tacú le cliaint ar leithligh i do bheathaisnéis."
   ],
   "Training, lineage, and certifications": [
     "Formación, linaje y certificaciones",
@@ -1386,7 +1511,8 @@ export const accountsMessages = {
     "Opleiding, traditie en certificeringen",
     "培训、传承与认证",
     "研修・伝統・資格",
-    "교육, 계보 및 자격증"
+    "교육, 계보 및 자격증",
+    "Oiliúint, traidisiún múinteoireachta agus deimhnithe"
   ],
   "Share the formal and informal background that informs your work.": [
     "Comparte la formación formal e informal que orienta tu trabajo.",
@@ -1397,7 +1523,8 @@ export const accountsMessages = {
     "Beschrijf de formele en informele achtergrond van je werk.",
     "介绍影响你工作的正规与非正规学习背景。",
     "活動の基盤となる正式な研修や、その他の学びを教えてください。",
-    "활동의 바탕이 된 공식 및 비공식 교육 배경을 소개하세요."
+    "활동의 바탕이 된 공식 및 비공식 교육 배경을 소개하세요.",
+    "Roinn an cúlra foirmiúil agus neamhfhoirmiúil a threoraíonn do chuid oibre."
   ],
   "How do you keep clients safe?": [
     "¿Cómo cuidas la seguridad de tus clientes?",
@@ -1408,7 +1535,8 @@ export const accountsMessages = {
     "Hoe bewaak je de veiligheid van cliënten?",
     "如何保障客户安全？",
     "クライアントの安全にどう配慮していますか？",
-    "고객의 안전을 어떻게 지키시나요?"
+    "고객의 안전을 어떻게 지키시나요?",
+    "Conas a choinníonn tú cliaint sábháilte?"
   ],
   "Required. This section is displayed publicly on your profile and reviewed by our team.": [
     "Obligatorio. Esta sección se publica en tu perfil y nuestro equipo la revisa.",
@@ -1419,7 +1547,8 @@ export const accountsMessages = {
     "Verplicht. Dit onderdeel is openbaar op je profiel en wordt door ons team beoordeeld.",
     "必填。此部分将在资料中公开，并由团队审核。",
     "必須項目です。プロフィールに公開され、チームが審査します。",
-    "필수입니다. 이 항목은 프로필에 공개되며 팀이 검토합니다."
+    "필수입니다. 이 항목은 프로필에 공개되며 팀이 검토합니다.",
+    "Riachtanach. Taispeántar an chuid seo go poiblí ar do phróifíl agus déanann ár bhfoireann athbhreithniú uirthi."
   ],
   "Contraindication awareness": [
     "Conocimiento de contraindicaciones",
@@ -1430,7 +1559,8 @@ export const accountsMessages = {
     "Kennis van contra-indicaties",
     "禁忌症认知",
     "禁忌事項の認識",
-    "금기사항 인식"
+    "금기사항 인식",
+    "Feasacht ar fhritásca"
   ],
   "Required. You must confirm awareness of contraindications before submitting.": [
     "Obligatorio. Debes confirmar que conoces las contraindicaciones antes de enviar.",
@@ -1441,7 +1571,8 @@ export const accountsMessages = {
     "Verplicht. Bevestig vóór het indienen je kennis van contra-indicaties.",
     "必填。提交前须确认了解禁忌症。",
     "必須です。提出前に禁忌事項の認識を確認してください。",
-    "필수입니다. 제출 전에 금기사항을 알고 있음을 확인하세요."
+    "필수입니다. 제출 전에 금기사항을 알고 있음을 확인하세요.",
+    "Riachtanach. Ní mór duit feasacht ar fhritásca a dheimhniú sula gcuireann tú isteach é."
   ],
   "How are you compensated?": [
     "¿Cómo cobras?",
@@ -1452,7 +1583,8 @@ export const accountsMessages = {
     "Hoe word je vergoed?",
     "如何收取费用？",
     "料金体系を教えてください",
-    "어떤 방식으로 보수를 받으시나요?"
+    "어떤 방식으로 보수를 받으시나요?",
+    "Conas a fhaigheann tú íocaíocht?"
   ],
   "All payments are for legal services only. Be transparent with seekers.": [
     "Todos los pagos corresponden a servicios legales. Sé transparente con quienes buscan apoyo.",
@@ -1463,7 +1595,8 @@ export const accountsMessages = {
     "Alle betalingen zijn alleen voor legale diensten. Wees transparant naar mensen die ondersteuning zoeken.",
     "所有付款仅用于合法服务。请向寻求支持者透明说明。",
     "料金は合法的なサービスのみを対象とします。利用者に明確に伝えてください。",
-    "모든 결제는 합법적인 서비스에 한합니다. 이용자에게 투명하게 안내하세요."
+    "모든 결제는 합법적인 서비스에 한합니다. 이용자에게 투명하게 안내하세요.",
+    "Is le haghaidh seirbhísí dleathacha amháin atá gach íocaíocht. Bí trédhearcach le daoine atá ag lorg tacaíochta."
   ],
   "What is your rate?": [
     "¿Cuál es tu tarifa?",
@@ -1474,7 +1607,8 @@ export const accountsMessages = {
     "Wat is je tarief?",
     "收费是多少？",
     "料金はいくらですか？",
-    "요금은 얼마인가요?"
+    "요금은 얼마인가요?",
+    "Cad é do ráta?"
   ],
   "Optional — you can update this at any time from your dashboard.": [
     "Opcional: puedes actualizarlo cuando quieras desde tu panel.",
@@ -1485,7 +1619,8 @@ export const accountsMessages = {
     "Optioneel: je kunt dit op elk moment via je dashboard wijzigen.",
     "可选，可随时在控制面板更新。",
     "任意です。ダッシュボードからいつでも変更できます。",
-    "선택 사항이며 대시보드에서 언제든 변경할 수 있습니다."
+    "선택 사항이며 대시보드에서 언제든 변경할 수 있습니다.",
+    "Roghnach — is féidir leat é seo a nuashonrú am ar bith ó do dheais."
   ],
   "Add your profile photos": [
     "Añade tus fotos de perfil",
@@ -1496,7 +1631,8 @@ export const accountsMessages = {
     "Voeg je profielfoto’s toe",
     "添加资料照片",
     "プロフィール写真を追加",
-    "프로필 사진 추가"
+    "프로필 사진 추가",
+    "Cuir do ghrianghraif próifíle leis"
   ],
   "At least one photo is required. Your primary photo helps people recognise you.": [
     "Se requiere al menos una foto. La principal ayuda a reconocerte.",
@@ -1507,7 +1643,8 @@ export const accountsMessages = {
     "Minimaal één foto is verplicht. Je hoofdfoto helpt mensen je te herkennen.",
     "至少需要一张照片。主照片能帮助人们认出你。",
     "写真は1枚以上必要です。メイン写真であなたを見つけやすくなります。",
-    "최소 1장의 사진이 필요합니다. 대표 사진은 사람들이 알아보는 데 도움이 됩니다."
+    "최소 1장의 사진이 필요합니다. 대표 사진은 사람들이 알아보는 데 도움이 됩니다.",
+    "Tá grianghraf amháin ar a laghad riachtanach. Cabhraíonn do phríomhghrianghraf le daoine tú a aithint."
   ],
   "Let people message you directly": [
     "Permite que te escriban directamente",
@@ -1518,7 +1655,8 @@ export const accountsMessages = {
     "Laat mensen je rechtstreeks berichten",
     "让访客直接给你发消息",
     "直接メッセージを受け取る",
-    "직접 메시지 받기"
+    "직접 메시지 받기",
+    "Lig do dhaoine teachtaireachtaí a sheoladh chugat go díreach"
   ],
   "Optional — add links to your own messaging accounts.": [
     "Opcional: añade enlaces a tus propias cuentas de mensajería.",
@@ -1529,7 +1667,8 @@ export const accountsMessages = {
     "Optioneel: voeg links naar je eigen berichtenaccounts toe.",
     "可选，添加你本人的通讯账户链接。",
     "任意です。ご自身のメッセージアカウントのリンクを追加してください。",
-    "선택 사항입니다. 본인의 메신저 계정 링크를 추가하세요."
+    "선택 사항입니다. 본인의 메신저 계정 링크를 추가하세요.",
+    "Roghnach — cuir naisc le do chuntais teachtaireachtaí féin leis."
   ],
   "Platform agreement": [
     "Acuerdo de la plataforma",
@@ -1540,7 +1679,8 @@ export const accountsMessages = {
     "Platformovereenkomst",
     "平台协议",
     "プラットフォームへの同意",
-    "플랫폼 동의"
+    "플랫폼 동의",
+    "Comhaontú an ardáin"
   ],
   "Please read the platform rules carefully and agree before submitting your application.": [
     "Lee atentamente las normas de la plataforma y acéptalas antes de enviar tu solicitud.",
@@ -1551,7 +1691,8 @@ export const accountsMessages = {
     "Lees de platformregels zorgvuldig en ga akkoord voordat je je aanvraag indient.",
     "请仔细阅读平台规则，并在提交申请前同意。",
     "規則をよく読み、同意してから申請を送信してください。",
-    "플랫폼 규칙을 주의 깊게 읽고 동의한 후 신청을 제출하세요."
+    "플랫폼 규칙을 주의 깊게 읽고 동의한 후 신청을 제출하세요.",
+    "Léigh rialacha an ardáin go cúramach agus aontaigh leo sula gcuireann tú d'iarratas isteach."
   ],
   "Your profile stays hidden while it is pending review. Check your dashboard for your application status and any updates.": [
     "Tu perfil permanece oculto durante la revisión. Consulta el estado y las novedades en tu panel.",
@@ -1562,7 +1703,8 @@ export const accountsMessages = {
     "Je profiel blijft verborgen tijdens de beoordeling. Bekijk je dashboard voor de status en updates.",
     "审核期间资料保持隐藏。请在控制面板查看申请状态和更新。",
     "審査中はプロフィールが非公開になります。申請状況や更新はダッシュボードで確認してください。",
-    "검토 중에는 프로필이 숨겨집니다. 대시보드에서 신청 상태와 업데이트를 확인하세요."
+    "검토 중에는 프로필이 숨겨집니다. 대시보드에서 신청 상태와 업데이트를 확인하세요.",
+    "Fanann do phróifíl i bhfolach agus í ag fanacht le hathbhreithniú. Seiceáil do dheais le haghaidh stádas d'iarratais agus aon nuashonruithe."
   ],
   "Submitting changes will hide your public profile until the updated profile is reviewed and approved.": [
     "Al enviar cambios, tu perfil público se ocultará hasta que el perfil actualizado sea revisado y aprobado.",
@@ -1573,7 +1715,8 @@ export const accountsMessages = {
     "Na het indienen van wijzigingen wordt je openbare profiel verborgen totdat de bijgewerkte versie is beoordeeld en goedgekeurd.",
     "提交修改后，公开资料将被隐藏，直到更新后的资料通过审核。",
     "変更を提出すると、更新内容の審査と承認が完了するまで公開プロフィールが非公開になります。",
-    "변경사항을 제출하면 수정된 프로필이 검토 및 승인될 때까지 공개 프로필이 숨겨집니다."
+    "변경사항을 제출하면 수정된 프로필이 검토 및 승인될 때까지 공개 프로필이 숨겨집니다.",
+    "Má chuireann tú athruithe isteach, beidh do phróifíl phoiblí i bhfolach go dtí go ndéanfar athbhreithniú ar an bpróifíl nuashonraithe agus go gceadófar í."
   ],
   "Submitting changes sends your updated profile for review. It stays hidden until approved.": [
     "Al enviar cambios, tu perfil actualizado pasa a revisión. Permanece oculto hasta su aprobación.",
@@ -1584,7 +1727,8 @@ export const accountsMessages = {
     "Je gewijzigde profiel wordt ter beoordeling ingediend. Het blijft verborgen tot goedkeuring.",
     "提交修改会将更新后的资料送审。在获批前保持隐藏。",
     "変更したプロフィールを審査に提出します。承認されるまで非公開のままです。",
-    "변경사항을 제출하면 수정된 프로필이 검토로 넘어갑니다. 승인될 때까지 숨겨집니다."
+    "변경사항을 제출하면 수정된 프로필이 검토로 넘어갑니다. 승인될 때까지 숨겨집니다.",
+    "Seoltar do phróifíl nuashonraithe le haghaidh athbhreithnithe nuair a chuireann tú athruithe isteach. Fanann sí i bhfolach go dtí go gceadaítear í."
   ],
   "Your profile could not be saved. Your entries are still here; please try again.": [
     "No se pudo guardar tu perfil. Tus datos siguen aquí; vuelve a intentarlo.",
@@ -1595,7 +1739,8 @@ export const accountsMessages = {
     "Je profiel kon niet worden opgeslagen. Je invoer staat er nog; probeer opnieuw.",
     "无法保存资料。填写的内容仍在，请重试。",
     "プロフィールを保存できませんでした。入力内容は残っています。再試行してください。",
-    "프로필을 저장할 수 없습니다. 입력 내용은 유지됩니다. 다시 시도하세요."
+    "프로필을 저장할 수 없습니다. 입력 내용은 유지됩니다. 다시 시도하세요.",
+    "Níorbh fhéidir do phróifíl a shábháil. Tá do chuid iontrálacha anseo fós; bain triail eile as."
   ],
   "Your profile could not be saved. Check your connection and try again; your entries are still here.": [
     "No se pudo guardar tu perfil. Comprueba tu conexión y vuelve a intentarlo; tus datos siguen aquí.",
@@ -1606,7 +1751,8 @@ export const accountsMessages = {
     "Je profiel kon niet worden opgeslagen. Controleer je verbinding en probeer opnieuw; je invoer staat er nog.",
     "无法保存资料。请检查网络后重试，填写的内容仍在。",
     "プロフィールを保存できませんでした。接続を確認して再試行してください。入力内容は残っています。",
-    "프로필을 저장할 수 없습니다. 연결을 확인하고 다시 시도하세요. 입력 내용은 유지됩니다."
+    "프로필을 저장할 수 없습니다. 연결을 확인하고 다시 시도하세요. 입력 내용은 유지됩니다.",
+    "Níorbh fhéidir do phróifíl a shábháil. Seiceáil do nasc agus bain triail eile as; tá do chuid iontrálacha anseo fós."
   ],
   "This appears on your public profile. First name or initials is fine.": [
     "Aparece en tu perfil público. Puedes usar tu nombre o iniciales.",
@@ -1617,7 +1763,8 @@ export const accountsMessages = {
     "Dit verschijnt op je openbare profiel. Voornaam of initialen zijn prima.",
     "这将显示在公开资料上。可以使用名字或首字母。",
     "公開プロフィールに表示されます。名前やイニシャルでも構いません。",
-    "공개 프로필에 표시됩니다. 이름이나 이니셜도 괜찮습니다."
+    "공개 프로필에 표시됩니다. 이름이나 이니셜도 괜찮습니다.",
+    "Taispeántar é seo ar do phróifíl phoiblí. Tá céadainm nó ceannlitreacha ceart go leor."
   ],
   "Optional — used to match you with seekers looking for in-person support.": [
     "Opcional: ayuda a encontrarte a quienes buscan apoyo presencial.",
@@ -1628,7 +1775,8 @@ export const accountsMessages = {
     "Optioneel: helpt mensen die ondersteuning op locatie zoeken je te vinden.",
     "可选，帮助寻求线下支持的人找到你。",
     "任意です。対面サポートを探す方があなたを見つけるために使います。",
-    "선택 사항으로 대면 지원을 찾는 사람들이 찾을 수 있도록 돕습니다."
+    "선택 사항으로 대면 지원을 찾는 사람들이 찾을 수 있도록 돕습니다.",
+    "Roghnach — úsáidtear é chun tú a mheaitseáil le daoine atá ag lorg tacaíocht duine le duine."
   ],
   "I can work with clients via video call, voice call, or async messaging.": [
     "Puedo trabajar con clientes por videollamada, llamada de voz o mensajes asincrónicos.",
@@ -1639,7 +1787,8 @@ export const accountsMessages = {
     "Ik kan cliënten begeleiden via video, spraak of asynchrone berichten.",
     "我可以通过视频、语音或异步消息为客户提供支持。",
     "ビデオ通話、音声通話、時間を合わせないメッセージで対応できます。",
-    "영상 통화, 음성 통화 또는 비동기 메시지로 고객을 지원할 수 있습니다."
+    "영상 통화, 음성 통화 또는 비동기 메시지로 고객을 지원할 수 있습니다.",
+    "Is féidir liom oibriú le cliaint trí fhísghlao, glao gutha nó teachtaireachtaí aisioncrónacha."
   ],
   "Describe your background, your approach, and what working with you actually looks like. Be specific and genuine — seekers are looking for a real sense of who you are.": [
     "Describe tu trayectoria, tu enfoque y cómo es trabajar contigo. Sé concreto y auténtico: las personas quieren conocerte de verdad.",
@@ -1650,7 +1799,8 @@ export const accountsMessages = {
     "Beschrijf je achtergrond, je aanpak en hoe samenwerken met jou verloopt. Wees concreet en oprecht: mensen willen je leren kennen.",
     "介绍你的背景、方法以及实际合作过程。请具体、真实地描述，让寻求支持者了解你。",
     "経歴、アプローチ、実際のサポートの進め方を説明してください。具体的かつ誠実な内容が、あなたを知る手がかりになります。",
-    "배경, 접근 방식, 실제로 함께하는 과정을 설명하세요. 구체적이고 진솔하게 작성하면 이용자가 어떤 분인지 이해할 수 있습니다."
+    "배경, 접근 방식, 실제로 함께하는 과정을 설명하세요. 구체적이고 진솔하게 작성하면 이용자가 어떤 분인지 이해할 수 있습니다.",
+    "Déan cur síos ar do chúlra, do chur chuige agus an chaoi a n-oibríonn tú le daoine. Bí sonrach agus macánta — tá daoine ag iarraidh tuiscint cheart a fháil ort."
   ],
   "Optional. May include personal practice. This is not a count of years working with clients; describe that experience separately in your bio.": [
     "Opcional. Puede incluir práctica personal. No indica años de trabajo con clientes; describe esa experiencia por separado en tu biografía.",
@@ -1661,7 +1811,8 @@ export const accountsMessages = {
     "Optioneel. Mag persoonlijke beoefening omvatten. Dit is niet het aantal jaren met cliënten; beschrijf die ervaring apart in je biografie.",
     "可选，可包括个人实践。这不代表服务客户的年数；请在简介中另行说明相关经验。",
     "任意です。個人の実践を含めても構いません。クライアント支援の年数とは異なります。その経験は自己紹介に別途記載してください。",
-    "선택 사항으로 개인적인 실천이 포함될 수 있습니다. 고객과 일한 연수를 뜻하지 않으며 그 경험은 소개에 따로 작성하세요."
+    "선택 사항으로 개인적인 실천이 포함될 수 있습니다. 고객과 일한 연수를 뜻하지 않으며 그 경험은 소개에 따로 작성하세요.",
+    "Roghnach. D'fhéadfadh cleachtas pearsanta a bheith san áireamh. Ní comhaireamh blianta ag obair le cliaint é seo; déan cur síos ar an taithí sin ar leithligh i do bheathaisnéis."
   ],
   "Optional. Comma-separated. These will be listed on your profile.": [
     "Opcional. Separa con comas. Se mostrarán en tu perfil.",
@@ -1672,7 +1823,8 @@ export const accountsMessages = {
     "Optioneel. Scheid met komma’s. Deze worden op je profiel vermeld.",
     "可选，以逗号分隔。将在资料中列出。",
     "任意です。コンマで区切ってください。プロフィールに掲載されます。",
-    "선택 사항입니다. 쉼표로 구분하면 프로필에 표시됩니다."
+    "선택 사항입니다. 쉼표로 구분하면 프로필에 표시됩니다.",
+    "Roghnach. Scartha le camóga. Liostófar iad seo ar do phróifíl."
   ],
   "Describe your intake process, how you screen for contraindications, which conditions or medications you do not work with, and how you handle crises or emergencies. Be specific — this builds trust with seekers and is reviewed by our team.": [
     "Describe la evaluación inicial, cómo detectas contraindicaciones, con qué afecciones o medicamentos no trabajas y cómo respondes a crisis o emergencias. Sé concreto: genera confianza y nuestro equipo lo revisa.",
@@ -1683,7 +1835,8 @@ export const accountsMessages = {
     "Beschrijf je intake, de screening op contra-indicaties, aandoeningen of medicijnen waarmee je niet werkt en je aanpak bij crises of noodsituaties. Wees concreet: dit helpt vertrouwen op te bouwen en wordt door ons team beoordeeld.",
     "说明初次评估、禁忌症筛查、不接受的疾病或用药情况，以及危机和紧急情况的应对方式。请具体说明，以建立信任，并供团队审核。",
     "初回確認、禁忌事項のスクリーニング、対応できない疾患や服薬、危機や緊急時の対応を説明してください。具体的な情報は信頼につながり、チームの審査対象となります。",
-    "초기 상담, 금기사항 확인, 지원하지 않는 질환이나 약물, 위기 및 응급상황 대응 방법을 설명하세요. 구체적인 내용은 신뢰 형성에 도움이 되며 팀이 검토합니다."
+    "초기 상담, 금기사항 확인, 지원하지 않는 질환이나 약물, 위기 및 응급상황 대응 방법을 설명하세요. 구체적인 내용은 신뢰 형성에 도움이 되며 팀이 검토합니다.",
+    "Déan cur síos ar do phróiseas glactha, conas a dhéanann tú scagadh le haghaidh fritásca, na riochtaí nó na cógais nach n-oibríonn tú leo, agus conas a láimhseálann tú géarchéimeanna nó éigeandálaí. Bí sonrach — cothaíonn sé seo muinín agus déanann ár bhfoireann athbhreithniú air."
   ],
   "Screening must fit the specific service and stay within your qualifications. A general checklist cannot establish whether a practice is appropriate for an individual. Refer medical, medication, and clinical eligibility questions to an appropriately qualified healthcare professional.": [
     "La evaluación debe ajustarse al servicio y a tus cualificaciones. Una lista general no determina si una práctica es adecuada para una persona. Remite las cuestiones médicas, de medicamentos y de idoneidad clínica a un profesional sanitario debidamente cualificado.",
@@ -1694,7 +1847,8 @@ export const accountsMessages = {
     "Screening moet passen bij de dienst en binnen je kwalificaties blijven. Een algemene checklist bepaalt niet of een werkwijze voor iemand geschikt is. Verwijs medische vragen, medicatievragen en vragen over klinische geschiktheid naar een bevoegde zorgprofessional.",
     "筛查必须符合具体服务，并在你的资质范围内进行。通用清单无法判断某种实践是否适合个人。有关医疗、药物和临床适用性的问题，应交由具有相应资质的医疗专业人士处理。",
     "スクリーニングはサービスに合わせ、自身の資格の範囲内で行ってください。一般的なチェックリストだけでは、個人への適合性は判断できません。医療、薬、臨床上の適格性については、適切な資格を持つ医療専門家に相談するよう案内してください。",
-    "사전 확인은 해당 서비스에 맞고 본인의 자격 범위 안에서 이루어져야 합니다. 일반적인 체크리스트만으로 개인에게 적합한지 판단할 수 없습니다. 의료, 약물 및 임상적 적합성에 관한 질문은 적절한 자격을 갖춘 의료 전문가에게 안내하세요."
+    "사전 확인은 해당 서비스에 맞고 본인의 자격 범위 안에서 이루어져야 합니다. 일반적인 체크리스트만으로 개인에게 적합한지 판단할 수 없습니다. 의료, 약물 및 임상적 적합성에 관한 질문은 적절한 자격을 갖춘 의료 전문가에게 안내하세요.",
+    "Ní mór don scagadh a bheith oiriúnach don tseirbhís ar leith agus laistigh de do cháilíochtaí. Ní féidir le seicliosta ginearálta a dheimhniú an bhfuil cleachtas oiriúnach do dhuine aonair. Cuir ceisteanna leighis, cógais agus incháilitheachta cliniciúla chuig gairmí cúraim sláinte a bhfuil na cáilíochtaí cuí aige."
   ],
   "As a guide on this platform, you commit to appropriate screening for every client, respecting your scope, and declining work you cannot responsibly provide. Use an agreed confidential process for any necessary health intake; the platform contact form is for introductions.": [
     "Como guía, te comprometes a evaluar adecuadamente a cada cliente, respetar tus competencias y rechazar lo que no puedas ofrecer responsablemente. Para cualquier evaluación de salud necesaria, usa un proceso confidencial acordado; el formulario de la plataforma es para presentaciones.",
@@ -1705,7 +1859,8 @@ export const accountsMessages = {
     "Als begeleider beloof je elke cliënt passend te screenen, je bevoegdheden te respecteren en werk te weigeren dat je niet verantwoord kunt bieden. Gebruik een afgesproken vertrouwelijk proces voor noodzakelijke gezondheidsinformatie; het contactformulier is voor kennismaking.",
     "作为平台引导师，你承诺对每位客户进行适当筛查，遵守执业范围，并拒绝无法负责任提供的服务。必要的健康信息收集应通过双方同意的保密流程进行；平台联系表仅用于初次介绍。",
     "ガイドとして、すべてのクライアントを適切に確認し、対応範囲を守り、責任をもって提供できない仕事は断ることに同意します。必要な健康情報は合意した秘密保持の手順で扱ってください。サイトの連絡フォームは初回の紹介用です。",
-    "가이드로서 모든 고객을 적절히 확인하고, 업무 범위를 지키며, 책임 있게 제공할 수 없는 서비스는 거절할 것을 약속합니다. 필요한 건강 정보는 합의된 비밀보장 절차로 수집하세요. 플랫폼 문의 양식은 첫 소개용입니다."
+    "가이드로서 모든 고객을 적절히 확인하고, 업무 범위를 지키며, 책임 있게 제공할 수 없는 서비스는 거절할 것을 약속합니다. 필요한 건강 정보는 합의된 비밀보장 절차로 수집하세요. 플랫폼 문의 양식은 첫 소개용입니다.",
+    "Mar threoraí ar an ardán seo, geallann tú scagadh cuí a dhéanamh do gach cliant, meas a bheith agat ar do raon cleachtais agus diúltú d'obair nach féidir leat a sholáthar go freagrach. Úsáid próiseas rúnda comhaontaithe chun aon eolas sláinte riachtanach a bhailiú; is le haghaidh réamhrá atá foirm teagmhála an ardáin."
   ],
   "I understand and commit to appropriate contraindication screening for every client.": [
     "Entiendo y me comprometo a evaluar adecuadamente las contraindicaciones de cada cliente.",
@@ -1716,7 +1871,8 @@ export const accountsMessages = {
     "Ik begrijp dit en beloof elke cliënt passend op contra-indicaties te screenen.",
     "我理解并承诺对每位客户进行适当的禁忌症筛查。",
     "すべてのクライアントに適切な禁忌事項のスクリーニングを行うことを理解し、約束します。",
-    "모든 고객의 금기사항을 적절히 확인할 것을 이해하고 약속합니다."
+    "모든 고객의 금기사항을 적절히 확인할 것을 이해하고 약속합니다.",
+    "Tuigim agus geallaim scagadh cuí le haghaidh fritásca a dhéanamh do gach cliant."
   ],
   "Set rate": [
     "Tarifa fija",
@@ -1727,7 +1883,8 @@ export const accountsMessages = {
     "Vast tarief",
     "固定收费",
     "固定料金",
-    "정액 요금"
+    "정액 요금",
+    "Ráta seasta"
   ],
   "I charge a fixed session rate or hourly fee.": [
     "Cobro una tarifa fija por sesión o por hora.",
@@ -1738,7 +1895,8 @@ export const accountsMessages = {
     "Ik reken een vast bedrag per sessie of per uur.",
     "我按次或按小时收取固定费用。",
     "セッションまたは時間ごとの固定料金です。",
-    "세션 또는 시간당 고정 요금을 받습니다."
+    "세션 또는 시간당 고정 요금을 받습니다.",
+    "Gearraim ráta seasta seisiúin nó táille in aghaidh na huaire."
   ],
   "Donation-based or sliding scale": [
     "Donaciones o escala variable",
@@ -1749,7 +1907,8 @@ export const accountsMessages = {
     "Donatie of aangepast tarief",
     "捐赠制或弹性收费",
     "寄付制・所得に応じた料金",
-    "기부 기반 또는 차등 요금"
+    "기부 기반 또는 차등 요금",
+    "Bunaithe ar shíntiúis nó scála sleamhnáin"
   ],
   "I work on a pay-what-you-can or sliding-scale basis.": [
     "Trabajo con aportación voluntaria según posibilidades o tarifa variable.",
@@ -1760,7 +1919,8 @@ export const accountsMessages = {
     "Ik werk met bijdragen naar draagkracht of aangepaste tarieven.",
     "我采用量力付费或弹性收费方式。",
     "支払える範囲での寄付や、所得に応じた料金で対応します。",
-    "지불 가능한 금액 또는 차등 요금제로 활동합니다."
+    "지불 가능한 금액 또는 차등 요금제로 활동합니다.",
+    "Oibrím ar bhonn íoc an méid is féidir leat nó scála sleamhnáin."
   ],
   "All payments are for legal services only: preparation, integration, breathwork, coaching, and education.": [
     "Todos los pagos son por servicios legales: preparación, integración, respiración, acompañamiento y educación.",
@@ -1771,7 +1931,8 @@ export const accountsMessages = {
     "Alle betalingen zijn voor legale diensten: voorbereiding, integratie, ademwerk, coaching en educatie.",
     "所有付款仅用于合法服务：准备、整合、呼吸练习、辅导和教育。",
     "料金は準備、統合、呼吸法、コーチング、教育など合法的なサービスのみを対象とします。",
-    "모든 결제는 준비, 통합, 호흡 훈련, 코칭, 교육 등 합법적인 서비스에 한합니다."
+    "모든 결제는 준비, 통합, 호흡 훈련, 코칭, 교육 등 합법적인 서비스에 한합니다.",
+    "Is le haghaidh seirbhísí dleathacha amháin atá gach íocaíocht: ullmhúchán, comhtháthú, obair anála, cóitseáil agus oideachas."
   ],
   "Optional. Leave blank if you prefer not to set a minimum.": [
     "Opcional. Déjalo vacío si no quieres fijar un mínimo.",
@@ -1782,7 +1943,8 @@ export const accountsMessages = {
     "Optioneel. Laat leeg als je geen minimum wilt instellen.",
     "可选，不设最低金额可留空。",
     "任意です。最低額を設けない場合は空欄にしてください。",
-    "선택 사항입니다. 최소 금액을 정하지 않으려면 비워두세요."
+    "선택 사항입니다. 최소 금액을 정하지 않으려면 비워두세요.",
+    "Roghnach. Fág bán é más fearr leat gan íosmhéid a shocrú."
   ],
   "Optional. Leave blank if you prefer to discuss rates privately.": [
     "Opcional. Déjalo vacío si prefieres acordar las tarifas en privado.",
@@ -1793,7 +1955,8 @@ export const accountsMessages = {
     "Optioneel. Laat leeg als je tarieven liever persoonlijk bespreekt.",
     "可选，希望私下讨论费用可留空。",
     "任意です。料金を個別に相談したい場合は空欄にしてください。",
-    "선택 사항입니다. 요금을 개별적으로 상담하려면 비워두세요."
+    "선택 사항입니다. 요금을 개별적으로 상담하려면 비워두세요.",
+    "Roghnach. Fág bán é más fearr leat rátaí a phlé go príobháideach."
   ],
   "These links will appear publicly on your approved profile. Visitors can open your messaging app and contact you directly. WhatsApp links and phone-based Signal links reveal your phone number. Conversations take place in that app, outside this site.": [
     "Estos enlaces se mostrarán en tu perfil aprobado. Los visitantes podrán contactarte directamente en tu app. Los enlaces de WhatsApp y los de Signal basados en teléfono revelan tu número. Las conversaciones ocurren en esa app, fuera del sitio.",
@@ -1804,7 +1967,8 @@ export const accountsMessages = {
     "Deze links zijn openbaar op je goedgekeurde profiel. Bezoekers kunnen je rechtstreeks in je berichtenapp benaderen. WhatsApp-links en Signal-links op basis van telefoonnummers tonen je nummer. Gesprekken vinden in die app plaats, buiten deze site.",
     "这些链接将在获批资料中公开。访客可打开通讯应用直接联系你。WhatsApp链接及基于手机号的Signal链接会显示你的电话号码。对话在相应应用中进行，不在本站内。",
     "承認されたプロフィールにリンクが公開されます。訪問者はアプリで直接連絡できます。WhatsAppや電話番号を使ったSignalのリンクは番号を公開します。会話はこのサイト外のアプリで行われます。",
-    "승인된 프로필에 링크가 공개되며 방문자가 앱에서 직접 연락할 수 있습니다. WhatsApp 및 전화번호 기반 Signal 링크는 전화번호를 공개합니다. 대화는 이 사이트 밖의 해당 앱에서 이루어집니다."
+    "승인된 프로필에 링크가 공개되며 방문자가 앱에서 직접 연락할 수 있습니다. WhatsApp 및 전화번호 기반 Signal 링크는 전화번호를 공개합니다. 대화는 이 사이트 밖의 해당 앱에서 이루어집니다.",
+    "Beidh na naisc seo le feiceáil go poiblí ar do phróifíl cheadaithe. Is féidir le cuairteoirí d'aip teachtaireachtaí a oscailt agus teagmháil a dhéanamh leat go díreach. Nochtann naisc WhatsApp agus naisc Signal bunaithe ar uimhir ghutháin d'uimhir ghutháin. Tarlaíonn comhráite san aip sin, lasmuigh den suíomh seo."
   ],
   "Use https://wa.me/ followed by your country code and number, with no spaces or plus sign.": [
     "Usa https://wa.me/ seguido del código de país y tu número, sin espacios ni signo más.",
@@ -1815,7 +1979,8 @@ export const accountsMessages = {
     "Gebruik https://wa.me/ gevolgd door landcode en nummer, zonder spaties of plusteken.",
     "使用https://wa.me/，后接国家代码和号码，不加空格或加号。",
     "https://wa.me/ に国番号と電話番号を続けます。スペースやプラス記号は不要です。",
-    "https://wa.me/ 뒤에 국가번호와 전화번호를 입력하세요. 공백이나 더하기 기호는 넣지 마세요."
+    "https://wa.me/ 뒤에 국가번호와 전화번호를 입력하세요. 공백이나 더하기 기호는 넣지 마세요.",
+    "Úsáid https://wa.me/ agus do chód tíre agus d'uimhir ina dhiaidh, gan spásanna ná comhartha móide."
   ],
   "In Signal, open Settings → your profile → QR Code or Link, then copy your link. A username share link lets you avoid listing your phone number here.": [
     "En Signal, abre Ajustes → tu perfil → Código QR o enlace y copia el enlace. Un enlace de nombre de usuario evita publicar aquí tu teléfono.",
@@ -1826,7 +1991,8 @@ export const accountsMessages = {
     "Open in Signal Instellingen → je profiel → QR-code of link en kopieer je link. Een gebruikersnaamlink voorkomt dat je hier je telefoonnummer vermeldt.",
     "在Signal中打开“设置”→个人资料→“二维码或链接”，复制链接。使用用户名分享链接可避免在此公布手机号。",
     "Signalの設定 → プロフィール → QRコードまたはリンクを開き、リンクをコピーしてください。ユーザー名のリンクなら、ここで電話番号を公開せずに済みます。",
-    "Signal에서 설정 → 프로필 → QR 코드 또는 링크를 열고 링크를 복사하세요. 사용자 이름 공유 링크를 사용하면 여기서 전화번호를 공개하지 않아도 됩니다."
+    "Signal에서 설정 → 프로필 → QR 코드 또는 링크를 열고 링크를 복사하세요. 사용자 이름 공유 링크를 사용하면 여기서 전화번호를 공개하지 않아도 됩니다.",
+    "In Signal, oscail Socruithe → do phróifíl → Cód QR nó Nasc, ansin cóipeáil do nasc. Ligeann nasc comhroinnte ainm úsáideora duit d'uimhir ghutháin a choinneáil as an liosta anseo."
   ],
   "Add your personal account link, without an @ before the username. Use your own account, rather than a group or bot.": [
     "Añade el enlace de tu cuenta personal, sin @ delante del usuario. Usa tu propia cuenta, no un grupo o bot.",
@@ -1837,7 +2003,8 @@ export const accountsMessages = {
     "Voeg je persoonlijke accountlink toe, zonder @ voor de gebruikersnaam. Gebruik je eigen account, geen groep of bot.",
     "添加你的个人账户链接，用户名之前不加@。请使用本人账户，不要使用群组或机器人。",
     "ユーザー名の前に@を付けず、個人アカウントのリンクを入力してください。グループやボットではなく、ご自身のアカウントを使ってください。",
-    "사용자 이름 앞에 @ 없이 개인 계정 링크를 입력하세요. 그룹이나 봇이 아닌 본인 계정을 사용하세요."
+    "사용자 이름 앞에 @ 없이 개인 계정 링크를 입력하세요. 그룹이나 봇이 아닌 본인 계정을 사용하세요.",
+    "Cuir nasc do chuntais phearsanta leis, gan @ roimh an ainm úsáideora. Úsáid do chuntas féin seachas grúpa nó bot."
   ],
   "Adding a link does not send a message. Leave all fields blank to use only the website contact form.": [
     "Añadir un enlace no envía mensajes. Deja todo vacío para usar solo el formulario del sitio.",
@@ -1848,7 +2015,8 @@ export const accountsMessages = {
     "Een link toevoegen verstuurt geen bericht. Laat alles leeg om alleen het contactformulier te gebruiken.",
     "添加链接不会发送消息。全部留空则仅使用网站联系表。",
     "リンクを追加してもメッセージは送信されません。サイトの連絡フォームだけを使う場合は、すべて空欄にしてください。",
-    "링크를 추가해도 메시지가 전송되지는 않습니다. 사이트 문의 양식만 사용하려면 모두 비워두세요."
+    "링크를 추가해도 메시지가 전송되지는 않습니다. 사이트 문의 양식만 사용하려면 모두 비워두세요.",
+    "Ní sheoltar teachtaireacht nuair a chuireann tú nasc leis. Fág gach réimse bán chun foirm teagmhála an tsuímh amháin a úsáid."
   ],
   "I have read and agree to all of the platform rules above.": [
     "He leído y acepto todas las normas de la plataforma anteriores.",
@@ -1859,7 +2027,8 @@ export const accountsMessages = {
     "Ik heb alle bovenstaande platformregels gelezen en ga ermee akkoord.",
     "我已阅读并同意上述所有平台规则。",
     "上記のすべての規則を読み、同意します。",
-    "위의 모든 플랫폼 규칙을 읽고 동의합니다."
+    "위의 모든 플랫폼 규칙을 읽고 동의합니다.",
+    "Léigh mé rialacha uile an ardáin thuas agus aontaím leo."
   ],
   "I offer only legal support services: preparation coaching, integration guidance, breathwork, somatic coaching, meditation guidance, spiritual coaching, harm reduction education, and related legal wellness work.": [
     "Ofrezco solo servicios de apoyo legales: preparación, integración, respiración, acompañamiento somático, meditación, orientación espiritual, educación para reducir daños y otros servicios legales de bienestar.",
@@ -1870,7 +2039,8 @@ export const accountsMessages = {
     "Ik bied alleen legale ondersteuning: voorbereiding, integratie, ademwerk, somatische coaching, meditatie, spirituele coaching, voorlichting over schadebeperking en verwante legale welzijnsdiensten.",
     "我仅提供合法支持服务：准备辅导、整合指导、呼吸练习、躯体辅导、冥想指导、精神成长辅导、减害教育及相关合法身心健康服务。",
     "準備支援、統合のガイド、呼吸法、ソマティックコーチング、瞑想指導、精神面のコーチング、ハームリダクション教育、および関連する合法的なウェルネス活動のみを提供します。",
-    "준비 코칭, 통합 안내, 호흡 훈련, 신체 기반 코칭, 명상 안내, 영적 코칭, 위해 감소 교육 및 관련 합법적 웰니스 활동만 제공합니다."
+    "준비 코칭, 통합 안내, 호흡 훈련, 신체 기반 코칭, 명상 안내, 영적 코칭, 위해 감소 교육 및 관련 합법적 웰니스 활동만 제공합니다.",
+    "Ní thairgim ach seirbhísí tacaíochta dleathacha: cóitseáil ullmhúcháin, treoir chomhtháthaithe, obair anála, cóitseáil shómatach, treoir mhachnaimh, cóitseáil spioradálta, oideachas um laghdú dochair agus obair ghaolmhar dhleathach folláine."
   ],
   "I will not facilitate illegal ceremonies and will not source, supply, or coordinate access to controlled substances of any kind.": [
     "No facilitaré ceremonias ilegales ni conseguiré, suministraré o coordinaré el acceso a sustancias controladas de ningún tipo.",
@@ -1881,7 +2051,8 @@ export const accountsMessages = {
     "Ik begeleid geen illegale ceremonies en zal geen gereguleerde middelen verkrijgen, leveren of de toegang ertoe coördineren.",
     "我不会主持非法仪式，也不会寻找、提供或协调获取任何受控物质。",
     "違法な儀式を進行したり、いかなる規制薬物も入手、供給、または入手の仲介をしたりしません。",
-    "불법 의식을 진행하거나 어떠한 규제 물질도 구하거나 공급하거나 접근을 알선하지 않겠습니다."
+    "불법 의식을 진행하거나 어떠한 규제 물질도 구하거나 공급하거나 접근을 알선하지 않겠습니다.",
+    "Ní éascóidh mé searmanais mhídhleathacha agus ní aimseoidh mé foinsí do shubstaintí rialaithe d'aon chineál, ní sholáthróidh mé iad ná ní chomhordóidh mé rochtain orthu."
   ],
   "I understand my profile will not appear publicly until it has been reviewed and approved by {appName}.": [
     "Entiendo que mi perfil no será público hasta que {appName} lo revise y apruebe.",
@@ -1892,7 +2063,8 @@ export const accountsMessages = {
     "Ik begrijp dat mijn profiel pas openbaar wordt na beoordeling en goedkeuring door {appName}.",
     "我理解资料只有经{appName}审核批准后才会公开。",
     "{appName}による審査と承認が完了するまでプロフィールが公開されないことを理解します。",
-    "{appName}의 검토와 승인이 완료되어야 프로필이 공개됨을 이해합니다."
+    "{appName}의 검토와 승인이 완료되어야 프로필이 공개됨을 이해합니다.",
+    "Tuigim nach mbeidh mo phróifíl le feiceáil go poiblí go dtí go mbeidh athbhreithniú déanta ag {appName} uirthi agus í ceadaithe."
   ],
   "I will keep my safety practices, contraindication screening process, and profile information accurate and up to date.": [
     "Mantendré mis prácticas de seguridad, mi proceso de evaluación de contraindicaciones y mi perfil precisos y actualizados.",
@@ -1903,7 +2075,8 @@ export const accountsMessages = {
     "Ik houd mijn veiligheidsmaatregelen, screening op contra-indicaties en profielinformatie juist en actueel.",
     "我会确保安全措施、禁忌症筛查流程和资料信息准确、及时更新。",
     "安全対策、禁忌事項のスクリーニング手順、プロフィール情報を正確かつ最新に保ちます。",
-    "안전 수칙, 금기사항 확인 절차 및 프로필 정보를 정확하고 최신 상태로 유지하겠습니다."
+    "안전 수칙, 금기사항 확인 절차 및 프로필 정보를 정확하고 최신 상태로 유지하겠습니다.",
+    "Coinneoidh mé mo chleachtais sábháilteachta, mo phróiseas scagtha fritásca agus m'eolas próifíle cruinn agus cothrom le dáta."
   ],
   "I understand that approval is not an endorsement of any specific practice, product, or health outcome.": [
     "Entiendo que la aprobación no respalda ninguna práctica, producto o resultado de salud específico.",
@@ -1914,7 +2087,8 @@ export const accountsMessages = {
     "Ik begrijp dat goedkeuring geen aanbeveling is van een specifieke werkwijze, product of gezondheidsuitkomst.",
     "我理解批准并不代表对任何具体实践、产品或健康结果的认可。",
     "承認は特定の手法、商品、健康上の結果を推奨・保証するものではないと理解します。",
-    "승인이 특정 방법, 제품 또는 건강 결과를 보증하는 것은 아님을 이해합니다."
+    "승인이 특정 방법, 제품 또는 건강 결과를 보증하는 것은 아님을 이해합니다.",
+    "Tuigim nach moladh aon chleachtais, táirge ná toraidh sláinte ar leith é ceadú."
   ],
   "You can add up to {count} photos. Remove a photo before adding more.": [
     "Puedes añadir hasta {count} fotos. Elimina una antes de añadir más.",
@@ -1925,7 +2099,8 @@ export const accountsMessages = {
     "Je kunt maximaal {count} foto’s toevoegen. Verwijder een foto voordat je meer toevoegt.",
     "最多可添加{count}张照片。添加更多前请先移除一张。",
     "写真は{count}枚までです。追加する前に1枚削除してください。",
-    "최대 {count}장의 사진을 추가할 수 있습니다. 더 추가하려면 먼저 사진을 삭제하세요."
+    "최대 {count}장의 사진을 추가할 수 있습니다. 더 추가하려면 먼저 사진을 삭제하세요.",
+    "Is féidir leat suas le {count} grianghraf a chur leis. Bain grianghraf sula gcuireann tú tuilleadh leis."
   ],
   "Choose JPG, PNG, or WebP photos. Other file types are not supported.": [
     "Elige fotos JPG, PNG o WebP. Otros formatos no son compatibles.",
@@ -1936,7 +2111,8 @@ export const accountsMessages = {
     "Kies JPG-, PNG- of WebP-foto’s. Andere bestandstypen worden niet ondersteund.",
     "请选择JPG、PNG或WebP照片，不支持其他格式。",
     "JPG、PNG、WebPの写真を選んでください。他の形式には対応していません。",
-    "JPG, PNG 또는 WebP 사진을 선택하세요. 다른 형식은 지원하지 않습니다."
+    "JPG, PNG 또는 WebP 사진을 선택하세요. 다른 형식은 지원하지 않습니다.",
+    "Roghnaigh grianghraif JPG, PNG nó WebP. Ní thacaítear le cineálacha comhaid eile."
   ],
   "Each photo must be 4 MB or less and must not be empty.": [
     "Cada foto debe tener como máximo 4 MB y no estar vacía.",
@@ -1947,7 +2123,8 @@ export const accountsMessages = {
     "Elke foto mag maximaal 4 MB groot zijn en mag niet leeg zijn.",
     "每张照片不得超过4MB，且文件不能为空。",
     "各写真は4MB以下で、空のファイルでないことを確認してください。",
-    "각 사진은 4MB 이하여야 하며 빈 파일이면 안 됩니다."
+    "각 사진은 4MB 이하여야 하며 빈 파일이면 안 됩니다.",
+    "Ní mór gach grianghraf a bheith 4 MB nó níos lú agus gan a bheith folamh."
   ],
   "Uploading photo {current} of {total}…": [
     "Subiendo foto {current} de {total}…",
@@ -1958,7 +2135,8 @@ export const accountsMessages = {
     "Foto {current} van {total} uploaden…",
     "正在上传第{current}张，共{total}张…",
     "写真 {current} / {total} をアップロード中…",
-    "사진 {current}/{total} 업로드 중…"
+    "사진 {current}/{total} 업로드 중…",
+    "Grianghraf {current} as {total} á uaslódáil…"
   ],
   "Your sign-in has expired. Sign in again before uploading photos.": [
     "Tu sesión ha caducado. Inicia sesión otra vez para subir fotos.",
@@ -1969,7 +2147,8 @@ export const accountsMessages = {
     "Je sessie is verlopen. Log opnieuw in voordat je foto’s uploadt.",
     "登录已过期。请重新登录后上传照片。",
     "ログインの有効期限が切れました。写真をアップロードする前に再ログインしてください。",
-    "로그인이 만료되었습니다. 사진 업로드 전에 다시 로그인하세요."
+    "로그인이 만료되었습니다. 사진 업로드 전에 다시 로그인하세요.",
+    "Tá do sheisiún sínithe isteach imithe in éag. Sínigh isteach arís sula n-uaslódálann tú grianghraif."
   ],
   "You have reached the upload limit for now. Please try again later.": [
     "Has alcanzado el límite de subidas. Vuelve a intentarlo más tarde.",
@@ -1980,7 +2159,8 @@ export const accountsMessages = {
     "Je hebt de uploadlimiet bereikt. Probeer het later opnieuw.",
     "暂时已达到上传限额，请稍后重试。",
     "現在のアップロード上限に達しました。時間をおいて再試行してください。",
-    "현재 업로드 한도에 도달했습니다. 나중에 다시 시도하세요."
+    "현재 업로드 한도에 도달했습니다. 나중에 다시 시도하세요.",
+    "Tá an teorainn uaslódála sroichte agat faoi láthair. Bain triail eile as ar ball."
   ],
   "This photo is too large. Choose a JPG, PNG, or WebP photo up to 4 MB.": [
     "La foto es demasiado grande. Elige JPG, PNG o WebP de hasta 4 MB.",
@@ -1991,7 +2171,8 @@ export const accountsMessages = {
     "Deze foto is te groot. Kies JPG, PNG of WebP van maximaal 4 MB.",
     "照片过大。请选择不超过4MB的JPG、PNG或WebP照片。",
     "写真が大きすぎます。4MB以下のJPG、PNG、WebPを選んでください。",
-    "사진이 너무 큽니다. 4MB 이하의 JPG, PNG 또는 WebP를 선택하세요."
+    "사진이 너무 큽니다. 4MB 이하의 JPG, PNG 또는 WebP를 선택하세요.",
+    "Tá an grianghraf seo rómhór. Roghnaigh grianghraf JPG, PNG nó WebP suas le 4 MB."
   ],
   "This photo could not be processed. Choose a non-animated JPG, PNG, or WebP image under 20 megapixels.": [
     "No se pudo procesar la foto. Elige una imagen estática JPG, PNG o WebP de menos de 20 megapíxeles.",
@@ -2002,7 +2183,8 @@ export const accountsMessages = {
     "Deze foto kon niet worden verwerkt. Kies een niet-geanimeerde JPG, PNG of WebP onder 20 megapixels.",
     "无法处理照片。请选择低于2000万像素的静态JPG、PNG或WebP图片。",
     "写真を処理できませんでした。2000万画素未満の静止画JPG、PNG、WebPを選んでください。",
-    "사진을 처리할 수 없습니다. 2천만 화소 미만의 움직이지 않는 JPG, PNG 또는 WebP를 선택하세요."
+    "사진을 처리할 수 없습니다. 2천만 화소 미만의 움직이지 않는 JPG, PNG 또는 WebP를 선택하세요.",
+    "Níorbh fhéidir an grianghraf seo a phróiseáil. Roghnaigh íomhá JPG, PNG nó WebP nach bhfuil beoite agus atá faoi bhun 20 meigipicsil."
   ],
   "The photo could not be uploaded. Please try again.": [
     "No se pudo subir la foto. Vuelve a intentarlo.",
@@ -2013,7 +2195,8 @@ export const accountsMessages = {
     "De foto kon niet worden geüpload. Probeer opnieuw.",
     "无法上传照片，请重试。",
     "写真をアップロードできませんでした。再試行してください。",
-    "사진을 업로드할 수 없습니다. 다시 시도하세요."
+    "사진을 업로드할 수 없습니다. 다시 시도하세요.",
+    "Níorbh fhéidir an grianghraf a uaslódáil. Bain triail eile as."
   ],
   "The upload could not be confirmed. Please try again.": [
     "No se pudo confirmar la subida. Vuelve a intentarlo.",
@@ -2024,7 +2207,8 @@ export const accountsMessages = {
     "De upload kon niet worden bevestigd. Probeer opnieuw.",
     "无法确认上传，请重试。",
     "アップロードを確認できませんでした。再試行してください。",
-    "업로드를 확인할 수 없습니다. 다시 시도하세요."
+    "업로드를 확인할 수 없습니다. 다시 시도하세요.",
+    "Níorbh fhéidir an t-uaslódáil a dheimhniú. Bain triail eile as."
   ],
   "Photos uploaded. Submit your profile to save these changes.": [
     "Fotos subidas. Envía tu perfil para guardar los cambios.",
@@ -2035,7 +2219,8 @@ export const accountsMessages = {
     "Foto’s geüpload. Dien je profiel in om de wijzigingen op te slaan.",
     "照片已上传。请提交资料以保存修改。",
     "写真をアップロードしました。変更を保存するにはプロフィールを送信してください。",
-    "사진이 업로드되었습니다. 변경사항을 저장하려면 프로필을 제출하세요."
+    "사진이 업로드되었습니다. 변경사항을 저장하려면 프로필을 제출하세요.",
+    "Grianghraif uaslódáilte. Cuir do phróifíl isteach chun na hathruithe seo a shábháil."
   ],
   "The upload did not finish. Check your connection and try again.": [
     "La subida no se completó. Revisa tu conexión e inténtalo de nuevo.",
@@ -2046,7 +2231,8 @@ export const accountsMessages = {
     "De upload is niet voltooid. Controleer je verbinding en probeer opnieuw.",
     "上传未完成。请检查网络后重试。",
     "アップロードが完了しませんでした。接続を確認して再試行してください。",
-    "업로드가 완료되지 않았습니다. 연결을 확인하고 다시 시도하세요."
+    "업로드가 완료되지 않았습니다. 연결을 확인하고 다시 시도하세요.",
+    "Níor críochnaíodh an t-uaslódáil. Seiceáil do nasc agus bain triail eile as."
   ],
   "Add one to five photos. Your first photo appears in search results. Use a clear photo of yourself, then add other images that help people understand your practice. Only upload images you have permission to share publicly.": [
     "Añade de una a cinco fotos. La primera aparece en los resultados. Usa una foto clara de ti y otras que ayuden a entender tu práctica. Sube solo imágenes que tengas permiso para compartir públicamente.",
@@ -2057,7 +2243,8 @@ export const accountsMessages = {
     "Voeg één tot vijf foto’s toe. De eerste verschijnt in zoekresultaten. Gebruik een duidelijke foto van jezelf en andere beelden die je praktijk tonen. Upload alleen beelden die je openbaar mag delen.",
     "添加一至五张照片。第一张显示在搜索结果中。请使用清晰的本人照片，再添加有助于了解你实践的图片。仅上传你有权公开分享的图片。",
     "写真は1〜5枚追加できます。1枚目が検索結果に表示されます。ご自身がはっきり写った写真と、活動が伝わる画像を使ってください。公開の許可がある画像のみアップロードしてください。",
-    "사진을 1~5장 추가하세요. 첫 사진이 검색 결과에 표시됩니다. 본인의 선명한 사진과 활동을 보여주는 이미지를 사용하세요. 공개할 권한이 있는 이미지만 업로드하세요."
+    "사진을 1~5장 추가하세요. 첫 사진이 검색 결과에 표시됩니다. 본인의 선명한 사진과 활동을 보여주는 이미지를 사용하세요. 공개할 권한이 있는 이미지만 업로드하세요.",
+    "Cuir idir grianghraf amháin agus cúig ghrianghraf leis. Taispeántar do chéad ghrianghraf sna torthaí cuardaigh. Úsáid grianghraf soiléir díot féin, ansin cuir íomhánna eile leis a chabhraíonn le daoine do chleachtas a thuiscint. Ná huaslódáil ach íomhánna a bhfuil cead agat iad a roinnt go poiblí."
   ],
   "Portrait selfies and landscape photos keep their full frame. No need to crop them into a square.": [
     "Los selfies verticales y fotos horizontales conservan el encuadre completo. No hace falta recortarlos en cuadrado.",
@@ -2068,7 +2255,8 @@ export const accountsMessages = {
     "Staande selfies en liggende foto’s blijven volledig zichtbaar. Vierkant bijsnijden is niet nodig.",
     "竖版自拍和横版照片均保留完整画面，无需裁成正方形。",
     "縦向きの自撮りも横向きの写真も全体が表示されます。正方形に切り取る必要はありません。",
-    "세로 셀카와 가로 사진 모두 전체 화면이 유지됩니다. 정사각형으로 자를 필요가 없습니다."
+    "세로 셀카와 가로 사진 모두 전체 화면이 유지됩니다. 정사각형으로 자를 필요가 없습니다.",
+    "Coinníonn féinphortráidí ingearacha agus grianghraif chothrománacha a bhfráma iomlán. Ní gá iad a bhearradh ina gcearnóg."
   ],
   "JPG, PNG, or WebP. Up to 4 MB per photo. Still images under 20 megapixels.": [
     "JPG, PNG o WebP. Hasta 4 MB por foto. Imágenes estáticas de menos de 20 megapíxeles.",
@@ -2079,7 +2267,8 @@ export const accountsMessages = {
     "JPG, PNG of WebP. Maximaal 4 MB per foto. Stilstaande beelden onder 20 megapixels.",
     "支持JPG、PNG或WebP。每张不超过4MB，静态图片低于2000万像素。",
     "JPG、PNG、WebP。1枚4MB以下、2000万画素未満の静止画。",
-    "JPG, PNG 또는 WebP. 사진당 최대 4MB, 2천만 화소 미만의 정지 이미지."
+    "JPG, PNG 또는 WebP. 사진당 최대 4MB, 2천만 화소 미만의 정지 이미지.",
+    "JPG, PNG nó WebP. Suas le 4 MB in aghaidh an ghrianghraif. Íomhánna socra faoi bhun 20 meigipicsil."
   ],
   "New uploads are visible to you and reviewers. Photos on your approved public profile are displayed publicly.": [
     "Las nuevas fotos son visibles para ti y los revisores. Las de tu perfil público aprobado se muestran públicamente.",
@@ -2090,7 +2279,8 @@ export const accountsMessages = {
     "Nieuwe uploads zijn zichtbaar voor jou en beoordelaars. Foto’s op je goedgekeurde openbare profiel zijn openbaar.",
     "新上传的照片仅你和审核人员可见。获批公开资料中的照片会公开展示。",
     "新しい画像はあなたと審査担当者に表示されます。承認された公開プロフィールの写真は一般公開されます。",
-    "새 업로드는 본인과 검토자에게 보입니다. 승인된 공개 프로필의 사진은 공개됩니다."
+    "새 업로드는 본인과 검토자에게 보입니다. 승인된 공개 프로필의 사진은 공개됩니다.",
+    "Tá uaslódálacha nua le feiceáil agat féin agus ag athbhreithneoirí. Taispeántar grianghraif ar do phróifíl phoiblí cheadaithe go poiblí."
   ],
   "Photo {number} is now your primary photo. Submit your profile to save.": [
     "La foto {number} es ahora la principal. Envía tu perfil para guardar.",
@@ -2101,7 +2291,8 @@ export const accountsMessages = {
     "Foto {number} is nu je hoofdfoto. Dien je profiel in om op te slaan.",
     "第{number}张现为主照片。请提交资料以保存。",
     "写真 {number} をメインに設定しました。保存するにはプロフィールを送信してください。",
-    "사진 {number}이(가) 대표 사진입니다. 저장하려면 프로필을 제출하세요."
+    "사진 {number}이(가) 대표 사진입니다. 저장하려면 프로필을 제출하세요.",
+    "Is é grianghraf {number} do phríomhghrianghraf anois. Cuir do phróifíl isteach chun sábháil."
   ],
   "Photo removed from this draft. Submit your profile to save.": [
     "Foto eliminada del borrador. Envía tu perfil para guardar.",
@@ -2112,7 +2303,8 @@ export const accountsMessages = {
     "Foto uit dit concept verwijderd. Dien je profiel in om op te slaan.",
     "已从草稿移除照片。请提交资料以保存。",
     "下書きから写真を削除しました。保存するにはプロフィールを送信してください。",
-    "초안에서 사진이 삭제되었습니다. 저장하려면 프로필을 제출하세요."
+    "초안에서 사진이 삭제되었습니다. 저장하려면 프로필을 제출하세요.",
+    "Baineadh an grianghraf den dréacht seo. Cuir do phróifíl isteach chun sábháil."
   ],
   "A place for thoughtful, responsible support. Share your practice and connect with people at their own pace.": [
     "Un lugar para un apoyo consciente y responsable. Comparte tu práctica y conecta con personas a su propio ritmo.",
@@ -2123,7 +2315,8 @@ export const accountsMessages = {
     "Een plek voor aandachtige, verantwoorde ondersteuning. Deel je praktijk en maak verbinding in het tempo van de ander.",
     "提供周到、负责任支持的空间。分享你的实践，尊重每个人的节奏建立联系。",
     "思いやりと責任あるサポートの場です。活動を紹介し、一人ひとりのペースでつながりましょう。",
-    "세심하고 책임 있는 지원을 위한 공간입니다. 활동을 소개하고 각자의 속도에 맞춰 연결하세요."
+    "세심하고 책임 있는 지원을 위한 공간입니다. 활동을 소개하고 각자의 속도에 맞춰 연결하세요.",
+    "Áit le haghaidh tacaíocht mhachnamhach fhreagrach. Roinn do chleachtas agus déan teagmháil le daoine ar a luas féin."
   ],
   "Sign in to manage your facilitator profile and connections.": [
     "Inicia sesión para gestionar tu perfil de facilitador y tus contactos.",
@@ -2134,7 +2327,8 @@ export const accountsMessages = {
     "Log in om je begeleidersprofiel en contacten te beheren.",
     "登录以管理引导师资料和联系。",
     "ログインしてファシリテーターのプロフィールとつながりを管理できます。",
-    "로그인하여 퍼실리테이터 프로필과 연락을 관리하세요."
+    "로그인하여 퍼실리테이터 프로필과 연락을 관리하세요.",
+    "Sínigh isteach chun do phróifíl éascaitheora agus do naisc a bhainistiú."
   ],
   "Create an account to submit your facilitator application. Looking for support instead? You don't need an account —": [
     "Crea una cuenta para enviar tu solicitud de facilitador. ¿Buscas apoyo? No necesitas cuenta:",
@@ -2145,7 +2339,8 @@ export const accountsMessages = {
     "Maak een account om je als begeleider aan te melden. Zoek je ondersteuning? Je hebt geen account nodig:",
     "创建账户以提交引导师申请。如果你在寻找支持，无需账户：",
     "ファシリテーター申請にはアカウントを作成してください。サポートをお探しならアカウントは不要です。",
-    "퍼실리테이터 신청을 위해 계정을 만드세요. 지원을 찾으시나요? 계정이 필요하지 않습니다."
+    "퍼실리테이터 신청을 위해 계정을 만드세요. 지원을 찾으시나요? 계정이 필요하지 않습니다.",
+    "Cruthaigh cuntas chun d'iarratas éascaitheora a chur isteach. Ag lorg tacaíochta ina áit sin? Ní gá cuntas duit —"
   ],
   "Reset password": [
     "Restablecer contraseña",
@@ -2156,7 +2351,8 @@ export const accountsMessages = {
     "Wachtwoord herstellen",
     "重置密码",
     "パスワード再設定",
-    "비밀번호 재설정"
+    "비밀번호 재설정",
+    "Athshocraigh pasfhocal"
   ],
   "Enter your email and we'll send you a reset link.": [
     "Introduce tu correo y te enviaremos un enlace de recuperación.",
@@ -2167,7 +2363,8 @@ export const accountsMessages = {
     "Vul je e-mail in en we sturen een herstellink.",
     "输入电子邮箱，我们会发送重置链接。",
     "メールアドレスを入力すると再設定リンクを送信します。",
-    "이메일을 입력하면 재설정 링크를 보내드립니다."
+    "이메일을 입력하면 재설정 링크를 보내드립니다.",
+    "Cuir isteach do ríomhphost agus seolfaimid nasc athshocraithe chugat."
   ],
   "Choose a strong password of at least 8 characters.": [
     "Elige una contraseña segura de al menos 8 caracteres.",
@@ -2178,7 +2375,8 @@ export const accountsMessages = {
     "Kies een sterk wachtwoord van minimaal 8 tekens.",
     "请选择至少8个字符的强密码。",
     "8文字以上の強力なパスワードを設定してください。",
-    "8자 이상의 안전한 비밀번호를 선택하세요."
+    "8자 이상의 안전한 비밀번호를 선택하세요.",
+    "Roghnaigh pasfhocal láidir ina bhfuil 8 gcarachtar ar a laghad."
   ],
   "Account setup issue": [
     "Problema al configurar la cuenta",
@@ -2189,7 +2387,8 @@ export const accountsMessages = {
     "Probleem bij accountinstelling",
     "账户设置问题",
     "アカウント設定の問題",
-    "계정 설정 문제"
+    "계정 설정 문제",
+    "Fadhb le bunú cuntais"
   ],
   "You're signed in, but we couldn't load your account. This has been logged on our end.": [
     "Has iniciado sesión, pero no pudimos cargar tu cuenta. Hemos registrado el problema.",
@@ -2200,7 +2399,8 @@ export const accountsMessages = {
     "Je bent ingelogd, maar we konden je account niet laden. We hebben het probleem vastgelegd.",
     "你已登录，但无法加载账户。我们已记录此问题。",
     "ログイン済みですが、アカウントを読み込めませんでした。問題は記録されています。",
-    "로그인되었지만 계정을 불러올 수 없습니다. 문제가 기록되었습니다."
+    "로그인되었지만 계정을 불러올 수 없습니다. 문제가 기록되었습니다.",
+    "Tá tú sínithe isteach, ach níorbh fhéidir linn do chuntas a lódáil. Tá sé seo logáilte againn."
   ],
   "You're signed in, but we couldn't check your guide application status. This has been logged on our end.": [
     "Has iniciado sesión, pero no pudimos comprobar tu solicitud de guía. Hemos registrado el problema.",
@@ -2211,7 +2411,8 @@ export const accountsMessages = {
     "Je bent ingelogd, maar we konden de status van je aanvraag niet controleren. We hebben het probleem vastgelegd.",
     "你已登录，但无法查询引导师申请状态。我们已记录此问题。",
     "ログイン済みですが、ガイド申請の状況を確認できませんでした。問題は記録されています。",
-    "로그인되었지만 가이드 신청 상태를 확인할 수 없습니다. 문제가 기록되었습니다."
+    "로그인되었지만 가이드 신청 상태를 확인할 수 없습니다. 문제가 기록되었습니다.",
+    "Tá tú sínithe isteach, ach níorbh fhéidir linn stádas d'iarratais treoraí a sheiceáil. Tá sé seo logáilte againn."
   ],
   "You're signed in, but we couldn't finish setting up your account. This has been logged on our end.": [
     "Has iniciado sesión, pero no pudimos terminar de configurar tu cuenta. Hemos registrado el problema.",
@@ -2222,7 +2423,8 @@ export const accountsMessages = {
     "Je bent ingelogd, maar we konden je account niet volledig instellen. We hebben het probleem vastgelegd.",
     "你已登录，但无法完成账户设置。我们已记录此问题。",
     "ログイン済みですが、アカウント設定を完了できませんでした。問題は記録されています。",
-    "로그인되었지만 계정 설정을 완료할 수 없습니다. 문제가 기록되었습니다."
+    "로그인되었지만 계정 설정을 완료할 수 없습니다. 문제가 기록되었습니다.",
+    "Tá tú sínithe isteach, ach níorbh fhéidir linn bunú do chuntais a chríochnú. Tá sé seo logáilte againn."
   ],
   "Signing out and back in often resolves it — if it keeps happening, please contact support.": [
     "Cerrar sesión y volver a entrar suele resolverlo. Si persiste, contacta con soporte.",
@@ -2233,7 +2435,8 @@ export const accountsMessages = {
     "Uitloggen en opnieuw inloggen helpt vaak. Blijft het gebeuren, neem contact op met ondersteuning.",
     "退出后重新登录通常能解决问题。如仍出现，请联系支持团队。",
     "ログアウトして再ログインすると解決する場合があります。繰り返す場合はサポートにお問い合わせください。",
-    "로그아웃 후 다시 로그인하면 해결되는 경우가 많습니다. 계속되면 지원팀에 문의하세요."
+    "로그아웃 후 다시 로그인하면 해결되는 경우가 많습니다. 계속되면 지원팀에 문의하세요.",
+    "Is minic a réitíonn síniú amach agus isteach arís é — má leanann sé ar aghaidh, déan teagmháil leis an bhfoireann tacaíochta."
   ],
   "Legal services only — preparation, integration, breathwork, somatic coaching, education": [
     "Solo servicios legales: preparación, integración, respiración, acompañamiento somático y educación",
@@ -2244,7 +2447,8 @@ export const accountsMessages = {
     "Alleen legale diensten: voorbereiding, integratie, ademwerk, somatische coaching en educatie",
     "仅限合法服务：准备、整合、呼吸练习、躯体辅导和教育",
     "準備、統合、呼吸法、ソマティックコーチング、教育などの合法的サービスのみ",
-    "준비, 통합, 호흡 훈련, 신체 기반 코칭, 교육 등 합법적 서비스만 가능"
+    "준비, 통합, 호흡 훈련, 신체 기반 코칭, 교육 등 합법적 서비스만 가능",
+    "Seirbhísí dleathacha amháin — ullmhúchán, comhtháthú, obair anála, cóitseáil shómatach, oideachas"
   ],
   "No facilitation of illegal ceremonies or coordination of substance procurement": [
     "No se permite facilitar ceremonias ilegales ni coordinar la obtención de sustancias",
@@ -2255,7 +2459,8 @@ export const accountsMessages = {
     "Geen begeleiding van illegale ceremonies of coördinatie van middelenverkrijging",
     "不得主持非法仪式或协调获取物质",
     "違法な儀式の進行や薬物入手の仲介は禁止",
-    "불법 의식 진행 및 물질 조달 알선 금지"
+    "불법 의식 진행 및 물질 조달 알선 금지",
+    "Gan searmanais mhídhleathacha a éascú ná soláthar substaintí a chomhordú"
   ],
   "At least one profile photo is required; JPG, PNG, or WebP, up to 4 MB": [
     "Se requiere al menos una foto de perfil; JPG, PNG o WebP, hasta 4 MB",
@@ -2266,7 +2471,8 @@ export const accountsMessages = {
     "Minimaal één profielfoto verplicht; JPG, PNG of WebP, maximaal 4 MB",
     "至少需要一张资料照片，JPG、PNG或WebP格式，不超过4MB",
     "プロフィール写真1枚以上必須。JPG、PNG、WebP、4MB以下",
-    "프로필 사진 최소 1장 필수. JPG, PNG 또는 WebP, 최대 4MB"
+    "프로필 사진 최소 1장 필수. JPG, PNG 또는 WebP, 최대 4MB",
+    "Tá grianghraf próifíle amháin ar a laghad riachtanach; JPG, PNG nó WebP, suas le 4 MB"
   ],
   "Detailed safety practice documentation is required": [
     "Se requiere documentación detallada de las prácticas de seguridad",
@@ -2277,7 +2483,8 @@ export const accountsMessages = {
     "Gedetailleerde beschrijving van veiligheidsmaatregelen verplicht",
     "须详细说明安全措施",
     "安全対策の詳細な記載が必要",
-    "안전 수칙에 대한 상세 설명 필수"
+    "안전 수칙에 대한 상세 설명 필수",
+    "Tá cur síos mionsonraithe ar chleachtais sábháilteachta riachtanach"
   ],
   "Contraindication awareness acknowledgement is required": [
     "Se requiere confirmar el conocimiento de contraindicaciones",
@@ -2288,7 +2495,8 @@ export const accountsMessages = {
     "Bevestiging van kennis van contra-indicaties verplicht",
     "须确认了解禁忌症",
     "禁忌事項の認識の確認が必要",
-    "금기사항 인식 확인 필수"
+    "금기사항 인식 확인 필수",
+    "Tá admháil feasachta ar fhritásca riachtanach"
   ],
   "Admin review before your profile appears publicly": [
     "Revisión del administrador antes de publicar tu perfil",
@@ -2299,7 +2507,8 @@ export const accountsMessages = {
     "Beoordeling door beheerder vóór publicatie van je profiel",
     "资料公开前须经管理员审核",
     "公開前に管理者による審査",
-    "프로필 공개 전 관리자 검토"
+    "프로필 공개 전 관리자 검토",
+    "Athbhreithniú riarthóra sula dtaispeántar do phróifíl go poiblí"
   ],
   "Submit your profile for review before it can appear publicly. Approval is an administrative decision to include a profile, not verification of a clinical license or a guarantee of safety. Check your dashboard for updates.": [
     "Envía tu perfil a revisión antes de publicarlo. La aprobación es una decisión administrativa de inclusión, no una verificación de licencia clínica ni una garantía de seguridad. Consulta las novedades en tu panel.",
@@ -2310,7 +2519,8 @@ export const accountsMessages = {
     "Dien je profiel in ter beoordeling vóór publicatie. Goedkeuring is een administratieve beslissing tot opname, geen controle van een klinische bevoegdheid of veiligheidsgarantie. Bekijk updates op je dashboard.",
     "资料公开前请提交审核。批准只是决定收录资料的行政行为，不代表核实临床执照，也不保证安全。请在控制面板查看更新。",
     "公開前にプロフィールを審査に提出してください。承認は掲載に関する運営上の判断であり、医療資格の検証や安全の保証ではありません。更新はダッシュボードで確認してください。",
-    "공개 전에 프로필을 검토에 제출하세요. 승인은 프로필 게재에 대한 운영상 결정이며 임상 면허 확인이나 안전 보장이 아닙니다. 대시보드에서 업데이트를 확인하세요."
+    "공개 전에 프로필을 검토에 제출하세요. 승인은 프로필 게재에 대한 운영상 결정이며 임상 면허 확인이나 안전 보장이 아닙니다. 대시보드에서 업데이트를 확인하세요.",
+    "Cuir do phróifíl isteach le haghaidh athbhreithnithe sular féidir í a thaispeáint go poiblí. Is cinneadh riaracháin é ceadú chun próifíl a chur san áireamh, ní fíorú ceadúnais chliniciúil ná ráthaíocht sábháilteachta. Seiceáil do dheais le haghaidh nuashonruithe."
   ],
   "Update your photos, messaging links, or practice details. Your current information is filled in below. Choose the section you want to change, then select “Finish editing” to confirm and submit your updates for review.": [
     "Actualiza fotos, enlaces o detalles de tu práctica. Tu información actual aparece abajo. Elige la sección que quieras cambiar y pulsa “Terminar edición” para confirmar y enviar los cambios a revisión.",
@@ -2321,7 +2531,8 @@ export const accountsMessages = {
     "Werk je foto’s, berichtenlinks of praktijkgegevens bij. Je huidige informatie staat hieronder ingevuld. Kies een onderdeel en daarna “Bewerken afronden” om wijzigingen te bevestigen en ter beoordeling in te dienen.",
     "更新照片、通讯链接或实践信息。下方已填入现有内容。选择要修改的部分，再点击“完成编辑”，确认并提交更新以供审核。",
     "写真、メッセージリンク、活動内容を更新できます。現在の情報は入力済みです。変更するセクションを選び、「編集を完了」で確認して更新を審査に提出してください。",
-    "사진, 메신저 링크 또는 활동 정보를 수정하세요. 현재 정보가 아래에 입력되어 있습니다. 수정할 섹션을 선택한 뒤 “수정 완료”를 눌러 확인하고 검토에 제출하세요."
+    "사진, 메신저 링크 또는 활동 정보를 수정하세요. 현재 정보가 아래에 입력되어 있습니다. 수정할 섹션을 선택한 뒤 “수정 완료”를 눌러 확인하고 검토에 제출하세요.",
+    "Nuashonraigh do ghrianghraif, naisc teachtaireachtaí nó sonraí cleachtais. Tá d'eolas reatha líonta isteach thíos. Roghnaigh an chuid is mian leat a athrú, ansin roghnaigh “Críochnaigh an eagarthóireacht” chun do nuashonruithe a dheimhniú agus a chur isteach le haghaidh athbhreithnithe."
   ],
   "Use https://wa.me/ followed by your full international phone number, including country code, without +, spaces, or punctuation.": [
     "Usa https://wa.me/ seguido de tu número internacional completo con código de país, sin +, espacios ni puntuación.",
@@ -2332,7 +2543,8 @@ export const accountsMessages = {
     "Gebruik https://wa.me/ gevolgd door je volledige internationale nummer met landcode, zonder +, spaties of leestekens.",
     "使用https://wa.me/，后接含国家代码的完整国际电话号码，不加+、空格或标点。",
     "https://wa.me/ の後に国番号を含む完全な電話番号を入力してください。+、スペース、記号は不要です。",
-    "https://wa.me/ 뒤에 국가번호를 포함한 전체 국제 전화번호를 입력하세요. +, 공백, 문장부호는 제외하세요."
+    "https://wa.me/ 뒤에 국가번호를 포함한 전체 국제 전화번호를 입력하세요. +, 공백, 문장부호는 제외하세요.",
+    "Úsáid https://wa.me/ agus d'uimhir ghutháin idirnáisiúnta iomlán ina dhiaidh, lena n-áirítear cód tíre, gan +, spásanna ná poncaíocht."
   ],
   "Copy your full https://signal.me/#eu/ link from Signal: Settings → your profile → QR Code or Link. A https://signal.me/#p/+ link with your international phone number also works.": [
     "Copia tu enlace completo https://signal.me/#eu/ desde Signal: Ajustes → tu perfil → Código QR o enlace. También sirve https://signal.me/#p/+ seguido de tu número internacional.",
@@ -2343,7 +2555,8 @@ export const accountsMessages = {
     "Kopieer je volledige https://signal.me/#eu/-link uit Signal: Instellingen → je profiel → QR-code of link. Een https://signal.me/#p/+-link met je internationale nummer werkt ook.",
     "在Signal的设置→个人资料→二维码或链接中，复制完整的https://signal.me/#eu/链接。也可使用https://signal.me/#p/+加国际电话号码的链接。",
     "Signalの設定 → プロフィール → QRコードまたはリンクから完全なhttps://signal.me/#eu/リンクをコピーしてください。https://signal.me/#p/+に国際電話番号を続けたリンクも使えます。",
-    "Signal의 설정 → 프로필 → QR 코드 또는 링크에서 전체 https://signal.me/#eu/ 링크를 복사하세요. https://signal.me/#p/+ 뒤에 국제 전화번호를 붙인 링크도 가능합니다."
+    "Signal의 설정 → 프로필 → QR 코드 또는 링크에서 전체 https://signal.me/#eu/ 링크를 복사하세요. https://signal.me/#p/+ 뒤에 국제 전화번호를 붙인 링크도 가능합니다.",
+    "Cóipeáil do nasc iomlán https://signal.me/#eu/ ó Signal: Socruithe → do phróifíl → Cód QR nó Nasc. Oibríonn nasc https://signal.me/#p/+ le d'uimhir ghutháin idirnáisiúnta freisin."
   ],
   "Use https://t.me/ followed by your personal username (5–32 letters, numbers, or underscores, starting with a letter). Paste your own contact link, not a group invite.": [
     "Usa https://t.me/ seguido de tu usuario personal (5–32 letras, números o guiones bajos, empezando con letra). Pega tu enlace personal, no una invitación de grupo.",
@@ -2354,7 +2567,8 @@ export const accountsMessages = {
     "Gebruik https://t.me/ gevolgd door je persoonlijke gebruikersnaam (5–32 letters, cijfers of underscores, beginnend met een letter). Plak je eigen contactlink, geen groepsuitnodiging.",
     "使用https://t.me/后接个人用户名（5–32个字母、数字或下划线，须以字母开头）。请粘贴个人联系链接，不要使用群组邀请。",
     "https://t.me/ に個人のユーザー名を続けてください（英字で始まる5〜32文字の英数字・アンダースコア）。グループ招待ではなく、ご自身の連絡先リンクを使ってください。",
-    "https://t.me/ 뒤에 개인 사용자 이름을 입력하세요(영문자로 시작하는 5~32자의 영문자, 숫자 또는 밑줄). 그룹 초대가 아닌 본인의 연락처 링크를 붙여넣으세요."
+    "https://t.me/ 뒤에 개인 사용자 이름을 입력하세요(영문자로 시작하는 5~32자의 영문자, 숫자 또는 밑줄). 그룹 초대가 아닌 본인의 연락처 링크를 붙여넣으세요.",
+    "Úsáid https://t.me/ agus d'ainm úsáideora pearsanta ina dhiaidh (5–32 litir, uimhir nó fostríoc, ag tosú le litir). Greamaigh do nasc teagmhála féin, ní cuireadh grúpa."
   ],
   "This request must come from this site.": [
     "Esta solicitud debe proceder de este sitio.",
@@ -2365,7 +2579,8 @@ export const accountsMessages = {
     "Dit verzoek moet van deze website komen.",
     "此请求必须来自本站。",
     "このリクエストは当サイトから送信してください。",
-    "이 요청은 이 사이트에서 보내야 합니다."
+    "이 요청은 이 사이트에서 보내야 합니다.",
+    "Ní mór don iarratas seo teacht ón suíomh seo."
   ],
   "Your sign-in has expired. Sign in again before submitting your profile.": [
     "Tu sesión ha caducado. Inicia sesión de nuevo antes de enviar tu perfil.",
@@ -2376,7 +2591,8 @@ export const accountsMessages = {
     "Je sessie is verlopen. Log opnieuw in voordat je je profiel indient.",
     "登录已过期。提交资料前请重新登录。",
     "ログインの有効期限が切れました。プロフィールを提出する前に再ログインしてください。",
-    "로그인이 만료되었습니다. 프로필 제출 전에 다시 로그인하세요."
+    "로그인이 만료되었습니다. 프로필 제출 전에 다시 로그인하세요.",
+    "Tá do sheisiún sínithe isteach imithe in éag. Sínigh isteach arís sula gcuireann tú do phróifíl isteach."
   ],
   "Your account could not be checked. Please try again.": [
     "No se pudo comprobar tu cuenta. Vuelve a intentarlo.",
@@ -2387,7 +2603,8 @@ export const accountsMessages = {
     "Je account kon niet worden gecontroleerd. Probeer opnieuw.",
     "无法检查账户，请重试。",
     "アカウントを確認できませんでした。再試行してください。",
-    "계정을 확인할 수 없습니다. 다시 시도하세요."
+    "계정을 확인할 수 없습니다. 다시 시도하세요.",
+    "Níorbh fhéidir do chuntas a sheiceáil. Bain triail eile as."
   ],
   "A guide account is required to submit an application.": [
     "Necesitas una cuenta de guía para enviar una solicitud.",
@@ -2398,7 +2615,8 @@ export const accountsMessages = {
     "Een begeleidersaccount is nodig om een aanvraag in te dienen.",
     "提交申请需要引导师账户。",
     "申請の提出にはガイドのアカウントが必要です。",
-    "신청을 제출하려면 가이드 계정이 필요합니다."
+    "신청을 제출하려면 가이드 계정이 필요합니다.",
+    "Tá cuntas treoraí riachtanach chun iarratas a chur isteach."
   ],
   "Review your application fields, required photo, and platform agreement before submitting.": [
     "Revisa los campos, la foto obligatoria y el acuerdo antes de enviar.",
@@ -2409,7 +2627,8 @@ export const accountsMessages = {
     "Controleer de velden, verplichte foto en platformovereenkomst voordat je indient.",
     "提交前请检查申请内容、必需照片和平台协议。",
     "提出前に入力欄、必須の写真、プラットフォームへの同意を確認してください。",
-    "제출 전에 신청 항목, 필수 사진 및 플랫폼 동의를 확인하세요."
+    "제출 전에 신청 항목, 필수 사진 및 플랫폼 동의를 확인하세요.",
+    "Seiceáil réimsí d'iarratais, an grianghraf riachtanach agus comhaontú an ardáin sula gcuireann tú isteach é."
   ],
   "Use photos uploaded through your own account.": [
     "Usa fotos subidas desde tu propia cuenta.",
@@ -2420,7 +2639,8 @@ export const accountsMessages = {
     "Gebruik foto’s die via je eigen account zijn geüpload.",
     "请使用通过本人账户上传的照片。",
     "ご自身のアカウントでアップロードした写真を使ってください。",
-    "본인 계정에서 업로드한 사진을 사용하세요."
+    "본인 계정에서 업로드한 사진을 사용하세요.",
+    "Úsáid grianghraif a uaslódáladh trí do chuntas féin."
   ],
   "An application already exists for this account. Open your dashboard to edit it.": [
     "Esta cuenta ya tiene una solicitud. Abre tu panel para editarla.",
@@ -2431,7 +2651,8 @@ export const accountsMessages = {
     "Er bestaat al een aanvraag voor dit account. Open je dashboard om deze te bewerken.",
     "该账户已有申请。请打开控制面板编辑。",
     "このアカウントには申請がすでにあります。ダッシュボードから編集してください。",
-    "이 계정에 이미 신청이 있습니다. 대시보드를 열어 수정하세요."
+    "이 계정에 이미 신청이 있습니다. 대시보드를 열어 수정하세요.",
+    "Tá iarratas ann cheana don chuntas seo. Oscail do dheais chun é a chur in eagar."
   ],
   "Your profile could not be saved. Check your photos and application fields, then try again.": [
     "No se pudo guardar tu perfil. Revisa las fotos y los campos y vuelve a intentarlo.",
@@ -2442,7 +2663,8 @@ export const accountsMessages = {
     "Je profiel kon niet worden opgeslagen. Controleer je foto’s en velden en probeer opnieuw.",
     "无法保存资料。请检查照片和申请内容后重试。",
     "プロフィールを保存できませんでした。写真と入力項目を確認して再試行してください。",
-    "프로필을 저장할 수 없습니다. 사진과 신청 항목을 확인한 뒤 다시 시도하세요."
+    "프로필을 저장할 수 없습니다. 사진과 신청 항목을 확인한 뒤 다시 시도하세요.",
+    "Níorbh fhéidir do phróifíl a shábháil. Seiceáil do ghrianghraif agus réimsí d'iarratais, ansin bain triail eile as."
   ],
   "Too small: expected number to be >=0": [
     "El número debe ser 0 o mayor",
@@ -2453,7 +2675,8 @@ export const accountsMessages = {
     "Het getal moet 0 of hoger zijn",
     "数字必须大于或等于0",
     "0以上の数値を入力してください",
-    "0 이상의 숫자를 입력하세요"
+    "0 이상의 숫자를 입력하세요",
+    "Róbheag: ní mór don uimhir a bheith >=0"
   ],
   "Too big: expected number to be <=50": [
     "El número debe ser 50 o menor",
@@ -2464,7 +2687,8 @@ export const accountsMessages = {
     "Het getal moet 50 of lager zijn",
     "数字必须小于或等于50",
     "50以下の数値を入力してください",
-    "50 이하의 숫자를 입력하세요"
+    "50 이하의 숫자를 입력하세요",
+    "Rómhór: ní mór don uimhir a bheith <=50"
   ],
   "Too big: expected string to have <=500 characters": [
     "El texto debe tener como máximo 500 caracteres",
@@ -2475,7 +2699,8 @@ export const accountsMessages = {
     "De tekst mag maximaal 500 tekens bevatten",
     "文字不得超过500个字符",
     "500文字以内で入力してください",
-    "500자 이하로 입력하세요"
+    "500자 이하로 입력하세요",
+    "Rófhada: ní mór don téacs a bheith <=500 carachtar"
   ],
   "Too big: expected string to have <=1000 characters": [
     "El texto debe tener como máximo 1000 caracteres",
@@ -2486,7 +2711,8 @@ export const accountsMessages = {
     "De tekst mag maximaal 1000 tekens bevatten",
     "文字不得超过1000个字符",
     "1000文字以内で入力してください",
-    "1000자 이하로 입력하세요"
+    "1000자 이하로 입력하세요",
+    "Rófhada: ní mór don téacs a bheith <=1000 carachtar"
   ],
   "Invalid input: expected number, received NaN": [
     "Introduce un número válido",
@@ -2497,6 +2723,7 @@ export const accountsMessages = {
     "Voer een geldig getal in",
     "请输入有效数字",
     "有効な数値を入力してください",
-    "올바른 숫자를 입력하세요"
+    "올바른 숫자를 입력하세요",
+    "Ionchur neamhbhailí: bhíothas ag súil le huimhir, fuarthas NaN"
   ]
 } satisfies MessageCatalog

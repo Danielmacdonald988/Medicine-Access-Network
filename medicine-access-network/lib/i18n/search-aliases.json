@@ -62,6 +62,10 @@
   "ceremonievoorbereiding": [
     "Ceremony Preparation"
   ],
+  "cleachtais shomatacha": [
+    "Somatic Coaching",
+    "Somatic Experiencing"
+  ],
   "coaching de atencao plena": [
     "Mindfulness Coaching"
   ],
@@ -97,6 +101,28 @@
   ],
   "coaching spirituale": [
     "Spiritual Coaching"
+  ],
+  "coitseail aireachais": [
+    "Mindfulness Coaching"
+  ],
+  "coitseail comhthathaithe": [
+    "Integration Coaching"
+  ],
+  "coitseail shomatach": [
+    "Somatic Coaching"
+  ],
+  "coitseail spioradalta": [
+    "Spiritual Coaching"
+  ],
+  "coitseail ullmhuchain": [
+    "Preparation Coaching"
+  ],
+  "comhthathu": [
+    "Integration Coaching",
+    "Psychedelic Integration"
+  ],
+  "comhthathu sicideileach": [
+    "Psychedelic Integration"
   ],
   "educacao": [
     "Kambo Education",
@@ -137,6 +163,9 @@
   ],
   "educazione sul kambo": [
     "Kambo Education"
+  ],
+  "eispeiriu somatach": [
+    "Somatic Experiencing"
   ],
   "experiencia somatica": [
     "Somatic Experiencing"
@@ -211,6 +240,14 @@
     "Breathwork",
     "Holotropic Breathwork"
   ],
+  "machnamh": [
+    "Meditation Guidance",
+    "Mindfulness Coaching"
+  ],
+  "machnamh agus aireachas": [
+    "Meditation Guidance",
+    "Mindfulness Coaching"
+  ],
   "meditacao": [
     "Meditation Guidance",
     "Mindfulness Coaching"
@@ -263,6 +300,27 @@
   ],
   "mindfulnesscoaching": [
     "Mindfulness Coaching"
+  ],
+  "obair anala": [
+    "Breathwork",
+    "Holotropic Breathwork"
+  ],
+  "obair anala holotropach": [
+    "Holotropic Breathwork"
+  ],
+  "obair shomatach agus choirp": [
+    "Somatic Coaching",
+    "Somatic Experiencing"
+  ],
+  "oideachas": [
+    "Kambo Education",
+    "Harm Reduction Education"
+  ],
+  "oideachas faoi kambo": [
+    "Kambo Education"
+  ],
+  "oideachas um laghdu dochair": [
+    "Harm Reduction Education"
   ],
   "orientacao em meditacao": [
     "Meditation Guidance"
@@ -430,6 +488,18 @@
   "spirituelles coaching": [
     "Spiritual Coaching"
   ],
+  "tacaiocht shicideileach": [
+    "Integration Coaching",
+    "Preparation Coaching",
+    "Psychedelic Integration",
+    "Ceremony Preparation"
+  ],
+  "tacaiocht spioradalta": [
+    "Spiritual Coaching"
+  ],
+  "tacaiocht tearnaimh": [
+    "Recovery Support"
+  ],
   "trabajo de respiracion": [
     "Breathwork",
     "Holotropic Breathwork"
@@ -449,6 +519,20 @@
   "travail somatique et corporel": [
     "Somatic Coaching",
     "Somatic Experiencing"
+  ],
+  "treoir mhachnaimh": [
+    "Meditation Guidance"
+  ],
+  "ullmhuchan": [
+    "Preparation Coaching",
+    "Ceremony Preparation"
+  ],
+  "ullmhuchan searmanais": [
+    "Ceremony Preparation"
+  ],
+  "ullmhuchan sicideileach": [
+    "Preparation Coaching",
+    "Ceremony Preparation"
   ],
   "voorbereiding": [
     "Preparation Coaching",

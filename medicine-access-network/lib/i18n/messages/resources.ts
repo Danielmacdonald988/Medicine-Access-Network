@@ -11,6 +11,7 @@ export const resourceMessages = {
     '明确您需要什么支持。询问资质、界限和具体安排。有关健康或药物的问题，请咨询合格的医疗专业人员。',
     '必要な支援を明確にしましょう。資格、境界線、具体的な手配について質問してください。健康や薬に関する疑問は、資格のある医療専門家に相談しましょう。',
     '필요한 지원을 명확히 하세요. 자격, 경계, 진행 방식에 대해 질문하세요. 건강이나 약물 관련 질문은 자격을 갖춘 의료 전문가와 상담하세요.',
+    "Soiléirigh an tacaíocht atá uait. Cuir ceisteanna faoi cháilíochtaí, teorainneacha agus socruithe praiticiúla. Pléigh ceisteanna sláinte nó cógais le gairmí cáilithe cúraim sláinte.",
   ],
   'Give yourself time to reflect and return to daily routines. Seek qualified support for ongoing distress. Integration coaching does not replace mental health treatment.': [
     'Date tiempo para reflexionar y volver a tus rutinas. Busca apoyo cualificado si el malestar persiste. El acompañamiento de integración no sustituye al tratamiento de salud mental.',
@@ -22,6 +23,7 @@ export const resourceMessages = {
     '给自己时间反思并恢复日常生活。如果持续感到痛苦，请寻求合格的专业支持。整合指导不能替代心理健康治疗。',
     '振り返り、日常の習慣に戻るための時間を取りましょう。苦痛が続く場合は、資格のある専門家に支援を求めてください。統合コーチングは精神医療の代わりにはなりません。',
     '성찰하고 일상으로 돌아갈 시간을 가지세요. 고통이 지속되면 자격을 갖춘 전문가의 도움을 받으세요. 통합 코칭은 정신 건강 치료를 대체하지 않습니다.',
+    "Tabhair am duit féin chun machnamh a dhéanamh agus filleadh ar ghnáthaimh laethúla. Lorg tacaíocht cháilithe má mhaireann anacair. Ní ghlacann cóitseáil comhtháthaithe áit cóireála meabhairshláinte.",
   ],
   'Ask about training, professional licenses, screening, consent, fees, and cancellation terms. Check claimed credentials independently. You can decline any service.': [
     'Pregunta por la formación, licencias profesionales, evaluación previa, consentimiento, tarifas y condiciones de cancelación. Verifica las credenciales por tu cuenta. Puedes rechazar cualquier servicio.',
@@ -33,6 +35,7 @@ export const resourceMessages = {
     '询问培训、专业执照、筛查、知情同意、费用和取消条款。独立核实所声称的资质。您可以拒绝任何服务。',
     '研修、専門資格、事前確認、同意、料金、キャンセル条件について質問しましょう。提示された資格は独自に確認してください。どのサービスも断ることができます。',
     '교육, 전문 면허, 사전 평가, 동의, 비용, 취소 조건에 대해 질문하세요. 제시된 자격을 독립적으로 확인하세요. 어떤 서비스든 거절할 수 있습니다.',
+    "Cuir ceisteanna faoi oiliúint, ceadúnais ghairmiúla, scagadh, toiliú, táillí agus téarmaí cealaithe. Seiceáil cáilíochtaí a mhaítear go neamhspleách. Is féidir leat diúltú d'aon tseirbhís.",
   ],
   'Be cautious about pressure, guaranteed results, secrecy, unclear fees, or crossed boundaries. A responsible guide welcomes questions and respects your right to say no.': [
     'Ten cuidado ante la presión, los resultados garantizados, el secretismo, las tarifas poco claras o los límites vulnerados. Un guía responsable acepta preguntas y respeta tu derecho a decir que no.',
@@ -44,6 +47,7 @@ export const resourceMessages = {
     '警惕施压、保证效果、要求保密、费用不明或越界行为。负责任的引导师欢迎提问，并尊重您拒绝的权利。',
     '圧力、効果の保証、秘密の強要、不明確な料金、境界線の侵害に注意してください。責任あるガイドは質問を歓迎し、断る権利を尊重します。',
     '압박, 결과 보장, 비밀 유지 강요, 불명확한 비용, 경계 침해에 주의하세요. 책임 있는 가이드는 질문을 환영하고 거절할 권리를 존중합니다.',
+    "Bí airdeallach ar bhrú, torthaí ráthaithe, rúndacht, táillí doiléire nó sárú teorainneacha. Fáiltíonn treoraí freagrach roimh cheisteanna agus tugann sé meas ar do cheart diúltú.",
   ],
   'Discuss your health history and medications with a qualified healthcare professional. Do not change prescribed medication based on a guide’s advice. Keep medical details out of introductory messages.': [
     'Consulta tu historial de salud y tus medicamentos con un profesional sanitario cualificado. No cambies medicación recetada por consejo de un guía. No incluyas detalles médicos en los mensajes iniciales.',
@@ -55,6 +59,7 @@ export const resourceMessages = {
     '请与合格的医疗专业人员讨论您的健康史和用药情况。不要根据引导师的建议更改处方药。初次联系的信息中不要包含医疗细节。',
     '病歴や服薬については、資格のある医療専門家に相談してください。ガイドの助言で処方薬を変更しないでください。最初のメッセージに詳しい医療情報を含めないようにしましょう。',
     '건강 이력과 약물에 대해 자격을 갖춘 의료 전문가와 상담하세요. 가이드의 조언으로 처방약을 변경하지 마세요. 첫 메시지에 상세한 의료 정보를 포함하지 마세요.',
+    "Pléigh do stair sláinte agus do chógais le gairmí cáilithe cúraim sláinte. Ná hathraigh cógas ordaithe de bharr comhairle treoraí. Fág sonraí leighis as teachtaireachtaí tosaigh.",
   ],
   'Coaching, therapy, and medical care have different roles. A directory listing is not a professional license. Check qualifications and choose care that meets your needs.': [
     'El acompañamiento, la terapia y la atención médica tienen funciones diferentes. Un perfil en el directorio no es una licencia profesional. Comprueba las cualificaciones y elige la atención adecuada a tus necesidades.',
@@ -66,5 +71,6 @@ export const resourceMessages = {
     '指导、心理治疗和医疗服务各有不同作用。目录中的个人资料不等于专业执照。请核实资质，选择适合您需求的服务。',
     'コーチング、セラピー、医療はそれぞれ役割が異なります。ディレクトリーへの掲載は専門資格を意味しません。資格を確認し、ご自身のニーズに合うケアを選びましょう。',
     '코칭, 심리 치료, 의료는 서로 다른 역할을 합니다. 디렉터리 등재는 전문 면허를 의미하지 않습니다. 자격을 확인하고 필요에 맞는 서비스를 선택하세요.',
+    "Tá róil éagsúla ag cóitseáil, teiripe agus cúram leighis. Ní ceadúnas gairmiúil é iontráil in eolaire. Seiceáil cáilíochtaí agus roghnaigh cúram a fhreastalaíonn ar do riachtanais.",
   ],
 } satisfies MessageCatalog

@@ -1,15 +1,16 @@
-export const LOCALES = ['en', 'es', 'fr', 'pt', 'de', 'it', 'nl', 'zh-CN', 'ja', 'ko'] as const
+export const LOCALES = ['en', 'es', 'fr', 'pt', 'de', 'it', 'nl', 'zh-CN', 'ja', 'ko', 'ga'] as const
 export type Locale = typeof LOCALES[number]
 export type LanguagePreference = Locale | 'auto'
 export const LANGUAGE_COOKIE = 'tfn_language'
 export const LANGUAGE_NAMES: Record<Locale, string> = {
   en: 'English', es: 'Español', fr: 'Français', pt: 'Português', de: 'Deutsch',
-  it: 'Italiano', nl: 'Nederlands', 'zh-CN': '简体中文', ja: '日本語', ko: '한국어',
+  it: 'Italiano', nl: 'Nederlands', 'zh-CN': '简体中文', ja: '日本語', ko: '한국어', ga: 'Gaeilge',
 }
 
 /** Translation order: Spanish, French, Portuguese, German, Italian, Dutch,
- * Simplified Chinese, Japanese, Korean. English is the message key. */
-export type MessageCatalog = Record<string, readonly [string, string, string, string, string, string, string, string, string]>
+ * Simplified Chinese, Japanese, Korean, Irish. English is the message key.
+ * Irish uses standard written Irish across regional dialect preferences. */
+export type MessageCatalog = Record<string, readonly [string, string, string, string, string, string, string, string, string, string]>
 export type Dictionary = Record<string, string>
 export type TranslationParams = Record<string, string | number>
 export type Translator = (message: string, params?: TranslationParams) => string
@@ -24,7 +25,7 @@ export function languagePreference(value: unknown): LanguagePreference {
 
 function matchLanguage(tag: string): Locale | undefined {
   if (tag === '*') return 'en'
-  if (!/^[a-z]{2,3}(?:-[a-z0-9]{2,8})*$/i.test(tag)) return undefined
+  if (!/^[a-z]{2,3}(?:-[a-z0-9]{2,8})*(?:-x(?:-[a-z0-9]{1,8})+)?$/i.test(tag)) return undefined
   const base = tag.split('-')[0].toLowerCase()
   if (base === 'zh') return 'zh-CN'
   return isLocale(base) ? base : undefined

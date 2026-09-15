@@ -10,7 +10,8 @@ export const dashboardMessages = {
     "Een profielfoto is vereist vóór publicatie.",
     "发布前必须提供头像。",
     "公開前にプロフィール写真が必要です。",
-    "공개하려면 프로필 사진이 필요합니다."
+    "공개하려면 프로필 사진이 필요합니다.",
+    "Tá grianghraf próifíle riachtanach roimh fhoilsiú."
   ],
   "Accept": [
     "Aceptar",
@@ -21,7 +22,8 @@ export const dashboardMessages = {
     "Accepteren",
     "接受",
     "承諾",
-    "수락"
+    "수락",
+    "Glac leis"
   ],
   "Accepted": [
     "Aceptada",
@@ -32,7 +34,8 @@ export const dashboardMessages = {
     "Geaccepteerd",
     "已接受",
     "承諾済み",
-    "수락됨"
+    "수락됨",
+    "Glactha"
   ],
   "Admin email alerts are not configured yet. Applications are still saved here for review.": [
     "Los avisos por correo aún no están configurados. Las solicitudes se guardan aquí para revisión.",
@@ -43,7 +46,8 @@ export const dashboardMessages = {
     "E-mailmeldingen voor de beheerder zijn nog niet ingesteld. Aanvragen blijven hier opgeslagen ter beoordeling.",
     "管理员邮件提醒尚未配置，申请仍保存在此处供审核。",
     "管理者へのメール通知は未設定です。申請はここに保存され、確認できます。",
-    "관리자 이메일 알림이 아직 설정되지 않았습니다. 신청은 검토할 수 있도록 여기에 저장됩니다."
+    "관리자 이메일 알림이 아직 설정되지 않았습니다. 신청은 검토할 수 있도록 여기에 저장됩니다.",
+    "Níl foláirimh ríomhphoist riarthóra cumraithe fós. Sábháiltear iarratais anseo fós le haghaidh athbhreithnithe."
   ],
   "Application email alerts": [
     "Avisos de solicitudes por correo",
@@ -54,7 +58,8 @@ export const dashboardMessages = {
     "E-mailmeldingen over aanvragen",
     "申请邮件提醒",
     "申請のメール通知",
-    "신청 이메일 알림"
+    "신청 이메일 알림",
+    "Foláirimh ríomhphoist iarratas"
   ],
   "Applications awaiting decision": [
     "Solicitudes pendientes de decisión",
@@ -65,7 +70,8 @@ export const dashboardMessages = {
     "Aanvragen wachten op een beslissing",
     "待决定的申请",
     "判断待ちの申請",
-    "결정 대기 중인 신청"
+    "결정 대기 중인 신청",
+    "Iarratais ag fanacht le cinneadh"
   ],
   "Apply now": [
     "Solicitar ahora",
@@ -76,7 +82,8 @@ export const dashboardMessages = {
     "Nu aanmelden",
     "立即申请",
     "今すぐ申請",
-    "지금 신청"
+    "지금 신청",
+    "Déan iarratas anois"
   ],
   "Approve & publish": [
     "Aprobar y publicar",
@@ -87,7 +94,8 @@ export const dashboardMessages = {
     "Goedkeuren en publiceren",
     "批准并发布",
     "承認して公開",
-    "승인 및 공개"
+    "승인 및 공개",
+    "Ceadaigh agus foilsigh"
   ],
   "Approved": [
     "Aprobado",
@@ -98,7 +106,8 @@ export const dashboardMessages = {
     "Goedgekeurd",
     "已批准",
     "承認済み",
-    "승인됨"
+    "승인됨",
+    "Ceadaithe"
   ],
   "Approved · hidden": [
     "Aprobado · oculto",
@@ -109,7 +118,8 @@ export const dashboardMessages = {
     "Goedgekeurd · verborgen",
     "已批准 · 隐藏",
     "承認済み · 非公開",
-    "승인됨 · 비공개"
+    "승인됨 · 비공개",
+    "Ceadaithe · i bhfolach"
   ],
   "Approving publishes this profile so visitors can view it and send conversation requests. Rejecting keeps it hidden.": [
     "Al aprobar, el perfil se publica y los visitantes pueden verlo y enviar solicitudes. Al rechazar, permanece oculto.",
@@ -120,7 +130,8 @@ export const dashboardMessages = {
     "Goedkeuring publiceert het profiel zodat bezoekers het kunnen bekijken en aanvragen sturen. Bij afwijzing blijft het verborgen.",
     "批准后资料将公开，访客可查看并发送交流请求。拒绝则保持隐藏。",
     "承認するとプロフィールが公開され、訪問者が閲覧や相談リクエストを送信できます。却下した場合は非公開のままです。",
-    "승인하면 방문자가 프로필을 보고 대화 요청을 보낼 수 있습니다. 거절하면 비공개로 유지됩니다."
+    "승인하면 방문자가 프로필을 보고 대화 요청을 보낼 수 있습니다. 거절하면 비공개로 유지됩니다.",
+    "Foilsítear an phróifíl seo nuair a cheadaítear í ionas gur féidir le cuairteoirí í a fheiceáil agus iarratais comhrá a sheoladh. Coinnítear i bhfolach í má dhiúltaítear di."
   ],
   "Avg rating": [
     "Puntuación media",
@@ -131,7 +142,8 @@ export const dashboardMessages = {
     "Gemiddelde beoordeling",
     "平均评分",
     "平均評価",
-    "평균 평점"
+    "평균 평점",
+    "Meánrátáil"
   ],
   "Awaiting review": [
     "En espera de revisión",
@@ -142,7 +154,8 @@ export const dashboardMessages = {
     "In afwachting van beoordeling",
     "等待审核",
     "確認待ち",
-    "검토 대기"
+    "검토 대기",
+    "Ag fanacht le hathbhreithniú"
   ],
   "Complete your guide application": [
     "Completa tu solicitud de guía",
@@ -153,7 +166,8 @@ export const dashboardMessages = {
     "Voltooi je aanmelding als begeleider",
     "完成引导师申请",
     "ガイド申請を完成させる",
-    "가이드 신청 완료하기"
+    "가이드 신청 완료하기",
+    "Críochnaigh d'iarratas treoraí"
   ],
   "Completed": [
     "Completada",
@@ -164,7 +178,8 @@ export const dashboardMessages = {
     "Afgerond",
     "已完成",
     "完了",
-    "완료됨"
+    "완료됨",
+    "Críochnaithe"
   ],
   "Conversation requests": [
     "Solicitudes de conversación",
@@ -175,7 +190,8 @@ export const dashboardMessages = {
     "Gespreksverzoeken",
     "交流请求",
     "相談リクエスト",
-    "대화 요청"
+    "대화 요청",
+    "Iarratais comhrá"
   ],
   "Decline": [
     "Rechazar",
@@ -186,7 +202,8 @@ export const dashboardMessages = {
     "Afwijzen",
     "拒绝",
     "辞退",
-    "거절"
+    "거절",
+    "Diúltaigh"
   ],
   "Declined": [
     "Rechazada",
@@ -197,7 +214,8 @@ export const dashboardMessages = {
     "Afgewezen",
     "已拒绝",
     "辞退済み",
-    "거절됨"
+    "거절됨",
+    "Diúltaithe"
   ],
   "Edit profile, photos & messaging links": [
     "Editar perfil, fotos y enlaces de mensajería",
@@ -208,7 +226,8 @@ export const dashboardMessages = {
     "Profiel, foto’s en berichtlinks bewerken",
     "编辑资料、照片和消息链接",
     "プロフィール・写真・連絡リンクを編集",
-    "프로필, 사진 및 메시지 링크 수정"
+    "프로필, 사진 및 메시지 링크 수정",
+    "Cuir próifíl, grianghraif agus naisc teachtaireachtaí in eagar"
   ],
   "From {name}": [
     "De {name}",
@@ -219,7 +238,8 @@ export const dashboardMessages = {
     "Van {name}",
     "来自 {name}",
     "送信者：{name}",
-    "보낸 사람: {name}"
+    "보낸 사람: {name}",
+    "Ó {name}"
   ],
   "Guide dashboard": [
     "Panel del guía",
@@ -230,7 +250,8 @@ export const dashboardMessages = {
     "Dashboard voor begeleiders",
     "引导师管理面板",
     "ガイドダッシュボード",
-    "가이드 대시보드"
+    "가이드 대시보드",
+    "Deais treoraí"
   ],
   "In person": [
     "Presencial",
@@ -241,7 +262,8 @@ export const dashboardMessages = {
     "Ter plaatse",
     "当面",
     "対面",
-    "대면"
+    "대면",
+    "Duine le duine"
   ],
   "Integration {rating}/5": [
     "Integración {rating}/5",
@@ -252,7 +274,8 @@ export const dashboardMessages = {
     "Integratie {rating}/5",
     "整合 {rating}/5",
     "統合 {rating}/5",
-    "통합 {rating}/5"
+    "통합 {rating}/5",
+    "Comhtháthú {rating}/5"
   ],
   "Mark completed": [
     "Marcar como completada",
@@ -263,7 +286,8 @@ export const dashboardMessages = {
     "Markeren als afgerond",
     "标记为已完成",
     "完了にする",
-    "완료로 표시"
+    "완료로 표시",
+    "Marcáil mar chríochnaithe"
   ],
   "New applications and submitted changes alert the configured admin inbox. If an email is delayed, you can still review the application here.": [
     "Las nuevas solicitudes y cambios enviados avisan al correo del administrador. Si un correo se retrasa, puedes revisar la solicitud aquí.",
@@ -274,7 +298,8 @@ export const dashboardMessages = {
     "Nieuwe aanvragen en ingediende wijzigingen melden zich in de ingestelde beheerdersinbox. Ook als e-mail vertraagd is, kun je de aanvraag hier beoordelen.",
     "新申请和提交的更改会通知已配置的管理员邮箱。即使邮件延迟，仍可在此审核申请。",
     "新規申請や変更の提出は、設定した管理者の受信箱に通知されます。メールが遅れても、ここで申請を確認できます。",
-    "새 신청과 제출된 변경 사항은 설정된 관리자 이메일로 알립니다. 이메일이 지연되어도 여기서 신청을 검토할 수 있습니다."
+    "새 신청과 제출된 변경 사항은 설정된 관리자 이메일로 알립니다. 이메일이 지연되어도 여기서 신청을 검토할 수 있습니다.",
+    "Cuireann iarratais nua agus athruithe curtha isteach foláireamh chuig an mbosca isteach riarthóra cumraithe. Má bhíonn moill ar ríomhphost, is féidir leat an t-iarratas a athbhreithniú anseo fós."
   ],
   "New request": [
     "Nueva solicitud",
@@ -285,7 +310,8 @@ export const dashboardMessages = {
     "Nieuw verzoek",
     "新请求",
     "新しいリクエスト",
-    "새 요청"
+    "새 요청",
+    "Iarratas nua"
   ],
   "New requests": [
     "Nuevas solicitudes",
@@ -296,7 +322,8 @@ export const dashboardMessages = {
     "Nieuwe verzoeken",
     "新请求",
     "新しいリクエスト",
-    "새 요청"
+    "새 요청",
+    "Iarratais nua"
   ],
   "No alerts were ready to send in this attempt. Delayed alerts may still be waiting; retry later.": [
     "No había avisos listos para enviar. Puede haber avisos retrasados; inténtalo más tarde.",
@@ -307,7 +334,8 @@ export const dashboardMessages = {
     "Er waren geen meldingen klaar voor verzending. Vertraagde meldingen kunnen nog wachten; probeer het later opnieuw.",
     "此次没有可发送的提醒。延迟的提醒可能仍在等待，请稍后重试。",
     "今回送信できる通知はありませんでした。遅延中の通知が残っている可能性があります。後ほど再試行してください。",
-    "이번에는 보낼 준비가 된 알림이 없었습니다. 지연된 알림이 대기 중일 수 있으니 나중에 다시 시도하세요."
+    "이번에는 보낼 준비가 된 알림이 없었습니다. 지연된 알림이 대기 중일 수 있으니 나중에 다시 시도하세요.",
+    "Ní raibh aon fholáirimh réidh le seoladh san iarracht seo. D'fhéadfadh foláirimh mhoillithe a bheith ag fanacht fós; bain triail eile as ar ball."
   ],
   "No direct contact links supplied; the website inquiry form remains available.": [
     "No hay enlaces de contacto directo; el formulario web sigue disponible.",
@@ -318,7 +346,8 @@ export const dashboardMessages = {
     "Geen directe contactlinks opgegeven; het websiteformulier blijft beschikbaar.",
     "未提供直接联系链接，网站咨询表单仍可使用。",
     "直接連絡用のリンクはありません。サイトのお問い合わせフォームは利用できます。",
-    "직접 연락 링크가 없습니다. 웹사이트 문의 양식은 계속 이용할 수 있습니다."
+    "직접 연락 링크가 없습니다. 웹사이트 문의 양식은 계속 이용할 수 있습니다.",
+    "Níor soláthraíodh naisc teagmhála dírí; tá foirm fiosrúcháin an tsuímh ar fáil fós."
   ],
   "No new requests.": [
     "No hay nuevas solicitudes.",
@@ -329,7 +358,8 @@ export const dashboardMessages = {
     "Geen nieuwe verzoeken.",
     "暂无新请求。",
     "新しいリクエストはありません。",
-    "새 요청이 없습니다."
+    "새 요청이 없습니다.",
+    "Níl aon iarratais nua."
   ],
   "No pending applications — all caught up.": [
     "No hay solicitudes pendientes.",
@@ -340,7 +370,8 @@ export const dashboardMessages = {
     "Geen aanvragen in behandeling.",
     "暂无待审核申请。",
     "未確認の申請はありません。",
-    "대기 중인 신청이 없습니다."
+    "대기 중인 신청이 없습니다.",
+    "Níl aon iarratais ar feitheamh — tá gach rud déanta."
   ],
   "Not approved": [
     "No aprobado",
@@ -351,7 +382,8 @@ export const dashboardMessages = {
     "Niet goedgekeurd",
     "未批准",
     "未承認",
-    "승인되지 않음"
+    "승인되지 않음",
+    "Gan ceadú"
   ],
   "Once your profile is approved, seekers can send you requests.": [
     "Tras aprobar tu perfil, los exploradores podrán enviarte solicitudes.",
@@ -362,7 +394,8 @@ export const dashboardMessages = {
     "Zodra je profiel is goedgekeurd, kunnen geïnteresseerden verzoeken sturen.",
     "资料获批后，探索者即可向您发送请求。",
     "プロフィールが承認されると、利用者からリクエストを受け取れます。",
-    "프로필이 승인되면 탐색자가 요청을 보낼 수 있습니다."
+    "프로필이 승인되면 탐색자가 요청을 보낼 수 있습니다.",
+    "Nuair a cheadaítear do phróifíl, is féidir le daoine iarratais a sheoladh chugat."
   ],
   "Optional note to record with this decision…": [
     "Nota opcional para registrar esta decisión…",
@@ -373,7 +406,8 @@ export const dashboardMessages = {
     "Optionele notitie bij deze beslissing…",
     "随本次决定记录的备注（选填）…",
     "この判断に添えるメモ（任意）…",
-    "이 결정과 함께 기록할 메모(선택)…"
+    "이 결정과 함께 기록할 메모(선택)…",
+    "Nóta roghnach le taifeadadh leis an gcinneadh seo…"
   ],
   "Past requests": [
     "Solicitudes anteriores",
@@ -384,7 +418,8 @@ export const dashboardMessages = {
     "Eerdere verzoeken",
     "过往请求",
     "過去のリクエスト",
-    "지난 요청"
+    "지난 요청",
+    "Iarratais roimhe seo"
   ],
   "Pending": [
     "Pendiente",
@@ -395,7 +430,8 @@ export const dashboardMessages = {
     "In behandeling",
     "待处理",
     "保留中",
-    "대기 중"
+    "대기 중",
+    "Ar feitheamh"
   ],
   "Pending applications": [
     "Solicitudes pendientes",
@@ -406,7 +442,8 @@ export const dashboardMessages = {
     "Aanvragen in behandeling",
     "待审核申请",
     "未確認の申請",
-    "대기 중인 신청"
+    "대기 중인 신청",
+    "Iarratais ar feitheamh"
   ],
   "Pending review": [
     "Pendiente de revisión",
@@ -417,7 +454,8 @@ export const dashboardMessages = {
     "Wacht op beoordeling",
     "待审核",
     "確認待ち",
-    "검토 대기"
+    "검토 대기",
+    "Ag fanacht le hathbhreithniú"
   ],
   "Photo {number}": [
     "Foto {number}",
@@ -428,7 +466,8 @@ export const dashboardMessages = {
     "Foto {number}",
     "照片 {number}",
     "写真 {number}",
-    "사진 {number}"
+    "사진 {number}",
+    "Grianghraf {number}"
   ],
   "Profile approved and published in the public directory.": [
     "Perfil aprobado y publicado en el directorio público.",
@@ -439,7 +478,8 @@ export const dashboardMessages = {
     "Profiel goedgekeurd en gepubliceerd in de openbare gids.",
     "资料已批准并发布到公开目录。",
     "プロフィールを承認し、公開ディレクトリに掲載しました。",
-    "프로필이 승인되어 공개 디렉터리에 게시되었습니다."
+    "프로필이 승인되어 공개 디렉터리에 게시되었습니다.",
+    "Próifíl ceadaithe agus foilsithe san eolaire poiblí."
   ],
   "Profile photos": [
     "Fotos del perfil",
@@ -450,7 +490,8 @@ export const dashboardMessages = {
     "Profielfoto’s",
     "资料照片",
     "プロフィール写真",
-    "프로필 사진"
+    "프로필 사진",
+    "Grianghraif próifíle"
   ],
   "Profile status: {status}": [
     "Estado del perfil: {status}",
@@ -461,7 +502,8 @@ export const dashboardMessages = {
     "Profielstatus: {status}",
     "资料状态：{status}",
     "プロフィールの状態：{status}",
-    "프로필 상태: {status}"
+    "프로필 상태: {status}",
+    "Stádas próifíle: {status}"
   ],
   "Public direct contact links": [
     "Enlaces públicos de contacto directo",
@@ -472,7 +514,8 @@ export const dashboardMessages = {
     "Openbare directe contactlinks",
     "公开直接联系链接",
     "公開する直接連絡リンク",
-    "공개 직접 연락 링크"
+    "공개 직접 연락 링크",
+    "Naisc teagmhála dírí phoiblí"
   ],
   "Public profile": [
     "Perfil público",
@@ -483,7 +526,8 @@ export const dashboardMessages = {
     "Openbaar profiel",
     "公开资料",
     "公開プロフィール",
-    "공개 프로필"
+    "공개 프로필",
+    "Próifíl phoiblí"
   ],
   "Publish profile": [
     "Publicar perfil",
@@ -494,7 +538,8 @@ export const dashboardMessages = {
     "Profiel publiceren",
     "发布资料",
     "プロフィールを公開",
-    "프로필 공개"
+    "프로필 공개",
+    "Foilsigh an phróifíl"
   ],
   "Published": [
     "Publicado",
@@ -505,7 +550,8 @@ export const dashboardMessages = {
     "Gepubliceerd",
     "已发布",
     "公開済み",
-    "공개됨"
+    "공개됨",
+    "Foilsithe"
   ],
   "Published guides": [
     "Guías publicados",
@@ -516,7 +562,8 @@ export const dashboardMessages = {
     "Gepubliceerde begeleiders",
     "已公开的引导师",
     "公開中のガイド",
-    "공개된 가이드"
+    "공개된 가이드",
+    "Treoraithe foilsithe"
   ],
   "Recently reviewed": [
     "Revisados recientemente",
@@ -527,7 +574,8 @@ export const dashboardMessages = {
     "Onlangs beoordeeld",
     "近期审核",
     "最近確認したプロフィール",
-    "최근 검토됨"
+    "최근 검토됨",
+    "Athbhreithnithe le déanaí"
   ],
   "Reject": [
     "Rechazar",
@@ -538,7 +586,8 @@ export const dashboardMessages = {
     "Afwijzen",
     "拒绝",
     "却下",
-    "거절"
+    "거절",
+    "Diúltaigh"
   ],
   "Rejected · hidden": [
     "Rechazado · oculto",
@@ -549,7 +598,8 @@ export const dashboardMessages = {
     "Afgewezen · verborgen",
     "已拒绝 · 隐藏",
     "却下 · 非公開",
-    "거절됨 · 비공개"
+    "거절됨 · 비공개",
+    "Diúltaithe · i bhfolach"
   ],
   "Retry attempts a small batch of queued alerts.": [
     "Reintentar envía un pequeño grupo de avisos en cola.",
@@ -560,7 +610,8 @@ export const dashboardMessages = {
     "Opnieuw proberen verwerkt een kleine reeks meldingen in de wachtrij.",
     "重试会尝试发送少量排队中的提醒。",
     "再試行すると、待機中の通知を少量ずつ処理します。",
-    "재시도하면 대기 중인 알림을 소량씩 처리합니다."
+    "재시도하면 대기 중인 알림을 소량씩 처리합니다.",
+    "Déanann triail eile iarracht baisc bheag foláireamh sa scuaine a sheoladh."
   ],
   "Retry pending alerts": [
     "Reintentar avisos pendientes",
@@ -571,7 +622,8 @@ export const dashboardMessages = {
     "Openstaande meldingen opnieuw proberen",
     "重试待发送提醒",
     "未送信の通知を再試行",
-    "대기 중인 알림 재시도"
+    "대기 중인 알림 재시도",
+    "Bain triail eile as foláirimh ar feitheamh"
   ],
   "Review decision saved. The profile is hidden from the public directory.": [
     "Decisión guardada. El perfil está oculto en el directorio público.",
@@ -582,7 +634,8 @@ export const dashboardMessages = {
     "Beslissing opgeslagen. Het profiel is verborgen in de openbare gids.",
     "审核决定已保存，资料已从公开目录隐藏。",
     "確認結果を保存しました。プロフィールは非公開です。",
-    "검토 결정이 저장되었습니다. 프로필은 공개 디렉터리에서 숨겨졌습니다."
+    "검토 결정이 저장되었습니다. 프로필은 공개 디렉터리에서 숨겨졌습니다.",
+    "Cinneadh athbhreithnithe sábháilte. Tá an phróifíl i bhfolach ón eolaire poiblí."
   ],
   "Review note (optional)": [
     "Nota de revisión (opcional)",
@@ -593,7 +646,8 @@ export const dashboardMessages = {
     "Beoordelingsnotitie (optioneel)",
     "审核备注（选填）",
     "確認メモ（任意）",
-    "검토 메모(선택)"
+    "검토 메모(선택)",
+    "Nóta athbhreithnithe (roghnach)"
   ],
   "Reviews appear here after seekers complete a conversation.": [
     "Las reseñas aparecen aquí después de completar una conversación.",
@@ -604,7 +658,8 @@ export const dashboardMessages = {
     "Beoordelingen verschijnen hier na afgeronde gesprekken.",
     "探索者完成交流后，评价会显示在此处。",
     "利用者との相談が完了した後、レビューがここに表示されます。",
-    "탐색자가 대화를 완료하면 후기가 여기에 표시됩니다."
+    "탐색자가 대화를 완료하면 후기가 여기에 표시됩니다.",
+    "Taispeántar léirmheasanna anseo tar éis do dhaoine comhrá a chríochnú."
   ],
   "Safety practices": [
     "Prácticas de seguridad",
@@ -615,7 +670,8 @@ export const dashboardMessages = {
     "Veiligheidspraktijken",
     "安全实践",
     "安全対策",
-    "안전 수칙"
+    "안전 수칙",
+    "Cleachtais sábháilteachta"
   ],
   "Safety {rating}/5": [
     "Seguridad {rating}/5",
@@ -626,7 +682,8 @@ export const dashboardMessages = {
     "Veiligheid {rating}/5",
     "安全 {rating}/5",
     "安全 {rating}/5",
-    "안전 {rating}/5"
+    "안전 {rating}/5",
+    "Sábháilteacht {rating}/5"
   ],
   "Some application alerts could not be sent yet. The applications remain available below. Please retry later.": [
     "Algunos avisos aún no se enviaron. Las solicitudes siguen disponibles abajo. Inténtalo más tarde.",
@@ -637,7 +694,8 @@ export const dashboardMessages = {
     "Sommige meldingen konden nog niet worden verstuurd. De aanvragen blijven hieronder beschikbaar. Probeer het later opnieuw.",
     "部分申请提醒尚未发送，下方仍可查看申请。请稍后重试。",
     "一部の申請通知をまだ送信できません。申請は引き続き下に表示されます。後ほど再試行してください。",
-    "일부 신청 알림을 아직 보내지 못했습니다. 신청은 아래에서 확인할 수 있으니 나중에 다시 시도하세요."
+    "일부 신청 알림을 아직 보내지 못했습니다. 신청은 아래에서 확인할 수 있으니 나중에 다시 시도하세요.",
+    "Níorbh fhéidir roinnt foláireamh iarratais a sheoladh fós. Tá na hiarratais ar fáil thíos fós. Bain triail eile as ar ball."
   ],
   "Submit your profile for admin review to appear publicly.": [
     "Envía tu perfil a revisión para que se publique.",
@@ -648,7 +706,8 @@ export const dashboardMessages = {
     "Dien je profiel ter beoordeling in om openbaar te verschijnen.",
     "提交资料供管理员审核，通过后即可公开展示。",
     "公開するにはプロフィールを管理者の確認に提出してください。",
-    "공개되려면 관리자 검토를 위해 프로필을 제출하세요."
+    "공개되려면 관리자 검토를 위해 프로필을 제출하세요.",
+    "Cuir do phróifíl isteach le haghaidh athbhreithniú riarthóra chun í a thaispeáint go poiblí."
   ],
   "The email service accepted this batch of alerts. Other alerts may still be queued or delayed. Check your inbox and spam folder; inbox delivery is not confirmed here.": [
     "El servicio de correo aceptó este grupo de avisos. Otros pueden estar en cola o retrasados. Revisa tu bandeja y spam; aquí no se confirma la entrega.",
@@ -659,7 +718,8 @@ export const dashboardMessages = {
     "De e-maildienst heeft deze reeks meldingen geaccepteerd. Andere kunnen nog wachten of vertraagd zijn. Controleer inbox en spam; ontvangst wordt hier niet bevestigd.",
     "邮件服务已接受这批提醒。其他提醒可能仍在排队或延迟。请检查收件箱和垃圾邮件；此处不能确认是否已送达。",
     "メールサービスがこの通知群を受け付けました。他の通知は待機中や遅延中の可能性があります。受信箱と迷惑メールをご確認ください。ここでは受信を確認できません。",
-    "이메일 서비스가 이 알림 묶음을 접수했습니다. 다른 알림은 대기 또는 지연 중일 수 있습니다. 받은편지함과 스팸함을 확인하세요. 여기서는 실제 수신을 확인할 수 없습니다."
+    "이메일 서비스가 이 알림 묶음을 접수했습니다. 다른 알림은 대기 또는 지연 중일 수 있습니다. 받은편지함과 스팸함을 확인하세요. 여기서는 실제 수신을 확인할 수 없습니다.",
+    "Ghlac an tseirbhís ríomhphoist leis an mbaisc foláireamh seo. D'fhéadfadh foláirimh eile a bheith sa scuaine nó faoi mhoill fós. Seiceáil do bhosca isteach agus d'fhillteán turscair; ní dheimhnítear seachadadh anseo."
   ],
   "The link format is checked. Confirm the destination belongs to this guide during review.": [
     "Se comprueba el formato del enlace. Confirma durante la revisión que pertenezca a este guía.",
@@ -670,7 +730,8 @@ export const dashboardMessages = {
     "Het linkformaat wordt gecontroleerd. Bevestig bij beoordeling dat de bestemming van deze begeleider is.",
     "系统会检查链接格式，审核时请确认链接目标属于这位引导师。",
     "リンク形式は確認されます。確認時にリンク先がこのガイドのものか確かめてください。",
-    "링크 형식이 확인됩니다. 검토 시 연결 대상이 해당 가이드의 것인지 확인하세요."
+    "링크 형식이 확인됩니다. 검토 시 연결 대상이 해당 가이드의 것인지 확인하세요.",
+    "Seiceáiltear formáid an naisc. Deimhnigh gur leis an treoraí seo an ceann scríbe le linn an athbhreithnithe."
   ],
   "The review decision could not be saved. Please try again.": [
     "No se pudo guardar la decisión. Inténtalo de nuevo.",
@@ -681,7 +742,8 @@ export const dashboardMessages = {
     "De beslissing kon niet worden opgeslagen. Probeer opnieuw.",
     "审核决定未能保存，请重试。",
     "確認結果を保存できませんでした。もう一度お試しください。",
-    "검토 결정을 저장하지 못했습니다. 다시 시도하세요."
+    "검토 결정을 저장하지 못했습니다. 다시 시도하세요.",
+    "Níorbh fhéidir an cinneadh athbhreithnithe a shábháil. Bain triail eile as."
   ],
   "The review decision was not valid. Please try again.": [
     "La decisión no era válida. Inténtalo de nuevo.",
@@ -692,7 +754,8 @@ export const dashboardMessages = {
     "De beslissing was ongeldig. Probeer opnieuw.",
     "审核决定无效，请重试。",
     "確認結果が無効でした。もう一度お試しください。",
-    "검토 결정이 유효하지 않습니다. 다시 시도하세요."
+    "검토 결정이 유효하지 않습니다. 다시 시도하세요.",
+    "Ní raibh an cinneadh athbhreithnithe bailí. Bain triail eile as."
   ],
   "The review decision was saved, but the optional note could not be recorded.": [
     "La decisión se guardó, pero no se pudo registrar la nota opcional.",
@@ -703,7 +766,8 @@ export const dashboardMessages = {
     "De beslissing is opgeslagen, maar de optionele notitie niet.",
     "审核决定已保存，但未能记录选填备注。",
     "確認結果は保存されましたが、任意のメモは記録できませんでした。",
-    "검토 결정은 저장되었지만 선택 메모는 기록하지 못했습니다."
+    "검토 결정은 저장되었지만 선택 메모는 기록하지 못했습니다.",
+    "Sábháladh an cinneadh athbhreithnithe, ach níorbh fhéidir an nóta roghnach a thaifeadadh."
   ],
   "Total accounts": [
     "Cuentas totales",
@@ -714,7 +778,8 @@ export const dashboardMessages = {
     "Totaal accounts",
     "账号总数",
     "アカウント総数",
-    "전체 계정"
+    "전체 계정",
+    "Líon iomlán cuntas"
   ],
   "Unknown": [
     "Desconocido",
@@ -725,7 +790,8 @@ export const dashboardMessages = {
     "Onbekend",
     "未知",
     "不明",
-    "알 수 없음"
+    "알 수 없음",
+    "Anaithnid"
   ],
   "Update your application": [
     "Actualizar tu solicitud",
@@ -736,7 +802,8 @@ export const dashboardMessages = {
     "Je aanmelding bijwerken",
     "更新申请",
     "申請を更新",
-    "신청 수정하기"
+    "신청 수정하기",
+    "Nuashonraigh d'iarratas"
   ],
   "Video call": [
     "Videollamada",
@@ -747,7 +814,8 @@ export const dashboardMessages = {
     "Videogesprek",
     "视频通话",
     "ビデオ通話",
-    "영상 통화"
+    "영상 통화",
+    "Físghlao"
   ],
   "Voice call": [
     "Llamada de voz",
@@ -758,7 +826,8 @@ export const dashboardMessages = {
     "Telefoongesprek",
     "语音通话",
     "音声通話",
-    "음성 통화"
+    "음성 통화",
+    "Glao gutha"
   ],
   "Welcome": [
     "Bienvenido",
@@ -769,7 +838,8 @@ export const dashboardMessages = {
     "Welkom",
     "欢迎",
     "ようこそ",
-    "환영합니다"
+    "환영합니다",
+    "Fáilte"
   ],
   "Welcome, {name}": [
     "Bienvenido, {name}",
@@ -780,7 +850,8 @@ export const dashboardMessages = {
     "Welkom, {name}",
     "欢迎，{name}",
     "{name}さん、ようこそ",
-    "{name}님, 환영합니다"
+    "{name}님, 환영합니다",
+    "Fáilte, {name}"
   ],
   "Your profile is hidden while it is being reviewed. Check here for updates.": [
     "Tu perfil está oculto mientras se revisa. Consulta aquí las novedades.",
@@ -791,7 +862,8 @@ export const dashboardMessages = {
     "Je profiel is verborgen tijdens de beoordeling. Bekijk hier de updates.",
     "审核期间资料保持隐藏，请在此查看更新。",
     "確認中はプロフィールが非公開になります。進捗はここでご確認ください。",
-    "검토 중에는 프로필이 비공개입니다. 여기서 업데이트를 확인하세요."
+    "검토 중에는 프로필이 비공개입니다. 여기서 업데이트를 확인하세요.",
+    "Tá do phróifíl i bhfolach agus athbhreithniú á dhéanamh uirthi. Seiceáil anseo le haghaidh nuashonruithe."
   ],
   "Your profile is hidden. Contact the platform team for feedback.": [
     "Tu perfil está oculto. Contacta al equipo de la plataforma para recibir comentarios.",
@@ -802,7 +874,8 @@ export const dashboardMessages = {
     "Je profiel is verborgen. Neem contact op met het platformteam voor feedback.",
     "您的资料已隐藏，请联系平台团队获取反馈。",
     "プロフィールは非公開です。詳しくはプラットフォームのチームにお問い合わせください。",
-    "프로필이 비공개입니다. 의견을 받으려면 플랫폼 팀에 문의하세요."
+    "프로필이 비공개입니다. 의견을 받으려면 플랫폼 팀에 문의하세요.",
+    "Tá do phróifíl i bhfolach. Déan teagmháil le foireann an ardáin le haghaidh aiseolais."
   ],
   "Your profile is live. You can edit your photos, messaging links, and practice details any time. Submitted changes go through review again.": [
     "Tu perfil está publicado. Puedes editar fotos, enlaces y detalles cuando quieras. Los cambios enviados pasan por revisión de nuevo.",
@@ -813,7 +886,8 @@ export const dashboardMessages = {
     "Je profiel staat online. Je kunt foto’s, berichtlinks en praktijkgegevens altijd bewerken. Ingediende wijzigingen worden opnieuw beoordeeld.",
     "您的资料已上线，可随时编辑照片、消息链接和实践详情。提交的更改将再次审核。",
     "プロフィールを公開中です。写真、連絡リンク、活動内容はいつでも編集できます。提出した変更は再確認されます。",
-    "프로필이 공개 중입니다. 사진, 메시지 링크 및 활동 내용을 언제든 수정할 수 있습니다. 제출된 변경 사항은 다시 검토됩니다."
+    "프로필이 공개 중입니다. 사진, 메시지 링크 및 활동 내용을 언제든 수정할 수 있습니다. 제출된 변경 사항은 다시 검토됩니다.",
+    "Tá do phróifíl beo. Is féidir leat do ghrianghraif, naisc teachtaireachtaí agus sonraí cleachtais a chur in eagar am ar bith. Déantar athbhreithniú arís ar athruithe a chuirtear isteach."
   ],
   "{count} guide accounts · visitors need no account": [
     "{count} cuentas de guías · los visitantes no necesitan cuenta",
@@ -824,7 +898,8 @@ export const dashboardMessages = {
     "{count} begeleidersaccounts · bezoekers hebben geen account nodig",
     "{count} 个引导师账号 · 访客无需账号",
     "ガイドのアカウント {count} 件 · 訪問者はアカウント不要",
-    "가이드 계정 {count}개 · 방문자는 계정 불필요"
+    "가이드 계정 {count}개 · 방문자는 계정 불필요",
+    "Cuntais treoraithe: {count} · ní gá cuntas do chuairteoirí"
   ],
   "{count} rejected": [
     "{count} rechazados",
@@ -835,7 +910,8 @@ export const dashboardMessages = {
     "{count} afgewezen",
     "{count} 个已拒绝",
     "却下 {count} 件",
-    "거절 {count}개"
+    "거절 {count}개",
+    "Diúltaithe: {count}"
   ],
   "{name} — submitted photo {number}": [
     "{name} — foto enviada {number}",
@@ -846,7 +922,8 @@ export const dashboardMessages = {
     "{name} — ingediende foto {number}",
     "{name} — 已提交照片 {number}",
     "{name} — 提出した写真 {number}",
-    "{name} — 제출한 사진 {number}"
+    "{name} — 제출한 사진 {number}",
+    "{name} — grianghraf curtha isteach {number}"
   ],
   "{pending} pending · {accepted} accepted": [
     "{pending} pendientes · {accepted} aceptadas",
@@ -857,6 +934,7 @@ export const dashboardMessages = {
     "{pending} in behandeling · {accepted} geaccepteerd",
     "{pending} 个待处理 · {accepted} 个已接受",
     "保留 {pending} 件 · 承諾 {accepted} 件",
-    "대기 {pending}개 · 수락 {accepted}개"
+    "대기 {pending}개 · 수락 {accepted}개",
+    "Ar feitheamh: {pending} · glactha: {accepted}"
   ]
 } satisfies MessageCatalog

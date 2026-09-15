@@ -12,6 +12,7 @@ export const directoryLongMessages = {
       "所有付款仅用于合法的支持服务，包括准备指导、整合指导、呼吸练习和咨询。发送交流请求无需付款。",
       "お支払いは、準備コーチング、統合ガイダンス、呼吸法、相談など、合法的なサポートサービスのみを対象とします。会話のリクエスト送信に料金はかかりません。",
       "모든 결제는 준비 코칭, 통합 지도, 호흡법, 상담 등 합법적인 지원 서비스에만 해당합니다. 대화 요청을 보내는 데는 결제가 필요하지 않습니다.",
+    "Is le haghaidh seirbhísí tacaíochta dleathacha amháin atá gach íocaíocht — cóitseáil ullmhúcháin, treoir chomhtháthaithe, obair anála agus comhairliúchán. Ní gá íocaíocht chun iarratas comhrá a sheoladh.",
     ],
   "Ask how screening works, what falls outside their scope, and how referrals are handled. Discuss medical questions with a licensed healthcare provider.":
     [
@@ -24,6 +25,7 @@ export const directoryLongMessages = {
       "请询问筛查如何进行、哪些事项不在其服务范围内，以及如何转介。医疗问题请与持有执照的医疗专业人士讨论。",
       "スクリーニングの方法、対応範囲外の内容、他の専門家への紹介方法を尋ねてください。医療に関する質問は、適切な免許を持つ医療専門家と相談してください。",
       "선별 평가 방법, 업무 범위 밖의 사항, 전문가 의뢰 방식을 물어보세요. 의료 관련 질문은 면허를 가진 의료 전문가와 상의하세요.",
+    "Fiafraigh conas a oibríonn an scagadh, cad atá lasmuigh dá raon cleachtais agus conas a láimhseáiltear atreoruithe. Pléigh ceisteanna leighis le soláthraí ceadúnaithe cúraim sláinte.",
     ],
   "Check your inbox and spam folder. Timing, fees, and fit still need to be agreed with the guide.":
     [
@@ -36,6 +38,7 @@ export const directoryLongMessages = {
       "请检查收件箱和垃圾邮件文件夹。时间、费用以及服务是否合适，仍需与引导师商定。",
       "受信トレイと迷惑メールフォルダを確認してください。日時、料金、相性については、ガイドとの合意がまだ必要です。",
       "받은편지함과 스팸함을 확인하세요. 일정, 요금, 적합성은 가이드와 추가로 합의해야 합니다.",
+    "Seiceáil do bhosca isteach agus d'fhillteán turscair. Ní mór amanna, táillí agus oiriúnacht a aontú leis an treoraí fós.",
     ],
   "Confirm session length, total cost, cancellation terms, and any sliding scale options before agreeing to a session.":
     [
@@ -48,6 +51,7 @@ export const directoryLongMessages = {
       "同意会谈前，请确认时长、总费用、取消条款以及是否有按收入调整的收费选项。",
       "セッションに同意する前に、時間、総額、キャンセル条件、所得に応じた料金などを確認してください。",
       "세션에 동의하기 전에 시간, 총비용, 취소 조건, 소득에 따른 요금 조정 옵션을 확인하세요.",
+    "Deimhnigh fad an tseisiúin, an costas iomlán, téarmaí cealaithe agus aon roghanna scála shleamhnáin sula n-aontaíonn tú le seisiún.",
     ],
   "Describe your experience — what was helpful, how the guide supported you, and anything others should know.":
     [
@@ -60,6 +64,7 @@ export const directoryLongMessages = {
       "请描述你的经历：哪些方面有帮助、引导师如何支持你，以及你认为其他人应了解的事项。",
       "役に立ったこと、ガイドの支え方、他の方に伝えたいことなど、体験をお書きください。",
       "도움이 된 점, 가이드가 지원한 방식, 다른 사람이 알아야 할 사항 등 경험을 적어주세요.",
+    "Déan cur síos ar do thaithí — cad a bhí cabhrach, conas a thacaigh an treoraí leat agus aon rud eile ba cheart a bheith ar eolas ag daoine eile.",
     ],
   "During their application, this guide committed to appropriate screening and declining work where contraindications are present. This is a statement from the guide, not an independent assessment of their screening or clinical qualifications.":
     [
@@ -72,6 +77,7 @@ export const directoryLongMessages = {
       "申请时，这位引导师承诺进行适当筛查，并在存在禁忌情况时拒绝提供服务。这是引导师本人的声明，并非对其筛查能力或临床资质的独立评估。",
       "このガイドは申請時に、適切なスクリーニングを行い、禁忌がある場合は対応を断ることに同意しました。これはガイド本人の申告であり、スクリーニングや臨床資格の独立した評価ではありません。",
       "이 가이드는 신청 시 적절한 선별 평가를 실시하고 금기 사항이 있을 때는 서비스를 거절하겠다고 약속했습니다. 이는 가이드의 진술이며, 선별 평가나 임상 자격을 독립적으로 평가한 결과가 아닙니다.",
+    "Ina iarratas, gheall an treoraí seo scagadh cuí a dhéanamh agus diúltú d'obair nuair atá fritásca ann. Is ráiteas ón treoraí é seo, ní measúnú neamhspleách ar a scagadh ná ar a cháilíochtaí cliniciúla.",
     ],
   "Explore preparation, integration, breathwork, and somatic support. Get to know each guide’s approach, then start a conversation when you feel ready.":
     [
@@ -84,6 +90,7 @@ export const directoryLongMessages = {
       "探索准备、整合、呼吸练习和身心支持。了解每位引导师的方法，在你准备好时开始交流。",
       "準備、統合、呼吸法、身体感覚のサポートを探しましょう。各ガイドの方針を知り、準備ができたら会話を始めてください。",
       "준비, 통합, 호흡법, 신체 감각 지원을 살펴보세요. 각 가이드의 접근 방식을 알아보고 준비가 되면 대화를 시작하세요.",
+    "Brabhsáil tacaíocht ullmhúcháin, comhtháthaithe, oibre anála agus shómatach. Cuir aithne ar chur chuige gach treoraí, ansin cuir tús le comhrá nuair a bhraitheann tú réidh.",
     ],
   "Guides on this platform are not emergency providers. In a mental health crisis call 988 (US) or your local emergency services.":
     [
@@ -96,6 +103,7 @@ export const directoryLongMessages = {
       "本平台的引导师不提供紧急救助。在心理健康危机中，请拨打美国 988 或联系你所在地的紧急服务。",
       "このプラットフォームのガイドは緊急対応者ではありません。心の危機には米国の988、または地域の緊急サービスへ連絡してください。",
       "이 플랫폼의 가이드는 응급 서비스를 제공하지 않습니다. 정신 건강 위기 시 미국에서는 988, 그 외 지역에서는 현지 응급 서비스에 연락하세요.",
+    "Ní soláthraithe éigeandála iad treoraithe ar an ardán seo. I ngéarchéim mheabhairshláinte, glaoigh ar 988 (SAM) nó ar do sheirbhísí éigeandála áitiúla.",
     ],
   "I understand this is not a medical service, guides are not emergency providers, and this platform does not coordinate access to controlled substances.":
     [
@@ -108,6 +116,7 @@ export const directoryLongMessages = {
       "我理解这不是医疗服务，引导师不提供紧急救助，且本平台不协调获取受管制物质。",
       "医療サービスではないこと、ガイドは緊急対応を行わないこと、このプラットフォームは規制物質の入手を仲介しないことを理解しています。",
       "이 서비스는 의료 서비스가 아니며, 가이드는 응급 서비스를 제공하지 않고, 플랫폼은 규제 물질에 대한 접근을 주선하지 않음을 이해합니다.",
+    "Tuigim nach seirbhís leighis í seo, nach soláthraithe éigeandála iad treoraithe agus nach gcomhordaíonn an t-ardán seo rochtain ar shubstaintí rialaithe.",
     ],
   "I’m looking for integration support and would like to learn about your approach, availability, and fees.":
     [
@@ -120,6 +129,7 @@ export const directoryLongMessages = {
       "我正在寻找整合支持，希望了解你的服务方式、可预约时间和费用。",
       "統合サポートを探しています。方針、対応可能な日時、料金について教えていただきたいです。",
       "통합 지원을 찾고 있으며 접근 방식, 가능한 일정, 요금에 대해 알고 싶습니다.",
+    "Tá tacaíocht comhtháthaithe á lorg agam agus ba mhaith liom foghlaim faoi do chur chuige, d'infhaighteacht agus do tháillí.",
     ],
   "No reviews have been published yet. Take time to ask questions and check relevant training before deciding whether to work together.":
     [
@@ -132,6 +142,7 @@ export const directoryLongMessages = {
       "目前尚无已发布的评价。决定是否合作前，请花时间提问并核实相关培训。",
       "まだレビューは公開されていません。一緒に取り組むかを決める前に、時間をかけて質問し、関連する研修を確認してください。",
       "아직 게시된 후기가 없습니다. 함께할지 결정하기 전에 시간을 들여 질문하고 관련 교육을 확인하세요.",
+    "Níl aon léirmheasanna foilsithe fós. Glac am chun ceisteanna a chur agus oiliúint ábhartha a sheiceáil sula ndéanann sibh cinneadh oibriú le chéile.",
     ],
   "Nothing on this platform is medical advice. Always consult a licensed healthcare provider for medical decisions.":
     [
@@ -144,6 +155,7 @@ export const directoryLongMessages = {
       "本平台的任何内容均不构成医疗建议。医疗决策请始终咨询持有执照的医疗专业人士。",
       "このプラットフォームの内容は医療上の助言ではありません。医療に関する判断は、必ず適切な免許を持つ医療専門家に相談してください。",
       "이 플랫폼의 어떤 내용도 의학적 조언이 아닙니다. 의료적 결정은 항상 면허를 가진 의료 전문가와 상담하세요.",
+    "Ní comhairle leighis aon rud ar an ardán seo. Téigh i gcomhairle le soláthraí ceadúnaithe cúraim sláinte i gcónaí maidir le cinntí leighis.",
     ],
   "Online support is listed. Confirm formats, time zones, and whether the guide can work with you where you live.":
     [
@@ -156,6 +168,7 @@ export const directoryLongMessages = {
       "资料中列有线上支持。请确认交流形式、时区，以及引导师能否为你所在地区提供服务。",
       "オンライン対応が記載されています。形式、タイムゾーン、居住地で対応可能かを確認してください。",
       "온라인 지원이 기재되어 있습니다. 진행 방식, 시간대, 거주 지역에서 서비스를 받을 수 있는지 확인하세요.",
+    "Tá tacaíocht ar líne liostaithe. Deimhnigh formáidí, criosanna ama agus an féidir leis an treoraí oibriú leat san áit a bhfuil cónaí ort.",
     ],
   "Only profile IDs are saved in this browser tab. Anyone using this tab can see your selection; clear it when you are finished. Browser session restoration may restore it.":
     [
@@ -168,6 +181,7 @@ export const directoryLongMessages = {
       "此浏览器标签页仅保存资料 ID。任何使用此标签页的人都能看到你的选择；完成后请清除。浏览器恢复会话时可能会恢复这些内容。",
       "このタブにはプロフィールIDのみを保存します。このタブを使う人は選択内容を閲覧できるため、終了時に消去してください。ブラウザのセッション復元で再表示される場合があります。",
       "이 브라우저 탭에는 프로필 ID만 저장됩니다. 탭을 사용하는 다른 사람도 선택 내용을 볼 수 있으므로 사용 후 삭제하세요. 브라우저 세션 복원 시 다시 나타날 수 있습니다.",
+    "Ní shábháiltear ach aitheantóirí próifíle sa chluaisín brabhsálaí seo. Is féidir le haon duine a úsáideann an cluaisín seo do rogha a fheiceáil; glan í nuair atá tú críochnaithe. D'fhéadfadh athchóiriú seisiúin brabhsálaí í a athchóiriú.",
     ],
   "Opens the app or a new tab. Your message goes directly to the guide in that service and is not stored in your guide’s website inbox. That service’s privacy settings apply.":
     [
@@ -180,6 +194,7 @@ export const directoryLongMessages = {
       "将打开应用或新标签页。你的消息会通过该服务直接发送给引导师，不会保存在引导师的网站收件箱中。适用该服务的隐私设置。",
       "アプリまたは新しいタブが開きます。メッセージはそのサービスでガイドに直接届き、サイト上の受信箱には保存されません。そのサービスのプライバシー設定が適用されます。",
       "앱 또는 새 탭이 열립니다. 메시지는 해당 서비스에서 가이드에게 직접 전달되며 웹사이트 받은편지함에는 저장되지 않습니다. 해당 서비스의 개인정보 설정이 적용됩니다.",
+    "Osclaíonn sé an aip nó cluaisín nua. Téann do theachtaireacht go díreach chuig an treoraí sa tseirbhís sin agus ní stóráiltear í i mbosca isteach an treoraí ar an suíomh. Tá socruithe príobháideachais na seirbhíse sin i bhfeidhm.",
     ],
   "Profiles are ordered by when they were created, newest first, or alphabetically when you choose Name A–Z. Placement is not a quality rating or a recommendation. Guides do not pay for placement.":
     [
@@ -192,6 +207,7 @@ export const directoryLongMessages = {
       "资料按创建时间从新到旧排序；选择“姓名 A–Z”时则按字母排序。展示位置不代表质量评级或推荐。引导师无需为展示位置付费。",
       "プロフィールは作成日の新しい順、または「名前 A–Z」を選ぶとアルファベット順に表示されます。掲載位置は品質評価や推奨ではありません。ガイドは掲載位置に料金を払っていません。",
       "프로필은 생성일이 최신인 순으로, 또는 이름 A–Z 선택 시 알파벳순으로 표시됩니다. 노출 위치는 품질 평가나 추천을 의미하지 않습니다. 가이드는 노출 위치에 비용을 지불하지 않습니다.",
+    "Cuirtear próifílí in ord de réir am a gcruthaithe, an ceann is nuaí ar dtús, nó in ord aibítre nuair a roghnaíonn tú Ainm A–Z. Ní rátáil cáilíochta ná moladh é an suíomh sa liosta. Ní íocann treoraithe as suíomh sa liosta.",
     ],
   "Ratings summarize up to 20 recent reviews shown below. Reviews reflect individual experiences and do not establish safety or predict results.":
     [
@@ -204,6 +220,7 @@ export const directoryLongMessages = {
       "评分汇总了下方最多 20 条近期评价。评价反映个人经历，并不证明安全性，也不能预测结果。",
       "評価は以下の最近のレビュー最大20件をまとめたものです。個人の体験を反映しており、安全を証明したり結果を予測したりするものではありません。",
       "평점은 아래에 표시된 최근 후기 최대 20개를 요약합니다. 후기는 개인의 경험을 반영하며, 안전을 입증하거나 결과를 예측하지 않습니다.",
+    "Tugann rátálacha achoimre ar suas le 20 léirmheas le déanaí atá léirithe thíos. Léiríonn léirmheasanna taithí aonair agus ní dheimhníonn siad sábháilteacht ná ní thuarann siad torthaí.",
     ],
   "Reported by the guide. Ask about the issuer, scope, and current status of any credential relevant to your needs.":
     [
@@ -216,6 +233,7 @@ export const directoryLongMessages = {
       "由引导师本人提供。对于与你需求相关的资质，请询问发证机构、适用范围和当前有效状态。",
       "ガイド本人の申告です。必要に応じて、資格の発行機関、範囲、現在の有効性を確認してください。",
       "가이드가 기재한 정보입니다. 필요와 관련된 자격의 발급 기관, 범위, 현재 유효 상태를 물어보세요.",
+    "Tuairiscithe ag an treoraí. Cuir ceisteanna faoin eisitheoir, raon agus stádas reatha aon cháilíochta atá ábhartha do do riachtanais.",
     ],
   "Share your experience with {name}. Your name is not displayed publicly. Reviews are linked to completed conversations.":
     [
@@ -228,6 +246,7 @@ export const directoryLongMessages = {
       "分享你与 {name} 的经历。你的姓名不会公开显示。评价与已完成的交流关联。",
       "{name}との体験を共有してください。お名前は公開されません。レビューは完了した会話に紐づきます。",
       "{name}님과의 경험을 공유하세요. 이름은 공개되지 않습니다. 후기는 완료된 대화와 연결됩니다.",
+    "Roinn do thaithí le {name}. Ní thaispeántar d'ainm go poiblí. Tá léirmheasanna nasctha le comhráite críochnaithe.",
     ],
   "Shown in the order you saved them. This comparison does not rank or recommend guides. Details are supplied by each guide; confirm fees, session length, training, and fit directly.":
     [
@@ -240,6 +259,7 @@ export const directoryLongMessages = {
       "按你的收藏顺序显示。此比较不对引导师排名或推荐。详情由每位引导师提供；请直接确认费用、会谈时长、培训背景及是否合适。",
       "保存した順に表示します。この比較はガイドを順位付けしたり推奨したりするものではありません。情報は各ガイドが提供しています。料金、時間、研修、相性は直接確認してください。",
       "저장한 순서대로 표시됩니다. 이 비교는 가이드의 순위를 매기거나 추천하지 않습니다. 세부 정보는 각 가이드가 제공하므로 요금, 시간, 교육, 적합성을 직접 확인하세요.",
+    "Taispeántar iad san ord inar shábháil tú iad. Ní rangaíonn an chomparáid seo treoraithe ná ní mholann sí iad. Soláthraíonn gach treoraí a shonraí féin; deimhnigh táillí, fad seisiúin, oiliúint agus oiriúnacht go díreach.",
     ],
   "Start with a brief introduction. All fields are required except your preferred time window.":
     [
@@ -252,6 +272,7 @@ export const directoryLongMessages = {
       "先做个简短介绍。除偏好时间段外，所有字段均为必填。",
       "簡単な自己紹介から始めましょう。希望時間帯以外はすべて必須です。",
       "간단한 소개로 시작하세요. 선호 시간대를 제외한 모든 항목은 필수입니다.",
+    "Tosaigh le réamhrá gairid. Tá gach réimse riachtanach seachas an tréimhse ama is fearr leat.",
     ],
   "Take your time with up to 3 guides. Compare their approach, format, and fees, then decide who you would like to contact. Saving a guide does not contact them.":
     [
@@ -264,6 +285,7 @@ export const directoryLongMessages = {
       "你可以慢慢比较最多 3 位引导师。比较他们的方法、形式和费用，再决定联系谁。收藏引导师不会向对方发送联系请求。",
       "最大3人のガイドをじっくり比較できます。方針、形式、料金を比べて、連絡する相手を選びましょう。保存してもガイドに連絡は届きません。",
       "최대 3명의 가이드를 천천히 비교해 보세요. 접근 방식, 진행 형태, 요금을 비교한 뒤 연락할 사람을 정하세요. 저장만으로 가이드에게 연락이 가지 않습니다.",
+    "Glac do chuid ama le suas le 3 threoraí. Cuir a gcur chuige, formáid agus táillí i gcomparáid, ansin socraigh cé leis ar mhaith leat teagmháil a dhéanamh. Ní dhéantar teagmháil le treoraí nuair a shábhálann tú é.",
     ],
   "Thank you for sharing your experience. Your review helps others find safe, trusted support.":
     [
@@ -276,6 +298,7 @@ export const directoryLongMessages = {
       "感谢你分享经历。你的评价有助于他人找到安全、可信赖的支持。",
       "体験を共有いただきありがとうございます。レビューは、他の方が安全で信頼できるサポートを探す助けになります。",
       "경험을 공유해 주셔서 감사합니다. 후기는 다른 사람이 안전하고 신뢰할 수 있는 지원을 찾는 데 도움이 됩니다.",
+    "Go raibh maith agat as do thaithí a roinnt. Cabhraíonn do léirmheas le daoine eile tacaíocht shábháilte iontaofa a aimsiú.",
     ],
   "The directory is temporarily unavailable. Your saved selection is still here; this does not mean the guides have been removed.":
     [
@@ -288,6 +311,7 @@ export const directoryLongMessages = {
       "名录暂时无法使用。你的收藏仍在，这并不表示引导师已被移除。",
       "一覧を一時的に表示できません。保存した選択は残っています。ガイドが削除されたという意味ではありません。",
       "현재 목록을 일시적으로 이용할 수 없습니다. 저장한 선택 내용은 남아 있으며, 가이드가 삭제되었다는 뜻은 아닙니다.",
+    "Níl an t-eolaire ar fáil go sealadach. Tá do rogha sábháilte anseo fós; ní chiallaíonn sé seo gur baineadh na treoraithe.",
     ],
   "The guide can reply to your email. These are preferences to discuss, not confirmed session options.":
     [
@@ -300,6 +324,7 @@ export const directoryLongMessages = {
       "引导师可以回复你的电子邮箱。这些是有待讨论的偏好，并非已确认的会谈选项。",
       "ガイドはメールで返信できます。これらは相談するための希望であり、確定したセッション内容ではありません。",
       "가이드는 이메일로 답할 수 있습니다. 이는 논의할 선호 사항이며 확정된 세션 옵션이 아닙니다.",
+    "Is féidir leis an treoraí freagra a thabhairt ar do ríomhphost. Is roghanna iad seo le plé, ní roghanna seisiúin deimhnithe.",
     ],
   "The platform team has approved this profile for the directory. Approval does not verify a clinical license or guarantee safety, suitability, or an outcome. Training and practice details below are provided by the guide.":
     [
@@ -312,6 +337,7 @@ export const directoryLongMessages = {
       "平台团队已批准此资料进入名录。批准并不代表核实临床执照，也不保证安全性、适合程度或结果。下方的培训和实践详情由引导师本人提供。",
       "運営チームはこのプロフィールの掲載を承認しました。承認は臨床免許の確認でも、安全性、適合性、結果の保証でもありません。以下の研修や実践の情報はガイド本人が提供したものです。",
       "운영팀이 이 프로필의 목록 게시를 승인했습니다. 승인은 임상 면허를 검증하거나 안전성, 적합성, 결과를 보장하지 않습니다. 아래 교육 및 활동 정보는 가이드가 제공한 것입니다.",
+    "Cheadaigh foireann an ardáin an phróifíl seo don eolaire. Ní fhíoraíonn ceadú ceadúnas cliniciúil ná ní ráthaíonn sé sábháilteacht, oiriúnacht ná toradh. Is é an treoraí a sholáthraíonn na sonraí oiliúna agus cleachtais thíos.",
     ],
   "There are no approved profiles to browse right now. New guides appear after their applications are reviewed.":
     [
@@ -324,6 +350,7 @@ export const directoryLongMessages = {
       "目前没有可浏览的已批准资料。新引导师会在申请审核后显示。",
       "現在、閲覧できる承認済みプロフィールはありません。新しいガイドは申請の審査後に表示されます。",
       "현재 둘러볼 승인된 프로필이 없습니다. 새로운 가이드는 신청 검토 후 표시됩니다.",
+    "Níl aon phróifílí ceadaithe le brabhsáil faoi láthair. Taispeántar treoraithe nua tar éis athbhreithniú a dhéanamh ar a n-iarratais.",
     ],
   "This guide is no longer available for requests. Your message is still here so you can copy it.":
     [
@@ -336,6 +363,7 @@ export const directoryLongMessages = {
       "这位引导师已无法接受咨询。你的消息仍保留在此，可供复制。",
       "このガイドは現在リクエストを受け付けていません。コピーできるよう、メッセージは残っています。",
       "이 가이드는 더 이상 요청을 받을 수 없습니다. 복사할 수 있도록 메시지는 남아 있습니다.",
+    "Níl an treoraí seo ar fáil le haghaidh iarratas a thuilleadh. Tá do theachtaireacht anseo fós ionas gur féidir leat í a chóipeáil.",
     ],
   "This message is shared with the guide. Describe the support you want; leave out medical records, medication details, trauma histories, and other sensitive information. 20–1,000 characters.":
     [
@@ -348,6 +376,7 @@ export const directoryLongMessages = {
       "此消息会分享给引导师。请描述你想要的支持，不要包含病历、药物详情、创伤经历或其他敏感信息。长度为 20–1,000 个字符。",
       "このメッセージはガイドに共有されます。希望するサポートを書き、医療記録、薬の詳細、トラウマ歴などの機微な情報は含めないでください。20〜1,000文字。",
       "이 메시지는 가이드와 공유됩니다. 원하는 지원을 설명하되, 의료 기록, 약물 세부 사항, 트라우마 이력 등 민감한 정보는 적지 마세요. 20~1,000자.",
+    "Roinntear an teachtaireacht seo leis an treoraí. Déan cur síos ar an tacaíocht atá uait; fág taifid leighis, sonraí cógais, stair tráma agus eolas íogair eile as. 20–1,000 carachtar.",
     ],
   "This platform does not sell, source, supply, or coordinate access to controlled substances of any kind.":
     [
@@ -360,6 +389,7 @@ export const directoryLongMessages = {
       "本平台不销售、寻找来源、提供或协调获取任何类型的受管制物质。",
       "このプラットフォームは、いかなる規制物質の販売、調達、提供、入手の仲介も行いません。",
       "이 플랫폼은 어떤 종류의 규제 물질도 판매, 조달, 공급하거나 접근을 주선하지 않습니다.",
+    "Ní dhíolann an t-ardán seo substaintí rialaithe d'aon chineál, ní aimsíonn sé foinsí dóibh, ní sholáthraíonn sé iad ná ní chomhordaíonn sé rochtain orthu.",
     ],
   "This profile does not describe screening or safety practices. Ask how consent, boundaries, screening, and referrals are handled.":
     [
@@ -372,6 +402,7 @@ export const directoryLongMessages = {
       "此资料未描述筛查或安全做法。请询问如何处理知情同意、边界、筛查和转介。",
       "このプロフィールにはスクリーニングや安全への取り組みの説明がありません。同意、境界線、スクリーニング、他の専門家への紹介方法を確認してください。",
       "이 프로필에는 선별 평가나 안전 수칙이 설명되어 있지 않습니다. 동의, 경계, 평가, 전문가 의뢰를 어떻게 처리하는지 물어보세요.",
+    "Ní dhéanann an phróifíl seo cur síos ar scagadh ná ar chleachtais sábháilteachta. Fiafraigh conas a láimhseáiltear toiliú, teorainneacha, scagadh agus atreoruithe.",
     ],
   "Too many requests from this connection. Please wait before trying again. Your message is still here.":
     [
@@ -384,6 +415,7 @@ export const directoryLongMessages = {
       "此连接发送的请求过多。请稍等后重试。你的消息仍保留在此。",
       "この接続からのリクエストが多すぎます。しばらく待ってから再試行してください。メッセージは残っています。",
       "이 연결에서 너무 많은 요청이 발생했습니다. 잠시 기다린 뒤 다시 시도하세요. 메시지는 남아 있습니다.",
+    "An iomarca iarratas ón nasc seo. Fan sula mbaineann tú triail eile as. Tá do theachtaireacht anseo fós.",
     ],
   "Training details have not been provided. Ask about relevant training, supervision, and the scope of their work before deciding.":
     [
@@ -396,6 +428,7 @@ export const directoryLongMessages = {
       "尚未提供培训详情。决定前，请询问相关培训、督导和服务范围。",
       "研修の詳細は記載されていません。決める前に、関連する研修、スーパービジョン、業務範囲について尋ねてください。",
       "교육 세부 정보가 제공되지 않았습니다. 결정하기 전에 관련 교육, 슈퍼비전, 업무 범위를 물어보세요.",
+    "Níor soláthraíodh sonraí oiliúna. Cuir ceisteanna faoi oiliúint ábhartha, maoirseacht agus raon a gcuid oibre sula ndéanann tú cinneadh.",
     ],
   "We could not confirm whether your request was received. Your message is still here. Retrying may send it twice; wait a moment or contact platform support if you need help.":
     [
@@ -408,6 +441,7 @@ export const directoryLongMessages = {
       "我们无法确认是否已收到你的请求。消息仍保留在此。重试可能导致重复发送；请稍候，或在需要帮助时联系平台支持。",
       "リクエストが届いたか確認できませんでした。メッセージは残っています。再試行すると二重送信になる可能性があります。少し待つか、必要なら運営サポートへ連絡してください。",
       "요청 수신 여부를 확인할 수 없습니다. 메시지는 남아 있습니다. 다시 시도하면 중복 전송될 수 있으니 잠시 기다리거나 도움이 필요하면 플랫폼 지원팀에 문의하세요.",
+    "Níorbh fhéidir linn a dheimhniú an bhfuarthas d'iarratas. Tá do theachtaireacht anseo fós. D'fhéadfadh triail eile í a sheoladh faoi dhó; fan nóiméad nó déan teagmháil le foireann tacaíochta an ardáin má tá cabhair uait.",
     ],
   "We couldn’t load guide profiles. Your search is saved in the address bar; try again or browse the resource library while you wait.":
     [
@@ -420,6 +454,7 @@ export const directoryLongMessages = {
       "无法加载引导师资料。你的搜索已保留在地址栏中；请重试，或在等待时浏览知识库。",
       "ガイドのプロフィールを読み込めませんでした。検索条件はアドレスバーに残っています。再試行するか、待つ間に資料をご覧ください。",
       "가이드 프로필을 불러올 수 없습니다. 검색 내용은 주소창에 저장되어 있습니다. 다시 시도하거나 기다리는 동안 자료실을 둘러보세요.",
+    "Níorbh fhéidir linn próifílí treoraithe a lódáil. Tá do chuardach sábháilte sa bharra seoltaí; bain triail eile as nó brabhsáil an leabharlann acmhainní agus tú ag fanacht.",
     ],
   "Your browser is blocking saved guides. Allow session storage for this site to use this feature.":
     [
@@ -432,6 +467,7 @@ export const directoryLongMessages = {
       "你的浏览器正在阻止收藏功能。请允许此网站使用会话存储，以使用此功能。",
       "ブラウザがガイドの保存をブロックしています。この機能を使うには、当サイトのセッションストレージを許可してください。",
       "브라우저가 가이드 저장을 차단하고 있습니다. 이 기능을 사용하려면 사이트의 세션 저장소를 허용하세요.",
+    "Tá do bhrabhsálaí ag cur bac ar threoraithe sábháilte. Ceadaigh stóráil seisiúin don suíomh seo chun an ghné seo a úsáid.",
     ],
   "Your name, email, and message are shared with this guide and processed by the platform to deliver your request. They are not displayed publicly. No account is created.":
     [
@@ -444,6 +480,7 @@ export const directoryLongMessages = {
       "你的姓名、电子邮箱和消息会分享给此引导师，并由平台处理以送达请求。这些信息不会公开显示，也不会创建账户。",
       "お名前、メールアドレス、メッセージはこのガイドに共有され、リクエストを届けるために運営が処理します。公開表示はされず、アカウントも作成されません。",
       "이름, 이메일, 메시지는 이 가이드와 공유되며 요청 전달을 위해 플랫폼에서 처리됩니다. 공개되지 않으며 계정은 생성되지 않습니다.",
+    "Roinntear d'ainm, do ríomhphost agus do theachtaireacht leis an treoraí seo agus próiseálann an t-ardán iad chun d'iarratas a sheachadadh. Ní thaispeántar go poiblí iad. Ní chruthaítear cuntas.",
     ],
   "Your request is available to {name}. The guide can reply to the email address you provided. A response or session is not guaranteed.":
     [
@@ -456,5 +493,6 @@ export const directoryLongMessages = {
       "{name} 可以查看你的请求。引导师可以回复你提供的电子邮箱。不保证一定会收到回复或安排会谈。",
       "{name}はリクエストを確認できます。ガイドは入力されたメールアドレスに返信できます。返信やセッションは保証されません。",
       "{name}님이 요청을 확인할 수 있습니다. 가이드는 제공한 이메일 주소로 답할 수 있습니다. 답변이나 세션은 보장되지 않습니다.",
+    "Tá d'iarratas ar fáil do {name}. Is féidir leis an treoraí freagra a thabhairt chuig an seoladh ríomhphoist a thug tú. Ní ráthaítear freagra ná seisiún.",
     ],
 } satisfies MessageCatalog;

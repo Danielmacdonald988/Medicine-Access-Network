@@ -16,7 +16,7 @@ const placeholders = (text: string) => [...new Set(text.match(/\{[A-Za-z][A-Za-z
 
 test('every supported translation preserves required dynamic values', () => {
   for (const catalog of catalogs) for (const [key, translations] of Object.entries(catalog)) {
-    assert.equal(translations.length, 9, key)
+    assert.equal(translations.length, LOCALES.length - 1, key)
     for (const [index, translation] of translations.entries()) {
       assert.ok(translation.trim(), `${LOCALES[index + 1]}: ${key}`)
       assert.deepEqual(placeholders(translation), placeholders(key), `${LOCALES[index + 1]}: ${key}`)
@@ -51,4 +51,14 @@ test('translated free text expands supported practices without replacing entered
   assert.deepEqual([...filterSearchParams(filters)], [['q', query], ['location', 'México'], ['modality', 'Breathwork'], ['remote', 'true']])
   assert.equal(textSearchExpression('Example Name 123').includes('modalities.ov.'), false)
   assert.equal(textSearchExpression('private.person@example.com').includes('modalities.ov.'), false)
+})
+
+test('Irish searches work with fada accents, without accents, and in uppercase', () => {
+  const t = createTranslator(dictionaryFor('ga', catalogs))
+  assert.equal(t('Language'), 'Teanga')
+  assert.equal(t('Contact {name}', { name: 'Aoife' }), 'Déan teagmháil le Aoife')
+  assert.equal(t('${amount} USD per session', { amount: 80 }), '$80 USD in aghaidh an tseisiúin')
+  for (const query of ['Cóitseáil comhtháthaithe', 'Coitseail comhthathaithe', 'CÓITSEÁIL COMHTHÁTHAITHE']) {
+    assert.ok(textSearchExpression(query).includes('Integration Coaching'), query)
+  }
 })

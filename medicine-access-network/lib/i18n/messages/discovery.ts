@@ -11,6 +11,7 @@ export const discoveryMessages = {
     "人与人的联结，全新的可能。",
     "人とのつながり。新たな可能性。",
     "사람과의 연결. 새로운 가능성.",
+    "Nasc daonna. Féidearthachtaí nua.",
   ],
   "Your next chapter.": [
     "Tu próximo capítulo.",
@@ -22,6 +23,7 @@ export const discoveryMessages = {
     "开启人生新篇章。",
     "あなたの次の一章へ。",
     "당신의 다음 장.",
+    "Do chéad chaibidil eile.",
   ],
   "The right support.": [
     "El apoyo adecuado.",
@@ -33,6 +35,7 @@ export const discoveryMessages = {
     "找到适合你的支持。",
     "あなたに合ったサポート。",
     "나에게 맞는 지원.",
+    "An tacaíocht cheart.",
   ],
   "Find your people in psychedelic preparation, integration, breathwork, and beyond. A more personal path starts here.":
     [
@@ -45,6 +48,7 @@ export const discoveryMessages = {
       "在迷幻体验准备、整合、呼吸练习等领域找到适合你的支持者。属于你的探索之路，从这里开始。",
       "サイケデリック体験の準備、統合、呼吸法などを通じて、あなたに合う人を見つけましょう。あなたらしい道がここから始まります。",
       "사이키델릭 경험 준비, 통합, 호흡법 등에서 함께할 사람을 찾아보세요. 나에게 맞는 여정이 여기서 시작됩니다.",
+    "Aimsigh do dhaoine le haghaidh ullmhúchán sícideileach, comhtháthú, obair anála agus tuilleadh. Tosaíonn cosán níos pearsanta anseo.",
     ],
   "Wherever you are in your journey, you belong.": [
     "Estés donde estés en tu camino, este es tu lugar.",
@@ -56,6 +60,7 @@ export const discoveryMessages = {
     "无论走到哪一步，这里都欢迎你。",
     "旅のどの段階にいても、あなたの居場所があります。",
     "여정의 어느 단계에 있든, 당신을 환영합니다.",
+    "Cibé áit a bhfuil tú ar do thuras, tá fáilte romhat.",
   ],
   "Morning sunlight across a quiet forest path with a distant walker": [
     "Luz de la mañana sobre un sendero tranquilo del bosque, con una persona caminando a lo lejos",
@@ -67,6 +72,7 @@ export const discoveryMessages = {
     "晨光洒在静谧的林间小路上，远处有人漫步",
     "朝日が差す静かな森の小道と、遠くを歩く人",
     "아침 햇살이 비치는 조용한 숲길과 멀리 걷는 사람",
+    "Solas maidine trasna cosán ciúin foraoise agus siúlóir i bhfad uait",
   ],
   "A little guidance.": [
     "Un poco de orientación.",
@@ -78,6 +84,7 @@ export const discoveryMessages = {
     "一点指引。",
     "少しの導き。",
     "작은 길잡이.",
+    "Beagán treorach.",
   ],
   "A world of possibility.": [
     "Un mundo de posibilidades.",
@@ -89,6 +96,7 @@ export const discoveryMessages = {
     "无限可能。",
     "広がる可能性。",
     "가능성의 세계.",
+    "Domhan féidearthachtaí.",
   ],
   "Room to grow": [
     "Espacio para crecer",
@@ -100,6 +108,7 @@ export const discoveryMessages = {
     "成长的空间",
     "成長できる場所",
     "성장할 공간",
+    "Spás le fás",
   ],
   "Many paths. One place to begin.": [
     "Muchos caminos. Un lugar para empezar.",
@@ -111,6 +120,7 @@ export const discoveryMessages = {
     "多条路径，同一个起点。",
     "さまざまな道。ひとつの出発点。",
     "다양한 길. 하나의 출발점.",
+    "Go leor cosán. Áit amháin le tosú.",
   ],
   "Support that meets you where you are.": [
     "Apoyo que se adapta al momento que vives.",
@@ -122,6 +132,7 @@ export const discoveryMessages = {
     "与你当下需要相契合的支持。",
     "今のあなたに寄り添うサポート。",
     "지금의 나에게 맞는 지원.",
+    "Tacaíocht a fhreastalaíonn ort mar atá tú.",
   ],
   "Follow your curiosity.": [
     "Sigue tu curiosidad.",
@@ -133,6 +144,7 @@ export const discoveryMessages = {
     "跟随你的好奇心。",
     "好奇心に従って。",
     "호기심을 따라가 보세요.",
+    "Lean d'fhiosracht.",
   ],
   "You don’t need to have it all figured out.": [
     "No necesitas tenerlo todo claro.",
@@ -144,6 +156,7 @@ export const discoveryMessages = {
     "不必一开始就想清楚一切。",
     "すべての答えが出ていなくても大丈夫です。",
     "모든 답을 미리 알 필요는 없습니다.",
+    "Ní gá gach rud a bheith socraithe agat.",
   ],
   "Start with a little curiosity": [
     "Empieza con un poco de curiosidad",
@@ -155,6 +168,7 @@ export const discoveryMessages = {
     "从一点好奇开始",
     "少しの好奇心から始めましょう",
     "작은 호기심에서 시작하세요",
+    "Tosaigh le beagán fiosrachta",
   ],
   "Less searching. More connecting.": [
     "Menos búsqueda. Más conexión.",
@@ -166,6 +180,7 @@ export const discoveryMessages = {
     "少一点寻找，多一点联结。",
     "探す時間を、つながる時間に。",
     "검색은 줄이고, 연결은 늘리고.",
+    "Níos lú cuardaigh. Níos mó nasc.",
   ],
   "A human way forward.": [
     "Una forma humana de avanzar.",
@@ -177,6 +192,7 @@ export const discoveryMessages = {
     "以人为本，向前迈进。",
     "人とのつながりから、前へ。",
     "사람과 함께 앞으로.",
+    "Bealach daonna chun cinn.",
   ],
   "A little clarity.": [
     "Un poco de claridad.",
@@ -188,6 +204,7 @@ export const discoveryMessages = {
     "多一点清晰。",
     "少しの明確さ。",
     "조금 더 명확하게.",
+    "Beagán soiléireachta.",
   ],
   "A connection on your terms.": [
     "Una conexión a tu manera.",
@@ -199,6 +216,7 @@ export const discoveryMessages = {
     "按你的意愿建立联结。",
     "あなたのペースでつながる。",
     "내 방식대로 연결하기.",
+    "Nasc ar do théarmaí féin.",
   ],
   "Open minds. Grounded values.": [
     "Mentes abiertas. Valores sólidos.",
@@ -210,6 +228,7 @@ export const discoveryMessages = {
     "开放的心态，踏实的价值观。",
     "開かれた心。地に足のついた価値観。",
     "열린 마음. 단단한 가치.",
+    "Intinn oscailte. Luachanna daingne.",
   ],
   "Big possibilities.": [
     "Grandes posibilidades.",
@@ -221,6 +240,7 @@ export const discoveryMessages = {
     "更广阔的可能。",
     "大きな可能性。",
     "더 큰 가능성.",
+    "Féidearthachtaí móra.",
   ],
   "Human first. Always.": [
     "Las personas primero. Siempre.",
@@ -232,6 +252,7 @@ export const discoveryMessages = {
     "始终以人为本。",
     "いつでも、人を第一に。",
     "언제나 사람을 먼저.",
+    "An duine ar dtús. I gcónaí.",
   ],
   "Finding support is personal. The process should feel clear, welcoming, and entirely yours.":
     [
@@ -244,6 +265,7 @@ export const discoveryMessages = {
       "寻找支持是很个人的事。这个过程应当清晰、友善，并由你做主。",
       "サポート探しは個人的なもの。わかりやすく、温かく、あなた自身が選べる過程であるべきです。",
       "지원을 찾는 일은 개인적인 과정입니다. 명확하고 편안하며, 온전히 내가 선택할 수 있어야 합니다.",
+    "Is rud pearsanta é tacaíocht a aimsiú. Ba cheart don phróiseas a bheith soiléir, fáilteach agus faoi do smacht féin.",
     ],
   "Our approach to profile review": [
     "Cómo revisamos los perfiles",
@@ -255,6 +277,7 @@ export const discoveryMessages = {
     "我们的资料审核方式",
     "プロフィール審査について",
     "프로필 검토 방식",
+    "Ár gcur chuige maidir le hathbhreithniú próifílí",
   ],
   "Clarity before commitment": [
     "Claridad antes de comprometerte",
@@ -266,6 +289,7 @@ export const discoveryMessages = {
     "先了解清楚，再做决定",
     "決める前に、よく知ること",
     "결정하기 전에 명확하게",
+    "Soiléireacht roimh thiomantas",
   ],
   "Ask about training, boundaries, costs, and consent. Profile review is a starting point, not a guarantee of safety or qualifications.":
     [
@@ -278,6 +302,7 @@ export const discoveryMessages = {
       "请了解培训背景、服务边界、费用和知情同意。资料审核只是起点，并不保证安全性或资质。",
       "研修、境界線、費用、同意について確認しましょう。プロフィール審査は出発点であり、安全や資格を保証するものではありません。",
       "교육, 경계, 비용, 동의에 대해 물어보세요. 프로필 검토는 출발점일 뿐, 안전이나 자격을 보장하지 않습니다.",
+    "Cuir ceisteanna faoi oiliúint, teorainneacha, costais agus toiliú. Is pointe tosaigh é athbhreithniú próifíle, ní ráthaíocht sábháilteachta ná cáilíochtaí.",
     ],
   "Your pace. Your choice.": [
     "Tu ritmo. Tu decisión.",
@@ -289,6 +314,7 @@ export const discoveryMessages = {
     "你的节奏，你的选择。",
     "あなたのペース。あなたの選択。",
     "내 속도. 내 선택.",
+    "Do luas féin. Do rogha féin.",
   ],
   "Explore without pressure. You decide what fits, who you connect with, and when. It’s always okay to pause or say no.":
     [
@@ -301,6 +327,7 @@ export const discoveryMessages = {
       "不必有压力。由你决定什么适合自己、与谁联系以及何时联系。随时可以暂停或拒绝。",
       "プレッシャーなく探しましょう。何が合うか、誰といつつながるかはあなたが決めます。立ち止まったり、断ったりしても大丈夫です。",
       "부담 없이 살펴보세요. 무엇이 맞는지, 누구와 언제 연결할지는 내가 결정합니다. 언제든 멈추거나 거절해도 괜찮습니다.",
+    "Brabhsáil gan bhrú. Socraíonn tú céard a oireann duit, cé leis a nascann tú agus cathain. Tá sé ceart go leor sos a ghlacadh nó diúltú i gcónaí.",
     ],
   "Room for different paths": [
     "Espacio para distintos caminos",
@@ -312,6 +339,7 @@ export const discoveryMessages = {
     "容纳不同的探索之路",
     "さまざまな道を受け入れる場所",
     "다양한 길을 위한 공간",
+    "Spás do chosáin éagsúla",
   ],
   "From a first breathwork session to integration support, your starting point is welcome. Services and legal availability vary by location.":
     [
@@ -324,6 +352,7 @@ export const discoveryMessages = {
       "无论是第一次呼吸练习还是寻求整合支持，我们都欢迎你的起点。服务内容及其合法可用性因地区而异。",
       "初めての呼吸法から統合サポートまで、どこからでも始められます。サービスや法的な利用可否は地域によって異なります。",
       "첫 호흡 세션부터 통합 지원까지, 어디서 시작하든 환영합니다. 서비스와 법적 이용 가능 여부는 지역에 따라 다릅니다.",
+    "Ó chéad seisiún oibre anála go tacaíocht comhtháthaithe, tá fáilte romhat cibé pointe tosaigh atá agat. Braitheann seirbhísí agus infhaighteacht dhleathach ar an suíomh.",
     ],
   "For the people who hold space": [
     "Para quienes acompañan a otras personas",
@@ -335,6 +364,7 @@ export const discoveryMessages = {
     "致提供陪伴与支持的人们",
     "安心できる場をつくる方へ",
     "함께할 공간을 만드는 분들께",
+    "Dóibh siúd a chruthaíonn spás do dhaoine eile",
   ],
   "Your work matters.": [
     "Tu trabajo importa.",
@@ -346,6 +376,7 @@ export const discoveryMessages = {
     "你的工作很重要。",
     "あなたの活動には価値がある。",
     "당신의 일은 소중합니다.",
+    "Tá tábhacht le do chuid oibre.",
   ],
   "Let’s help people find you.": [
     "Ayudemos a que te encuentren.",
@@ -357,6 +388,7 @@ export const discoveryMessages = {
     "让我们帮助更多人找到你。",
     "あなたを必要とする人に届けましょう。",
     "사람들이 당신을 찾도록 돕겠습니다.",
+    "Cabhróimis le daoine teacht ort.",
   ],
   "Bring your practice to a growing community.": [
     "Comparte tu práctica con una comunidad en crecimiento.",
@@ -368,6 +400,7 @@ export const discoveryMessages = {
     "向不断成长的社群介绍你的服务。",
     "広がるコミュニティに、あなたの活動を。",
     "성장하는 커뮤니티에 나의 활동을 소개하세요.",
+    "Tabhair do chleachtas chuig pobal atá ag fás.",
   ],
   "Free to apply. Every profile is reviewed before publication.": [
     "La solicitud es gratuita. Cada perfil se revisa antes de publicarse.",
@@ -379,6 +412,7 @@ export const discoveryMessages = {
     "免费申请。每份资料发布前都会经过审核。",
     "申請は無料。すべてのプロフィールは公開前に審査されます。",
     "신청은 무료입니다. 모든 프로필은 게시 전에 검토됩니다.",
+    "Saor in aisce iarratas a dhéanamh. Déantar athbhreithniú ar gach próifíl sula bhfoilsítear í.",
   ],
   "List your practice": [
     "Publica tu práctica",
@@ -390,6 +424,7 @@ export const discoveryMessages = {
     "发布你的服务",
     "活動を掲載する",
     "활동 등록하기",
+    "Liostaigh do chleachtas",
   ],
   "Rooted in connection.": [
     "Con raíces en la conexión.",
@@ -401,6 +436,7 @@ export const discoveryMessages = {
     "以联结为根。",
     "つながりに根ざして。",
     "연결에 뿌리내리고.",
+    "Fréamhaithe sa nasc.",
   ],
   "Growing together.": [
     "Creciendo juntos.",
@@ -412,6 +448,7 @@ export const discoveryMessages = {
     "一同成长。",
     "ともに育つ。",
     "함께 성장하기.",
+    "Ag fás le chéile.",
   ],
   "A little more clarity": [
     "Un poco más de claridad",
@@ -423,6 +460,7 @@ export const discoveryMessages = {
     "再多一点了解",
     "もう少し詳しく",
     "조금 더 알아보기",
+    "Beagán níos mó soiléireachta",
   ],
   "Good questions.": [
     "Buenas preguntas.",
@@ -434,6 +472,7 @@ export const discoveryMessages = {
     "值得提出的问题。",
     "大切な質問。",
     "좋은 질문.",
+    "Ceisteanna maithe.",
   ],
   "Clear answers.": [
     "Respuestas claras.",
@@ -445,6 +484,7 @@ export const discoveryMessages = {
     "清晰的解答。",
     "明確な答え。",
     "명확한 답변.",
+    "Freagraí soiléire.",
   ],
   "Contact us": [
     "Contáctanos",
@@ -456,6 +496,7 @@ export const discoveryMessages = {
     "联系我们",
     "お問い合わせ",
     "문의하기",
+    "Déan teagmháil linn",
   ],
   "A new way to find your people.": [
     "Una nueva forma de encontrar a tu gente.",
@@ -467,6 +508,7 @@ export const discoveryMessages = {
     "用新的方式，遇见适合你的人。",
     "あなたに合う人を見つける、新しい方法。",
     "나와 맞는 사람을 만나는 새로운 방법.",
+    "Bealach nua chun do dhaoine a aimsiú.",
   ],
   "Explore the network": [
     "Explora la red",
@@ -478,6 +520,7 @@ export const discoveryMessages = {
     "探索社群",
     "ネットワークを探す",
     "네트워크 둘러보기",
+    "Brabhsáil an líonra",
   ],
   "Main navigation": [
     "Navegación principal",
@@ -489,6 +532,7 @@ export const discoveryMessages = {
     "主导航",
     "メインナビゲーション",
     "주 메뉴",
+    "Príomh-nascleanúint",
   ],
   "Edit my profile": [
     "Editar mi perfil",
@@ -500,6 +544,7 @@ export const discoveryMessages = {
     "编辑我的资料",
     "プロフィールを編集",
     "내 프로필 수정",
+    "Cuir mo phróifíl in eagar",
   ],
   "Account menu": [
     "Menú de la cuenta",
@@ -511,6 +556,7 @@ export const discoveryMessages = {
     "账户菜单",
     "アカウントメニュー",
     "계정 메뉴",
+    "Roghchlár cuntais",
   ],
   Dashboard: [
     "Panel",
@@ -522,6 +568,7 @@ export const discoveryMessages = {
     "控制面板",
     "ダッシュボード",
     "대시보드",
+    "Deais",
   ],
   Admin: [
     "Administración",
@@ -533,6 +580,7 @@ export const discoveryMessages = {
     "管理",
     "管理",
     "관리",
+    "Riarachán",
   ],
   "Sign out": [
     "Cerrar sesión",
@@ -544,6 +592,7 @@ export const discoveryMessages = {
     "退出登录",
     "ログアウト",
     "로그아웃",
+    "Sínigh amach",
   ],
   "Sign in": [
     "Iniciar sesión",
@@ -555,6 +604,7 @@ export const discoveryMessages = {
     "登录",
     "ログイン",
     "로그인",
+    "Sínigh isteach",
   ],
   "For facilitators": [
     "Para facilitadores",
@@ -566,6 +616,7 @@ export const discoveryMessages = {
     "面向引导师",
     "ファシリテーターの方へ",
     "퍼실리테이터를 위한 공간",
+    "D'éascaitheoirí",
   ],
   "Mobile navigation": [
     "Navegación móvil",
@@ -577,6 +628,7 @@ export const discoveryMessages = {
     "移动端导航",
     "モバイルナビゲーション",
     "모바일 메뉴",
+    "Nascleanúint mhóibíleach",
   ],
   "Facilitator sign in": [
     "Acceso para facilitadores",
@@ -588,6 +640,7 @@ export const discoveryMessages = {
     "引导师登录",
     "ファシリテーターログイン",
     "퍼실리테이터 로그인",
+    "Síniú isteach d'éascaitheoirí",
   ],
   "A little more connection.": [
     "Un poco más de conexión.",
@@ -599,6 +652,7 @@ export const discoveryMessages = {
     "多一点联结。",
     "もう少しのつながり。",
     "조금 더 가까운 연결.",
+    "Beagán níos mó nasc.",
   ],
   "Find support for preparation, integration, and the path in between.": [
     "Encuentra apoyo para la preparación, la integración y el camino entre ambas.",
@@ -610,6 +664,7 @@ export const discoveryMessages = {
     "为准备、整合及其间的旅程寻找支持。",
     "準備、統合、その間の道のりを支える人を探しましょう。",
     "준비와 통합, 그 사이의 여정을 위한 지원을 찾아보세요.",
+    "Faigh tacaíocht don ullmhúchán, don chomhtháthú agus don chosán eatarthu.",
   ],
   "Questions? Get in touch": [
     "¿Preguntas? Contáctanos",
@@ -621,6 +676,7 @@ export const discoveryMessages = {
     "有疑问？联系我们",
     "ご質問はお問い合わせください",
     "궁금한 점이 있나요? 문의하세요",
+    "Ceisteanna? Déan teagmháil linn",
   ],
   "Safety library": [
     "Biblioteca de seguridad",
@@ -632,6 +688,7 @@ export const discoveryMessages = {
     "安全知识库",
     "安全に関する資料",
     "안전 자료실",
+    "Leabharlann sábháilteachta",
   ],
   "Find support": [
     "Encuentra apoyo",
@@ -643,6 +700,7 @@ export const discoveryMessages = {
     "寻找支持",
     "サポートを探す",
     "지원 찾기",
+    "Faigh tacaíocht",
   ],
   "What kind of support?": [
     "¿Qué tipo de apoyo?",
@@ -654,6 +712,7 @@ export const discoveryMessages = {
     "你需要哪种支持？",
     "どのようなサポートですか？",
     "어떤 지원을 원하시나요?",
+    "Cén cineál tacaíochta?",
   ],
   "All practices": [
     "Todas las prácticas",
@@ -665,6 +724,7 @@ export const discoveryMessages = {
     "全部服务",
     "すべての実践",
     "모든 활동",
+    "Gach cleachtas",
   ],
   "Psychedelic preparation": [
     "Preparación psicodélica",
@@ -676,6 +736,7 @@ export const discoveryMessages = {
     "迷幻体验准备",
     "サイケデリック体験の準備",
     "사이키델릭 경험 준비",
+    "Ullmhúchán sícideileach",
   ],
   Integration: [
     "Integración",
@@ -687,6 +748,7 @@ export const discoveryMessages = {
     "整合",
     "統合",
     "통합",
+    "Comhtháthú",
   ],
   Breathwork: [
     "Trabajo de respiración",
@@ -698,6 +760,7 @@ export const discoveryMessages = {
     "呼吸练习",
     "呼吸法",
     "호흡법",
+    "Obair anála",
   ],
   "Somatic practices": [
     "Prácticas somáticas",
@@ -709,6 +772,7 @@ export const discoveryMessages = {
     "身心练习",
     "身体感覚の実践",
     "신체 감각 수련",
+    "Cleachtais shómatacha",
   ],
   Meditation: [
     "Meditación",
@@ -720,6 +784,7 @@ export const discoveryMessages = {
     "冥想",
     "瞑想",
     "명상",
+    "Machnamh",
   ],
   "Recovery support": [
     "Apoyo en la recuperación",
@@ -731,6 +796,7 @@ export const discoveryMessages = {
     "康复支持",
     "回復サポート",
     "회복 지원",
+    "Tacaíocht téarnaimh",
   ],
   "Where feels right?": [
     "¿Qué lugar te va bien?",
@@ -742,6 +808,7 @@ export const discoveryMessages = {
     "你希望在哪里？",
     "どの場所がよいですか？",
     "어디가 편하신가요?",
+    "Cén áit a oireann duit?",
   ],
   "(optional)": [
     "(opcional)",
@@ -753,6 +820,7 @@ export const discoveryMessages = {
     "（选填）",
     "（任意）",
     "(선택 사항)",
+    "(roghnach)",
   ],
   "City, region, or country": [
     "Ciudad, región o país",
@@ -764,6 +832,7 @@ export const discoveryMessages = {
     "城市、地区或国家",
     "市区町村、地域、国",
     "도시, 지역 또는 국가",
+    "Cathair, réigiún nó tír",
   ],
   "Find my support": [
     "Encontrar mi apoyo",
@@ -775,6 +844,7 @@ export const discoveryMessages = {
     "寻找适合我的支持",
     "自分に合うサポートを探す",
     "나에게 맞는 지원 찾기",
+    "Faigh mo thacaíocht",
   ],
   "Free to explore. No account needed.": [
     "Explorar es gratis. Sin necesidad de cuenta.",
@@ -786,6 +856,7 @@ export const discoveryMessages = {
     "免费浏览，无需注册。",
     "無料で閲覧。アカウントは不要です。",
     "무료로 둘러보세요. 계정이 필요 없습니다.",
+    "Saor in aisce le brabhsáil. Ní gá cuntas.",
   ],
   "Online sessions": [
     "Sesiones en línea",
@@ -797,6 +868,7 @@ export const discoveryMessages = {
     "线上会谈",
     "オンラインセッション",
     "온라인 세션",
+    "Seisiúin ar líne",
   ],
   "Browse all guides": [
     "Ver todos los guías",
@@ -808,6 +880,7 @@ export const discoveryMessages = {
     "浏览所有引导师",
     "すべてのガイドを見る",
     "모든 가이드 보기",
+    "Brabhsáil gach treoraí",
   ],
   "Search & filters": [
     "Búsqueda y filtros",
@@ -819,6 +892,7 @@ export const discoveryMessages = {
     "搜索与筛选",
     "検索と絞り込み",
     "검색 및 필터",
+    "Cuardach agus scagairí",
   ],
   "Show guides": [
     "Mostrar guías",
@@ -830,6 +904,7 @@ export const discoveryMessages = {
     "显示引导师",
     "ガイドを表示",
     "가이드 보기",
+    "Taispeáin treoraithe",
   ],
   "Guide directory": [
     "Directorio de guías",
@@ -841,6 +916,7 @@ export const discoveryMessages = {
     "引导师名录",
     "ガイド一覧",
     "가이드 목록",
+    "Eolaire treoraithe",
   ],
   "Support or guide": [
     "Apoyo o guía",
@@ -852,6 +928,7 @@ export const discoveryMessages = {
     "支持类型或引导师",
     "サポートまたはガイド",
     "지원 유형 또는 가이드",
+    "Tacaíocht nó treoraí",
   ],
   "Preparation, integration, or a name": [
     "Preparación, integración o un nombre",
@@ -863,6 +940,7 @@ export const discoveryMessages = {
     "准备、整合或姓名",
     "準備、統合、または名前",
     "준비, 통합 또는 이름",
+    "Ullmhúchán, comhtháthú nó ainm",
   ],
   Location: [
     "Ubicación",
@@ -874,6 +952,7 @@ export const discoveryMessages = {
     "地点",
     "場所",
     "위치",
+    "Suíomh",
   ],
   "City, state, or country": [
     "Ciudad, estado o país",
@@ -885,6 +964,7 @@ export const discoveryMessages = {
     "城市、省州或国家",
     "市区町村、都道府県、国",
     "도시, 주 또는 국가",
+    "Cathair, stát nó tír",
   ],
   "Search the location listed on a profile. For online support, leave location blank and use the online filter; confirm the guide can work with you where you live.":
     [
@@ -897,6 +977,7 @@ export const discoveryMessages = {
       "搜索资料中列出的地点。如需线上支持，请留空地点并使用线上筛选；请确认引导师能否为你所在地区提供服务。",
       "プロフィールに記載された場所を検索します。オンラインをご希望の場合は場所を空欄にしてオンラインの絞り込みを使い、居住地で対応可能か確認してください。",
       "프로필에 기재된 위치로 검색하세요. 온라인 지원은 위치를 비우고 온라인 필터를 사용한 뒤, 거주 지역에서 서비스를 받을 수 있는지 확인하세요.",
+    "Cuardaigh an suíomh atá liostaithe ar phróifíl. Le haghaidh tacaíochta ar líne, fág an suíomh bán agus úsáid an scagaire ar líne; deimhnigh gur féidir leis an treoraí oibriú leat san áit a bhfuil cónaí ort.",
     ],
   "Sort by": [
     "Ordenar por",
@@ -908,6 +989,7 @@ export const discoveryMessages = {
     "排序方式",
     "並べ替え",
     "정렬 기준",
+    "Sórtáil de réir",
   ],
   "Newest profiles": [
     "Perfiles más recientes",
@@ -919,6 +1001,7 @@ export const discoveryMessages = {
     "最新资料",
     "新しいプロフィール順",
     "최신 프로필",
+    "Próifílí is nuaí",
   ],
   "Name A–Z": [
     "Nombre A–Z",
@@ -930,6 +1013,7 @@ export const discoveryMessages = {
     "姓名 A–Z",
     "名前 A–Z",
     "이름 A–Z",
+    "Ainm A–Z",
   ],
   "Filter guides": [
     "Filtrar guías",
@@ -941,6 +1025,7 @@ export const discoveryMessages = {
     "筛选引导师",
     "ガイドを絞り込む",
     "가이드 필터링",
+    "Scag treoraithe",
   ],
   "Refine your search": [
     "Afina tu búsqueda",
@@ -952,6 +1037,7 @@ export const discoveryMessages = {
     "细化搜索",
     "検索条件を絞る",
     "검색 조건 좁히기",
+    "Mionchoigeartaigh do chuardach",
   ],
   "Clear filters": [
     "Borrar filtros",
@@ -963,6 +1049,7 @@ export const discoveryMessages = {
     "清除筛选",
     "絞り込みを解除",
     "필터 초기화",
+    "Glan scagairí",
   ],
   "Guide search filters": [
     "Filtros de búsqueda de guías",
@@ -974,6 +1061,7 @@ export const discoveryMessages = {
     "引导师搜索筛选",
     "ガイド検索の絞り込み",
     "가이드 검색 필터",
+    "Scagairí cuardaigh treoraithe",
   ],
   "Format and pricing": [
     "Formato y precios",
@@ -985,6 +1073,7 @@ export const discoveryMessages = {
     "形式与费用",
     "形式と料金",
     "진행 방식 및 요금",
+    "Formáid agus praghsáil",
   ],
   "Online sessions available": [
     "Sesiones en línea disponibles",
@@ -996,6 +1085,7 @@ export const discoveryMessages = {
     "可提供线上会谈",
     "オンライン対応あり",
     "온라인 세션 가능",
+    "Seisiúin ar líne ar fáil",
   ],
   "Donation-based pricing": [
     "Precio basado en donaciones",
@@ -1007,6 +1097,7 @@ export const discoveryMessages = {
     "捐赠制收费",
     "寄付制の料金",
     "기부 기반 요금",
+    "Praghsáil bunaithe ar shíntiúis",
   ],
   "Online support depends on where you live. Donation-based guides may set a minimum. Confirm both before arranging a session.":
     [
@@ -1019,6 +1110,7 @@ export const discoveryMessages = {
       "线上支持是否可用取决于你的居住地。采用捐赠制的引导师可能设有最低金额。安排会谈前，请确认这两点。",
       "オンライン対応の可否は居住地によります。寄付制でも最低額がある場合があります。予約前に両方を確認してください。",
       "온라인 지원 가능 여부는 거주 지역에 따라 다릅니다. 기부 기반 가이드도 최소 금액을 정할 수 있습니다. 세션을 정하기 전에 두 가지 모두 확인하세요.",
+    "Braitheann tacaíocht ar líne ar an áit a bhfuil cónaí ort. Féadfaidh treoraithe a oibríonn ar bhonn síntiúis íosmhéid a shocrú. Deimhnigh an dá rud sula socraíonn tú seisiún.",
     ],
   "Self-reported practice": [
     "Práctica declarada",
@@ -1030,6 +1122,7 @@ export const discoveryMessages = {
     "本人申报的练习经历",
     "自己申告の実践経験",
     "본인이 기재한 수련 경험",
+    "Cleachtas féintuairiscithe",
   ],
   "Years may include personal practice. This is not a measure of training or professional experience.":
     [
@@ -1042,6 +1135,7 @@ export const discoveryMessages = {
       "年限可能包含个人练习，并不代表培训程度或专业工作经验。",
       "年数には個人的な実践が含まれる場合があり、研修や専門的経験の指標ではありません。",
       "개인 수련 기간이 포함될 수 있습니다. 교육 수준이나 전문 경력을 나타내는 지표가 아닙니다.",
+    "D'fhéadfadh cleachtas pearsanta a bheith san áireamh sna blianta. Ní tomhas oiliúna ná taithí gairmiúla é seo.",
     ],
   "Type of support": [
     "Tipo de apoyo",
@@ -1053,6 +1147,7 @@ export const discoveryMessages = {
     "支持类型",
     "サポートの種類",
     "지원 유형",
+    "Cineál tacaíochta",
   ],
   "Matches any selected type.": [
     "Coincide con cualquiera de los tipos seleccionados.",
@@ -1064,6 +1159,7 @@ export const discoveryMessages = {
     "匹配任一所选类型。",
     "選択した種類のいずれかに一致します。",
     "선택한 유형 중 하나 이상과 일치합니다.",
+    "Meaitseálann sé aon chineál roghnaithe.",
   ],
   "Skip to main content": [
     "Saltar al contenido principal",
@@ -1075,6 +1171,7 @@ export const discoveryMessages = {
     "跳转到主要内容",
     "メインコンテンツへ移動",
     "본문으로 건너뛰기",
+    "Téigh chuig an bpríomhábhar",
   ],
   "Explore support": [
     "Explora el apoyo",
@@ -1086,6 +1183,7 @@ export const discoveryMessages = {
     "探索支持服务",
     "サポートを探す",
     "지원 둘러보기",
+    "Brabhsáil tacaíocht",
   ],
   "Our approach": [
     "Nuestro enfoque",
@@ -1097,6 +1195,7 @@ export const discoveryMessages = {
     "我们的理念",
     "私たちの考え方",
     "운영 철학",
+    "Ár gcur chuige",
   ],
   "Saved guides": [
     "Guías guardados",
@@ -1108,6 +1207,7 @@ export const discoveryMessages = {
     "已收藏的引导师",
     "保存したガイド",
     "저장한 가이드",
+    "Treoraithe sábháilte",
   ],
   "How it works": [
     "Cómo funciona",
@@ -1119,6 +1219,7 @@ export const discoveryMessages = {
     "使用方式",
     "ご利用の流れ",
     "이용 방법",
+    "Conas a oibríonn sé",
   ],
   "Browse resources": [
     "Explora los recursos",
@@ -1130,6 +1231,7 @@ export const discoveryMessages = {
     "浏览资料",
     "資料を見る",
     "자료 둘러보기",
+    "Brabhsáil acmhainní",
   ],
   Preparation: [
     "Preparación",
@@ -1141,6 +1243,7 @@ export const discoveryMessages = {
     "准备",
     "準備",
     "준비",
+    "Ullmhúchán",
   ],
   "Red flags": [
     "Señales de alerta",
@@ -1152,6 +1255,7 @@ export const discoveryMessages = {
     "警示信号",
     "注意すべき兆候",
     "주의 신호",
+    "Comharthaí rabhaidh",
   ],
   "Urgent support": [
     "Apoyo urgente",
@@ -1163,6 +1267,7 @@ export const discoveryMessages = {
     "紧急支持",
     "緊急の支援",
     "긴급 지원",
+    "Tacaíocht phráinneach",
   ],
   "About & help": [
     "Acerca de y ayuda",
@@ -1174,6 +1279,7 @@ export const discoveryMessages = {
     "关于与帮助",
     "当サイトとヘルプ",
     "소개 및 도움말",
+    "Eolas agus cabhair",
   ],
   "About & profile review": [
     "Acerca de y revisión de perfiles",
@@ -1185,6 +1291,7 @@ export const discoveryMessages = {
     "关于我们与资料审核",
     "当サイトとプロフィール審査",
     "소개 및 프로필 검토",
+    "Eolas agus athbhreithniú próifílí",
   ],
   "Contact & report a concern": [
     "Contacto y comunicar una inquietud",
@@ -1196,6 +1303,7 @@ export const discoveryMessages = {
     "联系与问题反馈",
     "お問い合わせと問題の報告",
     "문의 및 우려 사항 신고",
+    "Teagmháil agus ábhar imní a thuairisciú",
   ],
   "Choosing a guide": [
     "Cómo elegir un guía",
@@ -1207,6 +1315,7 @@ export const discoveryMessages = {
     "选择引导师",
     "ガイドの選び方",
     "가이드 선택하기",
+    "Treoraí a roghnú",
   ],
   "{appName} home": [
     "Inicio de {appName}",
@@ -1218,6 +1327,7 @@ export const discoveryMessages = {
     "{appName} 首页",
     "{appName} ホーム",
     "{appName} 홈",
+    "Baile {appName}",
   ],
   "© {year} {appName}. All rights reserved.": [
     "© {year} {appName}. Todos los derechos reservados.",
@@ -1229,6 +1339,7 @@ export const discoveryMessages = {
     "© {year} {appName}。保留所有权利。",
     "© {year} {appName}. 無断転載を禁じます。",
     "© {year} {appName}. 모든 권리 보유.",
+    "© {year} {appName}. Gach ceart ar cosaint.",
   ],
   "Close menu": [
     "Cerrar menú",
@@ -1240,6 +1351,7 @@ export const discoveryMessages = {
     "关闭菜单",
     "メニューを閉じる",
     "메뉴 닫기",
+    "Dún an roghchlár",
   ],
   "Open menu": [
     "Abrir menú",
@@ -1251,6 +1363,7 @@ export const discoveryMessages = {
     "打开菜单",
     "メニューを開く",
     "메뉴 열기",
+    "Oscail an roghchlár",
   ],
   "Searching…": [
     "Buscando…",
@@ -1262,6 +1375,7 @@ export const discoveryMessages = {
     "正在搜索…",
     "検索中…",
     "검색 중…",
+    "Ag cuardach…",
   ],
   "Find a guide": [
     "Encuentra un guía",
@@ -1273,6 +1387,7 @@ export const discoveryMessages = {
     "寻找引导师",
     "ガイドを探す",
     "가이드 찾기",
+    "Aimsigh treoraí",
   ],
   "Sorting guide results…": [
     "Ordenando los resultados…",
@@ -1284,6 +1399,7 @@ export const discoveryMessages = {
     "正在排序搜索结果…",
     "検索結果を並べ替え中…",
     "검색 결과 정렬 중…",
+    "Torthaí treoraithe á sórtáil…",
   ],
   "Updating guide results…": [
     "Actualizando los resultados…",
@@ -1295,6 +1411,7 @@ export const discoveryMessages = {
     "正在更新搜索结果…",
     "検索結果を更新中…",
     "검색 결과 업데이트 중…",
+    "Torthaí treoraithe á nuashonrú…",
   ],
   "Trying again…": [
     "Intentando de nuevo…",
@@ -1306,6 +1423,7 @@ export const discoveryMessages = {
     "正在重试…",
     "再試行中…",
     "다시 시도 중…",
+    "Ag baint triail eile as…",
   ],
   "Try again": [
     "Intentar de nuevo",
@@ -1317,6 +1435,7 @@ export const discoveryMessages = {
     "重试",
     "再試行",
     "다시 시도",
+    "Bain triail eile as",
   ],
   Any: [
     "Cualquiera",
@@ -1328,6 +1447,7 @@ export const discoveryMessages = {
     "不限",
     "指定なし",
     "무관",
+    "Aon cheann",
   ],
   "2+ yrs": [
     "2+ años",
@@ -1339,6 +1459,7 @@ export const discoveryMessages = {
     "2 年以上",
     "2年以上",
     "2년 이상",
+    "2+ bliain",
   ],
   "5+ yrs": [
     "5+ años",
@@ -1350,6 +1471,7 @@ export const discoveryMessages = {
     "5 年以上",
     "5年以上",
     "5년 이상",
+    "5+ bliain",
   ],
   "10+ yrs": [
     "10+ años",
@@ -1361,6 +1483,7 @@ export const discoveryMessages = {
     "10 年以上",
     "10年以上",
     "10년 이상",
+    "10+ bliain",
   ],
   "Psychedelic support": [
     "Apoyo psicodélico",
@@ -1372,6 +1495,7 @@ export const discoveryMessages = {
     "迷幻体验支持",
     "サイケデリック体験のサポート",
     "사이키델릭 지원",
+    "Tacaíocht shícideileach",
   ],
   "Explore {practice}": [
     "Explorar: {practice}",
@@ -1383,6 +1507,7 @@ export const discoveryMessages = {
     "探索{practice}",
     "{practice}を探す",
     "{practice} 둘러보기",
+    "Brabhsáil {practice}",
   ],
   "A thoughtful starting point for preparation, education, and integration.": [
     "Un punto de partida consciente para la preparación, la educación y la integración.",
@@ -1394,6 +1519,7 @@ export const discoveryMessages = {
     "为准备、教育和整合提供一个经过深思的起点。",
     "準備、学び、統合を丁寧に始めるために。",
     "준비, 교육, 통합을 신중하게 시작할 수 있는 곳.",
+    "Pointe tosaigh machnamhach le haghaidh ullmhúchán, oideachas agus comhtháthú.",
   ],
   "Make space to slow down, breathe, and reconnect with yourself.": [
     "Haz espacio para bajar el ritmo, respirar y reconectar contigo.",
@@ -1405,6 +1531,7 @@ export const discoveryMessages = {
     "给自己空间，慢下来、深呼吸，重新与自己联结。",
     "立ち止まり、呼吸し、自分自身とつながり直す時間を。",
     "속도를 늦추고, 숨을 쉬며, 자신과 다시 연결할 공간을 만드세요.",
+    "Cruthaigh spás chun moilliú, análú agus ceangal leat féin arís.",
   ],
   "Bring your experiences into the everyday, at your own pace.": [
     "Integra tus experiencias en la vida cotidiana, a tu ritmo.",
@@ -1416,6 +1543,7 @@ export const discoveryMessages = {
     "按自己的节奏，将经历融入日常生活。",
     "自分のペースで、体験を日常へつなげましょう。",
     "나만의 속도로 경험을 일상에 녹여보세요.",
+    "Tabhair do thaithí isteach sa ghnáthshaol, ar do luas féin.",
   ],
   "Explore a more connected relationship with your body.": [
     "Explora una relación más conectada con tu cuerpo.",
@@ -1427,6 +1555,7 @@ export const discoveryMessages = {
     "探索与身体更紧密的联结。",
     "身体とのつながりを深めましょう。",
     "몸과 더 깊이 연결되는 관계를 탐색해 보세요.",
+    "Fiosraigh caidreamh níos dlúithe le do chorp.",
   ],
   "Find your starting point": [
     "Encuentra tu punto de partida",
@@ -1438,6 +1567,7 @@ export const discoveryMessages = {
     "找到你的起点",
     "出発点を見つける",
     "나의 출발점 찾기",
+    "Aimsigh do phointe tosaigh",
   ],
   "Explore practices and facilitator profiles. Browse freely, without creating an account.":
     [
@@ -1450,6 +1580,7 @@ export const discoveryMessages = {
       "了解各种练习和引导师资料。无需注册，即可自由浏览。",
       "実践やファシリテーターのプロフィールを見てみましょう。アカウント登録なしで自由に閲覧できます。",
       "활동과 퍼실리테이터 프로필을 살펴보세요. 계정 없이 자유롭게 둘러볼 수 있습니다.",
+    "Brabhsáil cleachtais agus próifílí éascaitheoirí. Brabhsáil go saor gan cuntas a chruthú.",
     ],
   "Explore the directory": [
     "Explora el directorio",
@@ -1461,6 +1592,7 @@ export const discoveryMessages = {
     "浏览名录",
     "一覧を見る",
     "목록 둘러보기",
+    "Brabhsáil an t-eolaire",
   ],
   "Get to know the person": [
     "Conoce a la persona",
@@ -1472,6 +1604,7 @@ export const discoveryMessages = {
     "了解对方",
     "その人を知る",
     "상대방 알아가기",
+    "Cuir aithne ar an duine",
   ],
   "Read about their approach, training, safety practices, and fees. Save a few guides to compare.":
     [
@@ -1484,6 +1617,7 @@ export const discoveryMessages = {
       "阅读其服务方式、培训背景、安全做法和费用。收藏几位引导师以便比较。",
       "方針、研修、安全への取り組み、料金を確認しましょう。いくつか保存して比較できます。",
       "접근 방식, 교육, 안전 수칙, 요금을 읽어보세요. 가이드를 저장해 비교할 수 있습니다.",
+    "Léigh faoina gcur chuige, oiliúint, cleachtais sábháilteachta agus táillí. Sábháil cúpla treoraí chun iad a chur i gcomparáid.",
     ],
   "Questions worth asking": [
     "Preguntas que vale la pena hacer",
@@ -1495,6 +1629,7 @@ export const discoveryMessages = {
     "值得询问的问题",
     "聞いておきたい質問",
     "물어볼 만한 질문",
+    "Ceisteanna ar fiú iad a chur",
   ],
   "Start a conversation": [
     "Empieza una conversación",
@@ -1506,6 +1641,7 @@ export const discoveryMessages = {
     "开始交流",
     "会話を始める",
     "대화 시작하기",
+    "Cuir tús le comhrá",
   ],
   "Use a guide’s messaging link or send an inquiry. Discuss fit and boundaries before deciding together.":
     [
@@ -1518,6 +1654,7 @@ export const discoveryMessages = {
       "使用引导师的通讯链接或发送咨询。在共同决定前，先讨论是否合适以及服务边界。",
       "ガイドのメッセージリンクを使うか、お問い合わせを送りましょう。相性や境界線を話し合ってから、一緒に決めてください。",
       "가이드의 메시지 링크를 이용하거나 문의를 보내세요. 함께 결정하기 전에 적합성과 경계를 이야기하세요.",
+    "Úsáid nasc teachtaireachtaí treoraí nó seol fiosrúchán. Pléigh oiriúnacht agus teorainneacha sula ndéanann sibh cinneadh le chéile.",
     ],
   "Know what to look for": [
     "Saber en qué fijarte",
@@ -1529,6 +1666,7 @@ export const discoveryMessages = {
     "了解需要关注的事项",
     "確認すべきことを知る",
     "살펴볼 사항 알아보기",
+    "Bíodh a fhios agat cad atá le lorg",
   ],
   "Do I need to know exactly what I’m looking for?": [
     "¿Necesito saber exactamente qué busco?",
@@ -1540,6 +1678,7 @@ export const discoveryMessages = {
     "我需要明确知道自己在寻找什么吗？",
     "何を求めているか、はっきりしている必要はありますか？",
     "무엇을 찾는지 정확히 알고 있어야 하나요?",
+    "An gá dom a bheith cinnte cén rud atá á lorg agam?",
   ],
   "No. Start with the safety library or browse profiles. Take time to learn about different practices before reaching out. You do not need an account to explore or contact a guide.":
     [
@@ -1552,6 +1691,7 @@ export const discoveryMessages = {
       "不需要。可以先阅读安全知识库或浏览资料。在联系前，花些时间了解不同的练习。浏览和联系引导师都无需账户。",
       "いいえ。安全に関する資料やプロフィールから始められます。連絡する前に、さまざまな実践をゆっくり知りましょう。閲覧やガイドへの連絡にアカウントは不要です。",
       "아니요. 안전 자료실이나 프로필부터 살펴보세요. 연락하기 전에 다양한 활동을 알아볼 시간을 가지세요. 둘러보거나 가이드에게 연락하는 데 계정은 필요하지 않습니다.",
+    "Ní gá. Tosaigh leis an leabharlann sábháilteachta nó brabhsáil próifílí. Glac am chun foghlaim faoi chleachtais éagsúla sula ndéanann tú teagmháil. Ní gá cuntas chun brabhsáil ná teagmháil a dhéanamh le treoraí.",
     ],
   "What does profile review mean?": [
     "¿Qué significa la revisión del perfil?",
@@ -1563,6 +1703,7 @@ export const discoveryMessages = {
     "资料审核意味着什么？",
     "プロフィール審査とは何ですか？",
     "프로필 검토란 무엇인가요?",
+    "Cad is brí le hathbhreithniú próifíle?",
   ],
   "Profiles require admin approval before publication. This is an administrative review, not independent verification of qualifications or a guarantee of safety. Ask about relevant training and check any claimed license with its issuing body.":
     [
@@ -1575,6 +1716,7 @@ export const discoveryMessages = {
       "资料发布前须经管理员批准。这属于行政审核，并非独立核实资质，也不保证安全。请询问相关培训，并向发证机构核实对方声称持有的执照。",
       "公開前に管理者の承認が必要です。これは事務的な審査であり、資格の独立した確認や安全の保証ではありません。関連する研修を尋ね、記載された免許は発行機関に確認してください。",
       "프로필은 게시 전에 관리자 승인이 필요합니다. 이는 행정적 검토이며, 자격을 독립적으로 검증하거나 안전을 보장하는 것은 아닙니다. 관련 교육을 물어보고, 기재된 면허는 발급 기관에서 확인하세요.",
+    "Teastaíonn ceadú riarthóra roimh phróifílí a fhoilsiú. Is athbhreithniú riaracháin é seo, ní fíorú neamhspleách cáilíochtaí ná ráthaíocht sábháilteachta. Cuir ceisteanna faoi oiliúint ábhartha agus seiceáil aon cheadúnas a mhaítear leis an gcomhlacht a d'eisigh é.",
     ],
   "Does reaching out book or charge me?": [
     "¿Contactar me reserva una sesión o genera un cargo?",
@@ -1586,6 +1728,7 @@ export const discoveryMessages = {
     "联系对方会直接预约或收费吗？",
     "連絡すると予約や料金が発生しますか？",
     "연락하면 예약되거나 요금이 청구되나요?",
+    "An gcuireann teagmháil seisiún in áirithe nó an ngearrtar táille orm?",
   ],
   "No. An inquiry starts a conversation about fit. It does not confirm a session, and there is no fee to send one. Agree on the service, cost, and cancellation terms directly with the facilitator.":
     [
@@ -1598,6 +1741,7 @@ export const discoveryMessages = {
       "不会。咨询只是开启一场关于是否合适的交流，不代表确认会谈，发送咨询也不收费。请直接与引导师商定服务、费用和取消条款。",
       "いいえ。お問い合わせは、合うかどうかを話し合うきっかけです。予約の確定ではなく、送信は無料です。サービス、費用、キャンセル条件はファシリテーターと直接合意してください。",
       "아니요. 문의는 적합성을 알아보는 대화의 시작입니다. 세션이 확정되지 않으며 문의는 무료입니다. 서비스, 비용, 취소 조건은 퍼실리테이터와 직접 합의하세요.",
+    "Ní chuireann. Cuireann fiosrúchán tús le comhrá faoi oiriúnacht. Ní dheimhníonn sé seisiún agus níl táille ar a sheoladh. Aontaigh an tseirbhís, an costas agus na téarmaí cealaithe go díreach leis an éascaitheoir.",
     ],
   "What should I share in a first message?": [
     "¿Qué debería compartir en el primer mensaje?",
@@ -1609,6 +1753,7 @@ export const discoveryMessages = {
     "第一条消息应该分享什么？",
     "最初のメッセージには何を書けばよいですか？",
     "첫 메시지에는 무엇을 적어야 하나요?",
+    "Cad ba cheart dom a roinnt i gcéad teachtaireacht?",
   ],
   "A brief introduction, the support you want, and your preferred format are enough. Leave out diagnoses, medications, trauma details, and other sensitive information. Discuss necessary screening directly with an appropriately qualified professional.":
     [
@@ -1621,6 +1766,7 @@ export const discoveryMessages = {
       "简短自我介绍、所需支持和偏好的交流形式就足够了。请勿包含诊断、用药、创伤细节等敏感信息。必要的筛查请直接与具备相应资质的专业人士讨论。",
       "簡単な自己紹介、希望するサポート、形式で十分です。診断、服薬、トラウマの詳細など、機微な情報は書かないでください。必要なスクリーニングは適切な資格を持つ専門家と直接相談してください。",
       "간단한 소개, 원하는 지원, 선호하는 진행 방식이면 충분합니다. 진단, 약물, 트라우마 세부 사항 등 민감한 정보는 적지 마세요. 필요한 선별 평가는 적절한 자격을 갖춘 전문가와 직접 논의하세요.",
+    "Is leor réamhrá gairid, an tacaíocht atá uait agus an fhormáid is fearr leat. Fág diagnóisí, cógais, sonraí tráma agus eolas íogair eile as. Pléigh aon scagadh riachtanach go díreach le gairmí a bhfuil na cáilíochtaí cuí aige.",
     ],
   "Can I find or buy substances here?": [
     "¿Puedo encontrar o comprar sustancias aquí?",
@@ -1632,6 +1778,7 @@ export const discoveryMessages = {
     "可以在这里寻找或购买物质吗？",
     "ここで物質を探したり購入したりできますか？",
     "여기서 물질을 구하거나 구매할 수 있나요?",
+    "An féidir liom substaintí a aimsiú nó a cheannach anseo?",
   ],
   "No. This platform is for legal support services, including education, preparation, and integration. It does not sell, source, or coordinate access to controlled substances.":
     [
@@ -1644,6 +1791,7 @@ export const discoveryMessages = {
       "不可以。本平台用于合法的支持服务，包括教育、准备和整合。平台不销售、寻找来源或协调获取受管制物质。",
       "いいえ。このプラットフォームは、教育、準備、統合などの合法的なサポートサービスのためのものです。規制物質の販売、調達、入手の仲介は行いません。",
       "아니요. 이 플랫폼은 교육, 준비, 통합을 포함한 합법적인 지원 서비스를 위한 것입니다. 규제 물질을 판매하거나 조달하거나 접근을 주선하지 않습니다.",
+    "Ní féidir. Is le haghaidh seirbhísí tacaíochta dleathacha, lena n-áirítear oideachas, ullmhúchán agus comhtháthú, atá an t-ardán seo. Ní dhíolann sé substaintí rialaithe, ní aimsíonn sé foinsí dóibh ná ní chomhordaíonn sé rochtain orthu.",
     ],
   "Somatic & Body Work": [
     "Trabajo somático y corporal",
@@ -1655,6 +1803,7 @@ export const discoveryMessages = {
     "身心与身体练习",
     "身体感覚とボディワーク",
     "신체 감각 및 바디워크",
+    "Obair shómatach agus choirp",
   ],
   "Meditation & Mindfulness": [
     "Meditación y atención plena",
@@ -1666,6 +1815,7 @@ export const discoveryMessages = {
     "冥想与正念",
     "瞑想とマインドフルネス",
     "명상 및 마음챙김",
+    "Machnamh agus aireachas",
   ],
   "Spiritual Support": [
     "Apoyo espiritual",
@@ -1677,6 +1827,7 @@ export const discoveryMessages = {
     "精神与灵性支持",
     "スピリチュアルなサポート",
     "영적 지원",
+    "Tacaíocht spioradálta",
   ],
   "Recovery Support": [
     "Apoyo en la recuperación",
@@ -1688,6 +1839,7 @@ export const discoveryMessages = {
     "康复支持",
     "回復サポート",
     "회복 지원",
+    "Tacaíocht téarnaimh",
   ],
   Education: [
     "Educación",
@@ -1699,6 +1851,7 @@ export const discoveryMessages = {
     "教育",
     "教育",
     "교육",
+    "Oideachas",
   ],
   "Integration Coaching": [
     "Coaching de integración",
@@ -1710,6 +1863,7 @@ export const discoveryMessages = {
     "整合指导",
     "統合コーチング",
     "통합 코칭",
+    "Cóitseáil comhtháthaithe",
   ],
   "Preparation Coaching": [
     "Coaching de preparación",
@@ -1721,6 +1875,7 @@ export const discoveryMessages = {
     "准备指导",
     "準備コーチング",
     "준비 코칭",
+    "Cóitseáil ullmhúcháin",
   ],
   "Holotropic Breathwork": [
     "Respiración holotrópica",
@@ -1732,6 +1887,7 @@ export const discoveryMessages = {
     "全息呼吸练习",
     "ホロトロピック・ブレスワーク",
     "홀로트로픽 호흡법",
+    "Obair anála holotrópach",
   ],
   "Somatic Coaching": [
     "Coaching somático",
@@ -1743,6 +1899,7 @@ export const discoveryMessages = {
     "身心指导",
     "ソマティック・コーチング",
     "신체 감각 코칭",
+    "Cóitseáil shómatach",
   ],
   "Somatic Experiencing": [
     "Experiencia somática",
@@ -1754,6 +1911,7 @@ export const discoveryMessages = {
     "躯体体验",
     "ソマティック・エクスペリエンシング",
     "신체 경험 요법",
+    "Eispéiriú sómatach",
   ],
   "Meditation Guidance": [
     "Guía de meditación",
@@ -1765,6 +1923,7 @@ export const discoveryMessages = {
     "冥想指导",
     "瞑想ガイダンス",
     "명상 지도",
+    "Treoir mhachnaimh",
   ],
   "Mindfulness Coaching": [
     "Coaching de atención plena",
@@ -1776,6 +1935,7 @@ export const discoveryMessages = {
     "正念指导",
     "マインドフルネス・コーチング",
     "마음챙김 코칭",
+    "Cóitseáil aireachais",
   ],
   "Spiritual Coaching": [
     "Coaching espiritual",
@@ -1787,6 +1947,7 @@ export const discoveryMessages = {
     "灵性指导",
     "スピリチュアル・コーチング",
     "영적 코칭",
+    "Cóitseáil spioradálta",
   ],
   "Psychedelic Integration": [
     "Integración psicodélica",
@@ -1798,6 +1959,7 @@ export const discoveryMessages = {
     "迷幻体验整合",
     "サイケデリック体験の統合",
     "사이키델릭 통합",
+    "Comhtháthú sícideileach",
   ],
   "Kambo Education": [
     "Educación sobre kambo",
@@ -1809,6 +1971,7 @@ export const discoveryMessages = {
     "Kambo 相关教育",
     "カンボに関する教育",
     "캄보 교육",
+    "Oideachas faoi Kambo",
   ],
   "Harm Reduction Education": [
     "Educación en reducción de riesgos",
@@ -1820,6 +1983,7 @@ export const discoveryMessages = {
     "减害教育",
     "ハームリダクション教育",
     "위해 감소 교육",
+    "Oideachas um laghdú dochair",
   ],
   "Ceremony Preparation": [
     "Preparación para ceremonias",
@@ -1831,6 +1995,7 @@ export const discoveryMessages = {
     "仪式准备",
     "セレモニーの準備",
     "의식 준비",
+    "Ullmhúchán searmanais",
   ],
   "Preparation Basics": [
     "Fundamentos de preparación",
@@ -1842,6 +2007,7 @@ export const discoveryMessages = {
     "准备基础",
     "準備の基本",
     "준비의 기초",
+    "Bunghnéithe an ullmhúcháin",
   ],
   "Integration Basics": [
     "Fundamentos de integración",
@@ -1853,6 +2019,7 @@ export const discoveryMessages = {
     "整合基础",
     "統合の基本",
     "통합의 기초",
+    "Bunghnéithe an chomhtháthaithe",
   ],
   "Questions to Ask a Facilitator": [
     "Preguntas para un facilitador",
@@ -1864,6 +2031,7 @@ export const discoveryMessages = {
     "向引导师提出的问题",
     "ファシリテーターに聞きたい質問",
     "퍼실리테이터에게 할 질문",
+    "Ceisteanna le cur ar éascaitheoir",
   ],
   "Red Flags in Facilitators": [
     "Señales de alerta en facilitadores",
@@ -1875,6 +2043,7 @@ export const discoveryMessages = {
     "引导师的警示信号",
     "ファシリテーター選びの注意点",
     "퍼실리테이터의 주의 신호",
+    "Comharthaí rabhaidh in éascaitheoirí",
   ],
   "Health Questions & Screening": [
     "Preguntas de salud y evaluación",
@@ -1886,6 +2055,7 @@ export const discoveryMessages = {
     "健康问题与筛查",
     "健康に関する質問とスクリーニング",
     "건강 질문 및 선별 평가",
+    "Ceisteanna sláinte agus scagadh",
   ],
   "Coaching, Therapy & Medical Care": [
     "Coaching, terapia y atención médica",
@@ -1897,6 +2067,7 @@ export const discoveryMessages = {
     "指导、心理治疗与医疗",
     "コーチング、セラピー、医療",
     "코칭, 치료 및 의료",
+    "Cóitseáil, teiripe agus cúram leighis",
   ],
   "Get Urgent Help": [
     "Obtén ayuda urgente",
@@ -1908,6 +2079,7 @@ export const discoveryMessages = {
     "寻求紧急帮助",
     "緊急の助けを求める",
     "긴급 도움 받기",
+    "Faigh cabhair phráinneach",
   ],
   "The Facilitator Network does not sell, distribute, or coordinate access to controlled substances. All services listed are legal support services including education, preparation coaching, integration guidance, breathwork, and somatic work. Nothing on this platform constitutes medical advice, diagnosis, or treatment. Always consult a licensed healthcare provider for medical concerns.":
     [
@@ -1920,6 +2092,7 @@ export const discoveryMessages = {
       "The Facilitator Network 不销售、分发或协调获取受管制物质。所有列出的服务均为合法的支持服务，包括教育、准备指导、整合指导、呼吸练习和身心练习。本平台上的任何内容均不构成医疗建议、诊断或治疗。如有医疗方面的疑问，请始终咨询持有执照的医疗专业人士。",
       "The Facilitator Network は規制物質の販売、配布、入手の仲介を行いません。掲載するサービスは、教育、準備コーチング、統合ガイダンス、呼吸法、身体感覚の実践など、合法的なサポートサービスです。このプラットフォームの内容は医療上の助言、診断、治療にはあたりません。医療に関する懸念は、必ず適切な免許を持つ医療専門家に相談してください。",
       "The Facilitator Network는 규제 물질을 판매, 배포하거나 접근을 주선하지 않습니다. 등록된 모든 서비스는 교육, 준비 코칭, 통합 지도, 호흡법, 신체 감각 활동을 포함한 합법적인 지원 서비스입니다. 이 플랫폼의 어떤 내용도 의학적 조언, 진단, 치료를 구성하지 않습니다. 의료 관련 우려 사항은 항상 면허를 가진 의료 전문가와 상담하세요.",
+    "Ní dhíolann The Facilitator Network substaintí rialaithe, ní dháileann sé iad ná ní chomhordaíonn sé rochtain orthu. Is seirbhísí tacaíochta dleathacha iad na seirbhísí go léir atá liostaithe, lena n-áirítear oideachas, cóitseáil ullmhúcháin, treoir chomhtháthaithe, obair anála agus obair shómatach. Ní comhairle leighis, diagnóis ná cóireáil aon rud ar an ardán seo. Téigh i gcomhairle le soláthraí ceadúnaithe cúraim sláinte i gcónaí maidir le hábhair imní leighis.",
     ],
   "Psychedelic Preparation & Integration — {appName}": [
     "Preparación e integración psicodélica — {appName}",
@@ -1931,6 +2104,7 @@ export const discoveryMessages = {
     "迷幻体验准备与整合 — {appName}",
     "サイケデリック体験の準備と統合 — {appName}",
     "사이키델릭 준비 및 통합 — {appName}",
+    "Ullmhúchán agus comhtháthú sícideileach — {appName}",
   ],
   "Connect with facilitators for psychedelic preparation and integration. Explore their approaches, ask questions, and decide whether to work together.":
     [
@@ -1943,6 +2117,7 @@ export const discoveryMessages = {
       "联系提供迷幻体验准备与整合支持的引导师。了解他们的方法，提出问题，再决定是否合作。",
       "サイケデリック体験の準備と統合を支えるファシリテーターとつながりましょう。方針を知り、質問し、一緒に取り組むかを決めてください。",
       "사이키델릭 준비와 통합을 돕는 퍼실리테이터와 연결하세요. 접근 방식을 살펴보고 질문한 뒤 함께할지 결정하세요.",
+    "Déan teagmháil le héascaitheoirí le haghaidh ullmhúchán agus comhtháthú sícideileach. Fiosraigh a gcur chuige, cuir ceisteanna agus déan cinneadh ar mhaith libh oibriú le chéile.",
     ],
   "Safety Library": [
     "Biblioteca de seguridad",
@@ -1954,5 +2129,6 @@ export const discoveryMessages = {
     "安全知识库",
     "安全に関する資料",
     "안전 자료실",
+    "Leabharlann sábháilteachta",
   ],
 } satisfies MessageCatalog;

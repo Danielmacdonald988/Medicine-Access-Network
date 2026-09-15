@@ -29,13 +29,24 @@ test('excluded or malformed browser languages cannot win language negotiation', 
 })
 
 test('catalogs select only the visitor language and keep untranslated text intact', () => {
-  const messages: MessageCatalog = { Hello: ['Hola', 'Bonjour', 'Olá', 'Hallo', 'Ciao', 'Hallo', '你好', 'こんにちは', '안녕하세요'] }
+  const messages: MessageCatalog = { Hello: ['Hola', 'Bonjour', 'Olá', 'Hallo', 'Ciao', 'Hallo', '你好', 'こんにちは', '안녕하세요', 'Dia duit'] }
   assert.deepEqual(dictionaryFor('en', [messages]), {})
   for (const [index, locale] of LOCALES.slice(1).entries()) {
     const dictionary = dictionaryFor(locale, [messages])
     assert.deepEqual(dictionary, { Hello: messages.Hello[index] })
     assert.equal(createTranslator(dictionary)('Author-written biography'), 'Author-written biography')
   }
+})
+
+test('Irish selections and regional dialect preferences use the shared written Irish catalog', () => {
+  assert.equal(languagePreference('ga'), 'ga')
+  assert.equal(resolveLocale('ga', 'en-US'), 'ga')
+  for (const tag of ['ga', 'ga-IE', 'ga-GB', 'GA-ie', 'ga-Latn-IE', 'ga-IE-x-connacht', 'ga-IE-x-munster', 'ga-GB-x-ulster']) {
+    assert.equal(resolveLocale('auto', `${tag},en;q=0.8`), 'ga', tag)
+  }
+  assert.equal(resolveLocale('auto', 'ga-IE;q=0,en;q=0.8'), 'en')
+  assert.equal(resolveLocale('auto', 'ga-IE;q=0.4,fr;q=0.9'), 'fr')
+  assert.equal(resolveLocale('auto', 'gd-GB,en;q=0.8'), 'en')
 })
 
 test('interpolation preserves authored values literally without recursive replacement', () => {
