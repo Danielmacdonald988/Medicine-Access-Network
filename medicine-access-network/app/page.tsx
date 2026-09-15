@@ -174,6 +174,13 @@ export default async function Home() {
           <span className={styles.imageOverline}>{t("Room to grow")}</span>
         </div>
         <HomeSearch />
+        <p className={styles.facilitatorInvite}>
+          <span>{t("Are you a facilitator?")}</span>
+          <Link href="/signup" className={styles.inlineLink}>
+            {t("Join the network")}
+            <ArrowRight size={16} aria-hidden />
+          </Link>
+        </p>
       </section>
 
       <section

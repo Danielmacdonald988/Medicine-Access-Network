@@ -179,8 +179,8 @@ export function Navbar({ user }: NavbarProps) {
                   className="h-12 gap-2.5 rounded-lg border-[#a7b3a0] bg-transparent px-4 text-foreground hover:bg-secondary"
                   asChild
                 >
-                  <Link href="/onboarding/facilitator">
-                    {t("For facilitators")}{" "}
+                  <Link href="/signup">
+                    {t("List your practice")}{" "}
                     <ArrowUpRight className="size-4" aria-hidden="true" />
                   </Link>
                 </Button>
@@ -206,11 +206,23 @@ export function Navbar({ user }: NavbarProps) {
           </button>
         </div>
 
+        {!user && (
+          <div className="network-shell pb-3 xl:hidden">
+            <Link
+              href="/signup"
+              className="flex min-h-11 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              {t("Join as a facilitator")}
+              <ArrowUpRight className="size-4 shrink-0" aria-hidden="true" />
+            </Link>
+          </div>
+        )}
+
         {/* Mobile nav */}
         {mobileOpen && (
           <div
             id="mobile-navigation"
-            className="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-border bg-background py-4 xl:hidden"
+            className="max-h-[calc(100dvh-9rem)] overflow-y-auto border-t border-border bg-background py-4 xl:hidden"
             onClick={(event) => {
               if ((event.target as HTMLElement).closest("a"))
                 setMobileOpen(false);
@@ -285,7 +297,7 @@ export function Navbar({ user }: NavbarProps) {
                       <Link href="/login">{t("Facilitator sign in")}</Link>
                     </Button>
                     <Button className="h-11" asChild>
-                      <Link href="/onboarding/facilitator">
+                      <Link href="/signup">
                         {t("List your practice")}{" "}
                         <ArrowUpRight className="size-4" aria-hidden="true" />
                       </Link>

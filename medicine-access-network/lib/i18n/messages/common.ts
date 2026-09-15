@@ -1,6 +1,9 @@
 import type { MessageCatalog } from '../config'
 
 export const commonMessages = {
+  'Join as a facilitator': ['Únete como facilitador', 'Rejoindre en tant que facilitateur', 'Participe como facilitador', 'Als Begleitperson registrieren', 'Iscriviti come facilitatore', 'Meld je aan als begeleider', '注册成为引导师', 'ファシリテーターとして登録', '진행자로 가입하기'],
+  'Are you a facilitator?': ['¿Eres facilitador?', 'Vous êtes facilitateur ?', 'Você é facilitador?', 'Sind Sie Begleitperson?', 'Sei un facilitatore?', 'Ben je een begeleider?', '您是引导师吗？', 'ファシリテーターの方ですか？', '진행자이신가요?'],
+  'Join the network': ['Únete a la red', 'Rejoindre le réseau', 'Participe da rede', 'Dem Netzwerk beitreten', 'Unisciti alla rete', 'Sluit je aan bij het netwerk', '加入网络', 'ネットワークに参加', '네트워크 가입하기'],
   'Language': ['Idioma', 'Langue', 'Idioma', 'Sprache', 'Lingua', 'Taal', '语言', '言語', '언어'],
   'Browser default': ['Idioma del navegador', 'Langue du navigateur', 'Idioma do navegador', 'Browsersprache', 'Lingua del browser', 'Browsertaal', '浏览器默认语言', 'ブラウザーの言語', '브라우저 기본 언어'],
   'Changing language…': ['Cambiando idioma…', 'Changement de langue…', 'Alterando idioma…', 'Sprache wird geändert…', 'Cambio lingua…', 'Taal wijzigen…', '正在切换语言…', '言語を変更中…', '언어 변경 중…'],

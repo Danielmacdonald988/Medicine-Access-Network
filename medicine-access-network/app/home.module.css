@@ -746,3 +746,30 @@
     grid-template-columns: 1fr;
   }
 }
+
+.facilitatorInvite {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 10px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  border: 1px solid #dce3d7;
+  border-radius: 10px;
+  background: #e8eddf;
+  font-size: 0.875rem;
+}
+.facilitatorInvite a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 8px;
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .facilitatorInvite {
+    order: 5;
+  }
+}
