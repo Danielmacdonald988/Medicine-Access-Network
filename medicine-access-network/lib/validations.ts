@@ -66,7 +66,8 @@ export const facilitatorOnboardingSchema = z.object({
   linkedin_url: socialUrlSchema('linkedin_url'),
   website_url: socialUrlSchema('website_url'),
 
-  // Step 14 — stripped before DB write
+  // Step 14 — explicit version sent by the form and verified by the server
+  agreement_version: z.literal('2026-09-27.1', { message: 'Refresh this page to review the current agreement.' }),
   platform_agreement: z.literal(true, {
     message: 'You must agree to the platform rules to apply',
   }),
@@ -119,7 +120,8 @@ export const reviewSchema = z.object({
 export const verificationNoteSchema = z.object({
   status: z.enum(['pending', 'approved', 'rejected']),
   note: z.string().max(1000).optional(),
-})
+  review_checklist: z.boolean().optional(),
+}).refine(value => value.status !== 'approved' || value.review_checklist === true, { message: 'Complete the approval checklist before publishing.' })
 
 // Inferred types
 export type SignUpInput = z.infer<typeof signUpSchema>

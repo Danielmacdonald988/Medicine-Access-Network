@@ -68,15 +68,10 @@ export interface FacilitatorPublicProfile {
   id: string
   user_id: string
   display_name: string
-  bio: string
   location?: string
   remote_available: boolean
   modalities: string[]
   years_experience?: number
-  lineage_or_training?: string
-  certifications?: string[]
-  safety_practices?: string
-  contraindications_acknowledged: boolean
   donation_based: boolean
   minimum_donation?: number
   hourly_rate?: number

@@ -14,37 +14,14 @@ async function requireAdmin(supabase: AdminSupabase) {
 }
 
 async function saveReview(supabase: AdminSupabase, adminId: string, profileId: string, input: VerificationNoteInput) {
-  const { data: profile, error: lookupError } = await supabase
-    .from('facilitator_profiles')
-    .select('user_id')
-    .eq('id', profileId)
-    .maybeSingle()
-
-  if (lookupError) return { success: false as const, status: 500, error: 'Unable to load this application.' }
-  if (!profile) return { success: false as const, status: 404, error: 'Facilitator not found.' }
-
-  const { data: updated, error: updateError } = await supabase
-    .from('facilitator_profiles')
-    .update({
-      verification_status: input.status,
-      visibility: input.status === 'approved' ? 'public' : 'hidden',
-    })
-    .eq('id', profileId)
-    .select('id')
-    .maybeSingle()
-
-  if (updateError || !updated) return { success: false as const, status: 500, error: 'The review decision could not be saved. Please try again.' }
-
-  // Record a note only after the publication decision has succeeded.
-  if (input.note) {
-    const { error } = await supabase.from('verification_notes').insert({
-      facilitator_id: profile.user_id,
-      admin_id: adminId,
-      status: input.status,
-      note: input.note,
-    })
-    if (error) return { success: true as const, noteSaved: false }
-  }
+  void adminId // Database records auth.uid(), never a client-supplied admin ID.
+  const { error } = await supabase.rpc('review_facilitator_application', {
+    p_profile_id: profileId,
+    p_status: input.status,
+    p_note: input.note || null,
+    p_checklist_version: input.status === 'approved' && input.review_checklist ? '2026-09-27.1' : null,
+  })
+  if (error) return { success: false as const, status: error.code === 'P0002' ? 404 : error.code === '23514' ? 400 : 500, error: 'The decision could not be saved. Check the application and approval checklist, then retry.' }
   return { success: true as const, noteSaved: true }
 }
 
@@ -82,6 +59,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   const note = formData.get('note')
   const parsed = verificationNoteSchema.safeParse({
     status: formData.get('status'),
+    review_checklist: formData.get('review_checklist') === 'on',
     note: typeof note === 'string' ? note.trim() || undefined : undefined,
   })
   if (!parsed.success) return NextResponse.redirect(new URL('/admin?notice=invalid', request.url), 303)

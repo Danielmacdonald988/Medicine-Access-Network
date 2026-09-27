@@ -27,6 +27,7 @@ function fixture({ admin = true, updateFails = false, noteFails = false } = {}) 
   const writes = []
   const supabase = {
     auth: { getUser: async () => ({ data: { user: { id: 'admin-id' } } }) },
+    rpc: async (name, value) => { writes.push({ rpc: name, value }); return { error: updateFails || noteFails ? {code: 'XX000'} : null } },
     from(table) {
       let update
       const query = {
@@ -54,7 +55,7 @@ function fixture({ admin = true, updateFails = false, noteFails = false } = {}) 
 const context = () => ({ params: Promise.resolve({ id: 'profile-id' }) })
 function request(status, note, headers = {}) {
   return new Request('https://directory.test/api/admin/facilitators/profile-id', {
-    method: 'PATCH', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify({ status, note }),
+    method: 'PATCH', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify({ status, note, review_checklist: true }),
   })
 }
 
@@ -63,7 +64,7 @@ test('admin approval publishes and other review decisions hide the profile in th
     const { writes, routes } = fixture()
     const response = await routes.PATCH(request(status), context())
     assert.equal(response.status, 200)
-    assert.deepEqual(writes, [{ table: 'facilitator_profiles', value: { verification_status: status, visibility: status === 'approved' ? 'public' : 'hidden' } }])
+    assert.deepEqual(writes, [{ rpc: 'review_facilitator_application', value: { p_profile_id: 'profile-id', p_status: status, p_note: null, p_checklist_version: status === 'approved' ? '2026-09-27.1' : null } }])
   }
 })
 
@@ -85,10 +86,11 @@ test('HTML review form reports publication or note failure after redirecting to 
     const { routes } = fixture({ noteFails })
     const form = new FormData()
     form.set('status', 'approved')
+    form.set('review_checklist', 'on')
     form.set('note', 'A review note')
     const response = await routes.POST(new Request('https://directory.test/api/admin/facilitators/profile-id', { method: 'POST', body: form }), context())
     assert.equal(response.status, 303)
-    assert.equal(new URL(response.headers.get('Location')).searchParams.get('notice'), noteFails ? 'note_failed' : 'published')
+    assert.equal(new URL(response.headers.get('Location')).searchParams.get('notice'), noteFails ? 'update_failed' : 'published')
   }
 })
 
@@ -129,13 +131,12 @@ test('native same-origin approval and rejection forms work with empty or populat
       const response = await routes.POST(new Request('https://directory.test/api/admin/facilitators/profile-id', {
         method: 'POST',
         headers: { Origin: 'https://directory.test', 'Sec-Fetch-Site': 'same-origin' },
-        body: new URLSearchParams({ note, status }),
+        body: new URLSearchParams({ note, status, review_checklist: 'on' }),
       }), context())
       assert.equal(response.status, 303)
       assert.equal(new URL(response.headers.get('Location')).searchParams.get('notice'), status === 'approved' ? 'published' : 'hidden')
-      assert.deepEqual(writes[0].value, { verification_status: status, visibility: status === 'approved' ? 'public' : 'hidden' })
-      assert.equal(writes.length, note ? 2 : 1)
-      if (note) assert.equal(writes[1].value.note, note.trim())
+      assert.deepEqual(writes[0].value, { p_profile_id: 'profile-id', p_status: status, p_note: note.trim() || null, p_checklist_version: status === 'approved' ? '2026-09-27.1' : null })
+      assert.equal(writes.length, 1)
     }
   }
 })
@@ -160,4 +161,11 @@ test('oversized approval bodies are rejected before any publication or note writ
     assert.equal((await routes[method](incoming, context())).status, 413)
     assert.deepEqual(writes, [])
   }
+})
+
+test('approval requires an explicit checklist confirmation before any database write', async () => {
+ const { writes, routes } = fixture()
+ const response = await routes.PATCH(new Request('https://directory.test/api/admin/facilitators/profile-id', {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'approved'})}),context())
+ assert.equal(response.status,400)
+ assert.deepEqual(writes,[])
 })

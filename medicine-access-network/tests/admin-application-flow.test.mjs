@@ -46,6 +46,7 @@ const application = (overrides = {}) => ({
   signal_url: null,
   telegram_url: null,
   platform_agreement: true,
+  agreement_version: '2026-09-27.1',
   ...overrides,
 })
 
@@ -374,4 +375,16 @@ test('application saves normalized structured locations instead of caller-suppli
     assert.equal((await invalid.applications.POST(submission({application:application({locations})}))).status,400)
     assert.deepEqual(invalid.writes,[])
   }
+})
+
+test('applications require current agreement acceptance and cannot supply the recorded time', async () => {
+ for (const changes of [{agreement_version: undefined}, {agreement_version:'obsolete'}, {platform_agreement:false}]) {
+  const f=fixture()
+  assert.equal((await f.applications.POST(submission({application:application(changes)}))).status,400)
+  assert.equal(f.writes.length,0)
+ }
+ const f=fixture()
+ assert.equal((await f.applications.POST(submission({application:application({agreement_accepted_at:'2000-01-01'})}))).status,201)
+ assert.equal(f.writes[0].value.agreement_version,'2026-09-27.1')
+ assert.equal('agreement_accepted_at' in f.writes[0].value,false)
 })

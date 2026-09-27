@@ -1,3 +1,4 @@
+import { SocialLinks } from '@/components/profile/SocialLinks'
 import { EngagementMetrics } from '@/components/admin/EngagementMetrics'
 import { getTranslation } from '@/lib/i18n/server'
 import type { Locale } from '@/lib/i18n/config'
@@ -40,8 +41,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   const notices: Record<string, string> = {
     published: 'Profile approved and published in the public directory.',
     hidden: 'Review decision saved. The profile is hidden from the public directory.',
-    invalid: 'The review decision was not valid. Please try again.',
-    update_failed: 'The review decision could not be saved. Please try again.',
+    invalid: 'Approval requires completing the review checklist. Check the decision and try again.',
+    update_failed: 'The review decision could not be saved. Approval requires current agreement acceptance and a completed checklist. Confirm these, then retry.',
     note_failed: 'The review decision was saved, but the optional note could not be recorded.',
     notifications_sent: 'The email service accepted this batch of alerts. Other alerts may still be queued or delayed. Check your inbox and spam folder; inbox delivery is not confirmed here.',
     notifications_not_ready: 'No alerts were ready to send in this attempt. Delayed alerts may still be waiting; retry later.',
@@ -62,7 +63,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     supabase
       .from('facilitator_profiles')
       .select(
-        'id, display_name, location, modalities, bio, safety_practices, years_experience, lineage_or_training, certifications, created_at, user_id, image_paths, whatsapp_url, signal_url, telegram_url'
+        'id, display_name, location, modalities, bio, safety_practices, years_experience, lineage_or_training, certifications, agreement_version, agreement_accepted_at, created_at, user_id, image_paths, whatsapp_url, signal_url, telegram_url, instagram_url, facebook_url, linkedin_url, website_url'
       )
       .eq('verification_status', 'pending')
       .order('created_at', { ascending: true }),
@@ -225,6 +226,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                       <p className="mt-2 text-xs text-stone-600">{t("The link format is checked. Confirm the destination belongs to this guide during review.")}</p>
                     </> : <p className="text-sm text-stone-600">{t("No direct contact links supplied; the website inquiry form remains available.")}</p>}
                   </div>
+                  <SocialLinks profile={f} />
                   {/* Modalities */}
                   {(f.modalities ?? []).length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
@@ -254,6 +256,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                     </div>
                   )}
 
+                  {(f.certifications ?? []).length > 0 && <div><p className="text-xs font-medium text-stone-500">Certifications supplied for review</p><p className="text-sm">{f.certifications.join(', ')}</p></div>}
                   {/* Safety */}
                   <div>
                     <p className="mb-1 text-xs font-medium uppercase tracking-wide text-stone-400">{t("Safety practices")}</p>
@@ -268,6 +271,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
 
                   <Separator />
 
+                  <p className="text-sm text-stone-600">Agreement: {f.agreement_version ? `${f.agreement_version} · ${f.agreement_accepted_at ? new Date(f.agreement_accepted_at).toISOString() : 'No acceptance time recorded'}` : 'No recorded acceptance of the current agreement. Request a new submission.'}</p>
+                  <a href="/review-standards" target="_blank" rel="noopener noreferrer" className="text-sm underline">Read the approval checklist</a>
                   {/* Approve / Reject form */}
                   <form
                     action={`/api/admin/facilitators/${f.id}`}
@@ -284,6 +289,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                       className="text-base sm:text-sm"
                     />
                     <p className="text-xs leading-relaxed text-stone-600">{t("Approving publishes this profile so visitors can view it and send conversation requests. Rejecting keeps it hidden.")}</p>
+                    <label className="flex items-start gap-2 text-sm leading-relaxed"><input type="checkbox" name="review_checklist" className="mt-1" />I reviewed the required application details, service selections and boundaries, training and safety responses, photos and contact destinations, and current agreement acceptance. I found no unresolved conflict with the listing rules. This is administrative review, not credential or safety certification.</label>
                     <div className="flex flex-col gap-3 sm:flex-row">
                       <Button
                         type="submit"
@@ -339,7 +345,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                     </Badge>
                     {f.verification_status === 'approved' && f.visibility !== 'public' && (
                       <form action={`/api/admin/facilitators/${f.id}`} method="POST">
-                        <Button type="submit" name="status" value="approved" variant="outline" className="min-h-11">{t("Publish profile")}</Button>
+                        <Button type="submit" name="status" value="pending" variant="outline" className="min-h-11">{t("Return to review")}</Button>
                       </form>
                     )}
                     <span className="text-xs text-stone-400">

@@ -50,6 +50,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     { url: `${SITE_URL}/about` },
     { url: `${SITE_URL}/contact` },
+    ...['privacy', 'consumer-health-privacy', 'terms', 'provider-agreement', 'review-standards'].map(path => ({ url: `${SITE_URL}/${path}` })),
     ...resourceEntries,
     ...facilitatorEntries,
   ]

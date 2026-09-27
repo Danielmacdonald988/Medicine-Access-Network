@@ -22,6 +22,7 @@ export default async function SignUpPage() {
       </CardHeader>
       <CardContent className="px-6 sm:px-8">
         <SignUpForm />
+        <p className="mt-4 text-xs leading-relaxed text-stone-600">We use your name and email to create your provider account and send sign-in links. Read our <Link href="/privacy" className="underline">Privacy Policy</Link> and <Link href="/terms" className="underline">Terms of Use</Link>. Full agreement acceptance is required when you submit your application.</p>
       </CardContent>
       <CardFooter className="justify-center border-t border-border bg-muted/50 px-6 py-5 text-center sm:px-8">
         <p className="text-sm text-muted-foreground">{t("Already have an account?")}{' '}

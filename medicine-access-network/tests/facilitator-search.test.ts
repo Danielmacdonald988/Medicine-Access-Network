@@ -61,7 +61,7 @@ test('punctuation and wildcard characters search literally instead of becoming p
   assert.equal(new RegExp(pattern, 'i').test(`About ${input.toLowerCase()} here`), true)
   assert.equal(new RegExp(pattern, 'i').test('Anything B C D E F'), false)
   const expression = textSearchExpression(input)
-  const firstValue = expression.slice('display_name.imatch.'.length, expression.indexOf(',bio.imatch.'))
+  const firstValue = expression.slice('display_name.imatch.'.length, expression.indexOf(',location.imatch.'))
   assert.equal(JSON.parse(firstValue), pattern)
   assert.equal(expression.includes('modalities.ov.'), false)
 })
@@ -121,7 +121,8 @@ test('database search finds older matching profiles beyond the original 50-row c
   const supabase = clientWithFetch(async (input, options) => {
     const url = new URL(String(input))
     assert.equal(url.pathname, '/rest/v1/facilitator_public_profiles')
-    assert.equal(url.searchParams.get('select'), '*')
+    assert.ok(!url.searchParams.get('select')?.split(',').includes('bio'))
+    assert.ok(url.searchParams.get('select')?.includes('display_name'))
     // The public view enforces approval and visibility and does not expose this column.
     assert.equal(url.searchParams.has('verification_status'), false)
     assert.equal(url.searchParams.get('order'), 'created_at.desc,id.desc')

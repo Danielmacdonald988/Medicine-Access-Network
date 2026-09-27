@@ -41,7 +41,7 @@ const STEP_META: Record<number, { title: string; description: string }> = {
   4: {
     title: 'Tell us about your practice',
     description:
-      'Your bio helps our team review your application. Public profiles show your selected services and basic details.',
+      'Your bio is for you and our administrators to review. Public profiles show your selected services and basic details.',
   },
   5: {
     title: 'What modalities do you offer?',
@@ -59,7 +59,7 @@ const STEP_META: Record<number, { title: string; description: string }> = {
   8: {
     title: 'How do you keep clients safe?',
     description:
-      'Required. Our team reviews this information when assessing your application.',
+      'Required. This information is available to you and our administrators, not on your public listing.',
   },
   9: {
     title: 'Contraindication awareness',
@@ -222,6 +222,7 @@ export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }:
       website_url: existingProfile?.website_url ?? '',
 
       platform_agreement: undefined,
+      agreement_version: '2026-09-27.1',
     },
   })
 
@@ -808,6 +809,7 @@ export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }:
       {/* ── Step 14: Platform agreement ──────────────────────────────────────── */}
       {step === 14 && (
         <div className="space-y-4">
+          <p className="text-sm leading-relaxed">Read the <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline">Terms of Use</a>, <a href="/provider-agreement" target="_blank" rel="noopener noreferrer" className="underline">Provider Agreement</a>, and <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline">Privacy Policy</a> before agreeing. Links open in a new tab. These documents are in English.</p>
           <ul className="space-y-2 rounded-xl border border-stone-200 bg-stone-50 p-5">
             {PLATFORM_RULES.map((rule, i) => (
               <li key={i} className="flex items-start gap-2.5 text-sm text-stone-700">
@@ -840,7 +842,7 @@ export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }:
                   }
                   className="mt-0.5 shrink-0"
                 />
-                <span className="text-sm font-medium text-stone-800">{t("I have read and agree to all of the platform rules above.")}</span>
+                <span className="text-sm font-medium text-stone-800">{t("I am at least 18. I agree to the platform rules, Terms of Use, and Provider Agreement, and acknowledge the Privacy Policy (version 2026-09-27.1).") }</span>
               </label>
             )}
           />

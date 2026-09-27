@@ -90,7 +90,7 @@ function quoteFilterValue(value: string): string {
 
 export function textSearchExpression(q: string): string {
   const value = quoteFilterValue(literalSearchPattern(q))
-  const clauses = ['display_name', 'bio', 'location'].map((column) => `${column}.imatch.${value}`)
+  const clauses = ['display_name', 'location'].map((column) => `${column}.imatch.${value}`)
   // Only expand a small set of plain-language descriptions of the catalog.
   // These are support categories, not a clinical or suitability assessment.
   const aliases: Record<string, 'preparation' | 'integration'> = {
@@ -107,7 +107,7 @@ export function textSearchExpression(q: string): string {
   const term = q.toLowerCase().trim().replace(/\s+/g, ' ')
   const category = Object.hasOwn(aliases, term) ? aliases[term] : undefined
   // Match translated catalog labels without rewriting the visitor's words or
-  // losing matches against biographies/names written in their original language.
+  // losing matches against names written in their original language.
   const normalized = term.normalize('NFKD').replace(/\p{M}/gu, '')
   const translatedNames: string[] = Object.hasOwn(translatedSearchAliases, normalized)
     ? translatedSearchAliases[normalized as keyof typeof translatedSearchAliases]
@@ -123,7 +123,7 @@ export function textSearchExpression(q: string): string {
 export function buildFacilitatorQuery(
   supabase: SupabaseClient,
   filters: FacilitatorFilters,
-  { limit, offset, columns = '*' }: { limit: number; offset: number; columns?: string }
+  { limit, offset, columns = 'id, user_id, display_name, location, remote_available, modalities, years_experience, donation_based, minimum_donation, hourly_rate, avatar_url, image_paths, whatsapp_url, signal_url, telegram_url, instagram_url, facebook_url, linkedin_url, website_url, created_at' }: { limit: number; offset: number; columns?: string }
 ) {
   let query = supabase
     // The public view owns the approved + public visibility rule and excludes

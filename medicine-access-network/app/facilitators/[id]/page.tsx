@@ -12,7 +12,6 @@ import {
   MapPin,
   Video,
   Star,
-  ShieldCheck,
   Clock,
   AlertTriangle,
   Ban,
@@ -233,7 +232,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                 href="#profile-review"
                 className="inline-flex min-h-9 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 underline-offset-4 hover:underline"
               >
-                <ShieldCheck aria-hidden="true" className="size-3" />{t("Profile reviewed")}</a>
+                {t("Listing approved")}</a>
               <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-stone-500">
                 {facilitator.location && (
                   <span className="flex items-center gap-1.5">
@@ -367,8 +366,8 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
             <h2
               id="profile-review-heading"
               className="font-semibold text-emerald-900"
-            >{t("What “profile reviewed” means")}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-emerald-900">{t("The platform team has approved this profile for the directory. Approval does not verify a clinical license or guarantee safety, suitability, or an outcome. Service selections and profile details are self-reported.")}</p>
+            >{t("What “listing approved” means")}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-emerald-900">{t("An administrator approved this listing for publication. Service selections and profile details are self-reported. Approval is not independent verification of identity, credentials, insurance, service legality, or safety, and does not guarantee results.")}</p>
             <Link
               href="/resources/questions-to-ask"
               className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-emerald-800 underline underline-offset-4"

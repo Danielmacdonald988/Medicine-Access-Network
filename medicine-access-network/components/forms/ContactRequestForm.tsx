@@ -327,6 +327,7 @@ export function ContactRequestForm({
           id={`${id}-message-help`}
           className="text-sm leading-relaxed text-stone-600"
         >{t("This message is shared with the guide. Describe the support you want; leave out medical records, medication details, trauma histories, and other sensitive information. 20–1,000 characters.")}</p>
+        <p className="text-xs text-stone-600">Read our <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline">Privacy Policy</a>, <a href="/consumer-health-privacy" target="_blank" rel="noopener noreferrer" className="underline">Consumer Health Data Privacy Policy</a>, and <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline">Terms of Use</a>. Links open in a new tab. We use your details to deliver this request to the selected guide.</p>
         <Textarea
           id={`${id}-message`}
           rows={4}

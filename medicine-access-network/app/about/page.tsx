@@ -17,11 +17,11 @@ export default async function AboutPage() {
       <p className="mt-6 text-lg leading-relaxed text-stone-600">{t('Discover preparation, integration, breathwork, and wellness support. Explore profiles and resources without creating an account.')}</p>
       <section id="profile-review" className="mt-10 scroll-mt-24 rounded-2xl border border-emerald-200 bg-white p-6 sm:p-8">
         <ShieldCheck className="mb-4 size-7 text-emerald-800" aria-hidden />
-        <h2 className="text-2xl font-semibold">{t('What “Profile reviewed” means')}</h2>
-        <p className="mt-4 leading-relaxed text-stone-600">{t('An administrator has approved the profile for the public directory. Training, experience, and safety practices are described by the guide.')}</p>
+        <h2 className="text-2xl font-semibold">{t('What “Listing approved” means')}</h2>
+        <p className="mt-4 leading-relaxed text-stone-600">{t('An administrator approved the listing for publication. Listed services and experience are self-reported. Application narratives are available to the applicant and authorized administrators.')}</p>
         <h3 className="mt-6 font-semibold">{t('What it does not mean')}</h3>
-        <p className="mt-2 leading-relaxed text-stone-600">{t('Approval is not a medical license, independent verification of every claim, or a guarantee of safety or results. Check any claimed license with its issuing organization.')}</p>
-        <p className="mt-4 leading-relaxed text-stone-600">{t('Ask about fees, qualifications, and boundaries. Decide whether the service fits your needs. You have the right to ask questions and decline.')}</p>
+        <p className="mt-2 leading-relaxed text-stone-600">{t('Approval is not independent verification of identity, credentials, insurance, service legality, or safety. It is not an endorsement or a guarantee of results. Check any claimed license with its issuing organization.')}</p>
+        <p className="mt-4 leading-relaxed text-stone-600">{t('Ask about fees, qualifications, and boundaries. Decide whether the service fits your needs. You have the right to ask questions and decline.')}</p><p className="mt-3"><Link href="/review-standards" className="underline">Read our administrative review standards</Link></p>
         <Link href="/resources/questions-to-ask" className="mt-5 inline-flex items-center gap-2 font-medium text-emerald-800 underline underline-offset-4">{t('Questions to ask a guide')} <ArrowRight className="size-4 shrink-0" aria-hidden /></Link>
       </section>
       <section id="site-analytics" className="mt-10 scroll-mt-24">

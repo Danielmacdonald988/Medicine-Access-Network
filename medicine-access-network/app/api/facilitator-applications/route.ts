@@ -66,6 +66,7 @@ export async function POST(request: Request) {
 
     const profileData = {
       user_id: user.id,
+      agreement_version: data.agreement_version,
       display_name: data.display_name,
       bio: data.bio,
       location: formatProfileLocations(data.locations),

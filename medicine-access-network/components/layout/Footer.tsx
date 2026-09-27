@@ -22,6 +22,11 @@ const footerLinks = {
   "About & help": [
     { href: "/about", label: "About & profile review" },
     { href: "/contact", label: "Contact & report a concern" },
+    { href: "/privacy", label: "Privacy Policy" },
+    { href: "/consumer-health-privacy", label: "Consumer Health Data Privacy" },
+    { href: "/terms", label: "Terms of Use" },
+    { href: "/provider-agreement", label: "Provider Agreement" },
+    { href: "/review-standards", label: "Review standards" },
     { href: "/resources/questions-to-ask", label: "Choosing a guide" },
   ],
 };

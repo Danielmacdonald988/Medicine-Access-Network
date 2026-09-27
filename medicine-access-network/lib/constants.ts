@@ -130,7 +130,7 @@ export const PREFERRED_FORMATS = [
 
 export const SAFETY_DISCLAIMER =
   `${APP_NAME} does not sell, distribute, or coordinate access to controlled substances. ` +
-  'All services listed are legal support services including education, preparation coaching, integration guidance, ' +
+  'Providers must offer only lawful support within their qualifications, including education, preparation, integration, ' +
   'breathwork, and somatic work. Nothing on this platform constitutes medical advice, diagnosis, or treatment. ' +
   'Always consult a licensed healthcare provider for medical concerns.'
 
