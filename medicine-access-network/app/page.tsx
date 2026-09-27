@@ -42,7 +42,7 @@ const steps = [
   },
   {
     title: "Get to know the person",
-    body: "Read about their approach, training, safety practices, and fees. Save a few guides to compare.",
+    body: "Compare selected services, locations, and fees. Save a few guides to compare.",
     href: "/resources/questions-to-ask",
     action: "Questions worth asking",
   },

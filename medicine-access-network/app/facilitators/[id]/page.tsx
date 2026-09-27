@@ -8,6 +8,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import {
+  Check,
   MapPin,
   Video,
   Star,
@@ -19,7 +20,6 @@ import {
   HeartPulse,
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
@@ -46,7 +46,7 @@ export async function generateMetadata({
   // on this view at all).
   const { data } = await supabase
     .from('facilitator_public_profiles')
-    .select('display_name, bio, location, modalities, image_paths')
+    .select('display_name, location, modalities, image_paths')
     .eq('id', id)
     .maybeSingle()
 
@@ -60,9 +60,7 @@ export async function generateMetadata({
     }
   }
 
-  const description = data.location
-    ? `${data.bio.slice(0, 140)} — ${data.location}`.slice(0, 160)
-    : data.bio.slice(0, 160)
+  const description = [data.display_name, data.location, profileServices(data.modalities).join(', ')].filter(Boolean).join(' — ').slice(0, 160)
   const photoUrl = getProfileImageUrl(data.image_paths?.[0])
 
   return {
@@ -137,7 +135,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
   const { data: facilitator } = await supabase
     .from('facilitator_public_profiles')
-    .select('*')
+    .select('id, user_id, display_name, location, modalities, image_paths, remote_available, years_experience, donation_based, minimum_donation, hourly_rate, whatsapp_url, signal_url, telegram_url, instagram_url, facebook_url, linkedin_url, website_url')
     .eq('id', id)
     .maybeSingle()
 
@@ -199,7 +197,6 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
       ? t('${amount} USD per session', { amount: facilitator.hourly_rate })
       : t('Rate discussed on request')
 
-  const certifications: string[] = facilitator.certifications ?? []
   const photoUrls = (facilitator.image_paths ?? [])
     .slice(0, 5)
     .map((path: string) => getProfileImageUrl(path))
@@ -301,11 +298,8 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
         className={headerStyles.sections}
       >
         {[
-          { href: '#about', label: 'About' },
-          { href: '#approach', label: 'Approach' },
+          { href: '#services', label: 'Type of support' },
           ...(photoUrls.length ? [{ href: '#photos', label: 'Photos' }] : []),
-          { href: '#training', label: 'Training' },
-          { href: '#safety', label: 'Safety' },
           { href: '#fees', label: 'Fees' },
           { href: '#reviews', label: 'Reviews' },
           {
@@ -322,11 +316,16 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
           </a>
         ))}
       </nav>
-        <section id="about" aria-labelledby="profile-name" className={headerStyles.bio}>
-          <p dir="auto" className="mt-4 max-w-prose whitespace-pre-line break-words leading-7 text-stone-600">
-                {facilitator.bio}
-              </p>
-              {locale !== 'en' && <p className="mt-3 text-xs text-stone-500">{t('Profile descriptions and reviews are shown in their original language.')}</p>}
+        <section id="services" aria-labelledby="services-heading" className={headerStyles.services}>
+          <h2 id="services-heading" className="mb-3 text-base font-semibold text-stone-900">{t('Type of support')}</h2>
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {profileServices(facilitator.modalities).map((service) => (
+              <li key={service} className="flex items-start gap-2 text-sm text-stone-700">
+                <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 rounded bg-emerald-800 p-0.5 text-white" />
+                {t(service)}
+              </li>
+            ))}
+          </ul>
         </section>
         <div className={headerStyles.fee}>
           <p className="text-xs font-medium uppercase tracking-wide text-stone-500">{t("Listed fee · USD")}</p>
@@ -339,29 +338,6 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
         <div className="min-w-0 space-y-4 lg:col-span-2">
-          {/* Modalities */}
-          <section
-            id="approach"
-            aria-labelledby="approach-heading"
-            className="scroll-mt-24"
-          >
-            <h2
-              id="approach-heading"
-              className="mb-3 text-2xl font-medium tracking-tight text-stone-900"
-            >{t("Areas of practice")}</h2>
-            <div className="flex flex-wrap gap-2">
-              {profileServices(facilitator.modalities).map((m: string) => (
-                <Badge
-                  key={m}
-                  variant="secondary"
-                  className="rounded-full bg-stone-100 px-3 py-1.5 text-sm font-normal text-stone-700 hover:bg-stone-100"
-                >
-                  {t(m)}
-                </Badge>
-              ))}
-            </div>
-          </section>
-
           {photoUrls.length > 0 && (
             <ProfileDetails id="photos" title={t("Photos")}>
 
@@ -392,80 +368,12 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               id="profile-review-heading"
               className="font-semibold text-emerald-900"
             >{t("What “profile reviewed” means")}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-emerald-900">{t("The platform team has approved this profile for the directory. Approval does not verify a clinical license or guarantee safety, suitability, or an outcome. Training and practice details below are provided by the guide.")}</p>
+            <p className="mt-2 text-sm leading-relaxed text-emerald-900">{t("The platform team has approved this profile for the directory. Approval does not verify a clinical license or guarantee safety, suitability, or an outcome. Service selections and profile details are self-reported.")}</p>
             <Link
               href="/resources/questions-to-ask"
               className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-emerald-800 underline underline-offset-4"
             >{t("Questions to ask before choosing a guide")}</Link>
           </section>
-
-          {/* Training, lineage & certifications */}
-          <ProfileDetails id="training" title={t("Training & lineage")}>
-
-            {facilitator.lineage_or_training || certifications.length > 0 ? (
-              <div>
-                <p className="mb-3 text-xs text-stone-500">{t("Reported by the guide. Ask about the issuer, scope, and current status of any credential relevant to your needs.")}</p>
-                {facilitator.lineage_or_training && (
-                  <p dir="auto" className="whitespace-pre-line leading-relaxed text-stone-600">
-                    {facilitator.lineage_or_training}
-                  </p>
-                )}
-                {certifications.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {certifications.map((cert: string) => (
-                      <Badge
-                        key={cert}
-                        variant="outline"
-                        className="border-stone-300 text-xs text-stone-600"
-                      >
-                        {cert}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p className="text-sm leading-relaxed text-stone-600">{t("Training details have not been provided. Ask about relevant training, supervision, and the scope of their work before deciding.")}</p>
-            )}
-          </ProfileDetails>
-
-          <ProfileDetails id="safety" title={t("Safety practices & screening")}>
-
-            {facilitator.safety_practices ? (
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
-                <p className="mb-2 text-xs font-medium text-amber-800">{t("Described by the guide")}</p>
-                <p dir="auto" className="whitespace-pre-line text-sm leading-relaxed text-amber-900">
-                  {facilitator.safety_practices}
-                </p>
-              </div>
-            ) : (
-              <p className="text-sm leading-relaxed text-stone-600">{t("This profile does not describe screening or safety practices. Ask how consent, boundaries, screening, and referrals are handled.")}</p>
-            )}
-
-            {/* Contraindication awareness */}
-            {facilitator.contraindications_acknowledged && (
-              <div>
-                <h3 className="mb-3 font-semibold text-stone-900">{t("Screening commitment")}</h3>
-                <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
-                  <div className="flex items-start gap-3">
-                    <ShieldCheck className="mt-0.5 size-5 shrink-0 text-emerald-600" />
-                    <div className="text-sm leading-relaxed text-emerald-900">
-                      <p className="font-medium">
-                        {t('{name} has acknowledged a screening commitment', { name: facilitator.display_name })}</p>
-                      <p className="mt-2 text-emerald-800">{t("During their application, this guide committed to appropriate screening and declining work where contraindications are present. This is a statement from the guide, not an independent assessment of their screening or clinical qualifications.")}</p>
-                      <p className="mt-2 text-emerald-800">{t("Ask how screening works, what falls outside their scope, and how referrals are handled. Discuss medical questions with a licensed healthcare provider.")}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            <p className="text-sm leading-relaxed text-stone-600">{t("Discuss health questions with a licensed healthcare provider.")}{' '}
-              <Link
-                href="/resources/contraindications"
-                className="font-medium text-emerald-800 underline underline-offset-4"
-              >{t("Health Questions & Screening")}</Link>
-            </p>
-          </ProfileDetails>
 
           {/* Compensation */}
           <ProfileDetails id="fees" title={t("Fees & practical details")}>

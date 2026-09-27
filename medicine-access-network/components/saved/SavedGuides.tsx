@@ -4,6 +4,7 @@ import { useTranslation } from '@/components/i18n/TranslationProvider'
 
 import Link from 'next/link'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { profileServices } from '@/lib/constants'
 import { type SavedGuideProfile } from '@/lib/saved-guides'
 import { Button } from '@/components/ui/button'
 import { clearSavedGuides, removeSavedGuide, useSavedGuides } from './useSavedGuides'
@@ -13,7 +14,7 @@ import { getProfileImageUrl } from '@/lib/profile-media'
 type LoadState = { status: 'loading' } | { status: 'error' } | { status: 'ready'; profiles: SavedGuideProfile[] }
 
 function Comparison({ ids, onRemove }: { ids: string[]; onRemove: (id: string) => void }) {
-  const { t, locale } = useTranslation()
+  const { t } = useTranslation()
   const [state, setState] = useState<LoadState>({ status: 'loading' })
   const [attempt, setAttempt] = useState(0)
 
@@ -47,12 +48,11 @@ function Comparison({ ids, onRemove }: { ids: string[]; onRemove: (id: string) =
 
   const profiles = ids.map((id) => state.profiles.find((profile) => profile.id === id))
   const rows: { label: string; value: (profile: SavedGuideProfile) => ReactNode }[] = [
-    { label: 'Type of support', value: (profile) => profile.modalities.length ? profile.modalities.map((modality) => t(modality)).join(', ') : t('Ask the guide') },
+    { label: 'Type of support', value: (profile) => profile.modalities.length ? profileServices(profile.modalities).map((modality) => t(modality)).join(', ') : t('Ask the guide') },
     { label: 'Location', value: (profile) => profile.location || t('Ask the guide') },
     { label: 'Online support', value: (profile) => profile.remote_available ? t('Online sessions listed. Confirm they can work with you where you live.') : t('Not listed; ask the guide about session format.') },
     { label: 'Fees', value: (profile) => profile.donation_based ? typeof profile.minimum_donation === 'number' ? t('Suggested donation from ${amount} USD', { amount: profile.minimum_donation }) : t('Donation-based; ask about the amount') : typeof profile.hourly_rate === 'number' ? t('${amount} USD per session', { amount: profile.hourly_rate }) : t('Ask about fees') },
     { label: 'Practice experience', value: (profile) => typeof profile.years_experience === 'number' ? t('{years} years, self-reported; may include personal practice.', { years: profile.years_experience }) : t('Not specified') },
-    { label: 'Training & lineage', value: (profile) => <><p dir="auto" className="whitespace-pre-line">{profile.lineage_or_training || t('No training description listed.')}</p>{Boolean(profile.certifications?.length) && <p className="mt-2">{profile.certifications?.join(', ')}</p>}</> },
   ]
 
   return <div>
@@ -73,8 +73,6 @@ function Comparison({ ids, onRemove }: { ids: string[]; onRemove: (id: string) =
                     <AvatarFallback className="rounded-none bg-emerald-100 text-2xl font-medium text-emerald-800">{profile.display_name.split(' ').map((part) => part[0]).join('').toUpperCase().slice(0, 2)}</AvatarFallback>
                   </Avatar>
                   <Link href={`/facilitators/${id}`} className="break-words text-2xl font-medium tracking-tight text-emerald-900 underline underline-offset-4">{profile.display_name}</Link>
-                  <p dir="auto" className="mt-2 line-clamp-3 text-sm leading-relaxed text-stone-600">{profile.bio}</p>
-                  {locale !== 'en' && <p className="mt-2 text-xs text-stone-500">{t('Profile text is shown in its original language.')}</p>}
                   <Link href={`/facilitators/${id}`} className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-emerald-800 underline underline-offset-4">{t("View profile & contact")}</Link>
                 </> : <>
                   <p className="font-semibold text-stone-900">{t("Profile no longer available")}</p>

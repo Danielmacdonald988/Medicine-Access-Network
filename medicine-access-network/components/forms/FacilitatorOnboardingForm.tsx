@@ -41,7 +41,7 @@ const STEP_META: Record<number, { title: string; description: string }> = {
   4: {
     title: 'Tell us about your practice',
     description:
-      'Your bio is the centrepiece of your public profile. Be specific, honest, and human.',
+      'Your bio helps our team review your application. Public profiles show your selected services and basic details.',
   },
   5: {
     title: 'What modalities do you offer?',
@@ -59,7 +59,7 @@ const STEP_META: Record<number, { title: string; description: string }> = {
   8: {
     title: 'How do you keep clients safe?',
     description:
-      'Required. This section is displayed publicly on your profile and reviewed by our team.',
+      'Required. Our team reviews this information when assessing your application.',
   },
   9: {
     title: 'Contraindication awareness',
