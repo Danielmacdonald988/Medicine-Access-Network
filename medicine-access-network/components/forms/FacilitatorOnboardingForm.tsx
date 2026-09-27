@@ -17,6 +17,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { facilitatorOnboardingSchema, type FacilitatorOnboardingInput } from '@/lib/validations'
 import type { FacilitatorProfile } from '@/lib/types'
 import { ProfileMediaFields } from '@/components/profile/ProfileMediaFields'
+import { LocationFields } from '@/components/profile/LocationFields'
 import { SOCIAL_FIELDS } from '@/lib/social-links'
 import { MODALITIES, MODALITY_CATEGORIES, APP_NAME, profileServices } from '@/lib/constants'
 
@@ -90,7 +91,7 @@ const STEP_META: Record<number, { title: string; description: string }> = {
 
 const STEP_FIELDS: Record<number, string[]> = {
   1: ['display_name'],
-  2: ['location'],
+  2: ['locations'],
   3: ['remote_available'],
   4: ['bio'],
   5: ['modalities'],
@@ -199,7 +200,7 @@ export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }:
     resolver: zodResolver(facilitatorOnboardingSchema),
     defaultValues: {
       display_name: existingProfile?.display_name ?? initialName,
-      location: existingProfile?.location ?? '',
+      locations: existingProfile?.locations?.length ? existingProfile.locations : [{city:'',region:'',country:''}],
       remote_available: existingProfile?.remote_available ?? true,
       bio: existingProfile?.bio ?? '',
       modalities: profileServices(existingProfile?.modalities ?? []),
@@ -388,16 +389,7 @@ export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }:
 
       {/* ── Step 2: Location ─────────────────────────────────────────────────── */}
       {step === 2 && (
-        <div className="space-y-1.5">
-          <Label htmlFor="location">{t("Location")}</Label>
-          <Input
-            id="location"
-            placeholder={t("City, State or Country")}
-            autoFocus
-            {...register('location')}
-          />
-          <p className="text-xs text-stone-400">{t("Optional — used to match you with seekers looking for in-person support.")}</p>
-        </div>
+        <Controller name="locations" control={control} render={({field})=><LocationFields value={field.value} onChange={field.onChange} error={errors.locations ? 'Choose a country and region, enter a city, and remove any duplicate locations.' : undefined} />} />
       )}
 
       {/* ── Step 3: Remote availability ──────────────────────────────────────── */}

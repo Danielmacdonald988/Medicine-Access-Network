@@ -1,3 +1,4 @@
+import { locationSearchPattern } from './locations'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import translatedSearchAliases from './i18n/search-aliases.json'
 import { MODALITIES, LEGACY_MODALITIES, profileServices, serviceSearchNames } from './constants'
@@ -134,7 +135,7 @@ export function buildFacilitatorQuery(
   if (filters.remote) query = query.eq('remote_available', true)
   if (filters.donation) query = query.eq('donation_based', true)
   if (filters.modalities.length) query = query.overlaps('modalities', serviceSearchNames(filters.modalities))
-  if (filters.location) query = query.regexIMatch('location', literalSearchPattern(filters.location))
+  if (filters.location) query = query.regexIMatch('location', locationSearchPattern(filters.location))
   if (filters.minExperience) query = query.gte('years_experience', filters.minExperience)
 
   // Both orderings run in the database before pagination. The ID tiebreaker

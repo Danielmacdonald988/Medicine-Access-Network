@@ -9,13 +9,14 @@ const root = new URL('../', import.meta.url)
 
 function loadModule(path, mocks = {}) {
   const source = readFileSync(new URL(path, root), 'utf8')
-  const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText
+  const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, esModuleInterop: true, target: ts.ScriptTarget.ES2020 } }).outputText
   const loadedModule = { exports: {} }
   new Function('require', 'module', 'exports', '__dirname', code)((name) => name in mocks ? mocks[name] : require(name), loadedModule, loadedModule.exports, root.pathname)
   return loadedModule.exports
 }
 
 const schemas = loadModule('lib/validations.ts', {
+  './locations': loadModule('lib/locations.ts'),
   './social-links': loadModule('lib/social-links.ts'),
   './direct-contact': loadModule('lib/direct-contact.ts'),
   './profile-media': loadModule('lib/profile-media.ts'),
@@ -43,6 +44,7 @@ function fixture({ admin = true, updateFails = false, noteFails = false } = {}) 
   }
   const routes = loadModule('app/api/admin/facilitators/[id]/route.ts', {
     '@/lib/supabaseServer': { createServerSupabaseClient: async () => supabase },
+    '@/lib/locations': loadModule('lib/locations.ts'),
     '@/lib/validations': schemas,
     '@/lib/request-body': bodyHelpers,
   })

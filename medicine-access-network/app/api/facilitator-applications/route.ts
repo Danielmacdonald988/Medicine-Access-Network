@@ -1,3 +1,4 @@
+import { formatProfileLocations } from '@/lib/locations'
 import { after, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createAdminSupabaseClient } from '@/lib/supabaseAdmin'
@@ -67,7 +68,8 @@ export async function POST(request: Request) {
       user_id: user.id,
       display_name: data.display_name,
       bio: data.bio,
-      location: data.location || null,
+      location: formatProfileLocations(data.locations),
+      locations: data.locations,
       remote_available: data.remote_available,
       modalities: data.modalities,
       years_experience: data.years_experience ?? null,

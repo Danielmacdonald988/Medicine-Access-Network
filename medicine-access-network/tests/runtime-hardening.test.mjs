@@ -10,7 +10,7 @@ const root = new URL('../', import.meta.url)
 function loadModule(path, mocks = {}) {
   const source = readFileSync(new URL(path, root), 'utf8')
   const code = ts.transpileModule(source, {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+    compilerOptions: { module: ts.ModuleKind.CommonJS, esModuleInterop: true, target: ts.ScriptTarget.ES2020 },
   }).outputText
   const loadedModule = { exports: {} }
   new Function('require', 'module', 'exports', code)(
@@ -21,6 +21,7 @@ function loadModule(path, mocks = {}) {
 
 const bodyHelpers = loadModule('lib/request-body.ts')
 const schemas = loadModule('lib/validations.ts', {
+  './locations': loadModule('lib/locations.ts'),
   './social-links': loadModule('lib/social-links.ts'),
   './direct-contact': loadModule('lib/direct-contact.ts'),
   './profile-media': loadModule('lib/profile-media.ts'),
@@ -69,6 +70,7 @@ function contactFixture(t, options = {}) {
   const notifications = []
   const routes = loadModule('app/api/contact-requests/route.ts', {
     '@/lib/request-body': bodyHelpers,
+    '@/lib/locations': loadModule('lib/locations.ts'),
     '@/lib/validations': schemas,
     '@/lib/supabaseAdmin': {
       createAdminSupabaseClient: () => ({

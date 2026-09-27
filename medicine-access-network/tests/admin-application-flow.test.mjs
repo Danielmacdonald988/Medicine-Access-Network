@@ -10,7 +10,7 @@ const root = new URL('../', import.meta.url)
 function loadModule(path, mocks = {}) {
   const source = readFileSync(new URL(path, root), 'utf8')
   const code = ts.transpileModule(source, {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+    compilerOptions: { module: ts.ModuleKind.CommonJS, esModuleInterop: true, target: ts.ScriptTarget.ES2020 },
   }).outputText
   const loadedModule = { exports: {} }
   new Function('require', 'module', 'exports', code)(
@@ -21,6 +21,7 @@ function loadModule(path, mocks = {}) {
 
 const media = loadModule('lib/profile-media.ts')
 const schemas = loadModule('lib/validations.ts', {
+  './locations': loadModule('lib/locations.ts'),
   './social-links': loadModule('lib/social-links.ts'),
   './direct-contact': loadModule('lib/direct-contact.ts'),
   './profile-media': media,
@@ -34,7 +35,8 @@ const photoPath = `${userId}/11111111-1111-4111-8111-111111111111.webp`
 const application = (overrides = {}) => ({
   display_name: 'A guide',
   bio: 'A detailed description of my preparation and integration practice. '.repeat(3),
-  location: '',
+  location: 'ignored legacy text',
+  locations: [{city:'Cary',region:'NC',country:'US'}],
   modalities: ['integration-coaching'],
   certifications: ' Training one, , Training two ',
   safety_practices: 'I use appropriate screening, informed consent, clear boundaries, and an emergency plan.',
@@ -91,6 +93,7 @@ function fixture({ authenticated = true, role = 'facilitator', authError = null,
       },
     }) },
     '@/lib/supabaseServer': { createServerSupabaseClient: async () => supabase },
+    '@/lib/locations': loadModule('lib/locations.ts'),
     '@/lib/validations': schemas,
     '@/lib/profile-media': media,
     '@/lib/request-body': bodyHelpers,
@@ -138,7 +141,7 @@ test('new applications derive ownership from authentication and save only pendin
   assert.equal(write.value.hourly_rate, null)
   assert.equal(write.value.minimum_donation, null)
   assert.equal(write.value.years_experience, null)
-  assert.equal(write.value.location, null)
+  assert.equal(write.value.location, 'Cary, North Carolina, United States')
   assert.equal(write.value.role, undefined)
   assert.equal(write.value.platform_agreement, undefined)
   assert.equal(f.afterCallbacks.length, 1)
@@ -359,4 +362,16 @@ test('social-link saves use the same owner-scoped contact path and preserve mode
   assert.deepEqual(f.contactWrites[0].filters, [['id', profileId], ['user_id', userId]])
   assert.equal('verification_status' in f.contactWrites[0].value, false)
   assert.deepEqual(f.afterCallbacks, [])
+})
+
+test('application saves normalized structured locations instead of caller-supplied display text', async () => {
+  const f = fixture()
+  assert.equal((await f.applications.POST(submission())).status,201)
+  assert.equal(f.writes[0].value.location,'Cary, North Carolina, United States')
+  assert.deepEqual(f.writes[0].value.locations,[{city:'Cary',region:'NC',country:'US'}])
+  for (const locations of [undefined,[],[{city:'Cary',region:'NC',country:'Mexico'}]]) {
+    const invalid = fixture()
+    assert.equal((await invalid.applications.POST(submission({application:application({locations})}))).status,400)
+    assert.deepEqual(invalid.writes,[])
+  }
 })

@@ -74,3 +74,9 @@ The search tests use mocked database responses to check query construction, pagi
 - [Supabase setup](docs/supabase-setup.md)
 
 The older product specification describes the original account-based MVP. Use the current application and the product-improvements document for the account-free visitor flow.
+
+### Standardized profile locations (September 2026)
+
+Applications now collect one to five city/region/country entries. Country and region choices use the pinned `country-region-data` catalog; the server validates the relationship and derives public `location` text from `locations`. The owner-only JSON field is not exposed in the public view. Multiple places are separated with a semicolon so search terms cannot accidentally combine two different locations.
+
+Location search accepts full names, common postal abbreviations, punctuation, and accent variants. Matching runs in PostgreSQL before counts and pagination. `db/data-fixes/standardize-initial-profile-locations.sql` records the guarded one-time cleanup of the three initial profiles. The original labels are recorded there, and applying it twice deliberately fails without changing data.

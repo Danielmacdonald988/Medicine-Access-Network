@@ -1,3 +1,4 @@
+import { locationSearchPattern } from '../lib/locations'
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { createClient } from '@supabase/supabase-js'
@@ -151,7 +152,7 @@ test('all optional filters are sent to the database alongside the search', async
     assert.equal(params.get('donation_based'), 'eq.true')
     assert.equal(params.get('years_experience'), 'gte.5')
     assert.equal(params.get('modalities'), 'ov.{Breathwork,Holotropic Breathwork}')
-    assert.equal(params.get('location'), 'imatch.New York \\(NY\\)')
+    assert.equal(params.get('location'), 'imatch.' + locationSearchPattern('New York (NY)'))
     return jsonResponse([])
   })
   const filters = parseFacilitatorFilters(new URLSearchParams({ remote: 'true', donation: 'true', min_exp: '5', modality: 'Breathwork', location: 'New York (NY)' }))

@@ -18,6 +18,7 @@ const migrationNames = [
   '0005_profile_media_links.sql',
   '0006_admin_application_notifications.sql',
   '20260927192456_public_profile_social_links.sql',
+  '20260927193739_structured_profile_locations.sql',
 ]
 const migrations = await Promise.all(migrationNames.map(name => readFile(new URL(`../migrations/${name}`, import.meta.url), 'utf8')))
 let assertions = 0
@@ -87,6 +88,7 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
   await db.exec(migrations[5])
 
   await db.exec(migrations[6])
+  await db.exec(migrations[7])
 
   const id = n => `10000000-0000-0000-0000-${String(n).padStart(12, '0')}`
   const guide = id(1), otherGuide = id(2), seeker = id(3), admin = id(4), applicant = id(5), recovery = id(6)

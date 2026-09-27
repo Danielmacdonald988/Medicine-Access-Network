@@ -21,7 +21,7 @@ export default async function EditFacilitatorProfilePage() {
   const supabase = await createServerSupabaseClient()
   const { data: profile, error } = await supabase
     .from('facilitator_profiles')
-    .select('id, user_id, display_name, bio, location, remote_available, modalities, years_experience, lineage_or_training, certifications, safety_practices, contraindications_acknowledged, donation_based, minimum_donation, hourly_rate, verification_status, visibility, avatar_url, image_paths, whatsapp_url, signal_url, telegram_url, created_at, updated_at')
+    .select('id, user_id, display_name, bio, location, locations, remote_available, modalities, years_experience, lineage_or_training, certifications, safety_practices, contraindications_acknowledged, donation_based, minimum_donation, hourly_rate, verification_status, visibility, avatar_url, image_paths, whatsapp_url, signal_url, telegram_url, instagram_url, facebook_url, linkedin_url, website_url, created_at, updated_at')
     .eq('user_id', user.id)
     .maybeSingle()
 

@@ -1,3 +1,4 @@
+import { profileLocationsSchema } from './locations'
 import { z } from 'zod'
 import { socialUrlSchema } from './social-links'
 import { directContactUrlSchema } from './direct-contact'
@@ -25,7 +26,8 @@ export const loginSchema = z.object({
 export const facilitatorOnboardingSchema = z.object({
   // Steps 1–3
   display_name: z.string().min(2, 'Display name must be at least 2 characters'),
-  location: z.string().optional(),
+  location: z.string().optional(), // Legacy input is ignored when saving; display is derived.
+  locations: profileLocationsSchema,
   remote_available: z.boolean().default(true),
   // Step 4
   bio: z

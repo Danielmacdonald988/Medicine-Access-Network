@@ -9,11 +9,11 @@ const root = new URL('../', import.meta.url)
 const formSource = readFileSync(new URL('components/forms/ContactRequestForm.tsx', root), 'utf8')
 const schemaSource = readFileSync(new URL('lib/validations.ts', root), 'utf8')
 const schemaModule = { exports: {} }
-const schemaCode = ts.transpileModule(schemaSource, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText
+const schemaCode = ts.transpileModule(schemaSource, { compilerOptions: { module: ts.ModuleKind.CommonJS, esModuleInterop: true, target: ts.ScriptTarget.ES2020 } }).outputText
 const schemaImports = {}
-for (const dependency of ['direct-contact', 'profile-media', 'social-links']) {
+for (const dependency of ['direct-contact', 'profile-media', 'social-links', 'locations']) {
   const source = readFileSync(new URL(`lib/${dependency}.ts`, root), 'utf8')
-  const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText
+  const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, esModuleInterop: true, target: ts.ScriptTarget.ES2020 } }).outputText
   const loaded = { exports: {} }
   new Function('require', 'module', 'exports', compiled)(require, loaded, loaded.exports)
   schemaImports[`./${dependency}`] = loaded.exports

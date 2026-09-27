@@ -1,3 +1,4 @@
+import type { ProfileLocation } from './locations'
 export type UserRole = 'seeker' | 'facilitator' | 'admin'
 export type ExperienceLevel = 'curious' | 'beginner' | 'experienced'
 export type PreferredFormat = 'voice' | 'video' | 'in_person' | 'async'
@@ -27,6 +28,7 @@ export interface SeekerProfile {
 }
 
 export interface FacilitatorProfile {
+  locations?: ProfileLocation[]
   id: string
   user_id: string
   display_name: string

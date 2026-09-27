@@ -1728,3 +1728,10 @@ select id, display_name, bio, location, remote_available, modalities,
 from public.facilitator_profiles where public.is_facilitator_profile_public(id);
 grant select on public.facilitator_public_profiles to anon, authenticated;
 commit;
+
+-- Included migration: 20260927193739_structured_profile_locations.sql
+begin;
+alter table public.facilitator_profiles add column if not exists locations jsonb not null default '[]'::jsonb
+  check (jsonb_typeof(locations) = 'array' and jsonb_array_length(locations) <= 5);
+comment on column public.facilitator_profiles.locations is 'Structured owner-entered city, region code, and country code. The application validates against the country/region catalog and derives the public location text.';
+commit;
