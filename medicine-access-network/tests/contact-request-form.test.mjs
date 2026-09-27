@@ -11,7 +11,7 @@ const schemaSource = readFileSync(new URL('lib/validations.ts', root), 'utf8')
 const schemaModule = { exports: {} }
 const schemaCode = ts.transpileModule(schemaSource, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText
 const schemaImports = {}
-for (const dependency of ['direct-contact', 'profile-media']) {
+for (const dependency of ['direct-contact', 'profile-media', 'social-links']) {
   const source = readFileSync(new URL(`lib/${dependency}.ts`, root), 'utf8')
   const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText
   const loaded = { exports: {} }

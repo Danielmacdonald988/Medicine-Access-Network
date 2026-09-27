@@ -3,11 +3,11 @@
 import { useTranslation } from "@/components/i18n/TranslationProvider";
 
 import { useTransition } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { MODALITIES, MODALITY_CATEGORIES } from "@/lib/constants";
+import { MODALITIES } from "@/lib/constants";
 import {
   directoryHref,
   filterSearchParams,
@@ -24,6 +24,8 @@ const EXPERIENCE_OPTIONS = [
 export function SearchFilters() {
   const { t } = useTranslation();
   const router = useRouter();
+  const pathname = usePathname();
+  const resultHref = (params: URLSearchParams) => pathname === "/" ? `/${params.size ? `?${params}` : ""}` : directoryHref(params);
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const filters = parseFacilitatorFilters(searchParams);
@@ -35,7 +37,7 @@ export function SearchFilters() {
 
   const navigate = (params: URLSearchParams) => {
     startTransition(() =>
-      router.push(directoryHref(params), { scroll: false }),
+      router.push(resultHref(params), { scroll: false }),
     );
   };
 
@@ -171,48 +173,10 @@ export function SearchFilters() {
             {t("Matches any selected type.")}
           </p>
           <div className="mt-3 space-y-2">
-            {Object.entries(MODALITY_CATEGORIES).map(([key, label]) => {
-              const modalities = MODALITIES.filter(
-                (modality) => modality.category === key,
-              );
-              const selected = modalities.filter((modality) =>
-                filters.modalities.includes(modality.name),
-              ).length;
-              return (
-                <details
-                  key={key}
-                  open={selected > 0 ? true : undefined}
-                  className="rounded-lg border border-stone-200 bg-white/60 px-3"
-                >
-                  <summary className="cursor-pointer py-3 text-sm font-medium text-stone-700">
-                    {t(label)}
-                    {selected > 0 && ` (${selected})`}
-                  </summary>
-                  <div className="space-y-2 pb-3">
-                    {modalities.map((modality) => (
-                      <div
-                        key={modality.id}
-                        className="flex min-h-8 items-center gap-2"
-                      >
-                        <Checkbox
-                          id={`filter-${modality.id}`}
-                          checked={filters.modalities.includes(modality.name)}
-                          onCheckedChange={(checked) =>
-                            toggle("modality", modality.name, checked)
-                          }
-                        />
-                        <label
-                          htmlFor={`filter-${modality.id}`}
-                          className="cursor-pointer text-sm text-stone-700"
-                        >
-                          {t(modality.name)}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </details>
-              );
-            })}
+            {MODALITIES.map(modality => <div key={modality.id} className="flex min-h-8 items-center gap-2">
+              <Checkbox id={`filter-${modality.id}`} checked={filters.modalities.includes(modality.name)} onCheckedChange={checked=>toggle('modality',modality.name,checked)} />
+              <label htmlFor={`filter-${modality.id}`} className="cursor-pointer text-sm text-stone-700">{t(modality.name)}</label>
+            </div>)}
           </div>
         </div>
       </fieldset>

@@ -14,7 +14,7 @@ test('contact choices follow the guide’s catalog practices without inventing s
       'BREATHWORK',
       'Unknown practice',
     ]),
-    ['Integration Coaching', 'Breathwork', GENERAL_INTRODUCTION],
+    ['Integration conversations', 'Breathwork', GENERAL_INTRODUCTION],
   )
   assert.deepEqual(profileSupportOptions([]), [GENERAL_INTRODUCTION])
 })

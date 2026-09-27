@@ -67,12 +67,12 @@ test('punctuation and wildcard characters search literally instead of becoming p
 
 test('modality keywords participate in database text search', () => {
   const expression = textSearchExpression('integration')
-  assert.match(expression, /modalities\.ov\.\{"Integration Coaching","Psychedelic Integration"\}/)
+  assert.match(expression, /modalities\.ov\.\{"Integration conversations","Integration Coaching","Psychedelic Integration"\}/)
 })
 
 test('plain-language preparation and integration searches expand only to their catalog categories', () => {
-  assert.match(textSearchExpression('prep'), /modalities\.ov\.\{"Preparation Coaching","Ceremony Preparation"\}/)
-  assert.match(textSearchExpression('  after   a journey  '), /modalities\.ov\.\{"Integration Coaching","Psychedelic Integration"\}/)
+  assert.match(textSearchExpression('prep'), /modalities\.ov\.\{"Preparation education","Preparation Coaching","Ceremony Preparation"\}/)
+  assert.match(textSearchExpression('  after   a journey  '), /modalities\.ov\.\{"Integration conversations","Integration Coaching","Psychedelic Integration"\}/)
   for (const term of ['depression', 'trauma', 'therapy', 'a name with prep in it', 'constructor', '__proto__']) {
     assert.equal(textSearchExpression(term).includes('modalities.ov.'), false, `must not infer a support need from ${term}`)
   }
@@ -150,7 +150,7 @@ test('all optional filters are sent to the database alongside the search', async
     assert.equal(params.get('remote_available'), 'eq.true')
     assert.equal(params.get('donation_based'), 'eq.true')
     assert.equal(params.get('years_experience'), 'gte.5')
-    assert.equal(params.get('modalities'), 'ov.{Breathwork}')
+    assert.equal(params.get('modalities'), 'ov.{Breathwork,Holotropic Breathwork}')
     assert.equal(params.get('location'), 'imatch.New York \\(NY\\)')
     return jsonResponse([])
   })

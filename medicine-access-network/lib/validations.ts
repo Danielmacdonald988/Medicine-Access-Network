@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { socialUrlSchema } from './social-links'
 import { directContactUrlSchema } from './direct-contact'
 import { isProfileImagePath, MAX_PROFILE_IMAGES } from './profile-media'
 
@@ -58,6 +59,11 @@ export const facilitatorOnboardingSchema = z.object({
   whatsapp_url: directContactUrlSchema('whatsapp'),
   signal_url: directContactUrlSchema('signal'),
   telegram_url: directContactUrlSchema('telegram'),
+  instagram_url: socialUrlSchema('instagram_url'),
+  facebook_url: socialUrlSchema('facebook_url'),
+  linkedin_url: socialUrlSchema('linkedin_url'),
+  website_url: socialUrlSchema('website_url'),
+
   // Step 14 — stripped before DB write
   platform_agreement: z.literal(true, {
     message: 'You must agree to the platform rules to apply',

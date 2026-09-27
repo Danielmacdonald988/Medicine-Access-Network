@@ -16,6 +16,7 @@ function loadModule(path, mocks = {}) {
 }
 
 const schemas = loadModule('lib/validations.ts', {
+  './social-links': loadModule('lib/social-links.ts'),
   './direct-contact': loadModule('lib/direct-contact.ts'),
   './profile-media': loadModule('lib/profile-media.ts'),
 })

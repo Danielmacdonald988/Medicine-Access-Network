@@ -19,7 +19,7 @@ export const MODALITY_CATEGORIES = {
   education: 'Education',
 } as const
 
-export const MODALITIES = [
+export const LEGACY_MODALITIES = [
   { id: 'integration-coaching', name: 'Integration Coaching', category: 'integration' },
   { id: 'preparation-coaching', name: 'Preparation Coaching', category: 'preparation' },
   { id: 'breathwork', name: 'Breathwork', category: 'breathwork' },
@@ -35,6 +35,35 @@ export const MODALITIES = [
   { id: 'harm-reduction', name: 'Harm Reduction Education', category: 'education' },
   { id: 'ceremony-preparation', name: 'Ceremony Preparation', category: 'preparation' },
 ] as const
+
+export const MODALITIES = [
+  { id: 'integration-conversations', name: 'Integration conversations', category: 'integration' },
+  { id: 'preparation-education', name: 'Preparation education', category: 'preparation' },
+  { id: 'breathwork', name: 'Breathwork', category: 'breathwork' },
+  { id: 'meditation-mindfulness', name: 'Meditation & mindfulness', category: 'meditation' },
+  { id: 'somatic-practices', name: 'Somatic practices', category: 'somatic' },
+  { id: 'spiritual-support', name: 'Spiritual support', category: 'spiritual' },
+  { id: 'peer-recovery-support', name: 'Peer recovery support', category: 'recovery' },
+  { id: 'harm-reduction-education', name: 'Harm-reduction education', category: 'education' },
+] as const
+
+/** Map historical choices for display without rewriting a guide's stored selections. */
+export function profileServices(values: readonly string[]): string[] {
+  const selected = new Set(values.map(raw => {
+    const value = raw.trim()
+    const current = MODALITIES.find(m => m.name.toLowerCase() === value.toLowerCase() || m.id === value)
+    if (current) return current.name
+    const legacy = LEGACY_MODALITIES.find(m => m.name.toLowerCase() === value.toLowerCase() || m.id === value)
+    if (!legacy || legacy.name === 'Kambo Education') return undefined
+    return MODALITIES.find(m => m.category === legacy.category)?.name
+  }))
+  return MODALITIES.filter(m => selected.has(m.name)).map(m => m.name)
+}
+
+export function serviceSearchNames(values: readonly string[]): string[] {
+  const selected = new Set(profileServices(values))
+  return [...new Set([...values, ...selected, ...LEGACY_MODALITIES.filter(m => profileServices([m.name]).some(name => selected.has(name))).map(m => m.name)])]
+}
 
 export const EXPERIENCE_LEVELS = [
   {

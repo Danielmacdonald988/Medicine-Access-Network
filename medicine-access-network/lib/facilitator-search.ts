@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import translatedSearchAliases from './i18n/search-aliases.json'
-import { MODALITIES } from './constants'
+import { MODALITIES, LEGACY_MODALITIES, profileServices, serviceSearchNames } from './constants'
 import type { FacilitatorSearchResult } from './types'
 
 export type DirectorySearchParams = Record<string, string | string[] | undefined>
@@ -39,8 +39,8 @@ export function boundedInteger(value: string | null, fallback: number, min: numb
 
 export function parseFacilitatorFilters(params: Pick<URLSearchParams, 'get' | 'getAll'>): FacilitatorFilters {
   const modalities = params.getAll('modality').map((value) =>
-    MODALITIES.find((modality) => modality.name.toLowerCase() === value.trim().toLowerCase())?.name
-  ).filter((value): value is typeof MODALITIES[number]['name'] => Boolean(value))
+    profileServices([value.trim()])[0] || LEGACY_MODALITIES.find(m => m.name.toLowerCase() === value.trim().toLowerCase())?.name
+  ).filter((value): value is string => Boolean(value))
 
   return {
     q: cleanText(params.get('q'), 120),
@@ -111,10 +111,10 @@ export function textSearchExpression(q: string): string {
   const translatedNames: string[] = Object.hasOwn(translatedSearchAliases, normalized)
     ? translatedSearchAliases[normalized as keyof typeof translatedSearchAliases]
     : []
-  const modalities = MODALITIES.filter((modality) => modality.name.toLowerCase().includes(term) || modality.category === category || translatedNames.includes(modality.name))
+  const modalities = [...MODALITIES, ...LEGACY_MODALITIES].filter((modality) => modality.name.toLowerCase().includes(term) || modality.category === category || translatedNames.includes(modality.name))
   if (modalities.length) {
     // Modality names come from the same catalog used by the application form.
-    clauses.push(`modalities.ov.{${modalities.map((modality) => quoteFilterValue(modality.name)).join(',')}}`)
+    clauses.push(`modalities.ov.{${serviceSearchNames(modalities.map(modality => modality.name)).map(quoteFilterValue).join(',')}}`)
   }
   return clauses.join(',')
 }
@@ -133,7 +133,7 @@ export function buildFacilitatorQuery(
   if (filters.q) query = query.or(textSearchExpression(filters.q))
   if (filters.remote) query = query.eq('remote_available', true)
   if (filters.donation) query = query.eq('donation_based', true)
-  if (filters.modalities.length) query = query.overlaps('modalities', filters.modalities)
+  if (filters.modalities.length) query = query.overlaps('modalities', serviceSearchNames(filters.modalities))
   if (filters.location) query = query.regexIMatch('location', literalSearchPattern(filters.location))
   if (filters.minExperience) query = query.gte('years_experience', filters.minExperience)
 

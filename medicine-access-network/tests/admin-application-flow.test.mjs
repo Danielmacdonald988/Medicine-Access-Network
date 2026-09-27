@@ -21,6 +21,7 @@ function loadModule(path, mocks = {}) {
 
 const media = loadModule('lib/profile-media.ts')
 const schemas = loadModule('lib/validations.ts', {
+  './social-links': loadModule('lib/social-links.ts'),
   './direct-contact': loadModule('lib/direct-contact.ts'),
   './profile-media': media,
 })
@@ -343,4 +344,19 @@ test('full form contact-only saves bypass review, but mixed practice edits still
   assert.equal(mixed.writes[0].value.verification_status, 'pending')
   assert.equal(mixed.writes[0].value.visibility, 'hidden')
   assert.equal(mixed.afterCallbacks.length, 1)
+})
+
+test('social-link saves use the same owner-scoped contact path and preserve moderation', async () => {
+  const f = fixture()
+  const response = await f.applications.POST(contactSubmission({
+    whatsapp_url: '', signal_url: '', telegram_url: '',
+    instagram_url: 'https://www.instagram.com/example/',
+    website_url: 'https://example.com/',
+  }))
+  assert.equal(response.status, 200)
+  assert.equal(f.contactWrites[0].value.instagram_url, 'https://www.instagram.com/example/')
+  assert.equal(f.contactWrites[0].value.website_url, 'https://example.com/')
+  assert.deepEqual(f.contactWrites[0].filters, [['id', profileId], ['user_id', userId]])
+  assert.equal('verification_status' in f.contactWrites[0].value, false)
+  assert.deepEqual(f.afterCallbacks, [])
 })

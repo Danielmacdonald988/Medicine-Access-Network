@@ -17,7 +17,8 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { facilitatorOnboardingSchema, type FacilitatorOnboardingInput } from '@/lib/validations'
 import type { FacilitatorProfile } from '@/lib/types'
 import { ProfileMediaFields } from '@/components/profile/ProfileMediaFields'
-import { MODALITIES, MODALITY_CATEGORIES, APP_NAME } from '@/lib/constants'
+import { SOCIAL_FIELDS } from '@/lib/social-links'
+import { MODALITIES, MODALITY_CATEGORIES, APP_NAME, profileServices } from '@/lib/constants'
 
 // ─── Step metadata ────────────────────────────────────────────────────────────
 
@@ -100,7 +101,7 @@ const STEP_FIELDS: Record<number, string[]> = {
   10: ['donation_based'],
   11: ['minimum_donation', 'hourly_rate'],
   12: ['image_paths'],
-  13: ['whatsapp_url', 'signal_url', 'telegram_url'],
+  13: ['whatsapp_url', 'signal_url', 'telegram_url', 'instagram_url', 'facebook_url', 'linkedin_url', 'website_url'],
   14: ['platform_agreement'],
 }
 
@@ -201,7 +202,7 @@ export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }:
       location: existingProfile?.location ?? '',
       remote_available: existingProfile?.remote_available ?? true,
       bio: existingProfile?.bio ?? '',
-      modalities: existingProfile?.modalities ?? [],
+      modalities: profileServices(existingProfile?.modalities ?? []),
       years_experience: existingProfile?.years_experience ?? undefined,
       lineage_or_training: existingProfile?.lineage_or_training ?? '',
       certifications: existingProfile?.certifications?.join(', ') ?? '',
@@ -214,6 +215,11 @@ export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }:
       whatsapp_url: existingProfile?.whatsapp_url ?? '',
       signal_url: existingProfile?.signal_url ?? '',
       telegram_url: existingProfile?.telegram_url ?? '',
+      instagram_url: existingProfile?.instagram_url ?? '',
+      facebook_url: existingProfile?.facebook_url ?? '',
+      linkedin_url: existingProfile?.linkedin_url ?? '',
+      website_url: existingProfile?.website_url ?? '',
+
       platform_agreement: undefined,
     },
   })
@@ -289,7 +295,7 @@ export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }:
 
   const saveMessagingLinks = async () => {
     if (!existingProfile || savingContacts || isSubmitting) return
-    if (!await trigger(['whatsapp_url', 'signal_url', 'telegram_url'])) return
+    if (!await trigger(['whatsapp_url', 'signal_url', 'telegram_url', 'instagram_url', 'facebook_url', 'linkedin_url', 'website_url'])) return
     setSavingContacts(true)
     setSaveError('')
     try {
@@ -298,6 +304,11 @@ export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }:
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ profileId: existingProfile.id, contacts: {
           whatsapp_url: getValues('whatsapp_url'), signal_url: getValues('signal_url'), telegram_url: getValues('telegram_url'),
+          instagram_url: getValues('instagram_url'),
+          facebook_url: getValues('facebook_url'),
+          linkedin_url: getValues('linkedin_url'),
+          website_url: getValues('website_url'),
+
         } }),
       })
       const result = await response.json().catch(() => null)
@@ -792,6 +803,12 @@ export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }:
               {t(savingContacts ? 'Saving…' : 'Save messaging links')}
             </Button>
           </div>}
+          {SOCIAL_FIELDS.map(({key,label,placeholder}) => <div key={key} className="space-y-2">
+            <Label htmlFor={key}>{t(label)} ({t('optional')})</Label>
+            <Input id={key} type="url" maxLength={500} placeholder={placeholder} autoCapitalize="none" spellCheck={false} {...register(key)} aria-invalid={Boolean(errors[key])} />
+            {errors[key] && <p role="alert" className="text-sm text-red-700">{t(errors[key]?.message ?? '')}</p>}
+          </div>)}
+          <p className="text-xs text-stone-500">{t('Contact and social links are public on approved profiles. Only add links you want visitors to use.')}</p>
           <p className="text-xs text-stone-500">{t("Adding a link does not send a message. Leave all fields blank to use only the website contact form.")}</p>
         </div>
       )}

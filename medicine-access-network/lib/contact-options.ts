@@ -1,10 +1,10 @@
-import { MODALITIES } from './constants'
+import { MODALITIES, profileServices } from './constants'
 
 export const GENERAL_INTRODUCTION = 'Not sure — general introduction'
 
 /** Offer only catalog practices actually listed on this profile. */
 export function profileSupportOptions(modalities: readonly string[]) {
-  const listed = new Set(modalities.map((value) => value.trim().toLowerCase()))
+  const listed = new Set(profileServices(modalities).map((value) => value.toLowerCase()))
   return [
     ...MODALITIES.filter(
       ({ id, name }) => listed.has(id) || listed.has(name.toLowerCase()),

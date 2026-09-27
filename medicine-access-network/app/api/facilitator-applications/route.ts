@@ -12,6 +12,7 @@ export const maxDuration = 60
 
 const contactSchema = facilitatorOnboardingSchema.pick({
   whatsapp_url: true, signal_url: true, telegram_url: true,
+  instagram_url: true, facebook_url: true, linkedin_url: true, website_url: true,
 }).strict()
 const contactSubmissionSchema = z.object({
   profileId: z.string().uuid(), contacts: contactSchema,
@@ -83,6 +84,11 @@ export async function POST(request: Request) {
       whatsapp_url: data.whatsapp_url || null,
       signal_url: data.signal_url || null,
       telegram_url: data.telegram_url || null,
+      ...(data.instagram_url === undefined ? {} : { instagram_url: data.instagram_url || null }),
+      ...(data.facebook_url === undefined ? {} : { facebook_url: data.facebook_url || null }),
+      ...(data.linkedin_url === undefined ? {} : { linkedin_url: data.linkedin_url || null }),
+      ...(data.website_url === undefined ? {} : { website_url: data.website_url || null }),
+
       verification_status: 'pending',
       visibility: 'hidden',
     }
@@ -91,7 +97,7 @@ export async function POST(request: Request) {
         .from('facilitator_profiles').select(Object.keys(profileData).join(','))
         .eq('id', profileId).eq('user_id', user.id).single()
       if (readError || !current) return json({ error: 'Your profile could not be loaded. Please try again.' }, 404)
-      const excluded = new Set(['whatsapp_url', 'signal_url', 'telegram_url', 'verification_status', 'visibility'])
+      const excluded = new Set(['whatsapp_url', 'signal_url', 'telegram_url', 'instagram_url', 'facebook_url', 'linkedin_url', 'website_url', 'verification_status', 'visibility'])
       const contactOnly = Object.entries(profileData).every(([key, value]) =>
         excluded.has(key) || JSON.stringify(value) === JSON.stringify((current as unknown as Record<string, unknown>)[key]))
       if (contactOnly) return await saveContacts(user.id, profileId, data)
@@ -139,6 +145,11 @@ async function saveContacts(userId: string, profileId: string, contacts: z.infer
     whatsapp_url: contacts.whatsapp_url || null,
     signal_url: contacts.signal_url || null,
     telegram_url: contacts.telegram_url || null,
+    ...(contacts.instagram_url === undefined ? {} : { instagram_url: contacts.instagram_url || null }),
+    ...(contacts.facebook_url === undefined ? {} : { facebook_url: contacts.facebook_url || null }),
+    ...(contacts.linkedin_url === undefined ? {} : { linkedin_url: contacts.linkedin_url || null }),
+    ...(contacts.website_url === undefined ? {} : { website_url: contacts.website_url || null }),
+
   }).eq('id', profileId).eq('user_id', userId).select('id').single()
   if (error || !saved) return json({ error: 'Your messaging links could not be saved. Please try again.' }, 400)
   return json({ success: true, profileId: saved.id, reviewRequired: false })

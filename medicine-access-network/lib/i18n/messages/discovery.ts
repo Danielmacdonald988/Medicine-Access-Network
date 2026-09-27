@@ -1,6 +1,13 @@
 import type { MessageCatalog } from "../config";
 
 export const discoveryMessages = {
+"Integration conversations": ["Conversaciones de integración", "Conversations d’intégration", "Conversas de integração", "Integrationsgespräche", "Conversazioni di integrazione", "Integratiegesprekken", "整合交流", "統合についての対話", "통합 대화", "Comhráite comhtháthaithe"],
+"Preparation education": ["Educación para la preparación", "Éducation à la préparation", "Educação para a preparação", "Vorbereitende Bildung", "Educazione alla preparazione", "Voorbereidende educatie", "准备教育", "準備のための教育", "준비 교육", "Oideachas ullmhúcháin"],
+"Meditation & mindfulness": ["Meditación y atención plena", "Méditation et pleine conscience", "Meditação e atenção plena", "Meditation und Achtsamkeit", "Meditazione e consapevolezza", "Meditatie en mindfulness", "冥想与正念", "瞑想とマインドフルネス", "명상과 마음챙김", "Machnamh agus aireachas"],
+"Spiritual support": ["Apoyo espiritual", "Soutien spirituel", "Apoio espiritual", "Spirituelle Unterstützung", "Sostegno spirituale", "Spirituele ondersteuning", "灵性支持", "スピリチュアルなサポート", "영적 지원", "Tacaíocht spioradálta"],
+"Peer recovery support": ["Apoyo entre pares en la recuperación", "Soutien au rétablissement par les pairs", "Apoio de pares na recuperação", "Genesungsbegleitung durch Gleichbetroffene", "Supporto tra pari nel recupero", "Herstelondersteuning door lotgenoten", "同伴康复支持", "仲間による回復支援", "동료 회복 지원", "Tacaíocht téarnaimh ó chomhghleacaithe"],
+"Harm-reduction education": ["Educación para la reducción de daños", "Éducation à la réduction des risques", "Educação para a redução de danos", "Aufklärung zur Schadensminimierung", "Educazione alla riduzione del danno", "Educatie over schadebeperking", "减害教育", "ハームリダクション教育", "위해 감소 교육", "Oideachas um laghdú díobhála"],
+
   "Human connection. New possibilities.": [
     "Conexión humana. Nuevas posibilidades.",
     "Des liens humains. De nouvelles possibilités.",

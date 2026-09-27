@@ -19,7 +19,7 @@ test('Spanish contact options display translated labels while retaining canonica
     facilitator_profile_id: '11111111-1111-4111-8111-111111111111',
     seeker_name: 'Test Visitor',
     seeker_email: 'visitor@example.test',
-    requested_service: 'Integration Coaching',
+    requested_service: 'Integration conversations',
     preferred_format: 'video',
     preferred_time_window: 'Weekday mornings',
     message: 'Me gustaría conocer su enfoque y disponibilidad.',
@@ -64,15 +64,15 @@ test('Spanish contact options display translated labels while retaining canonica
   const html = renderToStaticMarkup(createElement(loaded.exports.ContactRequestForm, {
     facilitatorProfileId: values.facilitator_profile_id,
     facilitatorDisplayName: 'Example Guide',
-    modalities: ['Integration Coaching'],
+    modalities: ['Integration conversations'],
     remoteAvailable: true,
     location: 'México',
   }))
-  assert.match(html, /value="Integration Coaching" selected=""/)
+  assert.match(html, /value="Integration conversations" selected=""/)
   assert.match(html, /value="video" selected=""/)
   assert.match(html, /value="Weekday mornings" selected=""/)
-  assert.ok(html.includes(t('Integration Coaching')))
+  assert.ok(html.includes(t('Integration conversations')))
   assert.ok(html.includes(t('Weekday mornings')))
-  assert.ok(!html.includes(`value="${t('Integration Coaching')}"`))
+  assert.ok(!html.includes(`value="${t('Integration conversations')}"`))
   assert.ok(!html.includes(`value="${t('Weekday mornings')}"`))
 })

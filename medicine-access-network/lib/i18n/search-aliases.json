@@ -21,50 +21,53 @@
     "Mindfulness Coaching"
   ],
   "ademwerk": [
-    "Breathwork",
-    "Holotropic Breathwork"
+    "Breathwork"
   ],
   "apoio a recuperacao": [
-    "Recovery Support"
+    "Recovery Support",
+    "Peer recovery support"
+  ],
+  "apoio de pares na recuperacao": [
+    "Peer recovery support"
   ],
   "apoio espiritual": [
-    "Spiritual Coaching"
+    "Spiritual support"
   ],
   "apoio psicodelico": [
-    "Integration Coaching",
-    "Preparation Coaching",
-    "Psychedelic Integration",
-    "Ceremony Preparation"
+    "Integration conversations",
+    "Preparation education"
   ],
   "apoyo en la recuperacion": [
-    "Recovery Support"
+    "Recovery Support",
+    "Peer recovery support"
+  ],
+  "apoyo entre pares en la recuperacion": [
+    "Peer recovery support"
   ],
   "apoyo espiritual": [
-    "Spiritual Coaching"
+    "Spiritual support"
   ],
   "apoyo psicodelico": [
-    "Integration Coaching",
-    "Preparation Coaching",
-    "Psychedelic Integration",
-    "Ceremony Preparation"
+    "Integration conversations",
+    "Preparation education"
   ],
   "atemarbeit": [
-    "Breathwork",
-    "Holotropic Breathwork"
+    "Breathwork"
   ],
   "aufklarung": [
-    "Kambo Education",
-    "Harm Reduction Education"
+    "Harm-reduction education"
   ],
   "aufklarung zur schadensminderung": [
     "Harm Reduction Education"
+  ],
+  "aufklarung zur schadensminimierung": [
+    "Harm-reduction education"
   ],
   "ceremonievoorbereiding": [
     "Ceremony Preparation"
   ],
   "cleachtais shomatacha": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "coaching de atencao plena": [
     "Mindfulness Coaching"
@@ -117,48 +120,81 @@
   "coitseail ullmhuchain": [
     "Preparation Coaching"
   ],
+  "comhraite comhthathaithe": [
+    "Integration conversations"
+  ],
   "comhthathu": [
-    "Integration Coaching",
-    "Psychedelic Integration"
+    "Integration conversations"
   ],
   "comhthathu sicideileach": [
     "Psychedelic Integration"
   ],
+  "conversaciones de integracion": [
+    "Integration conversations"
+  ],
+  "conversas de integracao": [
+    "Integration conversations"
+  ],
+  "conversations d’integration": [
+    "Integration conversations"
+  ],
+  "conversazioni di integrazione": [
+    "Integration conversations"
+  ],
   "educacao": [
-    "Kambo Education",
-    "Harm Reduction Education"
+    "Harm-reduction education"
   ],
   "educacao em reducao de danos": [
     "Harm Reduction Education"
+  ],
+  "educacao para a preparacao": [
+    "Preparation education"
+  ],
+  "educacao para a reducao de danos": [
+    "Harm-reduction education"
   ],
   "educacao sobre kambo": [
     "Kambo Education"
   ],
   "educacion": [
-    "Kambo Education",
-    "Harm Reduction Education"
+    "Harm-reduction education"
   ],
   "educacion en reduccion de riesgos": [
     "Harm Reduction Education"
   ],
+  "educacion para la preparacion": [
+    "Preparation education"
+  ],
+  "educacion para la reduccion de danos": [
+    "Harm-reduction education"
+  ],
   "educacion sobre kambo": [
     "Kambo Education"
   ],
+  "educatie over schadebeperking": [
+    "Harm-reduction education"
+  ],
   "education": [
-    "Kambo Education",
-    "Harm Reduction Education"
+    "Harm-reduction education"
+  ],
+  "education a la preparation": [
+    "Preparation education"
   ],
   "education a la reduction des risques": [
+    "Harm-reduction education",
     "Harm Reduction Education"
   ],
   "education au kambo": [
     "Kambo Education"
   ],
   "educazione": [
-    "Kambo Education",
-    "Harm Reduction Education"
+    "Harm-reduction education"
+  ],
+  "educazione alla preparazione": [
+    "Preparation education"
   ],
   "educazione alla riduzione del danno": [
+    "Harm-reduction education",
     "Harm Reduction Education"
   ],
   "educazione sul kambo": [
@@ -171,7 +207,11 @@
     "Somatic Experiencing"
   ],
   "genesungsbegleitung": [
-    "Recovery Support"
+    "Recovery Support",
+    "Peer recovery support"
+  ],
+  "genesungsbegleitung durch gleichbetroffene": [
+    "Peer recovery support"
   ],
   "guia de meditacion": [
     "Meditation Guidance"
@@ -180,7 +220,11 @@
     "Meditation Guidance"
   ],
   "herstelondersteuning": [
-    "Recovery Support"
+    "Recovery Support",
+    "Peer recovery support"
+  ],
+  "herstelondersteuning door lotgenoten": [
+    "Peer recovery support"
   ],
   "holotropes atmen": [
     "Holotropic Breathwork"
@@ -189,29 +233,28 @@
     "Holotropic Breathwork"
   ],
   "integracao": [
-    "Integration Coaching",
-    "Psychedelic Integration"
+    "Integration conversations"
   ],
   "integracao psicodelica": [
     "Psychedelic Integration"
   ],
   "integracion": [
-    "Integration Coaching",
-    "Psychedelic Integration"
+    "Integration conversations"
   ],
   "integracion psicodelica": [
     "Psychedelic Integration"
   ],
   "integratie": [
-    "Integration Coaching",
-    "Psychedelic Integration"
+    "Integration conversations"
   ],
   "integratiecoaching": [
     "Integration Coaching"
   ],
+  "integratiegesprekken": [
+    "Integration conversations"
+  ],
   "integration": [
-    "Integration Coaching",
-    "Psychedelic Integration"
+    "Integration conversations"
   ],
   "integration psychedelique": [
     "Psychedelic Integration"
@@ -219,9 +262,11 @@
   "integrationscoaching": [
     "Integration Coaching"
   ],
+  "integrationsgesprache": [
+    "Integration conversations"
+  ],
   "integrazione": [
-    "Integration Coaching",
-    "Psychedelic Integration"
+    "Integration conversations"
   ],
   "integrazione psichedelica": [
     "Psychedelic Integration"
@@ -233,91 +278,79 @@
     "Kambo Education"
   ],
   "lavoro somatico e corporeo": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "lavoro sul respiro": [
-    "Breathwork",
-    "Holotropic Breathwork"
+    "Breathwork"
   ],
   "machnamh": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "machnamh agus aireachas": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "meditacao": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "meditacao e atencao plena": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "meditacion": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "meditacion y atencion plena": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "meditatie": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "meditatie en mindfulness": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "meditatiebegeleiding": [
     "Meditation Guidance"
   ],
   "meditation": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "meditation et pleine conscience": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "meditation und achtsamkeit": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "meditationsbegleitung": [
     "Meditation Guidance"
   ],
   "meditazione": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "meditazione e consapevolezza": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "mindfulnesscoaching": [
     "Mindfulness Coaching"
   ],
   "obair anala": [
-    "Breathwork",
-    "Holotropic Breathwork"
+    "Breathwork"
   ],
   "obair anala holotropach": [
     "Holotropic Breathwork"
   ],
   "obair shomatach agus choirp": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "oideachas": [
-    "Kambo Education",
-    "Harm Reduction Education"
+    "Harm-reduction education"
   ],
   "oideachas faoi kambo": [
     "Kambo Education"
+  ],
+  "oideachas ullmhuchain": [
+    "Preparation education"
+  ],
+  "oideachas um laghdu diobhala": [
+    "Harm-reduction education"
   ],
   "oideachas um laghdu dochair": [
     "Harm Reduction Education"
@@ -326,74 +359,59 @@
     "Meditation Guidance"
   ],
   "practicas somaticas": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "praticas de respiracao": [
-    "Breathwork",
-    "Holotropic Breathwork"
+    "Breathwork"
   ],
   "praticas somaticas": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "pratiche somatiche": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "pratiques somatiques": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "preparacao": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "preparacao para cerimonias": [
     "Ceremony Preparation"
   ],
   "preparacao psicodelica": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "preparacion": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "preparacion para ceremonias": [
     "Ceremony Preparation"
   ],
   "preparacion psicodelica": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "preparation": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "preparation a une ceremonie": [
     "Ceremony Preparation"
   ],
   "preparation psychedelique": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "preparazione": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "preparazione alla cerimonia": [
     "Ceremony Preparation"
   ],
   "preparazione psichedelica": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "psychedelische begleitung": [
-    "Integration Coaching",
-    "Preparation Coaching",
-    "Psychedelic Integration",
-    "Ceremony Preparation"
+    "Integration conversations",
+    "Preparation education"
   ],
   "psychedelische integratie": [
     "Psychedelic Integration"
@@ -402,18 +420,14 @@
     "Psychedelic Integration"
   ],
   "psychedelische ondersteuning": [
-    "Integration Coaching",
-    "Preparation Coaching",
-    "Psychedelic Integration",
-    "Ceremony Preparation"
+    "Integration conversations",
+    "Preparation education"
   ],
   "psychedelische voorbereiding": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "psychedelische vorbereitung": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "respiracao holotropica": [
     "Holotropic Breathwork"
@@ -431,119 +445,118 @@
     "Somatic Experiencing"
   ],
   "somatisch werk en lichaamswerk": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "somatische arbeit und korperarbeit": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "somatische coaching": [
     "Somatic Coaching"
   ],
   "somatische oefeningen": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "somatische praktiken": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "somatisches coaching": [
     "Somatic Coaching"
   ],
   "sostegno al recupero": [
-    "Recovery Support"
+    "Recovery Support",
+    "Peer recovery support"
   ],
   "sostegno psichedelico": [
-    "Integration Coaching",
-    "Preparation Coaching",
-    "Psychedelic Integration",
-    "Ceremony Preparation"
+    "Integration conversations",
+    "Preparation education"
   ],
   "sostegno spirituale": [
-    "Spiritual Coaching"
+    "Spiritual support"
   ],
   "soutien au retablissement": [
-    "Recovery Support"
+    "Recovery Support",
+    "Peer recovery support"
+  ],
+  "soutien au retablissement par les pairs": [
+    "Peer recovery support"
   ],
   "soutien psychedelique": [
-    "Integration Coaching",
-    "Preparation Coaching",
-    "Psychedelic Integration",
-    "Ceremony Preparation"
+    "Integration conversations",
+    "Preparation education"
   ],
   "soutien spirituel": [
-    "Spiritual Coaching"
+    "Spiritual support"
   ],
   "spirituele coaching": [
     "Spiritual Coaching"
   ],
   "spirituele ondersteuning": [
-    "Spiritual Coaching"
+    "Spiritual support"
   ],
   "spirituelle begleitung": [
-    "Spiritual Coaching"
+    "Spiritual support"
+  ],
+  "spirituelle unterstutzung": [
+    "Spiritual support"
   ],
   "spirituelles coaching": [
     "Spiritual Coaching"
   ],
+  "supporto tra pari nel recupero": [
+    "Peer recovery support"
+  ],
   "tacaiocht shicideileach": [
-    "Integration Coaching",
-    "Preparation Coaching",
-    "Psychedelic Integration",
-    "Ceremony Preparation"
+    "Integration conversations",
+    "Preparation education"
   ],
   "tacaiocht spioradalta": [
-    "Spiritual Coaching"
+    "Spiritual support"
   ],
   "tacaiocht tearnaimh": [
-    "Recovery Support"
+    "Recovery Support",
+    "Peer recovery support"
+  ],
+  "tacaiocht tearnaimh o chomhghleacaithe": [
+    "Peer recovery support"
   ],
   "trabajo de respiracion": [
-    "Breathwork",
-    "Holotropic Breathwork"
+    "Breathwork"
   ],
   "trabajo somatico y corporal": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "trabalho somatico e corporal": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "travail respiratoire": [
-    "Breathwork",
-    "Holotropic Breathwork"
+    "Breathwork"
   ],
   "travail somatique et corporel": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "treoir mhachnaimh": [
     "Meditation Guidance"
   ],
   "ullmhuchan": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "ullmhuchan searmanais": [
     "Ceremony Preparation"
   ],
   "ullmhuchan sicideileach": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
+  ],
+  "voorbereidende educatie": [
+    "Preparation education"
   ],
   "voorbereiding": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "voorbereidingscoaching": [
     "Preparation Coaching"
   ],
   "voorlichting": [
-    "Kambo Education",
-    "Harm Reduction Education"
+    "Harm-reduction education"
   ],
   "voorlichting over kambo": [
     "Kambo Education"
@@ -551,9 +564,11 @@
   "voorlichting over schadebeperking": [
     "Harm Reduction Education"
   ],
+  "vorbereitende bildung": [
+    "Preparation education"
+  ],
   "vorbereitung": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "vorbereitungscoaching": [
     "Preparation Coaching"
@@ -562,43 +577,41 @@
     "Ceremony Preparation"
   ],
   "교육": [
-    "Kambo Education",
-    "Harm Reduction Education"
+    "Harm-reduction education"
+  ],
+  "동료 회복 지원": [
+    "Peer recovery support"
   ],
   "마음챙김 코칭": [
     "Mindfulness Coaching"
   ],
   "명상": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "명상 및 마음챙김": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "명상 지도": [
     "Meditation Guidance"
   ],
+  "명상과 마음챙김": [
+    "Meditation & mindfulness"
+  ],
   "사이키델릭 경험 준비": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "사이키델릭 지원": [
-    "Integration Coaching",
-    "Preparation Coaching",
-    "Psychedelic Integration",
-    "Ceremony Preparation"
+    "Integration conversations",
+    "Preparation education"
   ],
   "사이키델릭 통합": [
     "Psychedelic Integration"
   ],
   "신체 감각 및 바디워크": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "신체 감각 수련": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "신체 감각 코칭": [
     "Somatic Coaching"
@@ -607,20 +620,23 @@
     "Somatic Experiencing"
   ],
   "영적 지원": [
-    "Spiritual Coaching"
+    "Spiritual support"
   ],
   "영적 코칭": [
     "Spiritual Coaching"
   ],
   "위해 감소 교육": [
+    "Harm-reduction education",
     "Harm Reduction Education"
   ],
   "의식 준비": [
     "Ceremony Preparation"
   ],
   "준비": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
+  ],
+  "준비 교육": [
+    "Preparation education"
   ],
   "준비 코칭": [
     "Preparation Coaching"
@@ -629,34 +645,33 @@
     "Kambo Education"
   ],
   "통합": [
-    "Integration Coaching",
-    "Psychedelic Integration"
+    "Integration conversations"
+  ],
+  "통합 대화": [
+    "Integration conversations"
   ],
   "통합 코칭": [
     "Integration Coaching"
   ],
   "호흡법": [
-    "Breathwork",
-    "Holotropic Breathwork"
+    "Breathwork"
   ],
   "홀로트로픽 호흡법": [
     "Holotropic Breathwork"
   ],
   "회복 지원": [
-    "Recovery Support"
+    "Recovery Support",
+    "Peer recovery support"
   ],
   "カンホに関する教育": [
     "Kambo Education"
   ],
   "サイケテリック体験のサホート": [
-    "Integration Coaching",
-    "Preparation Coaching",
-    "Psychedelic Integration",
-    "Ceremony Preparation"
+    "Integration conversations",
+    "Preparation education"
   ],
   "サイケテリック体験の準備": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "サイケテリック体験の統合": [
     "Psychedelic Integration"
@@ -665,7 +680,7 @@
     "Spiritual Coaching"
   ],
   "スヒリチュアルなサホート": [
-    "Spiritual Coaching"
+    "Spiritual support"
   ],
   "セレモニーの準備": [
     "Ceremony Preparation"
@@ -677,6 +692,7 @@
     "Somatic Coaching"
   ],
   "ハームリタクション教育": [
+    "Harm-reduction education",
     "Harm Reduction Education"
   ],
   "ホロトロヒック・フレスワーク": [
@@ -688,51 +704,59 @@
   "仪式准备": [
     "Ceremony Preparation"
   ],
+  "仲間による回復支援": [
+    "Peer recovery support"
+  ],
   "全息呼吸练习": [
     "Holotropic Breathwork"
   ],
   "冥想": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "冥想与正念": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "冥想指导": [
     "Meditation Guidance"
   ],
   "准备": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "准备指导": [
     "Preparation Coaching"
   ],
+  "准备教育": [
+    "Preparation education"
+  ],
   "减害教育": [
+    "Harm-reduction education",
     "Harm Reduction Education"
+  ],
+  "同伴康复支持": [
+    "Peer recovery support"
   ],
   "呼吸法": [
-    "Breathwork",
-    "Holotropic Breathwork"
+    "Breathwork"
   ],
   "呼吸练习": [
-    "Breathwork",
-    "Holotropic Breathwork"
+    "Breathwork"
   ],
   "回復サホート": [
-    "Recovery Support"
+    "Recovery Support",
+    "Peer recovery support"
   ],
   "康复支持": [
-    "Recovery Support"
+    "Recovery Support",
+    "Peer recovery support"
   ],
   "教育": [
-    "Kambo Education",
-    "Harm Reduction Education"
+    "Harm-reduction education"
   ],
   "整合": [
-    "Integration Coaching",
-    "Psychedelic Integration"
+    "Integration conversations"
+  ],
+  "整合交流": [
+    "Integration conversations"
   ],
   "整合指导": [
     "Integration Coaching"
@@ -741,67 +765,65 @@
     "Mindfulness Coaching"
   ],
   "準備": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "準備コーチンク": [
     "Preparation Coaching"
   ],
+  "準備のための教育": [
+    "Preparation education"
+  ],
   "灵性指导": [
     "Spiritual Coaching"
   ],
+  "灵性支持": [
+    "Spiritual support"
+  ],
   "瞑想": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "瞑想カイタンス": [
     "Meditation Guidance"
   ],
   "瞑想とマイントフルネス": [
-    "Meditation Guidance",
-    "Mindfulness Coaching"
+    "Meditation & mindfulness"
   ],
   "精神与灵性支持": [
-    "Spiritual Coaching"
+    "Spiritual support"
   ],
   "統合": [
-    "Integration Coaching",
-    "Psychedelic Integration"
+    "Integration conversations"
   ],
   "統合コーチンク": [
     "Integration Coaching"
   ],
+  "統合についての対話": [
+    "Integration conversations"
+  ],
   "身体感覚とホティワーク": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "身体感覚の実践": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "身心与身体练习": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "身心指导": [
     "Somatic Coaching"
   ],
   "身心练习": [
-    "Somatic Coaching",
-    "Somatic Experiencing"
+    "Somatic practices"
   ],
   "躯体体验": [
     "Somatic Experiencing"
   ],
   "迷幻体验准备": [
-    "Preparation Coaching",
-    "Ceremony Preparation"
+    "Preparation education"
   ],
   "迷幻体验支持": [
-    "Integration Coaching",
-    "Preparation Coaching",
-    "Psychedelic Integration",
-    "Ceremony Preparation"
+    "Integration conversations",
+    "Preparation education"
   ],
   "迷幻体验整合": [
     "Psychedelic Integration"

@@ -42,3 +42,5 @@ next-env.d.ts
 
 # Share configuration names, never credentials.
 !.env.example
+
+/supabase/.temp/

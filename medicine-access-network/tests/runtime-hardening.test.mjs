@@ -21,6 +21,7 @@ function loadModule(path, mocks = {}) {
 
 const bodyHelpers = loadModule('lib/request-body.ts')
 const schemas = loadModule('lib/validations.ts', {
+  './social-links': loadModule('lib/social-links.ts'),
   './direct-contact': loadModule('lib/direct-contact.ts'),
   './profile-media': loadModule('lib/profile-media.ts'),
 })

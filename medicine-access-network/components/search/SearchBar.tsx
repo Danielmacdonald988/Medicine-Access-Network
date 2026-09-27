@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/components/i18n/TranslationProvider";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,8 @@ import {
 export function SearchBar({ onSearch }: { onSearch?: () => void }) {
   const { t } = useTranslation();
   const router = useRouter();
+  const pathname = usePathname();
+  const resultHref = (params: URLSearchParams) => pathname === "/" ? `/${params.size ? `?${params}` : ""}` : directoryHref(params);
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const filters = parseFacilitatorFilters(searchParams);
@@ -31,7 +33,7 @@ export function SearchBar({ onSearch }: { onSearch?: () => void }) {
     params.set("location", String(form.get("location") ?? ""));
     const normalized = filterSearchParams(parseFacilitatorFilters(params));
     startTransition(() =>
-      router.push(directoryHref(normalized), { scroll: false }),
+      router.push(resultHref(normalized), { scroll: false }),
     );
     onSearch?.();
   };
@@ -125,6 +127,8 @@ export function SearchBar({ onSearch }: { onSearch?: () => void }) {
 export function SearchSort() {
   const { t } = useTranslation();
   const router = useRouter();
+  const pathname = usePathname();
+  const resultHref = (params: URLSearchParams) => pathname === "/" ? `/${params.size ? `?${params}` : ""}` : directoryHref(params);
   const searchParams = useSearchParams();
   const filters = parseFacilitatorFilters(searchParams);
   const [isPending, startTransition] = useTransition();
@@ -146,7 +150,7 @@ export function SearchSort() {
           params.set("sort", event.target.value);
           startTransition(() =>
             router.push(
-              directoryHref(
+              resultHref(
                 filterSearchParams(parseFacilitatorFilters(params)),
               ),
               { scroll: false },

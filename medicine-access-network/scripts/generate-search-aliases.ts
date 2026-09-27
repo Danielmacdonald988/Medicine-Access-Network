@@ -1,5 +1,5 @@
 import { writeFileSync } from 'node:fs'
-import { MODALITIES, MODALITY_CATEGORIES } from '../lib/constants'
+import { MODALITIES, LEGACY_MODALITIES, MODALITY_CATEGORIES } from '../lib/constants'
 import { discoveryMessages } from '../lib/i18n/messages/discovery'
 import type { MessageCatalog } from '../lib/i18n/config'
 
@@ -14,7 +14,7 @@ function add(label: string, names: string[]) {
   }
 }
 
-for (const modality of MODALITIES) add(modality.name, [modality.name])
+for (const modality of [...MODALITIES, ...LEGACY_MODALITIES]) add(modality.name, [modality.name])
 for (const [category, label] of Object.entries(MODALITY_CATEGORIES)) {
   add(label, MODALITIES.filter((modality) => modality.category === category).map((modality) => modality.name))
 }

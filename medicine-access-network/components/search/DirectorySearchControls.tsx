@@ -31,6 +31,7 @@ export function DirectorySearchControls() {
 
   return (
     <div className="min-w-0 lg:contents">
+      <div className="mb-4 lg:col-span-2 lg:mb-0"><SearchBar onSearch={showGuides} /></div>
       <button
         ref={toggleRef}
         type="button"
@@ -57,9 +58,7 @@ export function DirectorySearchControls() {
           !open && "hidden",
         )}
       >
-        <div className="lg:col-span-2">
-          <SearchBar onSearch={showGuides} />
-        </div>
+
         <div className="min-w-0 space-y-4 self-start">
           <SearchSort />
           <SearchFilters />

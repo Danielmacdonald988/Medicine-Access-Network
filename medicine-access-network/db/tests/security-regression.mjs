@@ -17,6 +17,7 @@ const migrationNames = [
   '0003_contact_without_account.sql', '0004_authorization_and_contact.sql',
   '0005_profile_media_links.sql',
   '0006_admin_application_notifications.sql',
+  '20260927192456_public_profile_social_links.sql',
 ]
 const migrations = await Promise.all(migrationNames.map(name => readFile(new URL(`../migrations/${name}`, import.meta.url), 'utf8')))
 let assertions = 0
@@ -53,7 +54,7 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
     create policy "existing object access" on storage.objects for all to anon, authenticated
       using (true) with check (true);
   `)
-  if (mode === 'fresh schema') await db.exec(schema)
+  if (mode === 'fresh schema') await db.exec(schema.split('-- Included migration: 20260927192456_public_profile_social_links.sql')[0])
   else {
     await db.exec(schema.split('-- Included migration:')[0])
     for (const migration of migrations.slice(0, 4)) await db.exec(migration)
@@ -84,6 +85,8 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
   await db.exec(migrations[3])
   await db.exec(migrations[4])
   await db.exec(migrations[5])
+
+  await db.exec(migrations[6])
 
   const id = n => `10000000-0000-0000-0000-${String(n).padStart(12, '0')}`
   const guide = id(1), otherGuide = id(2), seeker = id(3), admin = id(4), applicant = id(5), recovery = id(6)
@@ -229,12 +232,15 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
   await as('postgres')
   await db.query("insert into public.facilitator_profiles(id,user_id,display_name,bio,verification_status,visibility,image_paths) values($1,$2,'Public guide',repeat('x',100),'approved','public',$5),($3,$4,'Hidden guide',repeat('x',100),'approved','hidden',$6)",[id(11),guide,id(12),otherGuide,[imagePath(guide)],[imagePath(otherGuide)]])
   await db.query('update public.facilitator_profiles set whatsapp_url=$1,signal_url=$2,telegram_url=$3 where user_id in ($4,$5)',[...Object.values(messageLinks),guide,otherGuide])
+  await db.query("update public.facilitator_profiles set instagram_url='https://www.instagram.com/example/' where user_id in ($1,$2)", [guide,otherGuide])
   await db.query("insert into public.modalities(id,name,category) values($1,'Test practice','test')",[id(20)])
   await as('authenticated',guide)
   await denied('insert into public.facilitator_modalities(facilitator_id,modality_id) values($1,$2)',[id(11),id(20)])
 
   await as('anon')
   check((await row('select count(*)::int as total from public.facilitator_public_profiles')).total === 1,'public view excludes hidden/pending profiles')
+  check((await row('select instagram_url from public.facilitator_public_profiles')).instagram_url === 'https://www.instagram.com/example/', 'published social links readable through RLS view')
+  check((await db.query('select instagram_url from public.facilitator_public_profiles where id=$1',[id(12)])).rows.length === 0, 'hidden social links are not public')
   const publicMedia = await row('select image_paths,whatsapp_url,signal_url,telegram_url from public.facilitator_public_profiles')
   check(publicMedia.image_paths[0] === imagePath(guide) && publicMedia.whatsapp_url === messageLinks.whatsapp_url && publicMedia.signal_url === messageLinks.signal_url && publicMedia.telegram_url === messageLinks.telegram_url, 'public view exposes uploaded photo references and chosen contact links only for a published profile')
   await denied('select email from public.users')
@@ -451,7 +457,10 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
     assertions++
     await db.exec('rollback')
     await db.exec(`alter table storage.${table} enable row level security`)
+    // Recreate the historical view before reapplying later additive columns.
+    await db.exec('drop view public.facilitator_public_profiles')
     await db.exec(migrations[4])
+    await db.exec(migrations[6])
   }
   await db.close()
   console.log(`PASS: ${mode}, including repeated migration`)

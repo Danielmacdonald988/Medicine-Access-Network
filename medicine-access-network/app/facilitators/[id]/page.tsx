@@ -1,3 +1,5 @@
+import { SocialLinks } from '@/components/profile/SocialLinks'
+import { profileServices } from '@/lib/constants'
 import { ProfileDetails } from '@/components/profile/ProfileDetails'
 import headerStyles from './profile-header.module.css'
 import { getTranslation } from '@/lib/i18n/server'
@@ -273,6 +275,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
         </div>
         <aside className={headerStyles.contact} aria-label={t('Contact {name}', { name: facilitator.display_name })}>
           {hasDirectContact && <DirectContactLinks profile={facilitator} compact />}
+          <SocialLinks profile={facilitator} />
               <Button
                 asChild
                 variant={hasDirectContact ? 'outline' : 'default'}
@@ -347,7 +350,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
               className="mb-3 text-2xl font-medium tracking-tight text-stone-900"
             >{t("Areas of practice")}</h2>
             <div className="flex flex-wrap gap-2">
-              {facilitator.modalities.map((m: string) => (
+              {profileServices(facilitator.modalities).map((m: string) => (
                 <Badge
                   key={m}
                   variant="secondary"
