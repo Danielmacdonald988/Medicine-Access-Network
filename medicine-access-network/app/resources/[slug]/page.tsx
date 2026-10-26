@@ -19,7 +19,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const resource = getResource(slug)
   if (!resource) return { title: 'Not found' }
   const { t, locale } = await getTranslation()
-  return { title: t(resource.title), description: locale === 'en' ? resource.description : t(resourceSummaries[slug]) }
+  return {
+    title: locale === 'en' ? resource.searchTitle ?? resource.title : t(resource.title),
+    description: locale === 'en' ? resource.description : t(resourceSummaries[slug]),
+    alternates: { canonical: `/resources/${resource.slug}` },
+  }
 }
 
 // ─── Block renderer ───────────────────────────────────────────────────────────
@@ -107,6 +111,9 @@ export default async function ResourcePage({ params }: PageProps) {
   const { slug } = await params
   const resource = getResource(slug)
   if (!resource) notFound()
+  const summary = resourceSummaries[slug]
+  const translatedSummary = t(summary)
+  const hasTranslatedSummary = translatedSummary !== summary
 
   return (
     <article className="space-y-5">
@@ -126,8 +133,8 @@ export default async function ResourcePage({ params }: PageProps) {
       </div>
 
       {locale !== 'en' && <section className="space-y-3 rounded-xl border border-emerald-200 bg-emerald-50 p-5">
-        <p className="text-sm text-stone-600">{t('The full safety articles are currently available in English. The summary below is in your selected language.')}</p>
-        <p className="leading-relaxed text-stone-800">{t(resourceSummaries[slug])}</p>
+        <p className="text-sm text-stone-600">{hasTranslatedSummary ? t('The full safety articles are currently available in English. The summary below is in your selected language.') : 'This article is currently available in English.'}</p>
+        <p lang={hasTranslatedSummary ? locale : 'en'} className="leading-relaxed text-stone-800">{translatedSummary}</p>
         <a href="#original-article" className="inline-flex min-h-11 items-center font-medium text-emerald-800 underline underline-offset-4">{t('Read the full article in English')}</a>
       </section>}
       <div id="original-article" lang="en" className="scroll-mt-28 space-y-5">
@@ -164,6 +171,19 @@ export default async function ResourcePage({ params }: PageProps) {
           </ul>
         </section>
       )}
+
+      {resource.nextStep && <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-5" aria-labelledby="resource-next-step">
+        <h2 id="resource-next-step" className="text-lg font-semibold text-stone-900">Explore your options</h2>
+        <p className="mt-2 leading-relaxed text-stone-700">{resource.nextStep.description}</p>
+        <Link href={resource.nextStep.href} className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-emerald-900 px-4 py-3 font-medium text-white hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900">{resource.nextStep.label}</Link>
+      </section>}
+      {resource.relatedSlugs && <nav aria-label="Related reading" className="rounded-xl border border-stone-200 p-5">
+        <h2 className="font-semibold text-stone-900">Keep exploring</h2>
+        <ul className="mt-2 space-y-1">{resource.relatedSlugs.map((relatedSlug) => {
+          const related = getResource(relatedSlug)
+          return related ? <li key={relatedSlug}><Link href={`/resources/${relatedSlug}`} className="inline-flex min-h-11 items-center text-emerald-800 underline underline-offset-4">{related.title}</Link></li> : null
+        })}</ul>
+      </nav>}
 
       {/* Footer disclaimer */}
       <div className="mt-10 border-t border-stone-100 pt-6 text-xs text-stone-400">

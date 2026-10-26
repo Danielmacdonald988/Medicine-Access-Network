@@ -13,6 +13,9 @@ export interface Resource {
   subtitle: string
   description: string // for <meta>
   blocks: Block[]
+  searchTitle?: string
+  nextStep?: { label: string; href: string; description: string }
+  relatedSlugs?: string[]
   sourceCheck?: {
     date: string
     scope: string
@@ -112,10 +115,25 @@ export const resources: Resource[] = [
   {
     slug: 'integration-basics',
     title: 'Integration Basics',
+    searchTitle: 'Integration Support: What to Expect and How to Choose',
+    nextStep: { label: 'Browse integration support', href: '/facilitators?modality=Integration+conversations', description: 'Compare guides who list integration conversations. Read their approach, ask about fit and fees, and confirm availability directly. No account is needed to browse or send an inquiry.' },
+    relatedSlugs: ['questions-to-ask', 'scope-of-practice'],
     subtitle: 'How to process and ground what arises in your work',
     description:
-      'An introduction to integration — what it means, why it matters, and how to support yourself after any significant personal or wellness experience.',
+      'Understand integration conversations, what to ask a guide, and how to compare scope, fees, format and boundaries before reaching out.',
     blocks: [
+      { type: 'h3', text: 'Looking for integration support?' },
+      { type: 'p', text: 'This guide is for adults considering a conversation about a significant personal experience. You do not need to share a detailed history to explore your options. Start by deciding what you want from a conversation: time to reflect, questions to explore, or help turning an intention into an everyday practice.' },
+      { type: 'h3', text: 'What to ask before a first conversation' },
+      { type: 'ul', items: [
+        'What does an integration conversation with you involve, and what is outside your role?',
+        'What training supports this particular service, and how can I check it?',
+        'Can we agree on the topics and practices in advance, and can I pause or decline?',
+        'What is the total fee, session length, cancellation policy and approach to confidentiality?',
+        'Do you offer online conversations where I live, and what time zone should we use?',
+      ] },
+      { type: 'p', text: 'Guides choose their own service labels. An integration listing is not proof of clinical qualifications or a promise of a particular result. Confirm what the individual offers; a first inquiry does not book a session.' },
+
       {
         type: 'p',
         text: 'Integration is the ongoing process of making sense of an experience and weaving what you have learned into your daily life. It is not a single conversation or a checklist — it is a slow, often nonlinear process of reflection, embodiment, and change.',
@@ -206,10 +224,25 @@ export const resources: Resource[] = [
   {
     slug: 'questions-to-ask',
     title: 'Questions to Ask a Facilitator',
+    searchTitle: 'How to Choose a Facilitator: Questions, Fees and Boundaries',
+    nextStep: { label: 'Compare facilitator profiles', href: '/facilitators', description: 'Use these questions alongside each profile. Compare listed services, location, format and fees, then ask a guide about the details that matter to you. Browsing and sending an inquiry do not require an account or payment.' },
+    relatedSlugs: ['red-flags', 'scope-of-practice'],
     subtitle: 'How to vet a guide before committing',
     description:
       'A practical list of questions to ask any integration coach, guide, or facilitator before working with them — covering background, safety, scope, and logistics.',
     blocks: [
+      { type: 'h3', text: 'Start with the support you want' },
+      { type: 'p', text: 'For adults comparing guides, a useful starting point is the service itself: integration conversations, spiritual support, meditation, preparation education or somatic practices. These labels describe different offerings, not interchangeable qualifications. Read each profile and ask what the guide actually does.' },
+      { type: 'h3', text: 'A simple comparison process' },
+      { type: 'ol', items: [
+        'Choose a type of support and any practical preferences, such as location or online sessions.',
+        'Compare a few profiles. Treat practice years and service selections as self-reported, and verify any claimed credentials independently.',
+        'Ask about scope, consent, privacy, total cost and cancellation terms before agreeing to work together.',
+        'Take time to decide. You can ask more questions, choose another guide, or decide not to proceed.',
+      ] },
+      { type: 'h3', text: 'Keep the first message simple' },
+      { type: 'p', text: 'For example: “I am exploring the support listed on your profile. Could you explain your approach, session format, fees and current availability?” Keep diagnoses, medication lists, trauma histories and other sensitive details out of an introductory platform message. An inquiry is a conversation starter, not a booking or payment.' },
+
       {
         type: 'p',
         text: 'Choosing a guide is a significant decision. A good guide will welcome your questions — and the quality of their answers will tell you as much as the answers themselves. If someone is dismissive, evasive, or pressures you not to ask, treat that as a signal.',
@@ -690,6 +723,38 @@ export const resources: Resource[] = [
         { title: 'Zendo Project: Event Services', url: 'https://zendoproject.org/volunteer/' },
       ],
     },
+  },
+  {
+    slug: 'spiritual-support',
+    title: 'Exploring Spiritual Support',
+    searchTitle: 'Spiritual Support: Approaches, Boundaries and Choosing a Guide',
+    subtitle: 'Questions about meaning, values and the kind of conversation you want',
+    description: 'Explore what spiritual support can mean, questions about beliefs and boundaries, and how to compare guides without pressure or an account.',
+    nextStep: { label: 'Browse spiritual support', href: '/facilitators?modality=Spiritual+support', description: 'Explore profiles that list spiritual support. The label alone does not establish a tradition, credential or approach. Ask each guide what they offer and whether it fits what you want. No account or payment is needed to inquire.' },
+    relatedSlugs: ['questions-to-ask', 'red-flags', 'scope-of-practice'],
+    blocks: [
+      { type: 'p', text: 'Adults may look for spiritual support when they want to talk about meaning, values, beliefs, belonging or changes in how they see their life. You can be curious, uncertain, religious, non-religious or still finding language for your questions. You do not need to adopt a belief to ask what a guide offers.' },
+      { type: 'h3', text: 'Ask what spiritual support means to this guide' },
+      { type: 'p', text: 'The term is broad. A conversation might involve reflection, a particular tradition or a practice agreed in advance, but do not assume that a directory label promises any of these. Ask the guide to describe their approach, training and limits in plain language.' },
+      { type: 'ul', items: [
+        'Do you work within a specific tradition, and how do you approach beliefs different from your own?',
+        'What happens in a typical session? Is it conversation, a practice, or something else?',
+        'What training or experience is relevant to this service, and what can I independently verify?',
+        'Can I disagree, ask questions, decline a practice or end a session?',
+      ] },
+      { type: 'h3', text: 'Agree on boundaries and practical details' },
+      { type: 'p', text: 'Before arranging a session, discuss confidentiality and its limits, fees, cancellation terms, session length and communication between sessions. If a practice involves touch, ask about consent before agreeing. Confirm online availability for your location and time zone rather than assuming that remote support is available everywhere.' },
+      { type: 'h3', text: 'Leave room for your own judgment' },
+      { type: 'ul', items: [
+        'You can take time to decide without pressure to buy a package or make a commitment.',
+        'Be cautious about guaranteed outcomes, claims of unquestionable authority, secrecy or pressure to give up other relationships and support.',
+        'A guide should be able to explain the limits of their role. Spiritual support is not a substitute for licensed medical or mental health care.',
+        'A listing does not independently verify identity, credentials, safety or results.',
+      ] },
+      { type: 'h3', text: 'Start with a brief question' },
+      { type: 'p', text: 'You could ask: “I would like to understand your approach to spiritual support. How do you work with someone who is still exploring their beliefs, and what are your fees and session options?” Keep private health information out of the first platform message. Sending an inquiry does not book a session.' },
+      { type: 'callout', variant: 'info', text: 'TFN connects people with listed legal support services. It does not sell, source or coordinate access to controlled substances. A spiritual-support listing does not imply ceremonies, substances or any particular religious role.' },
+    ],
   },
 ]
 

@@ -5,5 +5,6 @@ export const resourceSummaries: Record<string, string> = {
   'red-flags': 'Be cautious about pressure, guaranteed results, secrecy, unclear fees, or crossed boundaries. A responsible guide welcomes questions and respects your right to say no.',
   'contraindications': 'Discuss your health history and medications with a qualified healthcare professional. Do not change prescribed medication based on a guide’s advice. Keep medical details out of introductory messages.',
   'scope-of-practice': 'Coaching, therapy, and medical care have different roles. A directory listing is not a professional license. Check qualifications and choose care that meets your needs.',
+  'spiritual-support': 'Ask how a guide approaches beliefs, consent, privacy and fees. You can decline a practice or take time to decide. Spiritual support does not replace clinical care.',
   'emergency': 'In the US, call or text 988 for emotional distress or suicidal crisis. For immediate danger or a medical emergency, call 911. Outside the US, contact your local emergency or crisis service.',
 }
