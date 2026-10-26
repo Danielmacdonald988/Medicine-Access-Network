@@ -5,6 +5,8 @@ import { PGlite } from '@electric-sql/pglite'
 import { pageEvent, trafficSource } from '../lib/engagement'
 
 test('coarse page signals and referral classification never include sensitive values', () => {
+  assert.equal(pageEvent('/'), 'directory_view')
+  assert.equal(pageEvent('/facilitators'), 'directory_view')
   assert.equal(pageEvent('/facilitators/private-id'), 'profile_view')
   assert.equal(pageEvent('/auth/callback'), null)
   assert.equal(pageEvent('/admin'), null)

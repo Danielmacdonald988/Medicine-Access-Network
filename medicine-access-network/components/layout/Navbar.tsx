@@ -209,10 +209,10 @@ export function Navbar({ user }: NavbarProps) {
         {!user && (
           <div className="network-shell pb-3 xl:hidden">
             <Link
-              href="/signup"
+              href="/facilitators"
               className="flex min-h-11 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
-              {t("Join as a facilitator")}
+              {t("Explore support")}
               <ArrowUpRight className="size-4 shrink-0" aria-hidden="true" />
             </Link>
           </div>

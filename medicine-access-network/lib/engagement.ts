@@ -7,7 +7,7 @@ export const APPLICATION_STEPS = ['Display name', 'Location', 'Remote sessions',
 
 export function pageEvent(path: string): EngagementEvent | null {
   if (path === '/signup') return 'signup_view'
-  if (path === '/facilitators') return 'directory_view'
+  if (path === '/' || path === '/facilitators') return 'directory_view'
   if (/^\/facilitators\/[^/]+$/.test(path)) return 'profile_view'
   if (/^\/resources\/[^/]+$/.test(path)) return 'resource_view'
   return null

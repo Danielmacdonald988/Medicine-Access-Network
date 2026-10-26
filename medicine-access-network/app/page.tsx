@@ -21,7 +21,7 @@ import styles from "./home.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getTranslation();
-  const title = t("Psychedelic Preparation & Integration — {appName}", {
+  const title = t("Integration, Spiritual & Somatic Support — {appName}", {
     appName: APP_NAME,
   });
   const description = t(APP_TAGLINE);

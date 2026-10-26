@@ -40,11 +40,12 @@ export async function EngagementMetrics({ days }: { days: number }) {
         <FunnelCard title="Facilitator application" description="New applications only; profile edits are excluded." funnel={summary.funnels.application_started || empty} completeLabel="Application submitted" />
       </div>
       <p className="text-xs leading-relaxed text-stone-600">A drop-off means no tracked completion within 24 hours of the first interaction in the same browser tab. It does not prove someone closed the page. Signup accepted means the signup service returned success; email confirmation and a newly created account are not verified by this signal. Completion rates exclude starts less than 24 hours old.</p>
+      <p className="text-xs leading-relaxed text-stone-600">Contact signals count browser-tab sessions, not individual inquiries. Messaging link clicks do not confirm a message was sent. Website inquiry accepted means the request endpoint returned success; it does not confirm a guide reply or booking. Verify actual inquiries in the inbox.</p>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
         {[
           ['visit','Tracked sessions'],['directory_view','Directory visitors'],['profile_view','Profile viewers'],['resource_view','Resource readers'],
           ['search_used','Used search / filters'],['search_empty','Saw no search results'],['signup_view','Signup page visitors'],['signup_error','Signup errors'],
-          ['contact_started','Started a contact request'],['contact_sent','Sent a contact request'],['contact_error','Contact errors'],['direct_contact','Direct contact clicks'],['guide_saved','Saved a guide'],['application_error','Application save errors'],
+          ['contact_started','Started a contact request'],['contact_sent','Website inquiry accepted'],['contact_error','Contact errors'],['direct_contact','Messaging link clicks'],['guide_saved','Saved a guide'],['application_error','Application save errors'],
         ].map(([key,label]) => <div key={key} className="rounded-xl border border-stone-200 bg-white p-4"><p className="text-xs text-stone-600">{label}</p><p className="mt-2 text-2xl font-semibold text-stone-900">{summary.counts[key] || 0}</p></div>)}
       </div>
       <div className="grid gap-4 lg:grid-cols-3">

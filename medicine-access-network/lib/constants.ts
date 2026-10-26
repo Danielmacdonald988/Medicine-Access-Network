@@ -1,5 +1,5 @@
 export const APP_NAME = 'The Facilitator Network'
-export const APP_TAGLINE = 'Connect with facilitators for psychedelic preparation and integration. Explore their approaches, ask questions, and decide whether to work together.'
+export const APP_TAGLINE = 'Explore integration, spiritual support, meditation, preparation education, and somatic practices. Compare facilitators and start a conversation without an account.'
 export const SUPPORT_EMAIL = 'Dmacmedicine@pm.me'
 
 // Single source of truth for the site's absolute origin — used by

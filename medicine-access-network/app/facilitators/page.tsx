@@ -1,3 +1,4 @@
+import { SupportDiscovery } from '@/components/search/SupportDiscovery'
 import { SearchEngagement } from '@/components/EngagementTracker'
 import { getTranslation } from '@/lib/i18n/server'
 import type { Metadata } from 'next'
@@ -26,8 +27,9 @@ import {
 import type { FacilitatorSearchResult } from '@/lib/types'
 
 export const metadata: Metadata = {
-  title: 'Find Psychedelic Preparation & Integration Support',
-  description: 'Compare facilitators offering psychedelic preparation, integration, and related support by location, approach, online availability, and pricing.',
+  title: 'Find Integration, Spiritual & Somatic Support',
+  description: 'Explore integration conversations, spiritual support, meditation, preparation education, and somatic practices. Compare guides and contact them without an account.',
+  alternates: { canonical: '/facilitators' },
 }
 
 interface PageProps {
@@ -181,9 +183,10 @@ export default async function FacilitatorsPage({ searchParams }: PageProps) {
       <div className="mb-5 max-w-3xl lg:mb-6">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">{t("Find your support")}</p>
         <h1 className="mt-3 text-3xl font-medium leading-[1.08] tracking-[-0.045em] text-stone-900 sm:text-4xl lg:text-4xl">{t('Explore support. Start a conversation.')}</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">{t("Explore preparation, integration, breathwork, and somatic support. Get to know each guide’s approach, then start a conversation when you feel ready.")}</p>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">{t("Explore integration, spiritual support, meditation, preparation education, and somatic practices. Compare guides, then start a conversation when you feel ready.")}</p>
         <p className="mt-3 text-sm text-emerald-800 lg:mt-4">{t("No explorer account needed. Browse at your own pace.")}</p>
       </div>
+      <SupportDiscovery filters={filters} />
       <div className="grid gap-5 lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start lg:gap-8">
         <Suspense><DirectorySearchControls /></Suspense>
         <section aria-label={t("Guide search results")} className="min-w-0 flex-1">
