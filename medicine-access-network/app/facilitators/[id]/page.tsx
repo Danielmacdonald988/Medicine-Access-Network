@@ -1,3 +1,4 @@
+import { discoveryReturnHref, initialSupportSelection } from '@/lib/seeker-navigation'
 import { SocialLinks } from '@/components/profile/SocialLinks'
 import { profileServices } from '@/lib/constants'
 import { ProfileDetails } from '@/components/profile/ProfileDetails'
@@ -31,6 +32,7 @@ import { DirectContactLinks } from '@/components/profile/DirectContactLinks'
 
 interface PageProps {
   params: Promise<{ id: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
@@ -126,9 +128,11 @@ const LEGAL_NOTES = [
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default async function FacilitatorProfilePage({ params }: PageProps) {
+export default async function FacilitatorProfilePage({ params, searchParams }: PageProps) {
   const { t, locale } = await getTranslation()
   const { id } = await params
+  const context = await searchParams
+  const returnTo = discoveryReturnHref(context.returnTo)
 
   const supabase = await createServerSupabaseClient()
 
@@ -205,10 +209,13 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
 
   return (
     <div className="network-shell py-8 sm:py-12">
+      <nav aria-label="Guide navigation" className="mb-6 flex flex-wrap items-center gap-x-6">
+      {returnTo && <Link href={returnTo} lang="en" className="inline-flex min-h-11 items-center text-sm font-medium text-emerald-700 underline-offset-4 hover:underline">← Back to your results</Link>}
       <Link
         href="/facilitators"
-        className="mb-6 inline-flex min-h-11 items-center text-sm font-medium text-emerald-700 underline-offset-4 hover:underline"
+        className="inline-flex min-h-11 items-center text-sm font-medium text-emerald-700 underline-offset-4 hover:underline"
       >{t("← Back to all guides")}</Link>
+      </nav>
       <div className={headerStyles.header}>
         <div className={headerStyles.photo}>
           <Avatar className="h-28 w-20 shrink-0 overflow-hidden rounded-xl bg-[#eef0e8] p-1.5 after:rounded-[inherit] sm:h-40 sm:w-28 lg:h-48 lg:w-36">
@@ -541,6 +548,7 @@ export default async function FacilitatorProfilePage({ params }: PageProps) {
                     </div>
                     <ContactRequestForm
                       key={facilitator.id}
+                      initialService={initialSupportSelection(context.service, facilitator.modalities ?? [])}
                       facilitatorProfileId={facilitator.id}
                       facilitatorDisplayName={facilitator.display_name}
                       modalities={facilitator.modalities ?? []}

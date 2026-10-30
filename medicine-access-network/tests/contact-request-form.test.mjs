@@ -31,7 +31,7 @@ function actualFormDefaults(facilitatorProfileId) {
       const config = node.arguments[0]
       if (config && ts.isObjectLiteralExpression(config)) {
         const property = config.properties.find((item) => ts.isPropertyAssignment(item) && item.name.getText(source) === 'defaultValues')
-        if (property) defaults = new Function('facilitatorProfileId', `return (${property.initializer.getText(source)})`)(facilitatorProfileId)
+        if (property) defaults = new Function('facilitatorProfileId', 'supportOptions', 'initialService', `return (${property.initializer.getText(source)})`)(facilitatorProfileId, [], '')
       }
     }
     ts.forEachChild(node, visit)

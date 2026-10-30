@@ -139,6 +139,9 @@ export default async function ResourcePage({ params }: PageProps) {
       </section>}
       <div id="original-article" lang="en" className="scroll-mt-28 space-y-5">
       {locale !== 'en' && <h2 className="text-lg font-semibold">Original English article</h2>}
+      {slug === 'integration-basics' && <p className="text-sm leading-relaxed text-stone-600">
+        Ready to compare approaches? <Link href="/integration-support" className="inline-flex min-h-11 items-center text-emerald-800 underline underline-offset-4">Explore guides who list integration conversations</Link>. You can keep reading before deciding.
+      </p>}
       {/* Content */}
       <div className="space-y-4">
         {resource.blocks.map((block, i) => (
