@@ -46,6 +46,7 @@ interface ContactRequestFormProps {
   modalities: string[]
   remoteAvailable: boolean
   location?: string | null
+  initialService?: string
 }
 
 export function ContactRequestForm({
@@ -54,6 +55,7 @@ export function ContactRequestForm({
   modalities,
   remoteAvailable,
   location,
+  initialService = '',
 }: ContactRequestFormProps) {
   const { t } = useTranslation()
   const [submitted, setSubmitted] = useState(false)
@@ -61,6 +63,7 @@ export function ContactRequestForm({
   const honeypot = useRef<HTMLInputElement>(null)
   const submissionErrorRef = useRef<HTMLDivElement>(null)
   const id = useId()
+  const serviceEdited = useRef(false)
   const supportOptions = profileSupportOptions(modalities)
   const formatOptions = profileFormatOptions(remoteAvailable, location)
 
@@ -72,6 +75,7 @@ export function ContactRequestForm({
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ContactRequestFormInput>({
     resolver: zodResolver(contactRequestFormSchema),
@@ -79,11 +83,19 @@ export function ContactRequestForm({
       facilitator_profile_id: facilitatorProfileId,
       seeker_name: '',
       seeker_email: '',
-      requested_service: '',
+      // Initial hint only; subsequent route changes may update an untouched service field.
+      requested_service: supportOptions.includes(initialService) ? initialService : '',
       message: '',
       preferred_time_window: '',
     },
   })
+
+  const serviceHint = supportOptions.includes(initialService) ? initialService : ''
+  useEffect(() => {
+    // Query-only Back/Forward can reuse this form. Follow new intent only until
+    // the visitor makes a service choice; never reset their other draft fields.
+    if (!serviceEdited.current) setValue('requested_service', serviceHint, { shouldDirty: false })
+  }, [serviceHint, setValue])
 
   const onSubmit = async (data: ContactRequestFormInput) => {
     recordEngagement('contact_started')
@@ -229,7 +241,10 @@ export function ContactRequestForm({
           render={({ field }) => (
             <Select
               value={field.value || null}
-              onValueChange={field.onChange}
+              onValueChange={(value) => {
+                serviceEdited.current = true
+                field.onChange(value)
+              }}
               disabled={isSubmitting}
             >
               <SelectTrigger

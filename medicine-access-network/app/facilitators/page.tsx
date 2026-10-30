@@ -1,3 +1,4 @@
+import { directorySupportIntent } from '@/lib/seeker-navigation'
 import { SupportDiscovery } from '@/components/search/SupportDiscovery'
 import { SearchEngagement } from '@/components/EngagementTracker'
 import { getTranslation } from '@/lib/i18n/server'
@@ -147,7 +148,7 @@ async function FacilitatorGrid({ filters, page }: { filters: FacilitatorFilters;
         {pageCount > 1 && ` · ${t('Showing {start}–{end}', { start: offset + 1, end: offset + facilitators.length })}`}
       </p>
       <div className="grid grid-cols-1 gap-2">
-        {facilitators.map((facilitator) => <FacilitatorCard key={facilitator.id} facilitator={facilitator} />)}
+        {facilitators.map((facilitator) => <FacilitatorCard key={facilitator.id} facilitator={facilitator} returnTo={pageHref(page)} service={directorySupportIntent(filters)} />)}
       </div>
       {pageCount > 1 && (
         <nav aria-label={t("Guide results pages")} className="mt-8 flex items-center justify-between gap-3">

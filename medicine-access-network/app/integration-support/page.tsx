@@ -1,3 +1,4 @@
+import { INTEGRATION_SERVICE } from '@/lib/seeker-navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -26,7 +27,7 @@ async function IntegrationGuides() {
   if (!result.guides.length) return <p role="status" className="rounded-xl border border-stone-200 p-5">No public profiles currently list integration conversations. <Link className={linkStyle} href="/facilitators">Explore other listed support</Link> without assuming it offers the same service.</p>
   return <>
     <p className="mb-4 text-sm text-stone-600">Showing {result.guides.length} of {result.total} matching profiles, alphabetically. Placement is not a recommendation or quality rating.</p>
-    <div lang={locale} className="grid gap-3">{result.guides.map(guide => <FacilitatorCard key={guide.id} facilitator={guide} />)}</div>
+    <div lang={locale} className="grid gap-3">{result.guides.map(guide => <FacilitatorCard key={guide.id} facilitator={guide} returnTo="/integration-support" service={INTEGRATION_SERVICE} />)}</div>
     <Link className={`${linkStyle} mt-3`} href={INTEGRATION_DIRECTORY_HREF}>See all integration profiles and filter your options →</Link>
   </>
 }
