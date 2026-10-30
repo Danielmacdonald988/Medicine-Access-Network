@@ -21,9 +21,11 @@ const migrationNames = [
   '20260927193739_structured_profile_locations.sql',
 ]
 const migrations = await Promise.all(migrationNames.map(name => readFile(new URL(`../migrations/${name}`, import.meta.url), 'utf8')))
+const grantsName = '20261030143300_explicit_core_api_grants.sql'
+const explicitGrants = await readFile(new URL(`../migrations/${grantsName}`, import.meta.url), 'utf8')
 let assertions = 0
 
-for (const mode of ['fresh schema', 'existing schema upgrade']) {
+async function createDatabase(automaticGrants) {
   const db = new PGlite({ extensions: { uuid_ossp, pg_trgm } })
   await db.exec(`
     create role anon; create role authenticated; create role service_role bypassrls;
@@ -33,7 +35,7 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
       select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
     $$;
     grant usage on schema public, auth to anon, authenticated, service_role;
-    alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
+    ${automaticGrants ? 'alter default privileges in schema public grant all on tables to anon, authenticated, service_role;' : ''}
     create publication supabase_realtime;
     -- Minimal real tables, grants and RLS for Supabase Storage. Broad pre-existing
     -- policies deliberately exercise migration 0005's restrictive bucket policy.
@@ -55,7 +57,13 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
     create policy "existing object access" on storage.objects for all to anon, authenticated
       using (true) with check (true);
   `)
-  if (mode === 'fresh schema') await db.exec(schema.split('-- Included migration: 20260927192456_public_profile_social_links.sql')[0])
+  return db
+}
+
+for (const mode of ['fresh schema', 'fresh schema without automatic grants', 'existing schema upgrade']) {
+  const automaticGrants = mode !== 'fresh schema without automatic grants'
+  const db = await createDatabase(automaticGrants)
+  if (mode.startsWith('fresh schema')) await db.exec(schema.split('-- Included migration: 20260927192456_public_profile_social_links.sql')[0])
   else {
     await db.exec(schema.split('-- Included migration:')[0])
     for (const migration of migrations.slice(0, 4)) await db.exec(migration)
@@ -89,6 +97,10 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
 
   await db.exec(migrations[6])
   await db.exec(migrations[7])
+  // Apply explicit core rights only after the historical column migrations.
+  // No blanket defaults are installed in the new fresh-database scenario.
+  await db.exec(explicitGrants)
+  await db.exec(explicitGrants) // idempotent; preserves existing column restrictions
 
   const id = n => `10000000-0000-0000-0000-${String(n).padStart(12, '0')}`
   const guide = id(1), otherGuide = id(2), seeker = id(3), admin = id(4), applicant = id(5), recovery = id(6)
@@ -266,9 +278,13 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
   check(!!first.request_id && first.facilitator_email === `${guide}@example.test`,'trusted contact RPC stores request and resolves notification')
   for(let n=0;n<4;n++) await db.query(submitSQL,args)
   await denied(submitSQL,args,'P0001')
+  // Inspect internal RPC state as the fixture owner, not by granting the API
+  // service role additional direct access solely for test assertions.
+  await as('postgres')
   check((await row('select count(*)::int as total from public.booking_requests')).total === 5,'sixth attempt creates no message')
   check((await row('select bool_and(seeker_id is null and status=\'pending\') as valid from public.booking_requests')).valid,'anonymous messages start pending without an account')
   check((await row("select bool_and(ip_address ~ '^[a-f0-9]{64}$') as valid from public.contact_rate_limits")).valid,'rate limiter stores opaque keys only')
+  await as('service_role')
   check((await row('select public.check_and_record_contact_rate_limit($1,0,999) as allowed',['b'.repeat(64)])).allowed === false,'caller cannot change fixed rate-limit policy')
   check((await row('select public.check_and_record_contact_rate_limit($1) as allowed',['203.0.113.1'])).allowed === false,'raw IP storage refused')
   await db.query(submitSQL,[args[0],'b'.repeat(64),...args.slice(2)])
@@ -518,5 +534,80 @@ for (const mode of ['fresh schema', 'existing schema upgrade']) {
 
   await db.close()
   console.log(`PASS: ${mode}, including repeated migration`)
+}
+// Test the actual full fresh-install file, not only the historical prefixes
+// above. Reproduce the original session failure before the fix, then verify the
+// complete schema and minimal ACLs with defaults disabled.
+assert.equal(schema.split(`-- Included migration: ${grantsName}\n`)[1], explicitGrants)
+assertions++
+for (const repaired of [false, true]) {
+  const db = await createDatabase(false)
+  await db.exec(repaired ? schema : schema.split(`-- Included migration: ${grantsName}`)[0])
+  const owner = '20000000-0000-0000-0000-000000000001'
+  const other = '20000000-0000-0000-0000-000000000002'
+  const admin = '20000000-0000-0000-0000-000000000003'
+  const profile = '20000000-0000-0000-0000-000000000004'
+  const image = `${owner}/20000000-0000-0000-0000-000000000005.webp`
+  const as = async (role, uid = '') => db.exec(`reset role; set role ${role}; select set_config('request.jwt.claim.sub','${uid}',false);`)
+  const check = (value, message) => { assert.ok(value, message); assertions++ }
+  const denied = async (sql, params = []) => {
+    await assert.rejects(db.query(sql, params), error => error.code === '42501')
+    assertions++
+  }
+  for (const uid of [owner, other, admin]) await db.query('insert into auth.users(id,email) values($1,$2)', [uid, `${uid}@fresh.test`])
+  await as('authenticated', owner)
+  const lookup = 'select full_name,role from public.users where id=$1'
+  if (!repaired) {
+    await denied(lookup, [owner])
+    await db.close()
+    console.log('PASS: original no-defaults full schema reproduces session lookup permission denial')
+    continue
+  }
+  check((await db.query(lookup, [owner])).rows[0].role === 'facilitator', 'full schema supports the actual sign-in role lookup')
+  check((await db.query(lookup, [other])).rows.length === 0, 'lookup cannot read another account')
+  await denied('update public.users set role=\'admin\' where id=$1', [owner])
+  await as('postgres')
+  await db.exec(explicitGrants)
+  await db.exec(explicitGrants)
+  await db.query("insert into storage.objects(id,bucket_id,name) values($1,'profile-images',$2)", [profile, image])
+  await as('service_role')
+  await db.query("update public.users set role='admin' where id=$1", [admin])
+  await denied("update public.users set email='changed@fresh.test' where id=$1", [owner])
+  await denied('select * from public.contact_rate_limits')
+  await denied('select * from public.booking_requests')
+  await as('authenticated', owner)
+  await db.query("insert into public.facilitator_profiles(id,user_id,display_name,bio,image_paths,agreement_version) values($1,$2,'Fresh guide',repeat('x',100),$3,'2026-09-27.1')", [profile, owner, [image]])
+  await denied("update public.facilitator_profiles set verification_status='approved',visibility='public' where id=$1", [profile])
+  await as('authenticated', admin)
+  await db.query("select public.review_facilitator_application($1,'approved','Reviewed','2026-09-27.1')", [profile])
+  await as('service_role')
+  await db.query("update public.facilitator_profiles set whatsapp_url='https://wa.me/14155552671' where id=$1", [profile])
+  await denied("update public.facilitator_profiles set verification_status='rejected' where id=$1", [profile])
+  await as('anon')
+  await denied('select * from public.users')
+  await denied('select * from public.facilitator_profiles')
+  check((await db.query('select id,bio,whatsapp_url from public.facilitator_public_profiles where id=$1', [profile])).rows[0].bio === null, 'full fresh schema exposes only the safe public projection')
+  check((await db.query('select * from public.reviews')).rows.length === 0, 'public review reads have explicit access')
+  await denied('insert into public.reviews default values')
+  await as('authenticated', other)
+  check((await db.query('select * from public.facilitator_profiles where id=$1', [profile])).rows.length === 0, 'private application stays hidden from other authenticated users')
+  await denied("update public.booking_requests set payment_status='paid'")
+  await denied('insert into public.booking_requests default values')
+  await as('postgres')
+  // An unrelated future table must remain inaccessible: the fix must not
+  // restore blanket default privileges or accidentally rely on test bootstrap.
+  await db.exec('create table public.future_private_probe(id integer)')
+  for (const role of ['anon', 'authenticated', 'service_role']) {
+    await as(role)
+    await denied('select * from public.future_private_probe')
+    await denied('insert into public.future_private_probe values(1)')
+  }
+  await as('postgres')
+  await db.exec('alter table public.users disable row level security')
+  await assert.rejects(db.exec(explicitGrants), error => error.code === '42501' && error.message === 'core_api_grants_require_rls')
+  assertions++
+  await db.exec('rollback')
+  await db.close()
+  console.log('PASS: complete fresh schema without automatic grants, repeated grants, scoped service access, RLS and future-table isolation')
 }
 console.log(`PASS: ${assertions} PostgreSQL assertions; no external database contacted.`)
