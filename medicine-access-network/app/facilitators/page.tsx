@@ -186,6 +186,7 @@ export default async function FacilitatorsPage({ searchParams }: PageProps) {
         <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">{t("Explore integration, spiritual support, meditation, preparation education, and somatic practices. Compare guides, then start a conversation when you feel ready.")}</p>
         <p className="mt-3 text-sm text-emerald-800 lg:mt-4">{t("No explorer account needed. Browse at your own pace.")}</p>
       </div>
+      <Link href="/integration-support" lang="en" className="mb-4 inline-flex min-h-11 items-center text-sm text-emerald-800 underline underline-offset-4">Looking for integration support? Compare approaches and guides</Link>
       <SupportDiscovery filters={filters} />
       <div className="grid gap-5 lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start lg:gap-8">
         <Suspense><DirectorySearchControls /></Suspense>

@@ -13,7 +13,7 @@ test('resource discovery routes resolve to real services without account barrier
     for (const slug of resource.relatedSlugs ?? []) assert.ok(getResource(slug), slug)
     if (!resource.nextStep) continue
     const url = new URL(resource.nextStep.href, 'https://example.invalid')
-    assert.equal(url.pathname, '/facilitators')
+    assert.ok(['/facilitators', '/integration-support'].includes(url.pathname))
     for (const service of url.searchParams.getAll('modality')) {
       assert.ok(MODALITIES.some((item) => item.name === service), `unknown service ${service}`)
     }

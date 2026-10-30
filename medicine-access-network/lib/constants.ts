@@ -6,7 +6,7 @@ export const SUPPORT_EMAIL = 'Dmacmedicine@pm.me'
 // app/layout.tsx's metadataBase, app/robots.ts, and app/sitemap.ts. Set
 // NEXT_PUBLIC_APP_URL in production (see .env.example); falls back to
 // the public production origin when no override is configured.
-export const SITE_URL = (process.env.NEXT_PUBLIC_APP_URL || 'https://thefacilitatornetwork.com').replace(/\/$/, '')
+export const SITE_URL = (process.env.NEXT_PUBLIC_APP_URL || 'https://www.thefacilitatornetwork.com').replace(/\/$/, '')
 
 export const MODALITY_CATEGORIES = {
   preparation: 'Preparation',
