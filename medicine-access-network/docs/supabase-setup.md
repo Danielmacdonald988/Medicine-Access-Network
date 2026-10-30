@@ -104,12 +104,16 @@ If you want to run Supabase locally:
 npm install -g supabase
 supabase start
 # Use the local keys output by supabase start in your .env.local
-supabase db reset  # applies schema.sql
+# This repository uses db/schema.sql and db/migrations, not the CLI default layout.
+# A CLI reset does not automatically apply this repository schema.
+# Apply db/schema.sql once to a fresh local database through a trusted SQL connection.
 ```
 
 ## Troubleshooting
 
-**"relation does not exist"** — Run `db/schema.sql` in the SQL editor.
+**"relation does not exist"** — For a fresh empty project, run `db/schema.sql`. For an existing project, check and apply only missing migrations in `docs/deployment.md`; do not rerun the full schema.
+
+**"permission denied for table"** — Grants and RLS are separate. For fresh/recreated tables, verify the explicit grants migration in `docs/deployment.md`; do not enable blanket defaults or grant private tables to anonymous users. Existing tables retain their grants under the October 2026 provider change.
 
 **Users can see other users' data** — Verify RLS is enabled and the policies match what's in `db/schema.sql`.
 

@@ -14,10 +14,24 @@ For an **existing database**, review and apply these migrations in order:
 4. `db/migrations/0004_authorization_and_contact.sql`
 5. `db/migrations/0005_profile_media_links.sql`
 6. `db/migrations/0006_admin_application_notifications.sql`
+7. `db/migrations/0007_engagement.sql`
+8. `db/migrations/20260927192456_public_profile_social_links.sql`
+9. `db/migrations/20260927193739_structured_profile_locations.sql`
+10. `db/migrations/20260927204650_profile_privacy_and_legal_records.sql`
+11. `db/migrations/20260927205544_public_listing_projection.sql`
+12. `db/migrations/20261030143300_explicit_core_api_grants.sql`
 
 Apply the full sequence before switching traffic to the new code; the public directory depends on the final `facilitator_public_profiles` view and contact submission depends on the hardened server-only RPCs. The intermediate files contain historical warnings and compatibility corrections. Do not re-run old non-idempotent migrations against a database where they are already installed. Files ending in `.verify.sql` are diagnostic scripts, not numbered upgrade steps.
 
-For a **fresh database**, use the current `db/schema.sql`, which includes migrations 0001–0006. Do not also run those migrations on the same fresh database. Do not assume a Supabase CLI reset automatically reads `db/schema.sql`; this repository does not use the CLI's default `supabase/migrations` layout.
+For a **fresh database**, use the current `db/schema.sql`, which includes the complete sequence above. Do not also run those migrations on the same fresh database. Do not assume a Supabase CLI reset automatically reads `db/schema.sql`; this repository does not use the CLI's default `supabase/migrations` layout.
+
+### Explicit Data API grants (October 2026)
+
+Supabase no longer automatically exposes newly created public tables to the Data API. Existing tables keep their grants; this change alone does not indicate a live-site outage. Fresh databases, recreated tables and preview/reset workflows must declare their intended access explicitly. See the [provider notice](https://github.com/orgs/supabase/discussions/45329).
+
+The final migration adds the core grants used by account lookup, applications, inbox reads and legacy reviews, while preserving RLS and the existing column-limited user/request writes. The service role receives profile reads, seven contact-link update columns, user reads and role-only updates for the documented deliberate administrator bootstrap. It does not assign administrator status. It adds no anonymous access to private users/applications, no blanket defaults, and no new grants to dormant seeker/payment tables or managed Storage. Existing grants are not revoked or broadened beyond the listed additions. Server-only contact/notification/engagement RPCs retain their existing grants.
+
+`npm run test:db` checks legacy defaults, fresh setup without automatic grants, existing-schema upgrades, and the complete consolidated fresh schema. It also reproduces the original sign-in lookup denial without the fix and verifies that unrelated future tables remain inaccessible. These isolated tests do not replace preview checks of Supabase Auth/PostgREST, live grants or deployment state. Review and authorize any environment migration separately; never rerun the full schema over an existing project.
 
 Migration 0001 defaults profile visibility to `hidden`, including previously approved guides. Deliberately choose which existing approved profiles to republish; do not bulk-publish them without that decision. The admin **Approve & publish** action writes approval and public visibility together. Pending and rejected decisions write hidden visibility. The admin dashboard counts only approved, public profiles as published.
 
