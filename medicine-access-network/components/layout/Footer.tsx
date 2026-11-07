@@ -17,6 +17,7 @@ const footerLinks = {
     { href: "/resources", label: "Browse resources" },
     { href: "/resources/preparation-basics", label: "Preparation" },
     { href: "/resources/integration-basics", label: "Integration" },
+    { href: "/psychedelic-facilitator", label: "What is a psychedelic facilitator?" },
     { href: "/resources/red-flags", label: "Red flags" },
     { href: "/resources/emergency", label: "Urgent support" },
   ],

@@ -28,7 +28,7 @@ import {
 import type { FacilitatorSearchResult } from '@/lib/types'
 
 export const metadata: Metadata = {
-  title: 'Find Integration, Spiritual & Somatic Support',
+  title: 'Find Psychedelic Integration & Preparation Guides',
   description: 'Explore integration conversations, spiritual support, meditation, preparation education, and somatic practices. Compare guides and contact them without an account.',
   alternates: { canonical: '/facilitators' },
 }
@@ -188,6 +188,7 @@ export default async function FacilitatorsPage({ searchParams }: PageProps) {
         <p className="mt-3 text-sm text-emerald-800 lg:mt-4">{t("No explorer account needed. Browse at your own pace.")}</p>
       </div>
       <Link href="/integration-support" lang="en" className="mb-4 inline-flex min-h-11 items-center text-sm text-emerald-800 underline underline-offset-4">Looking for integration support? Compare approaches and guides</Link>
+      <p lang="en" className="mb-5 max-w-3xl text-sm leading-relaxed text-stone-600">Searching for a psychedelic facilitator? <Link href="/psychedelic-facilitator" className="inline-flex min-h-11 items-center text-emerald-800 underline underline-offset-4">Understand the roles, credentials and questions to ask</Link>. TFN focuses on preparation, integration and related support, not substance administration.</p>
       <SupportDiscovery filters={filters} />
       <div className="grid gap-5 lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start lg:gap-8">
         <Suspense><DirectorySearchControls /></Suspense>
