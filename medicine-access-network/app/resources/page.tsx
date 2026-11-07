@@ -15,9 +15,10 @@ import { resources } from '@/lib/resources'
 import { Card, CardContent } from '@/components/ui/card'
 
 export const metadata: Metadata = {
-  title: 'Safety Library',
+  title: 'Integration, Preparation & Choosing Support: Resource Library',
   description:
-    'Grounded guides on preparation, integration, facilitator safety, contraindications, and more.',
+    'Learn what integration support can offer, prepare questions about fees and boundaries, and compare facilitator roles before you reach out.',
+  alternates: { canonical: '/resources' },
 }
 
 const icons = [BookOpen, HeartHandshake, HelpCircle, AlertTriangle, ShieldCheck, Scale, Siren]
@@ -46,6 +47,33 @@ export default async function ResourcesIndexPage() {
           </p>
         </CardContent>
       </Card>
+
+      <section lang="en" aria-labelledby="resource-starting-points" className="rounded-xl border border-stone-200 bg-stone-50 p-5 sm:p-6">
+        <h2 id="resource-starting-points" className="text-xl font-semibold text-stone-900">Where would you like to start?</h2>
+        <p className="mt-2 text-sm leading-relaxed text-stone-600">Read at your own pace. You can explore these guides and the directory without creating an account.</p>
+        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+          <div>
+            <h3 className="font-semibold text-stone-900">Understand integration support</h3>
+            <p className="mt-2 text-sm leading-relaxed text-stone-600">Learn what a conversation after a significant experience can involve, and how it differs from clinical care.</p>
+            <Link href="/resources/integration-basics" className="mt-2 inline-flex min-h-11 items-center text-sm text-emerald-800 underline underline-offset-4">Read the integration guide</Link>
+          </div>
+          <div>
+            <h3 className="font-semibold text-stone-900">Compare guides before contacting anyone</h3>
+            <p className="mt-2 text-sm leading-relaxed text-stone-600">Use questions about training, boundaries, session format, total fees and privacy to compare your options.</p>
+            <Link href="/resources/questions-to-ask" className="mt-2 inline-flex min-h-11 items-center text-sm text-emerald-800 underline underline-offset-4">Get the questions-to-ask checklist</Link>
+          </div>
+          <div>
+            <h3 className="font-semibold text-stone-900">Clarify the kind of support you need</h3>
+            <p className="mt-2 text-sm leading-relaxed text-stone-600">Service labels do not establish professional qualifications. Learn what to check about a guide’s role and limits.</p>
+            <Link href="/resources/scope-of-practice" className="mt-2 inline-flex min-h-11 items-center text-sm text-emerald-800 underline underline-offset-4">Understand scope of practice</Link>
+          </div>
+          <div>
+            <h3 className="font-semibold text-stone-900">Ready to explore profiles?</h3>
+            <p className="mt-2 text-sm leading-relaxed text-stone-600">Compare guides who list integration conversations. Confirm services, availability and location eligibility directly; an inquiry is not a booking.</p>
+            <Link href="/integration-support" className="mt-2 inline-flex min-h-11 items-center text-sm text-emerald-800 underline underline-offset-4">Find integration support</Link>
+          </div>
+        </div>
+      </section>
 
       {locale !== 'en' && <p className="text-sm leading-relaxed text-stone-600">{t('The full safety articles are currently available in English. The summary below is in your selected language.')}</p>}
       <div className="grid gap-4 sm:grid-cols-2">

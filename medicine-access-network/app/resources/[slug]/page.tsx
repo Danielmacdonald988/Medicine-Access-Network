@@ -193,8 +193,9 @@ export default async function ResourcePage({ params }: PageProps) {
         <p>
           This guide is for general information only and is not medical advice, diagnosis, or
           treatment. Always consult a qualified healthcare provider about your individual
-          situation. Guides on this platform offer legal coaching and support services — not
-          therapy, diagnosis, or medical care.
+          situation. A directory listing does not establish clinical qualifications or that a service is
+          permitted in every location. Confirm the guide’s role, any claimed license, and
+          whether they may provide the proposed service where you live.
         </p>
       </div>
       </div>
