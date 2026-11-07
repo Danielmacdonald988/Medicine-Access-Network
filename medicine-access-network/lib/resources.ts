@@ -29,6 +29,9 @@ export const resources: Resource[] = [
   {
     slug: 'preparation-basics',
     title: 'Preparation Basics',
+    searchTitle: 'Preparing for a Guide Conversation: Questions and Boundaries',
+    nextStep: { label: 'Explore support profiles', href: '/facilitators', description: 'Compare the services guides list, then ask about their approach, fees, boundaries and whether they can work with you where you live. You can browse without an account; an inquiry does not book or pay for a session.' },
+    relatedSlugs: ['questions-to-ask', 'scope-of-practice', 'red-flags'],
     subtitle: 'What to consider before working with a guide',
     description:
       'A grounded overview of how to prepare before working with an integration coach, breathwork facilitator, or other guide.',
