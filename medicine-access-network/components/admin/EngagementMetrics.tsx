@@ -30,12 +30,13 @@ export async function EngagementMetrics({ days }: { days: number }) {
 
   return <section id="engagement" aria-labelledby="engagement-title" className="space-y-5 scroll-mt-24">
     <div className="flex flex-wrap items-end justify-between gap-4">
-      <div><p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Audience & growth</p><h2 id="engagement-title" className="mt-1 text-2xl font-semibold text-stone-900">Engagement & signup drop-off</h2><p className="mt-2 text-sm text-stone-600">Understand where visitors engage and where applications stop.</p></div>
+      <div><p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Audience & growth</p><h2 id="engagement-title" className="mt-1 text-2xl font-semibold text-stone-900">Seeker engagement & conversion</h2><p className="mt-2 text-sm text-stone-600">See whether visitors reach out for support, then review signup and application activity.</p></div>
       <nav aria-label="Engagement reporting period" className="flex flex-wrap gap-2">{[7,30,90].map(value => <Link key={value} href={`/admin?days=${value}#engagement`} aria-current={days === value ? 'page' : undefined} className={`rounded-lg border px-3 py-2 text-sm ${days === value ? 'border-emerald-800 bg-emerald-800 text-white' : 'border-stone-200 bg-white text-stone-700'}`}>{value} days</Link>)}</nav>
     </div>
     {!summary ? <p role="status" className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900">Engagement metrics are temporarily unavailable. Refresh to try again. Account and application management are still available below.</p> : <>
       {!summary.first_event && <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">Tracking is ready. The first visitor activity will appear here after it is recorded. Earlier activity cannot be reconstructed.</p>}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-3">
+        {summary.funnels.contact_started ? <FunnelCard title="Seeker conversation requests" description="Sessions that started the website inquiry form. A tracked acceptance is not a verified reply or booking." funnel={summary.funnels.contact_started} completeLabel="Request accepted" /> : <div className="rounded-2xl border border-stone-200 bg-white p-5"><h3 className="font-semibold text-stone-900">Seeker conversation requests</h3><p className="mt-2 text-sm text-stone-600">No contact funnel is available for this period. Contact activity signals appear below; missing funnel data does not establish zero inquiries.</p></div>}
         <FunnelCard title="Account signup" description="Starts when someone interacts with the signup form." funnel={summary.funnels.signup_started || empty} completeLabel="Signup accepted" />
         <FunnelCard title="Facilitator application" description="New applications only; profile edits are excluded." funnel={summary.funnels.application_started || empty} completeLabel="Application submitted" />
       </div>
