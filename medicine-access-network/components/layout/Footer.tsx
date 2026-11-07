@@ -8,6 +8,7 @@ import { LanguageSelector } from "@/components/i18n/LanguageSelector";
 const footerLinks = {
   "Explore the network": [
     { href: "/facilitators", label: "Explore support" },
+    { href: "/integration-support", label: "Find integration support" },
     { href: "/saved", label: "Saved guides" },
     { href: "/#how-it-works", label: "How it works" },
     { href: "/signup", label: "List your practice" },

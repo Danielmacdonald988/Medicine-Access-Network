@@ -22,6 +22,7 @@ import { SavedGuidesLink } from "@/components/saved/SavedGuidesLink";
 
 const navLinks = [
   { href: "/facilitators", label: "Explore support" },
+  { href: "/integration-support", label: "Integration" },
   { href: "/resources", label: "Safety library" },
   { href: "/about", label: "Our approach" },
 ];
