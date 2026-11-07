@@ -8,7 +8,9 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
-      allow: '/',
+      // Permit rendering of visible profile photos. The image route still enforces
+      // profile visibility and sends noindex; all other APIs remain excluded.
+      allow: ['/', '/api/profile-images/'],
       disallow: [
         '/api/',
         '/admin',

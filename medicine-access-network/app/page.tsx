@@ -37,9 +37,9 @@ export async function generateMetadata(): Promise<Metadata> {
 const steps = [
   {
     title: "Find your starting point",
-    body: "Explore practices and facilitator profiles. Browse freely, without creating an account.",
-    href: "/facilitators",
-    action: "Explore the directory",
+    body: "Looking for a conversation after a significant experience? Learn what integration support means and compare guides without creating an account.",
+    href: "/integration-support",
+    action: "Find integration support",
   },
   {
     title: "Get to know the person",
