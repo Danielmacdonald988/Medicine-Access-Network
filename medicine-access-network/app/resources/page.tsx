@@ -75,6 +75,8 @@ export default async function ResourcesIndexPage() {
         </div>
       </section>
 
+      <p lang="en" className="text-sm leading-relaxed text-stone-600">Unsure what a title means? <Link href="/psychedelic-facilitator" className="inline-flex min-h-11 items-center text-emerald-800 underline underline-offset-4">Learn what a psychedelic facilitator does and what to verify</Link>.</p>
+
       {locale !== 'en' && <p className="text-sm leading-relaxed text-stone-600">{t('The full safety articles are currently available in English. The summary below is in your selected language.')}</p>}
       <div className="grid gap-4 sm:grid-cols-2">
         {resources.map((resource, i) => {

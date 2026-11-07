@@ -49,6 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     },
     { url: `${SITE_URL}/integration-support`, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${SITE_URL}/psychedelic-facilitator`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${SITE_URL}/about` },
     { url: `${SITE_URL}/contact` },
     ...['privacy', 'consumer-health-privacy', 'terms', 'provider-agreement', 'review-standards'].map(path => ({ url: `${SITE_URL}/${path}` })),
