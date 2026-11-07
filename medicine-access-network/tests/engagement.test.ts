@@ -9,6 +9,8 @@ test('coarse page signals and referral classification never include sensitive va
   assert.equal(pageEvent('/integration-support'), 'directory_view')
   assert.equal(pageEvent('/facilitators'), 'directory_view')
   assert.equal(pageEvent('/facilitators/private-id'), 'profile_view')
+  assert.equal(pageEvent('/resources'), 'resource_view')
+  assert.equal(pageEvent('/psychedelic-facilitator'), 'resource_view')
   assert.equal(pageEvent('/auth/callback'), null)
   assert.equal(pageEvent('/admin'), null)
   assert.equal(trafficSource('https://l.instagram.com/?private=secret', 'thefacilitatornetwork.com'), 'instagram')
@@ -24,6 +26,9 @@ test('engagement database protects events and correctly separates matured drop-o
     const migration = await readFile(new URL('../db/migrations/0007_engagement.sql', import.meta.url), 'utf8')
     await db.exec(migration)
     await db.exec(migration) // repeatable deployment
+    const seekerMigration = await readFile(new URL('../db/migrations/20261107234426_seeker_contact_funnel.sql', import.meta.url), 'utf8')
+    await db.exec(seekerMigration)
+    await db.exec(seekerMigration) // repeatable deployment
     for (const role of ['anon', 'authenticated']) {
       await db.exec(`set role ${role}`)
       for (const sql of ['select * from public.engagement_events', 'select public.engagement_summary(30)', `select public.record_engagement('10000000-0000-4000-8000-000000000001','visit',0,'direct','mobile',repeat('a',64))`]) {
@@ -48,6 +53,15 @@ test('engagement database protects events and correctly separates matured drop-o
       ('10000000-0000-4000-8000-000000000004','application_step',14,'direct','mobile',now()-interval '1 hour'),
       ('10000000-0000-4000-8000-000000000005','application_started',0,'direct','mobile',now()-interval '2 days'),
       ('10000000-0000-4000-8000-000000000005','application_submitted',0,'direct','mobile',now()-interval '47 hours'),
+      ('10000000-0000-4000-8000-000000000011','contact_started',0,'search','mobile',now()-interval '2 days'),
+      ('10000000-0000-4000-8000-000000000011','contact_sent',0,'search','mobile',now()-interval '47 hours'),
+      ('10000000-0000-4000-8000-000000000012','contact_started',0,'direct','mobile',now()-interval '2 days'),
+      ('10000000-0000-4000-8000-000000000012','direct_contact',0,'direct','mobile',now()-interval '47 hours'),
+      ('10000000-0000-4000-8000-000000000013','contact_started',0,'direct','mobile',now()-interval '1 hour'),
+      ('10000000-0000-4000-8000-000000000014','contact_started',0,'direct','mobile',now()-interval '2 days'),
+      ('10000000-0000-4000-8000-000000000014','contact_sent',0,'direct','mobile',now()-interval '1 hour'),
+      ('10000000-0000-4000-8000-000000000015','contact_started',0,'direct','mobile',now()-interval '1 hour'),
+      ('10000000-0000-4000-8000-000000000015','contact_sent',0,'direct','mobile',now()-interval '2 hours'),
       ('10000000-0000-4000-8000-000000000006','signup_started',0,'direct','mobile',now()-interval '40 days');
     `)
     const result = await db.query<{ value: { counts: Record<string,number>; funnels: Record<string,Record<string,number>>; last_steps: Record<string,number> } }>('select public.engagement_summary(30) as value')
@@ -55,6 +69,7 @@ test('engagement database protects events and correctly separates matured drop-o
     assert.equal(metrics.counts.visit, 1)
     assert.deepEqual(metrics.funnels.signup_started, { started: 3, completed: 1, pending: 1, dropped: 1, matured: 2, matured_completed: 1 })
     assert.deepEqual(metrics.funnels.application_started, { started: 2, completed: 1, pending: 0, dropped: 1, matured: 2, matured_completed: 1 })
+    assert.deepEqual(metrics.funnels.contact_started, { started: 5, completed: 1, pending: 2, dropped: 2, matured: 3, matured_completed: 1 })
     assert.deepEqual(metrics.last_steps, { '12': 1 })
     await db.exec(`update public.engagement_limits set requests=600 where key=repeat('a',64)`)
     await assert.rejects(db.query(`select public.record_engagement('10000000-0000-4000-8000-000000000007','visit',0,'direct','mobile',repeat('a',64))`), /engagement_rate_limited/)
