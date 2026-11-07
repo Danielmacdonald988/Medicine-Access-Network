@@ -7,6 +7,13 @@ const privateRoutes = ['api', 'admin', 'dashboard', 'facilitator', 'onboarding',
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  async redirects() {
+    return [{
+      source: '/downloads/Kambo_Bufo_Dan.pdf',
+      destination: '/downloads/Kambo_Bufo.pdf',
+      permanent: true,
+    }]
+  },
   // Recompile each release: restored compiler caches served stale theme CSS in preview.
   experimental: { turbopackFileSystemCacheForBuild: false },
   turbopack: { root: __dirname },
