@@ -79,6 +79,22 @@ test('plain-language preparation and integration searches expand only to their c
   }
 })
 
+test('seeker support wording matches only the intended catalog category and keeps literal name/location matching', () => {
+  for (const term of ['integration support', 'integration guide', 'integration guides', 'psychedelic integration support', '  Integration   Support  ']) {
+    const expression = textSearchExpression(term)
+    assert.match(expression, /modalities\.ov\.\{"Integration conversations","Integration Coaching","Psychedelic Integration"\}/)
+    assert.equal(expression.includes('Preparation education'), false)
+    assert.ok(expression.startsWith('display_name.imatch.'))
+    assert.ok(expression.includes('location.imatch.'))
+  }
+  for (const term of ['preparation support', 'preparation guide', 'preparation guides']) {
+    assert.match(textSearchExpression(term), /modalities\.ov\.\{"Preparation education","Preparation Coaching","Ceremony Preparation"\}/)
+  }
+  for (const term of ['psychedelic facilitator', 'psychedelic therapy', 'trauma support', 'depression support', 'integration support near me', 'Dr integration support Smith']) {
+    assert.equal(textSearchExpression(term).includes('modalities.ov.'), false, `do not infer clinical need, locality, credentials or eligibility from ${term}`)
+  }
+})
+
 test('sort survives search refinements and pagination resets without becoming an active filter', () => {
   const filters = parseFacilitatorFilters(new URLSearchParams({ sort: 'name', page: '4' }))
   assert.equal(filters.sort, 'name')

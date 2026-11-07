@@ -94,6 +94,14 @@ export function textSearchExpression(q: string): string {
   // Only expand a small set of plain-language descriptions of the catalog.
   // These are support categories, not a clinical or suitability assessment.
   const aliases: Record<string, 'preparation' | 'integration'> = {
+    // Match the same support wording used by TFN's seeker-facing pages.
+    'preparation support': 'preparation',
+    'preparation guide': 'preparation',
+    'preparation guides': 'preparation',
+    'integration support': 'integration',
+    'integration guide': 'integration',
+    'integration guides': 'integration',
+    'psychedelic integration support': 'integration',
     prep: 'preparation',
     preparing: 'preparation',
     'before a journey': 'preparation',
