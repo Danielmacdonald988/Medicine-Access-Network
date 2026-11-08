@@ -130,7 +130,7 @@ test('every actual card link carries the same context, including photo, name, se
     'next/link': { __esModule: true, default: ({ children, ...props }: Record<string, unknown>) => createElement('a', props, children as React.ReactNode) },
     '@/lib/seeker-navigation': navigation,
     '@/lib/constants': constants,
-    '@/lib/profile-media': { getProfileImageUrl: () => null },
+    '@/lib/profile-media': { profileThumbnailUrl: () => null },
     '@/components/i18n/TranslationProvider': { useTranslation: () => ({ t: (value: string) => value }) },
     '@/components/ui/avatar': { Avatar: passthrough, AvatarFallback: passthrough, AvatarImage: () => null },
     './provider-row.module.css': { __esModule: true, default: {} },

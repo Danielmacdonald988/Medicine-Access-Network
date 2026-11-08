@@ -29,7 +29,7 @@ export async function readImageBytes(request: Request): Promise<Uint8Array> {
   return bytes
 }
 
-export async function normalizeProfileImage(bytes: Uint8Array, contentType: string): Promise<Buffer> {
+async function resizeProfileImage(bytes: Uint8Array, contentType: string, maxEdge: number): Promise<Buffer> {
   if (bytes.byteLength > MAX_PROFILE_IMAGE_BYTES) throw new Error('size')
   if (!(PROFILE_IMAGE_TYPES as readonly string[]).includes(contentType)) throw new Error('image')
   const pipeline = sharp(bytes, { limitInputPixels: 20_000_000, failOn: 'warning', animated: false })
@@ -37,7 +37,16 @@ export async function normalizeProfileImage(bytes: Uint8Array, contentType: stri
   const expected = contentType === 'image/jpeg' ? 'jpeg' : contentType.slice(6)
   if (meta.format !== expected || (meta.pages ?? 1) !== 1 || !meta.width || !meta.height) throw new Error('image')
   // Re-encode, auto-orient, and omit metadata: no EXIF/GPS or original filename.
-  const output = await pipeline.rotate().resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true }).webp({ quality: 82 }).toBuffer()
+  const output = await pipeline.rotate().resize({ width: maxEdge, height: maxEdge, fit: 'inside', withoutEnlargement: true }).webp({ quality: 82 }).toBuffer()
   if (output.byteLength > 2 * 1024 * 1024) throw new Error('size')
   return output
+}
+
+export function normalizeProfileImage(bytes: Uint8Array, contentType: string): Promise<Buffer> {
+  return resizeProfileImage(bytes, contentType, 1600)
+}
+
+// Fixed card variant: preserve aspect ratio and never enlarge small originals.
+export function createProfileThumbnail(bytes: Uint8Array): Promise<Buffer> {
+  return resizeProfileImage(bytes, 'image/webp', 160)
 }

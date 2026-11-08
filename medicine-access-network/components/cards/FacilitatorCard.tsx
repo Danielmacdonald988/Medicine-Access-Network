@@ -5,12 +5,12 @@ import { useTranslation } from '@/components/i18n/TranslationProvider'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { FacilitatorSearchResult } from '@/lib/types'
 import { profileServices } from '@/lib/constants'
-import { getProfileImageUrl } from '@/lib/profile-media'
+import { profileThumbnailUrl } from '@/lib/profile-media'
 import styles from './provider-row.module.css'
 
 export function FacilitatorCard({ facilitator: f, returnTo, service }: { facilitator: FacilitatorSearchResult; returnTo?: string; service?: string }) {
   const { t } = useTranslation()
-  const photo = getProfileImageUrl(f.image_paths?.[0])
+  const photo = profileThumbnailUrl(f.image_paths?.[0])
   const href = profileDiscoveryHref(f.id, returnTo, service)
   const rate = f.donation_based ? (typeof f.minimum_donation === 'number' ? t('Suggested donation from ${amount} USD', { amount:f.minimum_donation }) : t('Donation-based')) : typeof f.hourly_rate === 'number' ? t('${amount} USD per session', {amount:f.hourly_rate}) : t('Rate on request')
   return <article className={styles.row}>
