@@ -2,6 +2,8 @@ import { boundedInteger, directoryHref, filterSearchParams, parseFacilitatorFilt
 import { profileSupportOptions } from './contact-options'
 
 export const INTEGRATION_SERVICE = 'Integration conversations'
+export const PREPARATION_SERVICE = 'Preparation education'
+const HANDOFF_SERVICES: readonly string[] = [INTEGRATION_SERVICE, PREPARATION_SERVICE]
 
 /** Keep return navigation on known discovery routes; never accept an arbitrary URL. */
 export function discoveryReturnHref(value: unknown): string | null {
@@ -22,22 +24,22 @@ export function discoveryReturnHref(value: unknown): string | null {
   } catch { return null }
 }
 
-/** Carry intent only from an explicit, single integration-service filter. */
+/** Carry intent only from an explicit, single preparation or integration filter. */
 export function directorySupportIntent(filters: FacilitatorFilters): string | undefined {
-  return filters.modalities.length === 1 && filters.modalities[0] === INTEGRATION_SERVICE ? INTEGRATION_SERVICE : undefined
+  return filters.modalities.length === 1 && HANDOFF_SERVICES.includes(filters.modalities[0]) ? filters.modalities[0] : undefined
 }
 
 export function profileDiscoveryHref(id: string, returnTo?: string, service?: string): string {
   const params = new URLSearchParams()
   const safeReturn = discoveryReturnHref(returnTo)
   if (safeReturn) params.set('returnTo', safeReturn)
-  if (service === INTEGRATION_SERVICE) params.set('service', INTEGRATION_SERVICE)
+  if (service && HANDOFF_SERVICES.includes(service)) params.set('service', service)
   const query = params.toString()
   return `/facilitators/${encodeURIComponent(id)}${query ? `?${query}` : ''}`
 }
 
 /** A hint is never a new service claim. Bare/unsupported profile visits stay blank. */
 export function initialSupportSelection(service: unknown, modalities: readonly string[]): string {
-  return service === INTEGRATION_SERVICE && profileSupportOptions(modalities).includes(INTEGRATION_SERVICE)
-    ? INTEGRATION_SERVICE : ''
+  return typeof service === 'string' && HANDOFF_SERVICES.includes(service) && profileSupportOptions(modalities).includes(service)
+    ? service : ''
 }
