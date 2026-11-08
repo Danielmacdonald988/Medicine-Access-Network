@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { resources } from '@/lib/resources'
+import { getVerifiedResourceContentDate } from '@/lib/resource-content-dates'
 import { SITE_URL } from '@/lib/constants'
 
 // Covers every publicly indexable URL: static marketing/browse pages, the
@@ -28,6 +29,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const resourceEntries: MetadataRoute.Sitemap = resources.map((r) => ({
     url: `${SITE_URL}/resources/${r.slug}`,
+    ...(getVerifiedResourceContentDate(r.slug)
+      ? { lastModified: getVerifiedResourceContentDate(r.slug) }
+      : {}),
     changeFrequency: 'monthly',
     priority: 0.5,
   }))
