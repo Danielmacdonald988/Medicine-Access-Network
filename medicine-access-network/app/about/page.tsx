@@ -25,6 +25,14 @@ export default async function AboutPage() {
         <p className="mt-4 leading-relaxed text-stone-600">{t('Ask about fees, qualifications, and boundaries. Decide whether the service fits your needs. You have the right to ask questions and decline.')}</p><p className="mt-3"><Link href="/review-standards" className="underline">Read our administrative review standards</Link></p>
         <Link href="/resources/questions-to-ask" className="mt-5 inline-flex items-center gap-2 font-medium text-emerald-800 underline underline-offset-4">{t('Questions to ask a guide')} <ArrowRight className="size-4 shrink-0" aria-hidden /></Link>
       </section>
+      <section id="educational-content" lang="en" className="mt-10 scroll-mt-24">
+        <h2 className="text-2xl font-semibold">About our educational content</h2>
+        <p className="mt-4 leading-relaxed text-stone-600">The Facilitator Network publishes these guides to help adults understand support roles, compare options and prepare questions. They are general educational material, not individualized medical or legal advice, clinical guidelines or evidence that a listed service is effective or safe.</p>
+        <p className="mt-4 leading-relaxed text-stone-600">Some educational content uses AI-assisted drafting and editing. Source links let you check the information described alongside them. A source-check date applies to the stated facts or service details, not to a clinical review of the whole article. Neither a citation nor publication by TFN implies endorsement by the source organization.</p>
+        <p className="mt-4 leading-relaxed text-stone-600">Facilitator profiles are separate from these guides: their service descriptions and experience are self-reported. Check credentials, service scope and location eligibility independently before deciding.</p>
+        <Link href="/contact" className="mt-4 inline-flex min-h-11 items-center font-medium text-emerald-800 underline underline-offset-4">Report an error or outdated information</Link>
+        <p className="mt-2 text-sm leading-relaxed text-stone-600">Include the page link and the statement you are questioning. Please do not send medical records or sensitive personal history.</p>
+      </section>
       <section id="site-analytics" className="mt-10 scroll-mt-24">
         <h2 className="text-2xl font-semibold">{t('How we measure site engagement')}</h2>
         <p className="mt-4 leading-relaxed text-stone-600">{t('We use a temporary identifier in your browser tab to understand which features are used and where signup or applications stop. It lasts up to 24 hours. These engagement records contain action names, application step numbers, broad referral sources, and device types, without names, emails, messages, search text, or the identity of guides you view.')}</p>
