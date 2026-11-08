@@ -1,5 +1,6 @@
 'use client'
 
+import { isInternalQa } from './internal-qa'
 import { trafficSource, type EngagementEvent } from './engagement'
 
 type Session = { id: string; expires: number; source: string; device: string }
@@ -27,7 +28,7 @@ function getSession(): Session {
 }
 
 export function recordEngagement(event: EngagementEvent, step = 0): void {
-  if (typeof window === 'undefined' || excluded || location.pathname.startsWith('/admin') || navigator.doNotTrack === '1' || (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl) return
+  if (typeof window === 'undefined' || isInternalQa() || excluded || location.pathname.startsWith('/admin') || navigator.doNotTrack === '1' || (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl) return
   // Analytics is best-effort: no storage/network failure may break a form.
   try {
     const session = getSession()
@@ -36,6 +37,8 @@ export function recordEngagement(event: EngagementEvent, step = 0): void {
     pending.add(key)
     queue = queue.then(async () => {
       try {
+        // QA can be enabled while an earlier event is awaiting the network.
+        if (isInternalQa()) return
         const response = await fetch('/api/engagement', {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true,
       body: JSON.stringify({ session: session.id, event, step, source: session.source, device: session.device }),
