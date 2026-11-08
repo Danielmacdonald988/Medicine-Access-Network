@@ -75,3 +75,18 @@ test('engagement database protects events and correctly separates matured drop-o
     await assert.rejects(db.query(`select public.record_engagement('10000000-0000-4000-8000-000000000007','visit',0,'direct','mobile',repeat('a',64))`), /engagement_rate_limited/)
   } finally { await db.close() }
 })
+
+
+test('admin separates count-only stored requests from browser signals and documents measurement limits', async () => {
+  const source = await readFile(new URL('../components/admin/EngagementMetrics.tsx', import.meta.url), 'utf8')
+  assert.ok(source.indexOf("await requireRole('admin')") < source.indexOf(".from('booking_requests')"))
+  assert.match(source, /select\('id', \{ count: 'exact', head: true \}\)/)
+  assert.match(source, /\.gte\('created_at', since\)/)
+  assert.match(source, /storedRequests === null \? 'Unavailable' : storedRequests/)
+  assert.match(source, /Resource viewers/)
+  assert.doesNotMatch(source, /Resource readers/)
+  assert.match(source, /not confirmed reading/)
+  assert.match(source, /expires 24 hours after its first tracked activity/)
+  assert.match(source, /not campaign attribution/)
+  assert.match(source, /does not confirm notification delivery/)
+})

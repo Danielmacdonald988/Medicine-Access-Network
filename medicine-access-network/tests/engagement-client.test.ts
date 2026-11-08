@@ -9,6 +9,9 @@ test('client orders and deduplicates signals, honors privacy controls, and toler
   const original = new Map(names.map(name => [name, Object.getOwnPropertyDescriptor(globalThis, name)]))
   const calls: { session: string; event: string; step: number; source: string; device: string }[] = []
   const browserNavigator = { userAgent: 'Mobile', doNotTrack: '0', globalPrivacyControl: false }
+  const originalNow = Date.now
+  let now = originalNow()
+  Date.now = () => now
   let fail = false
   const replace = (key: string, value: unknown) => Object.defineProperty(globalThis, key, { configurable: true, writable: true, value })
   replace('window', {})
@@ -50,7 +53,25 @@ test('client orders and deduplicates signals, honors privacy controls, and toler
     recordEngagement('contact_started')
     await flush()
     assert.equal(calls.at(-1)?.event, 'contact_started')
+    // Fresh tracked visit at hour 0, form start at hour 23, submit at hour 25.
+    // Form activity must not extend the first-visit session's 24-hour lifetime.
+    now += 25 * 60 * 60 * 1000
+    recordEngagement('visit')
+    await flush()
+    const firstVisitSession = calls.at(-1)?.session
+    now += 23 * 60 * 60 * 1000
+    recordEngagement('contact_started')
+    await flush()
+    assert.equal(calls.at(-1)?.session, firstVisitSession)
+    now += 2 * 60 * 60 * 1000
+    recordEngagement('contact_started') // form repeats start on submission
+    recordEngagement('contact_sent')
+    await flush()
+    assert.notEqual(calls.at(-1)?.session, firstVisitSession)
+    assert.equal(calls.at(-1)?.session, calls.at(-2)?.session)
+    assert.deepEqual(calls.slice(-2).map(c => c.event), ['contact_started', 'contact_sent'])
   } finally {
+    Date.now = originalNow
     excludeEngagement(false)
     for (const name of names) {
       const descriptor = original.get(name)
