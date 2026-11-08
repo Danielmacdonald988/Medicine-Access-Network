@@ -17,6 +17,11 @@ export function profileImageUrl(path: unknown): string | null {
 
 export const getProfileImageUrl = profileImageUrl
 
+export function profileThumbnailUrl(path: unknown): string | null {
+  const url = profileImageUrl(path)
+  return url ? `${url}?variant=thumbnail` : null
+}
+
 export function ownsProfileImage(path: unknown, userId: string): path is string {
   return isProfileImagePath(path) && path.startsWith(`${userId}/`)
 }
