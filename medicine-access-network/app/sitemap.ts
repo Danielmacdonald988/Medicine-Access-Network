@@ -49,7 +49,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     },
     { url: `${SITE_URL}/integration-support`, changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${SITE_URL}/psychedelic-facilitator`, changeFrequency: 'monthly', priority: 0.7 },
+    // Verified content publication: f86f9fd (#24), 2026-11-07 UTC.
+    // Update only after a significant change to this page's content/links/data.
+    // Never derive lastModified from request/build time; omit unverified dates.
+    { url: `${SITE_URL}/psychedelic-facilitator`, lastModified: '2026-11-07', changeFrequency: 'monthly', priority: 0.7 },
     { url: `${SITE_URL}/about` },
     { url: `${SITE_URL}/contact` },
     ...['privacy', 'consumer-health-privacy', 'terms', 'provider-agreement', 'review-standards'].map(path => ({ url: `${SITE_URL}/${path}` })),
