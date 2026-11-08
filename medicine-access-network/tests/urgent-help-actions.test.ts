@@ -32,7 +32,7 @@ test('official accessibility and international resources have bounded coverage',
   assert.match(JSON.stringify(emergency.blocks), /not worldwide services/)
   assert.equal(emergency.sourceCheck?.date, '2026-11-08')
   assert.match(emergency.sourceCheck!.scope, /not a test call or guarantee of availability/)
-  assert.equal(resources.filter((r) => r.blocks.some((b) => b.type === 'p' && b.links)).length, 1)
+  assert.equal(resources.filter((r) => r.blocks.some((b) => b.type === 'p' && b.links?.some(({ href }) => /^(tel|sms):/.test(href)))).length, 1)
 })
 
 test('resource actions remain server-rendered native links with visible focus and touch targets', () => {
