@@ -13,8 +13,10 @@ test('client orders and deduplicates signals, honors privacy controls, and toler
   let now = originalNow()
   Date.now = () => now
   let fail = false
+  let gate: Promise<void> | undefined
   const replace = (key: string, value: unknown) => Object.defineProperty(globalThis, key, { configurable: true, writable: true, value })
-  replace('window', {})
+  const browserWindow = { location: { search: '' }, sessionStorage: { getItem() { return null } } }
+  replace('window', browserWindow)
   replace('location', { pathname: '/signup', hostname: 'thefacilitatornetwork.com' })
   // document.referrer is intentionally a separate restored property.
   const originalDocument = Object.getOwnPropertyDescriptor(globalThis, 'document')
@@ -24,6 +26,7 @@ test('client orders and deduplicates signals, honors privacy controls, and toler
   replace('fetch', async (_url: string, options: {body: string}) => {
     if (fail) throw new Error('offline')
     calls.push(JSON.parse(options.body))
+    if (gate) await gate
     return { ok: true }
   })
   try {
@@ -70,6 +73,17 @@ test('client orders and deduplicates signals, honors privacy controls, and toler
     assert.notEqual(calls.at(-1)?.session, firstVisitSession)
     assert.equal(calls.at(-1)?.session, calls.at(-2)?.session)
     assert.deepEqual(calls.slice(-2).map(c => c.event), ['contact_started', 'contact_sent'])
+    let release!: () => void
+    gate = new Promise<void>(resolve => { release = resolve })
+    recordEngagement('resource_view')
+    await flush() // first event is already in flight
+    const beforeQa = calls.length
+    recordEngagement('guide_saved') // queued behind the in-flight request
+    browserWindow.location.search = '?tfn_qa=1'
+    release()
+    await flush()
+    assert.equal(calls.length, beforeQa, 'queued event must not send after QA is enabled')
+    assert.equal(calls.at(-1)?.event, 'resource_view', 'an already sent request cannot be retracted')
   } finally {
     Date.now = originalNow
     excludeEngagement(false)
