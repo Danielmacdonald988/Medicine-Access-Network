@@ -84,7 +84,7 @@ function contactFixture(t, options = {}) {
         },
       }),
     },
-    '@/lib/email': {
+    '@/lib/email': options.emailModule ?? {
       sendFacilitatorInquiryEmail: async (input) => {
         notifications.push(input)
         if (options.notificationThrows) throw new Error(privateMarker)
@@ -208,7 +208,7 @@ const emailInput = {
 }
 
 test('notification sends privately addressed plain text with reply-to and a bounded timeout', async (t) => {
-  setEnv(t, { RESEND_API_KEY: 'test-key', RESEND_FROM_EMAIL: 'requests@directory.test' })
+  setEnv(t, { NODE_ENV: 'production', VERCEL_ENV: 'production', RESEND_API_KEY: 'test-key', RESEND_FROM_EMAIL: 'requests@directory.test' })
   const fetchMock = t.mock.method(globalThis, 'fetch', async (url, options) => {
     assert.equal(url, 'https://api.resend.com/emails')
     assert.equal(options.cache, 'no-store')
@@ -226,7 +226,7 @@ test('notification sends privately addressed plain text with reply-to and a boun
 })
 
 test('provider failures, timeouts, and missing configuration are contained without sensitive logging', async (t) => {
-  setEnv(t, { RESEND_API_KEY: 'test-key', RESEND_FROM_EMAIL: 'requests@directory.test' })
+  setEnv(t, { NODE_ENV: 'production', VERCEL_ENV: 'production', RESEND_API_KEY: 'test-key', RESEND_FROM_EMAIL: 'requests@directory.test' })
   const errors = t.mock.method(console, 'error', () => {})
   const warnings = t.mock.method(console, 'warn', () => {})
   const email = loadModule('lib/email.ts', { 'server-only': {} })
@@ -331,4 +331,34 @@ test('disabled payments stop checkout and webhook before signature, auth, or dat
     assert.equal(response.status, 503)
   }
   assert.deepEqual(calls, [])
+})
+
+
+test('inquiry email is production-only even when preview or test has live-style configuration', async (t) => {
+  setEnv(t, { RESEND_API_KEY: 'test-key', RESEND_FROM_EMAIL: 'requests@directory.test' })
+  const fetchMock = t.mock.method(globalThis, 'fetch', async () => new Response('{}', { status: 200 }))
+  const email = loadModule('lib/email.ts', { 'server-only': {} })
+  for (const nodeEnv of ['production', 'development', 'test', '', undefined]) {
+    for (const vercelEnv of ['production', 'preview', 'development', 'unknown', '', undefined]) {
+      setEnv(t, { NODE_ENV: nodeEnv, VERCEL_ENV: vercelEnv })
+      const before = fetchMock.mock.calls.length
+      const allowed = nodeEnv === 'production' && (vercelEnv === 'production' || vercelEnv === undefined)
+      assert.deepEqual(await email.sendFacilitatorInquiryEmail(emailInput), { sent: allowed },
+        `NODE_ENV=${nodeEnv}, VERCEL_ENV=${vercelEnv}`)
+      assert.equal(fetchMock.mock.calls.length - before, allowed ? 1 : 0)
+    }
+  }
+})
+
+test('preview contact route saves the inquiry and succeeds with the real email guard but no provider call', async (t) => {
+  setEnv(t, { NODE_ENV: 'production', VERCEL_ENV: 'preview', RESEND_API_KEY: 'test-key', RESEND_FROM_EMAIL: 'requests@directory.test' })
+  const fetchMock = t.mock.method(globalThis, 'fetch', async () => { assert.fail('Preview must not contact email provider') })
+  const emailModule = loadModule('lib/email.ts', { 'server-only': {} })
+  const { routes, calls } = contactFixture(t, { emailModule })
+  const response = await routes.POST(jsonRequest(inquiry))
+  assert.equal(response.status, 201)
+  assert.deepEqual(await response.json(), { success: true })
+  assert.equal(calls.length, 1)
+  assert.equal(calls[0].name, 'submit_contact_request')
+  assert.equal(fetchMock.mock.calls.length, 0)
 })
