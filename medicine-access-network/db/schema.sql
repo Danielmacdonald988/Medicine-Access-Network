@@ -1616,7 +1616,7 @@ create table if not exists public.engagement_events (
   session_id uuid not null,
   event text not null check (event in ('visit','directory_view','profile_view','resource_view','search_used','search_empty','signup_view','signup_started','signup_accepted','signup_error','application_started','application_step','application_submitted','application_error','contact_started','contact_sent','contact_error','direct_contact','guide_saved')),
   step smallint not null default 0,
-  source text not null check (source in ('direct','instagram','linktree','search','other')),
+  source text not null check (source in ('direct','instagram','tiktok','x','youtube','linktree','search','other')),
   device text not null check (device in ('mobile','tablet','desktop')),
   created_at timestamptz not null default now(),
   primary key (session_id,event,step),

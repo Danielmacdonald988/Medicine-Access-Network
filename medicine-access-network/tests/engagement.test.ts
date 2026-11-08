@@ -19,6 +19,22 @@ test('coarse page signals and referral classification never include sensitive va
   assert.equal(trafficSource('', 'thefacilitatornetwork.com'), 'direct')
 })
 
+test('social referral buckets are hostname bounded and ignore paths and campaign text', () => {
+  const cases = [
+    ['https://www.tiktok.com/@example/video/1?utm_source=private', 'tiktok'],
+    ['https://vm.tiktok.com/opaque/', 'tiktok'],
+    ['https://x.com/example/status/1', 'x'],
+    ['https://mobile.twitter.com/example', 'x'],
+    ['https://t.co/opaque', 'x'],
+    ['https://m.youtube.com/watch?v=opaque', 'youtube'],
+    ['https://youtu.be/opaque', 'youtube'],
+  ]
+  for (const [url, expected] of cases) assert.equal(trafficSource(url, 'thefacilitatornetwork.com'), expected)
+  for (const url of ['https://tiktok.com.attacker.example/', 'https://notx.com/', 'https://fake-youtube.com/', 'https://evil.example/?utm_source=tiktok', 'https://evil.example/x.com', 'https://evil.example/youtu.be']) {
+    assert.equal(trafficSource(url, 'thefacilitatornetwork.com'), 'other')
+  }
+})
+
 test('engagement database protects events and correctly separates matured drop-offs from pending attempts', async () => {
   const db = new PGlite()
   try {
@@ -32,6 +48,12 @@ test('engagement database protects events and correctly separates matured drop-o
     const sourceMigration = await readFile(new URL('../db/migrations/20261108005340_source_contact_funnels.sql', import.meta.url), 'utf8')
     await db.exec(sourceMigration)
     await db.exec(sourceMigration)
+    const socialMigration = await readFile(new URL('../db/migrations/20261108145515_coarse_social_referral_sources.sql', import.meta.url), 'utf8')
+    await db.exec("insert into public.engagement_events(session_id,event,step,source,device) values ('40000000-0000-4000-8000-000000000001','visit',0,'other','mobile')")
+    await db.exec(socialMigration)
+    await db.exec(socialMigration)
+    assert.equal((await db.query<{ source: string }>("select source from public.engagement_events where session_id='40000000-0000-4000-8000-000000000001'")).rows[0].source, 'other')
+    await db.exec("delete from public.engagement_events where session_id='40000000-0000-4000-8000-000000000001'")
     for (const role of ['anon', 'authenticated']) {
       await db.exec(`set role ${role}`)
       for (const sql of ['select * from public.engagement_events', 'select public.engagement_summary(30)', `select public.record_engagement('10000000-0000-4000-8000-000000000001','visit',0,'direct','mobile',repeat('a',64))`]) {
@@ -103,6 +125,18 @@ test('engagement database protects events and correctly separates matured drop-o
     assert.deepEqual(excludedOnly.source_contact_funnels, {})
     assert.equal(excludedOnly.excluded_source_sessions, 1)
     await db.exec('rollback')
+    // New buckets reach the same aggregate funnel without joining inquiry records.
+    for (const [index, source] of ['tiktok', 'x', 'youtube'].entries()) {
+      const id = `30000000-0000-4000-8000-00000000000${index}`
+      await db.query(`select public.record_engagement($1,'contact_started',0,$2,'mobile',repeat('b',64))`, [id, source])
+      await db.query(`select public.record_engagement($1,'contact_sent',0,$2,'mobile',repeat('b',64))`, [id, source])
+    }
+    const social = (await db.query<{ value: SourceSummary }>('select public.engagement_summary(30) as value')).rows[0].value
+    for (const source of ['tiktok', 'x', 'youtube']) {
+      assert.equal(social.source_contact_funnels[source].started, 1)
+      assert.equal(social.source_contact_funnels[source].completed, 1)
+    }
+    await assert.rejects(db.query(`select public.record_engagement('30000000-0000-4000-8000-000000000009','visit',0,'private-campaign','mobile',repeat('b',64))`), /check constraint/)
     await db.exec(`update public.engagement_limits set requests=600 where key=repeat('a',64)`)
     await assert.rejects(db.query(`select public.record_engagement('10000000-0000-4000-8000-000000000007','visit',0,'direct','mobile',repeat('a',64))`), /engagement_rate_limited/)
   } finally { await db.close() }
