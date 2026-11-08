@@ -155,7 +155,7 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Insight without integration tends to fade. A meaningful experience — whether in a breathwork session, a somatic session, or any other deep personal work — can surface material that is new, confusing, or emotionally charged. Without time and support to process it, that material can be left unresolved.',
+        text: 'After a meaningful experience, you may want time to reflect on what it means to you. A conversation is one option, not a requirement, and does not guarantee lasting insights. You can choose whether to seek support, and an integration service cannot promise a particular outcome.',
       },
       {
         type: 'p',
