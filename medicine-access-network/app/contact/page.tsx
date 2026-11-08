@@ -4,6 +4,7 @@ import { Mail, ArrowUpRight } from 'lucide-react'
 import { SITE_URL, SUPPORT_EMAIL } from '@/lib/constants'
 import { getTranslation } from '@/lib/i18n/server'
 import { z } from 'zod'
+import { mailtoHref } from '@/lib/mailto'
 
 export const metadata: Metadata = {
   title: 'Contact & report a concern',
@@ -17,11 +18,11 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   const parsed = z.string().uuid().safeParse(query.profile)
   const profileId = parsed.success ? parsed.data : null
   const profilePath = profileId ? `/facilitators/${profileId}` : null
-  const emailParams = profilePath ? new URLSearchParams({
+  const emailFields = profilePath ? {
     subject: t('Concern about a guide profile'),
     body: `${SITE_URL}${profilePath}\n\n${t('Describe the concern and how you would like us to respond. Include only the information needed to understand the issue.')}\n\n`,
-  }) : null
-  const emailHref = `mailto:${SUPPORT_EMAIL}${emailParams ? `?${emailParams}` : ''}`
+  } : undefined
+  const emailHref = mailtoHref(SUPPORT_EMAIL, emailFields)
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
       <p className="text-sm font-medium text-emerald-800">{t('Help & concerns')}</p>
