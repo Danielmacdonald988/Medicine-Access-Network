@@ -17,7 +17,8 @@ test('client orders and deduplicates signals, honors privacy controls, and toler
   const replace = (key: string, value: unknown) => Object.defineProperty(globalThis, key, { configurable: true, writable: true, value })
   const browserWindow = { location: { search: '' }, sessionStorage: { getItem() { return null } } }
   replace('window', browserWindow)
-  replace('location', { pathname: '/signup', hostname: 'thefacilitatornetwork.com' })
+  const browserLocation = { pathname: '/signup', hostname: 'thefacilitatornetwork.com', search: '?utm_source=chatgpt.com&prompt=PRIVATE_PROMPT&email=PRIVATE_EMAIL' }
+  replace('location', browserLocation)
   // document.referrer is intentionally a separate restored property.
   const originalDocument = Object.getOwnPropertyDescriptor(globalThis, 'document')
   replace('document', { referrer: 'https://linktr.ee/thefacilitatornetwork' })
@@ -36,6 +37,9 @@ test('client orders and deduplicates signals, honors privacy controls, and toler
     await flush()
     assert.deepEqual(calls.map(c => c.event), ['signup_started', 'signup_accepted'])
     assert.equal(calls[0].session, calls[1].session)
+    assert.equal(calls[0].source, 'chatgpt')
+    assert.doesNotMatch(JSON.stringify(calls), /PRIVATE_|utm_source|prompt|email/)
+    browserLocation.search = ''
     assert.deepEqual(Object.keys(calls[0]).sort(), ['device','event','session','source','step'])
     recordEngagement('signup_started')
     browserNavigator.doNotTrack = '1'
@@ -56,12 +60,14 @@ test('client orders and deduplicates signals, honors privacy controls, and toler
     recordEngagement('contact_started')
     await flush()
     assert.equal(calls.at(-1)?.event, 'contact_started')
+    assert.equal(calls.at(-1)?.source, 'chatgpt', 'first session source survives navigation')
     // Fresh tracked visit at hour 0, form start at hour 23, submit at hour 25.
     // Form activity must not extend the first-visit session's 24-hour lifetime.
     now += 25 * 60 * 60 * 1000
     recordEngagement('visit')
     await flush()
     const firstVisitSession = calls.at(-1)?.session
+    assert.equal(calls.at(-1)?.source, 'linktree', 'expired session does not retain old landing tag')
     now += 23 * 60 * 60 * 1000
     recordEngagement('contact_started')
     await flush()
