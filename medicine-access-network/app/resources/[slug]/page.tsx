@@ -38,7 +38,17 @@ function RenderBlock({ block }: { block: Block }) {
       )
 
     case 'p':
-      return <p className="leading-relaxed text-stone-600">{block.text}</p>
+      if (!block.links) return <p className="leading-relaxed text-stone-600">{block.text}</p>
+      return (
+        <div className="space-y-2">
+          <p className="leading-relaxed text-stone-600">{block.text}</p>
+          {block.links && <ul className="flex flex-wrap gap-2">
+            {block.links.map((link) => <li key={link.href}>
+              <a href={link.href} className="inline-flex min-h-11 items-center rounded-lg border border-emerald-800 px-3 py-2 text-sm font-medium text-emerald-900 underline underline-offset-4 hover:bg-emerald-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900">{link.label}</a>
+            </li>)}
+          </ul>}
+        </div>
+      )
 
     case 'ul':
       return (
