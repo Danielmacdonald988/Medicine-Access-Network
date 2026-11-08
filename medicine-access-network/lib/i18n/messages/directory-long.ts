@@ -274,18 +274,18 @@ export const directoryLongMessages = {
       "간단한 소개로 시작하세요. 선호 시간대를 제외한 모든 항목은 필수입니다.",
     "Tosaigh le réamhrá gairid. Tá gach réimse riachtanach seachas an tréimhse ama is fearr leat.",
     ],
-  "Take your time with up to 3 guides. Compare their approach, format, and fees, then decide who you would like to contact. Saving a guide does not contact them.":
+  "Take your time with up to 3 guides. Compare their listed support, format, and fees, then decide who you would like to contact. Saving a guide does not contact them.":
     [
-      "Tómate tiempo para comparar hasta 3 guías. Compara su enfoque, formato y tarifas, y decide a quién quieres contactar. Guardar un guía no le envía ningún mensaje.",
-      "Prenez le temps de comparer jusqu’à 3 accompagnants. Comparez leurs approches, formats et tarifs, puis décidez qui contacter. Enregistrer un accompagnant ne le contacte pas.",
-      "Compare com calma até 3 guias. Veja abordagem, formato e valores e decida com quem entrar em contato. Salvar um guia não entra em contato com ele.",
-      "Nimm dir Zeit für bis zu 3 Begleitende. Vergleiche Ansatz, Format und Gebühren und entscheide dann, wen du kontaktieren möchtest. Durch das Speichern wird kein Kontakt hergestellt.",
-      "Prenditi il tempo per confrontare fino a 3 guide. Valuta approccio, formato e tariffe, poi decidi chi contattare. Salvare una guida non la contatta.",
-      "Neem de tijd voor maximaal 3 begeleiders. Vergelijk aanpak, vorm en tarieven en beslis daarna wie je wilt benaderen. Een begeleider opslaan neemt geen contact op.",
-      "你可以慢慢比较最多 3 位引导师。比较他们的方法、形式和费用，再决定联系谁。收藏引导师不会向对方发送联系请求。",
-      "最大3人のガイドをじっくり比較できます。方針、形式、料金を比べて、連絡する相手を選びましょう。保存してもガイドに連絡は届きません。",
-      "최대 3명의 가이드를 천천히 비교해 보세요. 접근 방식, 진행 형태, 요금을 비교한 뒤 연락할 사람을 정하세요. 저장만으로 가이드에게 연락이 가지 않습니다.",
-    "Glac do chuid ama le suas le 3 threoraí. Cuir a gcur chuige, formáid agus táillí i gcomparáid, ansin socraigh cé leis ar mhaith leat teagmháil a dhéanamh. Ní dhéantar teagmháil le treoraí nuair a shábhálann tú é.",
+      "Tómate tiempo para comparar hasta 3 guías. Compara el apoyo indicado, formato y tarifas, y decide a quién quieres contactar. Guardar un guía no le envía ningún mensaje.",
+      "Prenez le temps de comparer jusqu’à 3 accompagnants. Comparez le soutien indiqué, formats et tarifs, puis décidez qui contacter. Enregistrer un accompagnant ne le contacte pas.",
+      "Compare com calma até 3 guias. Veja apoio listado, formato e valores e decida com quem entrar em contato. Salvar um guia não entra em contato com ele.",
+      "Nimm dir Zeit für bis zu 3 Begleitende. Vergleiche angegebene Unterstützung, Format und Gebühren und entscheide dann, wen du kontaktieren möchtest. Durch das Speichern wird kein Kontakt hergestellt.",
+      "Prenditi il tempo per confrontare fino a 3 guide. Valuta supporto indicato, formato e tariffe, poi decidi chi contattare. Salvare una guida non la contatta.",
+      "Neem de tijd voor maximaal 3 begeleiders. Vergelijk vermelde ondersteuning, vorm en tarieven en beslis daarna wie je wilt benaderen. Een begeleider opslaan neemt geen contact op.",
+      "你可以慢慢比较最多 3 位引导师。比较他们列出的支持、形式和费用，再决定联系谁。收藏引导师不会向对方发送联系请求。",
+      "最大3人のガイドをじっくり比較できます。掲載されているサポート、形式、料金を比べて、連絡する相手を選びましょう。保存してもガイドに連絡は届きません。",
+      "최대 3명의 가이드를 천천히 비교해 보세요. 표시된 지원, 진행 형태, 요금을 비교한 뒤 연락할 사람을 정하세요. 저장만으로 가이드에게 연락이 가지 않습니다.",
+    "Glac do chuid ama le suas le 3 threoraí. Cuir an tacaíocht atá liostaithe acu, formáid agus táillí i gcomparáid, ansin socraigh cé leis ar mhaith leat teagmháil a dhéanamh. Ní dhéantar teagmháil le treoraí nuair a shábhálann tú é.",
     ],
   "Thank you for sharing your experience. Your review helps others find safe, trusted support.":
     [
