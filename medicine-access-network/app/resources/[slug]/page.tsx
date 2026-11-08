@@ -142,6 +142,28 @@ export default async function ResourcePage({ params }: PageProps) {
       {slug === 'integration-basics' && <p className="text-sm leading-relaxed text-stone-600">
         Ready to compare approaches? <Link href="/integration-support" className="inline-flex min-h-11 items-center text-emerald-800 underline underline-offset-4">Explore guides who list integration conversations</Link>. You can keep reading before deciding.
       </p>}
+      {slug === 'questions-to-ask' && <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-5" aria-labelledby="comparison-worksheet">
+        <h2 id="comparison-worksheet" className="text-xl font-semibold text-stone-900">Compare options at your own pace</h2>
+        <p className="mt-2 leading-relaxed text-stone-700">Use this blank, two-page worksheet to compare two facilitators side by side. Print it and keep your notes privately. No account or online answers are needed; do not include health history or other sensitive personal information.</p>
+        <details className="mt-3 text-sm leading-relaxed text-stone-700">
+          <summary className="min-h-11 cursor-pointer py-3 font-medium text-emerald-900">Read all worksheet prompts on this page</summary>
+          <p className="mb-3">For each question, compare Option A and Option B in your own private notes.</p>
+          <dl className="space-y-3">
+            <div><dt className="font-semibold">Proposed service &amp; scope</dt><dd>What is included? What is not? Is this preparation, integration, or another service?</dd></div>
+            <div><dt className="font-semibold">Qualifications &amp; checks</dt><dd>Record claimed training/license, issuing body, and a source to check independently. A claim is not verification.</dd></div>
+            <div><dt className="font-semibold">Format &amp; location eligibility</dt><dd>In person or online? Where may this person provide this exact service? Confirm your location is eligible.</dd></div>
+            <div><dt className="font-semibold">Fees &amp; duration</dt><dd>Session length, total price/currency, required extras, and any ongoing commitment.</dd></div>
+            <div><dt className="font-semibold">Cancellation &amp; refunds</dt><dd>Notice required, cancellation charges, deposits, and refund terms.</dd></div>
+            <div><dt className="font-semibold">Consent &amp; boundaries</dt><dd>How can you decline, pause or stop? Ask about touch, confidentiality limits and professional boundaries.</dd></div>
+            <div><dt className="font-semibold">Privacy &amp; contact</dt><dd>What information is requested, who can see it, how is it kept, and which contact method can you use?</dd></div>
+            <div><dt className="font-semibold">Scope limits &amp; referrals</dt><dd>What is outside their role? How do they handle concerns or refer someone to appropriate support?</dd></div>
+            <div><dt className="font-semibold">Unanswered questions</dt><dd>What needs clarification in writing? Note any pressure, vague claims or terms you do not understand.</dd></div>
+            <div><dt className="font-semibold">Your next step</dt><dd>Compare answers, verify claims, ask more, or decide not to proceed. There is no obligation to choose.</dd></div>
+          </dl>
+        </details>
+        <a href="/downloads/TFN-facilitator-comparison.pdf" download className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-emerald-900 px-4 py-3 font-medium text-white hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900">Download comparison worksheet (PDF, 2 pages)</a>
+        <p className="mt-3 text-sm leading-relaxed text-stone-600">This is a comparison aid, not a safety score, provider verification or clinical endorsement. You can ask more questions or decide not to proceed.</p>
+      </section>}
       {/* Content */}
       <div className="space-y-4">
         {resource.blocks.map((block, i) => (
