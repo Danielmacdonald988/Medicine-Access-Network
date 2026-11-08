@@ -120,7 +120,7 @@ export const resources: Resource[] = [
     title: 'Integration Basics',
     searchTitle: 'Psychedelic Integration: What Support Can and Cannot Offer',
     nextStep: { label: 'Find integration support', href: '/integration-support', description: 'Compare guides who list integration conversations. Read their approach, ask about fit and fees, and confirm availability directly. No account is needed to browse or send an inquiry.' },
-    relatedSlugs: ['questions-to-ask', 'scope-of-practice'],
+    relatedSlugs: ['questions-to-ask', 'scope-of-practice', 'integration-circles-vs-individual'],
     subtitle: 'Understanding reflection and support after a psychedelic or other significant experience',
     description:
       'Understand integration conversations, what to ask a guide, and how to compare scope, fees, format and boundaries before reaching out.',
@@ -841,6 +841,120 @@ export const resources: Resource[] = [
       { type: 'p', text: 'You could ask: “I would like to understand your approach to spiritual support. How do you work with someone who is still exploring their beliefs, and what are your fees and session options?” Keep private health information out of the first platform message. Sending an inquiry does not book a session.' },
       { type: 'callout', variant: 'info', text: 'TFN connects people with listed legal support services. It does not sell, source or coordinate access to controlled substances. A spiritual-support listing does not imply ceremonies, substances or any particular religious role.' },
     ],
+  },
+  {
+    "slug": "integration-circles-vs-individual",
+    "title": "Integration Circles or One-to-One Support?",
+    "searchTitle": "Psychedelic Integration Circles vs One-to-One Support",
+    "subtitle": "Compare participation, privacy and professional roles before choosing a format",
+    "description": "Compare psychedelic integration circles and one-to-one support. Ask about group rules, confidentiality, professional roles, fees and your right not to share.",
+    "relatedSlugs": [
+      "integration-basics",
+      "scope-of-practice",
+      "questions-to-ask",
+      "emergency"
+    ],
+    "nextStep": {
+      "label": "Explore integration profiles",
+      "href": "/integration-support",
+      "description": "Compare the services people list, then ask directly about format, scope, availability and location eligibility. TFN does not confirm that these profiles offer groups. An inquiry is not a booking."
+    },
+    "sourceCheck": {
+      "date": "2026-11-08",
+      "scope": "Sources inform the distinctions and questions below. APA guidance concerns clinical group therapy, not the effectiveness or regulation of peer integration circles. No clinical reviewer or endorsement is implied.",
+      "sources": [
+        {
+          "title": "American Psychological Association: Understanding group therapy",
+          "url": "https://www.apa.org/topics/psychotherapy/group-therapy"
+        },
+        {
+          "title": "APA Ethics Code: Group Therapy (10.03)",
+          "url": "https://www.apa.org/ethics/code"
+        },
+        {
+          "title": "Institute of Psychedelic Therapy: Integration groups and service limits",
+          "url": "https://instituteofpsychedelictherapy.org/directory/integration-groups/"
+        }
+      ]
+    },
+    "blocks": [
+      {
+        "type": "p",
+        "text": "If you are looking for a conversation after a psychedelic or other significant experience, a group and a one-to-one appointment involve different choices. Start with the kind of conversation you want, how much you want to share and the role of the person leading it. Neither format guarantees a particular outcome."
+      },
+      {
+        "type": "h3",
+        "text": "A circle is not automatically therapy"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "A peer integration circle is a shared discussion, not automatically a clinical service. Ask who leads it and what support is outside its scope.",
+          "A professionally facilitated nonclinical group may offer a structured conversation. Training or a professional-sounding title does not by itself establish a healthcare license.",
+          "Clinical group therapy is a distinct service. Verify the clinician’s current license, whether they may work with you in your location, and the clinical service actually being offered.",
+          "One-to-one integration support can also be clinical or nonclinical. The private format does not establish qualifications or make it therapy."
+        ]
+      },
+      {
+        "type": "h3",
+        "text": "Which conversation format fits your preferences?"
+      },
+      {
+        "type": "p",
+        "text": "In a group, time and attention are shared with other participants. Ask about group size, whether membership stays the same or newcomers can join, and how turns are managed. In a one-to-one appointment, ask how the conversation is structured around your questions. You can compare options without explaining your personal history or committing to either format."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Do you want to hear other perspectives, or would you prefer to discuss your questions with one person?",
+          "Can you attend only to listen, pass on an exercise or leave early? What happens if you do not want advice or an interpretation?",
+          "Is this a drop-in circle or a fixed series? What attendance commitment and total fees apply?",
+          "How does the leader handle pressure, interruptions, conflict or a participant whose needs are beyond the group’s scope?"
+        ]
+      },
+      {
+        "type": "h3",
+        "text": "A confidentiality agreement is not a guarantee"
+      },
+      {
+        "type": "p",
+        "text": "Other participants hear what is shared in a group. Even when everyone agrees to confidentiality, the organizer cannot guarantee that participants will keep information private. APA makes this limitation explicit for group therapy; do not assume a peer circle offers stronger protection. Ask what rules apply before you disclose anything sensitive."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Are names, attendance lists or contact details shared with other participants?",
+          "What are the rules about discussing someone else’s story outside the group? How are breaches handled?",
+          "May participants contact one another afterward, and is permission required first?",
+          "Who keeps any notes, who can access them, and what confidentiality limits apply to the leader?"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "A one-to-one conversation also has privacy limits. Ask the person to explain their actual policy and any legal duties; do not assume every integration guide has the same obligations as a licensed therapist."
+      },
+      {
+        "type": "h3",
+        "text": "A brief question you can send"
+      },
+      {
+        "type": "p",
+        "text": "“I am comparing group and one-to-one integration support. Is your service clinical care or a nonclinical conversation? For groups, how many people attend, can I listen without sharing, and what are the confidentiality and contact-between-participants rules? What are the total fees and attendance expectations?” Keep diagnoses, medication lists, substance-use history and other sensitive details out of an introductory platform message."
+      },
+      {
+        "type": "h3",
+        "text": "Know when a different service is needed"
+      },
+      {
+        "type": "p",
+        "text": "A peer circle or nonclinical guide is not a substitute for assessment or treatment by an appropriately licensed healthcare professional. If distress persists or interferes with daily life, seek qualified clinical support rather than relying on a group discussion alone. For immediate danger or urgent support, use the urgent-help guide linked below."
+      },
+      {
+        "type": "callout",
+        "variant": "info",
+        "text": "This guide concerns reflection and support, not obtaining or taking substances. TFN does not sell, source, administer or arrange access to controlled substances. It does not confirm group availability, independently verify every qualification or guarantee that a proposed service is permitted in every location."
+      }
+    ]
   },
 ]
 
