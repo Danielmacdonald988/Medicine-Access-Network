@@ -32,7 +32,7 @@ function RenderBlock({ block }: { block: Block }) {
   switch (block.type) {
     case 'h3':
       return (
-        <h3 className="mt-8 mb-3 text-lg font-semibold text-stone-900 first:mt-0">
+        <h3 id={block.id} className="scroll-mt-24 mt-8 mb-3 text-lg font-semibold text-stone-900 first:mt-0">
           {block.text}
         </h3>
       )

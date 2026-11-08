@@ -58,6 +58,7 @@ export default function IntegrationSupportPage() {
         <li><strong className="text-stone-900">Confirm practical details.</strong> Ask about your location, session format, time zone, availability, session length, total fees and cancellation terms before committing.</li>
       </ol>
       <Link className={`${linkStyle} mt-3`} href="/resources/questions-to-ask">Use the full questions-to-ask checklist</Link>
+      <p className="mt-3"><Link className={linkStyle} href="/resources/integration-basics#online-integration-readiness">Considering online support? Check location, privacy and session arrangements</Link></p>
     </section>
 
     <section aria-labelledby="contact-heading" className="max-w-3xl">

@@ -4,7 +4,7 @@ export type Block =
   | { type: 'p'; text: string; links?: { label: string; href: string }[] }
   | { type: 'ul'; items: string[] }
   | { type: 'ol'; items: string[] }
-  | { type: 'h3'; text: string }
+  | { type: 'h3'; text: string; id?: string }
   | { type: 'callout'; variant: 'warning' | 'info' | 'emergency'; text: string }
 
 export interface Resource {
@@ -140,6 +140,21 @@ export const resources: Resource[] = [
         'Can you work with me where I live, online or in person, and what time zone should we use?',
       ] },
       { type: 'p', text: 'Guides choose their own service labels. An integration listing is not proof of clinical qualifications or a promise of a particular result. Confirm what the individual offers; a first inquiry does not book a session.' },
+
+      { type: 'h3', id: 'online-integration-readiness', text: 'Before booking online integration support' },
+      { type: 'p', text: 'An online listing describes a possible format, not worldwide availability. Before agreeing to a remote conversation, confirm the exact service and the practical arrangements. These checks do not establish suitability or guarantee an outcome.' },
+      { type: 'ul', items: [
+        'Confirm session location and role. Tell the guide the state or country where you will physically be during the appointment, including if you will be traveling. Ask where they will be and whether they may offer this specific service in those locations. For US clinical care, check the relevant licensing authority; cross-state rules vary. Do not assume the same rules apply to every nonclinical service.',
+        'Ask about recording and notes. Will anyone record, transcribe or use an AI note-taking tool? Ask who can access the information, how long it is retained, and whether you can decline recording or choose another arrangement. A promise of confidentiality does not answer all of these questions.',
+        'Plan for privacy and access. Choose a space where others cannot overhear or see your screen, and consider headphones. Ask in advance about captions, interpretation or other accommodations. Confirm the joining link, time zone and a backup plan if the connection drops; test your device before the appointment.',
+        'Get the practical terms in writing. Confirm session length, total fee and currency, cancellation terms and whether there is an ongoing commitment. You can ask for clarification or decide not to proceed.',
+      ] },
+      { type: 'p', text: 'A simple first message: “I am considering an online integration conversation. Can you confirm the service you offer, eligible locations, session length, total fee and cancellation terms? Please also explain your recording or note-taking practices and available accessibility options.” Keep diagnoses, medication lists, trauma details and substance use history out of an introductory platform message. Ask about a suitable private intake process if one is needed.' },
+      { type: 'p', text: 'Sources for this online-readiness section checked November 8, 2026: US Department of Health and Human Services guidance on clinical cross-state practice, appointment preparation and privacy precautions. These sources describe healthcare settings; citing them does not mean TFN or every listed guide is a healthcare provider or covered by HIPAA.', links: [
+        { label: 'HHS: cross-state clinical licensing', href: 'https://telehealth.hhs.gov/licensure/licensing-across-state-lines' },
+        { label: 'HHS: preparing for a telehealth visit', href: 'https://telehealth.hhs.gov/patients/what-should-i-know-before-my-telehealth-visit' },
+        { label: 'HHS: privacy and security tips', href: 'https://www.hhs.gov/hipaa/for-professionals/privacy/guidance/telehealth-privacy-security/index.html' },
+      ] },
 
       {
         type: 'p',
