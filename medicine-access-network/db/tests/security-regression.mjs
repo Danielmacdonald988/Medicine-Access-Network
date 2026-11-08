@@ -538,7 +538,7 @@ for (const mode of ['fresh schema', 'fresh schema without automatic grants', 'ex
 // Test the actual full fresh-install file, not only the historical prefixes
 // above. Reproduce the original session failure before the fix, then verify the
 // complete schema and minimal ACLs with defaults disabled.
-assert.equal(schema.split(`-- Included migration: ${grantsName}\n`)[1], explicitGrants)
+assert.equal(schema.split(`-- Included migration: ${grantsName}\n`)[1].split('-- Included migration:')[0].trimEnd(), explicitGrants.trimEnd())
 assertions++
 for (const repaired of [false, true]) {
   const db = await createDatabase(false)

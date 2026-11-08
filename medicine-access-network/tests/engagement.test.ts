@@ -29,6 +29,9 @@ test('engagement database protects events and correctly separates matured drop-o
     const seekerMigration = await readFile(new URL('../db/migrations/20261107234426_seeker_contact_funnel.sql', import.meta.url), 'utf8')
     await db.exec(seekerMigration)
     await db.exec(seekerMigration) // repeatable deployment
+    const sourceMigration = await readFile(new URL('../db/migrations/20261108005340_source_contact_funnels.sql', import.meta.url), 'utf8')
+    await db.exec(sourceMigration)
+    await db.exec(sourceMigration)
     for (const role of ['anon', 'authenticated']) {
       await db.exec(`set role ${role}`)
       for (const sql of ['select * from public.engagement_events', 'select public.engagement_summary(30)', `select public.record_engagement('10000000-0000-4000-8000-000000000001','visit',0,'direct','mobile',repeat('a',64))`]) {
@@ -71,6 +74,35 @@ test('engagement database protects events and correctly separates matured drop-o
     assert.deepEqual(metrics.funnels.application_started, { started: 2, completed: 1, pending: 0, dropped: 1, matured: 2, matured_completed: 1 })
     assert.deepEqual(metrics.funnels.contact_started, { started: 5, completed: 1, pending: 2, dropped: 2, matured: 3, matured_completed: 1 })
     assert.deepEqual(metrics.last_steps, { '12': 1 })
+    type SourceSummary = { source_contact_funnels: Record<string, Record<string, number>>; excluded_source_sessions: number }
+    const firstSource = (await db.query<{ value: SourceSummary }>('select public.engagement_summary(30) as value')).rows[0].value
+    assert.deepEqual(firstSource.source_contact_funnels.search, { started: 1, completed: 1, pending: 0, dropped: 0, matured: 1, matured_completed: 1 })
+    assert.deepEqual(firstSource.source_contact_funnels.direct, { started: 4, completed: 0, pending: 2, dropped: 2, matured: 2, matured_completed: 0 })
+    assert.equal(firstSource.excluded_source_sessions, 0)
+    // No visit is required; retain all five coarse sources. No request rows joined.
+    await db.exec(`begin;
+      insert into public.engagement_events(session_id,event,step,source,device,created_at) values
+      ('20000000-0000-4000-8000-000000000001','contact_started',0,'instagram','mobile',now()-interval '24 hours'),
+      ('20000000-0000-4000-8000-000000000001','contact_sent',0,'instagram','mobile',now()),
+      ('20000000-0000-4000-8000-000000000002','contact_started',0,'linktree','mobile',now()-interval '1 hour'),
+      ('20000000-0000-4000-8000-000000000003','contact_started',0,'other','mobile',now()-interval '2 days'),
+      ('20000000-0000-4000-8000-000000000004','contact_started',0,'instagram','mobile',now()-interval '2 days'),
+      ('20000000-0000-4000-8000-000000000004','contact_sent',0,'search','mobile',now()-interval '47 hours'),
+      ('20000000-0000-4000-8000-000000000005','contact_started',0,'instagram','mobile',now()-interval '40 days');`)
+    const bySource = (await db.query<{ value: SourceSummary }>('select public.engagement_summary(30) as value')).rows[0].value
+    assert.deepEqual(bySource.source_contact_funnels.instagram, { started: 1, completed: 1, pending: 0, dropped: 0, matured: 1, matured_completed: 1 })
+    assert.equal(bySource.source_contact_funnels.linktree.pending, 1)
+    assert.equal(bySource.source_contact_funnels.other.dropped, 1)
+    assert.equal(bySource.excluded_source_sessions, 1)
+    assert.equal(Object.keys(bySource.source_contact_funnels).length, 5)
+    assert.doesNotMatch(JSON.stringify(bySource.source_contact_funnels), /session_id|20000000|request_id/)
+    const invalidWindow = (await db.query<{ value: SourceSummary }>('select public.engagement_summary(5) as value')).rows[0].value
+    assert.deepEqual(invalidWindow.source_contact_funnels, bySource.source_contact_funnels)
+    await db.exec("delete from public.engagement_events where session_id <> '20000000-0000-4000-8000-000000000004'")
+    const excludedOnly = (await db.query<{ value: SourceSummary }>('select public.engagement_summary(30) as value')).rows[0].value
+    assert.deepEqual(excludedOnly.source_contact_funnels, {})
+    assert.equal(excludedOnly.excluded_source_sessions, 1)
+    await db.exec('rollback')
     await db.exec(`update public.engagement_limits set requests=600 where key=repeat('a',64)`)
     await assert.rejects(db.query(`select public.record_engagement('10000000-0000-4000-8000-000000000007','visit',0,'direct','mobile',repeat('a',64))`), /engagement_rate_limited/)
   } finally { await db.close() }
@@ -89,4 +121,15 @@ test('admin separates count-only stored requests from browser signals and docume
   assert.match(source, /expires 24 hours after its first tracked activity/)
   assert.match(source, /not campaign attribution/)
   assert.match(source, /does not confirm notification delivery/)
+})
+
+ test('source breakdown remains private and distinguishable from unavailable data', async () => {
+  const component = await readFile(new URL('../components/admin/EngagementMetrics.tsx', import.meta.url), 'utf8')
+  assert.match(component, /source_contact_funnels === undefined/)
+  assert.match(component, /Source breakdown is not yet available/)
+  assert.match(component, /No attributable contact starts/)
+  assert.match(component, /Small sample/)
+  assert.match(component, /not a verified stored inquiry/)
+  const sql = await readFile(new URL('../db/migrations/20261108005340_source_contact_funnels.sql', import.meta.url), 'utf8')
+  assert.doesNotMatch(sql, /booking_requests|seeker_email|utm_|campaign_id/)
 })
