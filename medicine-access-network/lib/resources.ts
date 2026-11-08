@@ -237,6 +237,15 @@ export const resources: Resource[] = [
     subtitle: 'How to vet a guide before committing',
     description:
       'A practical list of questions to ask any integration coach, guide, or facilitator before working with them — covering background, safety, scope, and logistics.',
+    sourceCheck: {
+      date: '2026-11-08',
+      scope: 'TFN checked the official Oregon sources for the credential-checking example in this guide. This is a source check, not a clinical or legal review, and does not verify individual providers. Rules can change; consult the issuing authority for current information.',
+      sources: [
+        { title: 'OHA: OPS Licensee Directory and its limits', url: 'https://www.oregon.gov/oha/PH/PREVENTIONWELLNESS/Pages/Psilocybin-Licensee-Directory.aspx' },
+        { title: 'OHA: Search License and Worker Permit Status', url: 'https://www.oregon.gov/oha/PH/PREVENTIONWELLNESS/Pages/Psilocybin-Licensee-Status.aspx' },
+        { title: 'OHA: Facilitator Scope of Practice (PDF)', url: 'https://www.oregon.gov/oha/PH/PREVENTIONWELLNESS/Documents/Facilitator-Scope-of-Practice-Fact-Sheet.pdf' },
+      ],
+    },
     blocks: [
       { type: 'h3', text: 'Start with the support you want' },
       { type: 'p', text: 'For adults comparing guides, a useful starting point is the service itself: integration conversations, spiritual support, meditation, preparation education or somatic practices. These labels describe different offerings, not interchangeable qualifications. Read each profile and ask what the guide actually does.' },
@@ -256,6 +265,18 @@ export const resources: Resource[] = [
         'How would we agree on consent, touch or other practices, and how can I pause or withdraw without pressure?',
         'If private intake is necessary, who sees it, how is it stored and what are the limits of confidentiality?',
       ] },
+      { type: 'h3', text: 'How to check a claimed credential' },
+      { type: 'ol', items: [
+        'Ask for the exact credential or license name, issuing organization, license number (if applicable), and the state or country that issued it. A training certificate and a professional license are different claims.',
+        'Use the issuing authority’s official register or status lookup. Match the person and license type, check the current status and any restrictions shown, and note when you checked. If there is no public lookup or the result is unclear, ask the issuing body how to verify the claim.',
+        'Confirm the role they would use for this specific service and where both of you would be located, including for online sessions. Check the relevant authority’s current scope rules; one credential does not establish permission for every service or location.',
+        'Keep unanswered questions unresolved rather than treating a directory badge, certificate image, testimonial or missing search result as proof. You can wait for clarification or decide not to proceed.',
+      ] },
+      { type: 'p', text: 'TFN’s application review and publication process is not independent credential verification or a clinical endorsement. Checking a credential also does not guarantee safety, suitability or outcomes.' },
+      { type: 'h3', text: 'Oregon example: directory listing is not license verification' },
+      { type: 'p', text: 'Oregon Health Authority says its Oregon Psilocybin Services (OPS) Licensee Directory is optional and incomplete, and is not a license-verification tool. Someone missing from it may still be licensed. To check an OPS license, use the official Search License Status page linked below with the license number and license type.' },
+      { type: 'p', text: 'For scope questions, consult OHA’s current Facilitator Scope of Practice fact sheet below. It distinguishes preparation and integration from administration, including rules for people who hold another professional license. This Oregon example does not establish permission in another jurisdiction or verify any TFN profile. TFN does not arrange controlled-substance services.' },
+      { type: 'p', text: 'OHA notes that its lookup tools may be unavailable outside the United States. If access or a result is unclear, use the assistance contact on OHA’s official page rather than assuming a license is valid or invalid.' },
       { type: 'h3', text: 'Keep the first message simple' },
       { type: 'p', text: 'For example: “I am exploring the support listed on your profile. Could you explain your approach, session format, fees and current availability?” Keep diagnoses, medication lists, trauma histories and other sensitive details out of an introductory platform message. An inquiry is a conversation starter, not a booking or payment.' },
 
