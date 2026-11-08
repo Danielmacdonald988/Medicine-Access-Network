@@ -101,20 +101,6 @@ export default async function ResourcesIndexPage() {
         })}
       </div>
 
-      <section aria-labelledby="downloadable-booklets" lang="en" className="space-y-4">
-        <h2 id="downloadable-booklets" className="text-xl font-semibold text-stone-900">Downloadable booklets</h2>
-        <Card className="border-stone-200">
-          <CardContent className="p-5">
-            <h3 className="font-semibold text-stone-900">Kambo &amp; Bufo</h3>
-            <p className="mt-2 text-sm text-stone-600">A six-page contributor booklet. English · PDF.</p>
-            <p className="mt-2 max-w-2xl text-sm text-stone-500">Contributor-provided material; its health claims have not been clinically reviewed by The Facilitator Network. This booklet is not medical advice or a recommendation to use or combine substances.</p>
-            <a href="/downloads/Kambo_Bufo.pdf" download="Kambo_Bufo.pdf" className="mt-4 inline-flex rounded-md bg-emerald-700 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
-              Download Kambo &amp; Bufo (PDF)
-            </a>
-          </CardContent>
-        </Card>
-      </section>
-
       <div className="rounded-xl border border-stone-200 bg-stone-50 p-5 text-sm text-stone-500">
         <p className="font-medium text-stone-700">{t('A note on this library')}</p>
         <p className="mt-1">
