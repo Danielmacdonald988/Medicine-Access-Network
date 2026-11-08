@@ -6,6 +6,7 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Search, SlidersHorizontal, Users, X } from 'lucide-react'
+import { DirectoryResults } from '@/components/search/DirectoryResults'
 import { DirectorySearchControls } from '@/components/search/DirectorySearchControls'
 import { SearchRecovery } from '@/components/search/SearchRecovery'
 import { FacilitatorCard } from '@/components/cards/FacilitatorCard'
@@ -192,7 +193,7 @@ export default async function FacilitatorsPage({ searchParams }: PageProps) {
       <SupportDiscovery filters={filters} />
       <div className="grid gap-5 lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start lg:gap-8">
         <Suspense><DirectorySearchControls /></Suspense>
-        <section id="guide-results" tabIndex={-1} aria-label={t("Guide search results")} className="min-w-0 flex-1 scroll-mt-24">
+        <DirectoryResults label={t("Guide search results")}>
           <h2 className="mb-3 text-2xl font-medium tracking-tight text-stone-900">{t("Meet the guides")}</h2>
           <ActiveFilters filters={filters} />
           <Suspense key={`${filterSearchParams(filters)}:${page}`} fallback={<GridSkeleton />}>
@@ -205,7 +206,7 @@ export default async function FacilitatorsPage({ searchParams }: PageProps) {
               <p className="leading-relaxed">{t("Profiles are ordered by when they were created, newest first, or alphabetically when you choose Name A–Z. Placement is not a quality rating or a recommendation. Guides do not pay for placement.")}</p>
             </details>
           </div>
-        </section>
+        </DirectoryResults>
       </div>
       <div className="mt-16"><SafetyDisclaimer compact /></div>
     </div>

@@ -31,10 +31,13 @@ test('no promotional shortcut is added to other resources or unknown keys', () =
 
 test('shortcut stays optional, tappable and points at a focusable results target', () => {
   const resource = readFileSync('app/resources/[slug]/page.tsx', 'utf8')
-  const directory = readFileSync('app/facilitators/page.tsx', 'utf8')
+  const directory = readFileSync('components/search/DirectoryResults.tsx', 'utf8')
   assert.match(resource, /profileShortcut && <nav/)
   assert.match(resource, /You can keep reading first/)
   assert.match(resource, /href=\{profileShortcut.href\} className="[^"]*min-h-11/)
   assert.match(directory, /id="guide-results" tabIndex=\{-1\}/)
   assert.match(directory, /scroll-mt-24/)
+  assert.match(directory, /window.location.hash !== '#guide-results'/)
+  assert.match(directory, /scrollIntoView/)
+  assert.match(directory, /focus\(\{ preventScroll: true \}\)/)
 })
