@@ -5,7 +5,7 @@ import 'server-only'
 //
 // Uses Resend's plain HTTP API (https://resend.com/docs/api-reference/emails/send-email)
 // via fetch — no SDK dependency needed. Set RESEND_API_KEY and
-// RESEND_FROM_EMAIL to activate.
+// RESEND_FROM_EMAIL to activate in production only.
 //
 // Without them, notification is skipped without logging personal information —
 // fine for local development. If these aren't configured in production,
@@ -27,6 +27,14 @@ interface FacilitatorInquiryEmailInput {
 export async function sendFacilitatorInquiryEmail(
   input: FacilitatorInquiryEmailInput
 ): Promise<{ sent: boolean }> {
+  // Preview builds also use NODE_ENV=production and can share live credentials.
+  // Require a production runtime, and honor Vercel's deployment environment
+  // whenever present. Non-Vercel production hosting remains supported.
+  if (process.env.NODE_ENV !== 'production' ||
+      (process.env.VERCEL_ENV !== undefined && process.env.VERCEL_ENV !== 'production')) {
+    return { sent: false }
+  }
+
   const apiKey = process.env.RESEND_API_KEY
   const fromEmail = process.env.RESEND_FROM_EMAIL
 
