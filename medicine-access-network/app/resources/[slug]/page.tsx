@@ -1,3 +1,4 @@
+import { EducationalAttribution } from '@/components/educational-attribution'
 import type { Metadata } from 'next'
 import { getTranslation } from '@/lib/i18n/server'
 import { resourceSummaries } from '@/lib/i18n/resource-summaries'
@@ -140,6 +141,7 @@ export default async function ResourcePage({ params }: PageProps) {
       <div className="border-b border-stone-100 pb-6">
         <h1 className="text-3xl font-bold text-stone-900">{t(resource.title)}</h1>
         <p lang="en" className="mt-2 text-lg text-stone-500">{resource.subtitle}</p>
+        <EducationalAttribution />
       </div>
 
       {locale !== 'en' && <section className="space-y-3 rounded-xl border border-emerald-200 bg-emerald-50 p-5">
