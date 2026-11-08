@@ -63,7 +63,7 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Listings on this platform describe coaching, preparation support, integration conversations, and related legal wellness services. A listing does not establish a professional license or a clinical care relationship. Ask what capacity the guide is working in, check any claimed license with its issuing body, and confirm that the service matches your needs.',
+        text: 'Listings on this platform describe coaching, preparation support, integration conversations, and related wellness services. A listing does not establish a professional license or a clinical care relationship. Ask what capacity the guide is working in, check any claimed license with its issuing body, and confirm that the service matches your needs.',
       },
       {
         type: 'p',
@@ -110,7 +110,7 @@ export const resources: Resource[] = [
       {
         type: 'callout',
         variant: 'warning',
-        text: 'This platform does not coordinate, facilitate, source, or have any involvement in the use of controlled substances. Guides here offer legal coaching and support services only.',
+        text: 'This platform does not coordinate, facilitate, source, or have any involvement in the use of controlled substances. Guides must offer only lawful support within their qualifications. A listing does not verify service legality; confirm the proposed service and the requirements where you live.',
       },
     ],
   },
@@ -357,7 +357,7 @@ export const resources: Resource[] = [
     blocks: [
       {
         type: 'p',
-        text: 'Most guides working in this space are doing so with genuine care and integrity. But as with any unregulated field, there are people who cause harm — sometimes through incompetence, sometimes through exploitation. Knowing what to look for protects you.',
+        text: 'A profile or reassuring description cannot establish a guide’s competence or integrity. Review the proposed service, qualifications and boundaries, and watch for pressure or unsupported claims. These questions can help you make a more informed choice; they cannot guarantee safety.',
       },
       {
         type: 'h3',
@@ -540,15 +540,15 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Coaching is a future-focused, goal-oriented practice. Coaches help clients identify what they want, build clarity and accountability, and take steps toward change. Coaching is generally unregulated — there is no licensing body, no protected title, and no minimum training requirement, though many coaches pursue certification programmes.',
+        text: 'Coaching is a future-focused, goal-oriented practice. Coaches help clients identify what they want, build clarity and accountability, and take steps toward change. The coach title alone does not establish a clinical license or a standard level of training. Certification, title protection and practice requirements vary by service and jurisdiction; check the specific credential and role.',
       },
       {
         type: 'ul',
         items: [
-          'Future-focused: oriented toward where you want to go, not where you came from',
+          'May focus on goals, reflection and practical next steps; the approach varies by coach',
           'Does not diagnose or treat mental health conditions',
           'Not a substitute for therapy when clinical support is needed',
-          'No protected title — anyone can call themselves a coach',
+          'A coaching certificate is not the same as a clinical license',
           'Confidentiality varies — ask explicitly what a coach\'s policy is',
           'May include preparation support, integration conversations, or accountability work',
         ],
@@ -559,15 +559,15 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Psychotherapy is a licensed, regulated clinical practice. Therapists, psychotherapists, counsellors, psychologists, and social workers are trained and licensed to assess, diagnose, and treat mental health conditions. They operate within a formal ethical and legal framework including mandatory confidentiality, duty of care, and professional accountability.',
+        text: 'Psychotherapy includes approaches intended to help people with troubling emotions, thoughts and behaviours. Professional titles, licensing requirements and permitted activities vary by jurisdiction. A therapist or counsellor title alone does not establish a license or authority to diagnose. Check the exact qualification, applicable regulator or accredited register, and the scope of the proposed service.',
       },
       {
         type: 'ul',
         items: [
-          'Can diagnose and treat mental health conditions',
-          'Licensed and regulated by professional bodies',
-          'Subject to mandatory ethical standards and disciplinary processes',
-          'Often past-oriented — explores roots of current patterns',
+          'Appropriately qualified professionals may assess or treat mental health conditions within their permitted scope',
+          'Check licensing or registration requirements in the relevant jurisdiction',
+          'Ask which ethical standards and complaints process apply',
+          'May address current thoughts, behaviours, relationships or earlier experiences, depending on the approach',
           'Appropriate for trauma, depression, anxiety, and other clinical presentations',
           'Can work alongside psychiatry and medication management',
         ],
@@ -605,7 +605,7 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Guides here offer legal coaching and support services — preparation conversations, integration support, breathwork facilitation, somatic coaching, harm reduction education, and similar practices. This is meaningful, valuable work. It is also distinct from therapy and medicine.',
+        text: 'Profiles may list preparation conversations, integration support, breathwork facilitation, somatic coaching, harm reduction education and similar practices. Guides must work lawfully and within their qualifications. TFN does not independently verify service legality; confirm the exact activity, role and location requirements. A support-service label does not establish a clinical care relationship.',
       },
       {
         type: 'p',
@@ -625,6 +625,14 @@ export const resources: Resource[] = [
         ],
       },
     ],
+    sourceCheck: {
+      date: '2026-11-08',
+      scope: 'Psychotherapy approaches and jurisdiction-dependent professional regulation checked against the sources below. This is general information, not individual medical or legal advice.',
+      sources: [
+        { title: 'NIMH: Psychotherapies', url: 'https://www.nimh.nih.gov/health/topics/psychotherapies' },
+        { title: 'UK Parliament: Counselling and psychotherapy regulation (3 March 2026)', url: 'https://questions-statements.parliament.uk/written-questions/detail/2026-02-24/115490' },
+      ],
+    },
   },
 
   {
