@@ -5,6 +5,7 @@ import { getTranslation } from '@/lib/i18n/server'
 
 export const metadata: Metadata = {
   title: 'About & profile review',
+  alternates: { canonical: '/about' },
   description: 'Understand what profile review means, its limits, and how to make an informed choice when looking for support.',
 }
 
