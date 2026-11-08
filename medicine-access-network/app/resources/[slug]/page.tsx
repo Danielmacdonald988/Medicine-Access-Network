@@ -1,3 +1,4 @@
+import { resourceProfileShortcut } from '@/lib/resource-navigation'
 import { EducationalAttribution } from '@/components/educational-attribution'
 import type { Metadata } from 'next'
 import { getTranslation } from '@/lib/i18n/server'
@@ -122,6 +123,7 @@ export default async function ResourcePage({ params }: PageProps) {
   const { slug } = await params
   const resource = getResource(slug)
   if (!resource) notFound()
+  const profileShortcut = resourceProfileShortcut(slug)
   const summary = resourceSummaries[slug]
   const translatedSummary = t(summary)
   const hasTranslatedSummary = translatedSummary !== summary
@@ -151,9 +153,10 @@ export default async function ResourcePage({ params }: PageProps) {
       </section>}
       <div id="original-article" lang="en" className="scroll-mt-28 space-y-5">
       {locale !== 'en' && <h2 className="text-lg font-semibold">Original English article</h2>}
-      {slug === 'integration-basics' && <p className="text-sm leading-relaxed text-stone-600">
-        Ready to compare approaches? <Link href="/integration-support" className="inline-flex min-h-11 items-center text-emerald-800 underline underline-offset-4">Explore guides who list integration conversations</Link>. You can keep reading before deciding.
-      </p>}
+      {profileShortcut && <nav aria-label="Compare support options" className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3">
+        <p className="text-sm text-stone-600">Ready to compare? Browse listed services, then confirm fit and availability directly. You can keep reading first.</p>
+        <Link href={profileShortcut.href} className="mt-1 inline-flex min-h-11 items-center text-sm font-medium text-emerald-800 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900">{profileShortcut.label}</Link>
+      </nav>}
       {slug === 'questions-to-ask' && <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-5" aria-labelledby="comparison-worksheet">
         <h2 id="comparison-worksheet" className="text-xl font-semibold text-stone-900">Compare options at your own pace</h2>
         <p className="mt-2 leading-relaxed text-stone-700">Use this blank, two-page worksheet to compare two facilitators side by side. Print it and keep your notes privately. No account or online answers are needed; do not include health history or other sensitive personal information.</p>
