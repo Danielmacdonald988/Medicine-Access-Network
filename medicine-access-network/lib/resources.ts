@@ -1,7 +1,7 @@
 // ─── Content types ────────────────────────────────────────────────────────────
 
 export type Block =
-  | { type: 'p'; text: string }
+  | { type: 'p'; text: string; links?: { label: string; href: string }[] }
   | { type: 'ul'; items: string[] }
   | { type: 'ol'; items: string[] }
   | { type: 'h3'; text: string }
@@ -677,11 +677,18 @@ export const resources: Resource[] = [
         text: 'For emotional distress or a suicidal crisis in the United States, contact one of these services. If you are outside the US, use the crisis and emergency services in your location.',
       },
       {
-        type: 'ul',
-        items: [
-          '988 Suicide & Crisis Lifeline — call or text 988 (US). Available 24/7 for anyone in emotional distress or suicidal crisis.',
-          'Crisis Text Line — text HOME to 741741 in the US for free crisis support, available 24/7.',
+        type: 'p',
+        text: '988 Suicide & Crisis Lifeline — call or text 988 (US). Available 24/7 for anyone in emotional distress or suicidal crisis.',
+        links: [
+          { label: 'Call 988 (US)', href: 'tel:988' },
+          { label: 'Text 988 (US)', href: 'sms:988' },
+          { label: '988 accessibility options: chat, videophone and relay', href: 'https://988lifeline.org/deaf-hard-of-hearing-hearing-loss/' },
         ],
+      },
+      {
+        type: 'p',
+        text: 'Crisis Text Line — text HOME to 741741 in the US for free crisis support, available 24/7.',
+        links: [{ label: 'Text Crisis Text Line at 741741 (US); enter HOME', href: 'sms:741741' }],
       },
       {
         type: 'h3',
@@ -690,17 +697,32 @@ export const resources: Resource[] = [
       {
         type: 'p',
         text: 'Fireside Project — call or text 623-473-7433 in the US, daily from 11 a.m. to 11 p.m. Pacific. It offers non-clinical emotional support during or after psychedelic experiences. It is not an emergency service, a suicide hotline, or medical care. For immediate danger or a medical emergency, call 911; for suicidal crisis, call or text 988.',
+        links: [
+          { label: 'Call Fireside Project (US)', href: 'tel:+16234737433' },
+          { label: 'Text Fireside Project (US)', href: 'sms:+16234737433' },
+        ],
       },
       {
         type: 'h3',
         text: 'Treatment information and event support',
       },
       {
-        type: 'ul',
-        items: [
-          'SAMHSA National Helpline — 1-800-662-4357. A free, confidential US treatment referral and information service, available 24/7. Use 988 for immediate crisis support.',
-          'Zendo Project — peer support at participating events, plus harm reduction training and educational resources. It is not a general emergency phone line; check its website for current event services.',
-        ],
+        type: 'p',
+        text: 'SAMHSA National Helpline — 1-800-662-4357. A free, confidential US treatment referral and information service, available 24/7. Use 988 for immediate crisis support.',
+        links: [{ label: 'Call SAMHSA National Helpline (US)', href: 'tel:+18006624357' }],
+      },
+      {
+        type: 'p',
+        text: 'Zendo Project — peer support at participating events, plus harm reduction training and educational resources. It is not a general emergency phone line; check its website for current event services.',
+      },
+      {
+        type: 'h3',
+        text: 'Outside the United States',
+      },
+      {
+        type: 'p',
+        text: 'Use emergency services in your current location for immediate danger. US short codes and support lines are not worldwide services. Crisis Text Line lists country-specific international partners; check the partner’s location, eligibility and current service details before using it.',
+        links: [{ label: 'Find Crisis Text Line international partners by country', href: 'https://www.crisistextline.org/about-us/where-we-are/' }],
       },
       {
         type: 'h3',
@@ -758,10 +780,12 @@ export const resources: Resource[] = [
       },
     ],
     sourceCheck: {
-      date: '2026-09-06',
-      scope: 'Support-line numbers, hours, and service scope checked against the providers below.',
+      date: '2026-11-08',
+      scope: 'Support-line numbers, hours, service scope, 988 accessibility options and the international-partner resource checked against the providers below. This is a source check, not a test call or guarantee of availability.',
       sources: [
         { title: '988 Suicide & Crisis Lifeline', url: 'https://988lifeline.org/' },
+        { title: '988: Deaf, Hard of Hearing, Hearing Loss', url: 'https://988lifeline.org/deaf-hard-of-hearing-hearing-loss/' },
+        { title: 'Crisis Text Line: International partners', url: 'https://www.crisistextline.org/about-us/where-we-are/' },
         { title: 'Crisis Text Line', url: 'https://www.crisistextline.org/' },
         { title: 'Fireside Project: Psychedelic Support Line', url: 'https://firesideproject.org/support-line' },
         { title: 'SAMHSA National Helpline', url: 'https://www.samhsa.gov/find-help/helplines/national-helpline' },
