@@ -11,35 +11,49 @@ export function ResourceNav() {
   const { t } = useTranslation();
   const pathname = usePathname();
 
+  // Both responsive versions render ordinary crawlable links. Native details
+  // keeps the mobile disclosure keyboard accessible without JavaScript.
+  const links = (
+    <ul className="space-y-0.5">
+      {RESOURCE_NAV.map(({ slug, title }) => {
+        const href = `/resources/${slug}`;
+        const active = pathname === href;
+        return (
+          <li key={slug}>
+            <Link
+              href={href}
+              aria-current={active ? "page" : undefined}
+              className={`flex min-h-11 items-center rounded-lg px-3 py-2 text-sm transition-colors ${
+                active
+                  ? "bg-emerald-50 font-medium text-emerald-800"
+                  : "text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+              }`}
+            >
+              {t(title)}
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
+
   return (
     <nav aria-label={t("Safety library")}>
-      <div className="mb-3 flex items-center gap-2">
-        <BookOpen className="size-4 text-emerald-700" />
-        <span className="text-xs font-semibold uppercase tracking-wider text-stone-400">
-          {" "}
-          {t("Safety Library")}{" "}
-        </span>
+      <details key={pathname} className="rounded-xl border border-stone-200 bg-white lg:hidden">
+        <summary className="min-h-11 cursor-pointer rounded-xl px-4 py-3 text-sm font-medium text-stone-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
+          {t("Safety library")}
+        </summary>
+        <div className="px-2 pb-2">{links}</div>
+      </details>
+      <div className="hidden lg:block">
+        <div className="mb-3 flex items-center gap-2">
+          <BookOpen aria-hidden="true" className="size-4 text-emerald-700" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-stone-400">
+            {t("Safety Library")}
+          </span>
+        </div>
+        {links}
       </div>
-      <ul className="space-y-0.5">
-        {RESOURCE_NAV.map(({ slug, title }) => {
-          const href = `/resources/${slug}`;
-          const active = pathname === href;
-          return (
-            <li key={slug}>
-              <Link
-                href={href}
-                className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
-                  active
-                    ? "bg-emerald-50 font-medium text-emerald-800"
-                    : "text-stone-600 hover:bg-stone-100 hover:text-stone-900"
-                }`}
-              >
-                {t(title)}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
     </nav>
   );
 }
