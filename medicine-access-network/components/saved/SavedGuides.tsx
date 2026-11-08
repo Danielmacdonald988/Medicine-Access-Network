@@ -113,7 +113,7 @@ export function SavedGuides() {
     <p ref={statusRef} role="status" tabIndex={-1} className={message ? 'mb-5 rounded text-sm text-stone-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-700' : 'sr-only'}>{t(message)}</p>
     {ids.length ? <Comparison key={snapshot} ids={ids} onRemove={(id) => announce(removeSavedGuide(id) ?? 'Guide removed from your saved selection.')} /> : <div className="rounded-2xl border border-stone-200 bg-white px-6 py-16 text-center">
       <h2 className="text-2xl font-medium tracking-tight text-stone-900">{t("No guides saved yet")}</h2>
-      <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-stone-600">{t("Use Save on a guide’s card or profile to compare their approach, format, and fees here.")}</p>
+      <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-stone-600">{t("Use Save on a guide’s card or profile to compare their listed support, format, and fees here.")}</p>
       <Button asChild className="mt-5 min-h-11 bg-emerald-700 hover:bg-emerald-800"><Link href="/facilitators">{t("Find a guide")}</Link></Button>
     </div>}
   </div>

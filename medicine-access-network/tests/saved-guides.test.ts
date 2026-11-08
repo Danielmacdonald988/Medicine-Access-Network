@@ -101,3 +101,14 @@ test('ordinary directory search retains its filters, pagination, count, and resp
   assert.equal(request.options.limit, 2)
   assert.equal(request.options.offset, 4)
 })
+
+test('saved comparison describes public fields rather than promising private approach details', () => {
+  const page = readFileSync('app/saved/page.tsx', 'utf8')
+  const component = readFileSync('components/saved/SavedGuides.tsx', 'utf8')
+  for (const source of [page, component]) {
+    assert.ok(source.includes('their listed support, format, and fees'))
+    assert.ok(!source.includes('their approach, format, and fees'))
+  }
+  assert.ok(component.includes('confirm fees, session length, training, and fit directly'))
+  assert.ok(component.includes('/resources/questions-to-ask'))
+})
