@@ -5,7 +5,7 @@ import ts from 'typescript'
 import { createFormControl } from 'react-hook-form'
 import { parseFacilitatorFilters } from '../lib/facilitator-search'
 import { profileSupportOptions } from '../lib/contact-options'
-import { discoveryReturnHref, directorySupportIntent, profileDiscoveryHref, initialSupportSelection, INTEGRATION_SERVICE } from '../lib/seeker-navigation'
+import { discoveryReturnHref, directorySupportIntent, profileDiscoveryHref, initialSupportSelection, INTEGRATION_SERVICE, PREPARATION_SERVICE } from '../lib/seeker-navigation'
 
 const integrationFilters = parseFacilitatorFilters(new URLSearchParams({ modality: INTEGRATION_SERVICE }))
 
@@ -32,7 +32,7 @@ test('return target rejects external, encoded, normalized, private and ambiguous
   assert.equal(profileDiscoveryHref('guide-id', '//evil.test', 'unrelated'), '/facilitators/guide-id')
 })
 
-test('only explicit single integration intent is carried, never inferred from a name/query or unrelated filters', () => {
+test('only explicit single preparation or integration intent is carried, never inferred from a name/query or unrelated filters', () => {
   assert.equal(directorySupportIntent(integrationFilters), INTEGRATION_SERVICE)
   assert.equal(directorySupportIntent(parseFacilitatorFilters(new URLSearchParams({ modality: 'Psychedelic Integration' }))), INTEGRATION_SERVICE)
   for (const query of ['q=integration', '', 'modality=Breathwork', 'modality=Integration+conversations&modality=Spiritual+support']) {
@@ -44,6 +44,21 @@ test('only explicit single integration intent is carried, never inferred from a 
   assert.equal(initialSupportSelection(INTEGRATION_SERVICE, ['Integration Coaching']), INTEGRATION_SERVICE)
   assert.equal(initialSupportSelection([INTEGRATION_SERVICE], [INTEGRATION_SERVICE]), '')
   assert.equal(initialSupportSelection('Spiritual support', ['Spiritual support']), '')
+})
+
+test('explicit preparation selection survives profile navigation only when the guide lists it', () => {
+  const filters = parseFacilitatorFilters(new URLSearchParams({ modality: PREPARATION_SERVICE }))
+  const service = directorySupportIntent(filters)
+  assert.equal(service, PREPARATION_SERVICE)
+  const url = new URL(profileDiscoveryHref('guide-id', '/facilitators?modality=Preparation+education', service), 'https://site.test')
+  assert.equal(url.searchParams.get('service'), PREPARATION_SERVICE)
+  assert.equal(url.searchParams.get('returnTo'), '/facilitators?modality=Preparation+education')
+  assert.equal(initialSupportSelection(url.searchParams.get('service'), [PREPARATION_SERVICE]), PREPARATION_SERVICE)
+  assert.equal(initialSupportSelection(PREPARATION_SERVICE, ['Preparation Coaching']), PREPARATION_SERVICE)
+  assert.equal(initialSupportSelection(PREPARATION_SERVICE, [INTEGRATION_SERVICE]), '')
+  assert.equal(initialSupportSelection([PREPARATION_SERVICE], [PREPARATION_SERVICE]), '')
+  assert.equal(directorySupportIntent(parseFacilitatorFilters(new URLSearchParams({ q: 'preparation support' }))), undefined)
+  assert.equal(directorySupportIntent(parseFacilitatorFilters(new URLSearchParams('modality=Preparation+education&modality=Integration+conversations'))), undefined)
 })
 
 const formSource = readFileSync(new URL('../components/forms/ContactRequestForm.tsx', import.meta.url), 'utf8')
@@ -63,11 +78,14 @@ function actualDefaults(service: string, modalities: string[]) {
   return defaults
 }
 
-test('actual inquiry defaults preselect supported integration only and leave all private fields blank', () => {
+test('actual inquiry defaults preselect supported preparation/integration only and leave all private fields blank', () => {
   const defaults = actualDefaults(INTEGRATION_SERVICE, [INTEGRATION_SERVICE])
   assert.equal(defaults.requested_service, INTEGRATION_SERVICE)
   for (const field of ['seeker_name', 'seeker_email', 'message', 'preferred_time_window']) assert.equal(defaults[field], '')
   assert.equal(actualDefaults('', [INTEGRATION_SERVICE]).requested_service, '')
+  const preparationDefaults = actualDefaults(PREPARATION_SERVICE, [PREPARATION_SERVICE])
+  assert.equal(preparationDefaults.requested_service, PREPARATION_SERVICE)
+  for (const field of ['seeker_name', 'seeker_email', 'message', 'preferred_time_window']) assert.equal(preparationDefaults[field], '')
   assert.equal(actualDefaults(INTEGRATION_SERVICE, ['Spiritual support']).requested_service, '')
 })
 

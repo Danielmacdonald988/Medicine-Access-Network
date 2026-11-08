@@ -152,3 +152,18 @@ test('unsupported and direct-profile hints stay blank while legacy integration r
   assert.equal(inquiryHarness().render({ modalities: ['Psychedelic Integration'] }).requested_service, '')
   assert.equal(inquiryHarness().render({ initialService: integration, modalities: ['Psychedelic Integration'] }).requested_service, integration)
 })
+
+test('preparation hints preserve edits and private draft fields across route changes', () => {
+  const form = inquiryHarness()
+  const props = { initialService: 'Preparation education', modalities: ['Preparation Coaching', 'Spiritual support'] }
+  const draft = form.render(props)
+  assert.equal(draft.requested_service, 'Preparation education')
+  draft.message = 'Private draft stays local'
+  assert.equal(form.render({ ...props, initialService: '' }).requested_service, '')
+  assert.equal(form.render(props).requested_service, 'Preparation education')
+  form.chooseService('Spiritual support')
+  assert.equal(form.render(props).requested_service, 'Spiritual support')
+  assert.equal(form.render({ ...props, initialService: '' }).requested_service, 'Spiritual support')
+  assert.equal(draft.message, 'Private draft stays local')
+  assert.deepEqual(form.engagements, [['contact_started']])
+})
