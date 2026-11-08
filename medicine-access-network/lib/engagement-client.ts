@@ -1,7 +1,7 @@
 'use client'
 
 import { isInternalQa } from './internal-qa'
-import { trafficSource, type EngagementEvent } from './engagement'
+import { hasChatGPTSourceTag, trafficSource, type EngagementEvent } from './engagement'
 
 type Session = { id: string; expires: number; source: string; device: string }
 let memory: Session | undefined
@@ -20,7 +20,7 @@ function getSession(): Session {
   } catch { /* Storage may be blocked; keep an in-memory session. */ }
   memory = {
     id: crypto.randomUUID(), expires: Date.now() + 86_400_000,
-    source: trafficSource(document.referrer, location.hostname),
+    source: trafficSource(document.referrer, location.hostname, hasChatGPTSourceTag(location.search)),
     device: /iPad|Tablet/i.test(navigator.userAgent) ? 'tablet' : /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
   }
   try { sessionStorage.setItem('tfn-engagement', JSON.stringify(memory)) } catch { /* optional */ }
