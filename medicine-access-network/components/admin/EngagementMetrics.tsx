@@ -8,6 +8,11 @@ type Summary = { counts: Record<string, number>; funnels: Record<string, Funnel>
 const empty: Funnel = { started: 0, completed: 0, pending: 0, dropped: 0, matured: 0, matured_completed: 0 }
 const labels: Record<string, string> = { direct: 'Direct / unknown', instagram: 'Instagram', linktree: 'Linktree', search: 'Search engines', other: 'Other referrals', mobile: 'Mobile', tablet: 'Tablet', desktop: 'Desktop' }
 
+// Evaluated on the server for each authorized reporting request, never in a client render.
+function reportingStart(days: number) {
+  return new Date(Date.now() - days * 86_400_000).toISOString()
+}
+
 function FunnelCard({ title, description, funnel, completeLabel }: { title: string; description: string; funnel: Funnel; completeLabel: string }) {
   return <div className="rounded-2xl border border-stone-200 bg-white p-5">
     <h3 className="font-semibold text-stone-900">{title}</h3>
@@ -23,6 +28,15 @@ export async function EngagementMetrics({ days }: { days: number }) {
   // Guard here too: service-role reads must not depend on a layout alone.
   await requireRole('admin')
   let summary: Summary | null = null
+  let storedRequests: number | null = null
+  // Count only: no request content, identities, or analytics-to-request linkage.
+  try {
+    const since = reportingStart(days)
+    const { count, error } = await createAdminSupabaseClient()
+      .from('booking_requests').select('id', { count: 'exact', head: true })
+      .gte('created_at', since)
+    if (!error && typeof count === 'number') storedRequests = count
+  } catch { /* Unknown is not zero; analytics can still be displayed. */ }
   try {
     const { data, error } = await createAdminSupabaseClient().rpc('engagement_summary', { p_days: days })
     if (!error && data && typeof data === 'object' && data.counts && data.funnels) summary = data as Summary
@@ -33,6 +47,11 @@ export async function EngagementMetrics({ days }: { days: number }) {
       <div><p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Audience & growth</p><h2 id="engagement-title" className="mt-1 text-2xl font-semibold text-stone-900">Seeker engagement & conversion</h2><p className="mt-2 text-sm text-stone-600">See whether visitors reach out for support, then review signup and application activity.</p></div>
       <nav aria-label="Engagement reporting period" className="flex flex-wrap gap-2">{[7,30,90].map(value => <Link key={value} href={`/admin?days=${value}#engagement`} aria-current={days === value ? 'page' : undefined} className={`rounded-lg border px-3 py-2 text-sm ${days === value ? 'border-emerald-800 bg-emerald-800 text-white' : 'border-stone-200 bg-white text-stone-700'}`}>{value} days</Link>)}</nav>
     </div>
+    <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+      <h3 className="font-semibold text-stone-900">Stored website requests · last {days} days</h3>
+      <p className="mt-2 text-3xl font-semibold text-stone-900">{storedRequests === null ? 'Unavailable' : storedRequests}</p>
+      <p className="mt-2 text-sm text-stone-600">Database request records, independent of browser tracking. Not unique seekers or confirmed genuine inquiries; tests may be included. Saving a request does not confirm notification delivery, a guide reply, or a booking.</p>
+    </div>
     {!summary ? <p role="status" className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900">Engagement metrics are temporarily unavailable. Refresh to try again. Account and application management are still available below.</p> : <>
       {!summary.first_event && <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">Tracking is ready. The first visitor activity will appear here after it is recorded. Earlier activity cannot be reconstructed.</p>}
       <div className="grid gap-4 lg:grid-cols-3">
@@ -41,10 +60,10 @@ export async function EngagementMetrics({ days }: { days: number }) {
         <FunnelCard title="Facilitator application" description="New applications only; profile edits are excluded." funnel={summary.funnels.application_started || empty} completeLabel="Application submitted" />
       </div>
       <p className="text-xs leading-relaxed text-stone-600">A drop-off means no tracked completion within 24 hours of the first interaction in the same browser tab. It does not prove someone closed the page. Signup accepted means the signup service returned success; email confirmation and a newly created account are not verified by this signal. Completion rates exclude starts less than 24 hours old.</p>
-      <p className="text-xs leading-relaxed text-stone-600">Contact signals count browser-tab sessions, not individual inquiries. Messaging link clicks do not confirm a message was sent. Website inquiry accepted means the request endpoint returned success; it does not confirm a guide reply or booking. Verify actual inquiries in the inbox.</p>
+      <p className="text-xs leading-relaxed text-stone-600">Contact signals count browser-tab sessions, not individual inquiries. Messaging link clicks do not confirm a message was sent. Website inquiry accepted means the request endpoint returned success; it does not confirm a guide reply or booking. Compare with stored requests above; these totals use different units and are not linked. Check the inbox for delivered notifications.</p>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
         {[
-          ['visit','Tracked sessions'],['directory_view','Directory visitors'],['profile_view','Profile viewers'],['resource_view','Resource readers'],
+          ['visit','Tracked sessions'],['directory_view','Directory visitors'],['profile_view','Profile viewers'],['resource_view','Resource viewers'],
           ['search_used','Used search / filters'],['search_empty','Saw no search results'],['signup_view','Signup page visitors'],['signup_error','Signup errors'],
           ['contact_started','Started a contact request'],['contact_sent','Website inquiry accepted'],['contact_error','Contact errors'],['direct_contact','Messaging link clicks'],['guide_saved','Saved a guide'],['application_error','Application save errors'],
         ].map(([key,label]) => <div key={key} className="rounded-xl border border-stone-200 bg-white p-4"><p className="text-xs text-stone-600">{label}</p><p className="mt-2 text-2xl font-semibold text-stone-900">{summary.counts[key] || 0}</p></div>)}
@@ -54,7 +73,8 @@ export async function EngagementMetrics({ days }: { days: number }) {
         {(['sources','devices'] as const).map(key => <div key={key} className="rounded-xl border border-stone-200 bg-white p-5"><h3 className="font-semibold">{key === 'sources' ? 'How visitors found you' : 'Visitor devices'}</h3><dl className="mt-4 space-y-4">{Object.entries(summary[key]).sort((a,b) => b[1]-a[1]).map(([label,count]) => <div key={label}><div className="flex justify-between gap-3 text-sm"><dt className="text-stone-600">{labels[label] || label}</dt><dd className="font-semibold">{count}</dd></div><div className="mt-2 h-1.5 rounded-full bg-stone-100"><div className="h-1.5 rounded-full bg-emerald-700" style={{width: `${Math.min(100,100*count/Math.max(summary.counts.visit || 0,1))}%`}} /></div></div>)}</dl>{!Object.keys(summary[key]).length && <p className="mt-3 text-sm text-stone-500">No tracked visits in this period.</p>}</div>)}
       </div>
       <details className="rounded-xl border border-stone-200 p-4 text-sm text-stone-600"><summary className="cursor-pointer font-medium text-stone-800">How to read these numbers</summary><div className="mt-3 space-y-2">
-        <p>Counts represent browser-tab sessions, not unique people or total clicks. Each action is counted once per session. A session lasts up to 24 hours; another tab, browser, or device can count separately. Referrals use the first referring site, which may be unavailable or show Linktree instead of Instagram.</p>
+        <p>Counts represent browser-tab sessions, not unique people or total clicks. Each action is counted once per session. A session expires 24 hours after its first tracked activity, not 24 hours after a form starts. Another tab, browser, or device can count separately. A form started near expiry and completed later may appear as a drop-off in the old session and a completion in a new session, even within two hours. Tracking lifetime is not extended for a form. Referrals use the first referring site, which may be unavailable or show Linktree instead of Instagram.</p>
+        <p>Resource views mean page exposure, not confirmed reading. Resource coverage expanded on November 7, 2026, so earlier counts are incomplete. Referral categories are not campaign attribution and do not prove outreach caused a visit.</p>
         <p>Admin activity, preview deployments, and browsers requesting Do Not Track or Global Privacy Control are excluded. Blockers and network failures can reduce counts. Direct contact clicks do not confirm a message was sent. These are activity signals, not audited transaction totals.</p>
         <p>Only action names, numbered steps, broad referral sources and device types are stored. No names, emails, messages, search text, specific guide IDs, or full URLs are collected by this feature. Event history is retained for up to 90 days, with cleanup when new activity arrives.</p>
         <p>Earliest retained activity: {summary.first_event ? new Date(summary.first_event).toLocaleString('en-US', { timeZone: 'UTC' }) + ' UTC' : 'None yet'}. Latest: {summary.latest_event ? new Date(summary.latest_event).toLocaleString('en-US', { timeZone: 'UTC' }) + ' UTC' : 'None yet'}.</p>
