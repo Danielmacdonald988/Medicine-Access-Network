@@ -41,6 +41,7 @@ export default async function AboutPage() {
       <section className="mt-10">
         <h2 className="text-2xl font-semibold">{t('Keep the first conversation simple')}</h2>
         <p className="mt-4 leading-relaxed text-stone-600">{t('A request starts a conversation, not a confirmed booking. Share the support you want and your preferred format. Leave medical records and sensitive personal history out of introductory messages.')}</p>
+        <Link href="/facilitators" className="mt-4 inline-flex min-h-11 items-center gap-2 font-medium text-emerald-800 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">{t('Explore support')} <ArrowRight className="size-4 shrink-0" aria-hidden /></Link>
       </section>
       <section className="mt-10">
         <h2 className="text-2xl font-semibold">{t('Clear limits')}</h2>
