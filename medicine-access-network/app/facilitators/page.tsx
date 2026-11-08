@@ -192,7 +192,7 @@ export default async function FacilitatorsPage({ searchParams }: PageProps) {
       <SupportDiscovery filters={filters} />
       <div className="grid gap-5 lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start lg:gap-8">
         <Suspense><DirectorySearchControls /></Suspense>
-        <section aria-label={t("Guide search results")} className="min-w-0 flex-1">
+        <section id="guide-results" tabIndex={-1} aria-label={t("Guide search results")} className="min-w-0 flex-1 scroll-mt-24">
           <h2 className="mb-3 text-2xl font-medium tracking-tight text-stone-900">{t("Meet the guides")}</h2>
           <ActiveFilters filters={filters} />
           <Suspense key={`${filterSearchParams(filters)}:${page}`} fallback={<GridSkeleton />}>

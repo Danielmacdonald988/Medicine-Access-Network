@@ -109,8 +109,8 @@ test('visitor edits survive repeated hint evaluation and closing/reopening detai
 
 test('early integration link preserves final CTA and analytics continue discarding URL query values', () => {
   const article = readFileSync(new URL('../app/resources/[slug]/page.tsx', import.meta.url), 'utf8')
-  assert.ok(article.indexOf('Ready to compare approaches?') < article.indexOf('resource.blocks.map'))
-  assert.match(article, /slug === 'integration-basics'/)
+  assert.ok(article.indexOf('Ready to compare?') < article.indexOf('resource.blocks.map'))
+  assert.match(article, /resourceProfileShortcut\(slug\)/)
   assert.match(article, /resource.nextStep/)
   const analytics = readFileSync(new URL('../components/TrafficAnalytics.tsx', import.meta.url), 'utf8')
   assert.match(analytics, /url.search = ""/)
