@@ -29,9 +29,11 @@ export async function sendFacilitatorInquiryEmail(
 ): Promise<{ sent: boolean }> {
   // Preview builds also use NODE_ENV=production and can share live credentials.
   // Require a production runtime, and honor Vercel's deployment environment
-  // whenever present. Non-Vercel production hosting remains supported.
+  // whenever present. Known Vercel runtimes must identify their environment.
+  // Non-Vercel production hosting remains supported.
   if (process.env.NODE_ENV !== 'production' ||
-      (process.env.VERCEL_ENV !== undefined && process.env.VERCEL_ENV !== 'production')) {
+      ((process.env.VERCEL === '1' || process.env.VERCEL_ENV !== undefined) &&
+       process.env.VERCEL_ENV !== 'production')) {
     return { sent: false }
   }
 
