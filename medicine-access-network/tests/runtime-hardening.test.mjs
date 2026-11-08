@@ -338,14 +338,17 @@ test('inquiry email is production-only even when preview or test has live-style 
   setEnv(t, { RESEND_API_KEY: 'test-key', RESEND_FROM_EMAIL: 'requests@directory.test' })
   const fetchMock = t.mock.method(globalThis, 'fetch', async () => new Response('{}', { status: 200 }))
   const email = loadModule('lib/email.ts', { 'server-only': {} })
-  for (const nodeEnv of ['production', 'development', 'test', '', undefined]) {
-    for (const vercelEnv of ['production', 'preview', 'development', 'unknown', '', undefined]) {
-      setEnv(t, { NODE_ENV: nodeEnv, VERCEL_ENV: vercelEnv })
-      const before = fetchMock.mock.calls.length
-      const allowed = nodeEnv === 'production' && (vercelEnv === 'production' || vercelEnv === undefined)
-      assert.deepEqual(await email.sendFacilitatorInquiryEmail(emailInput), { sent: allowed },
-        `NODE_ENV=${nodeEnv}, VERCEL_ENV=${vercelEnv}`)
-      assert.equal(fetchMock.mock.calls.length - before, allowed ? 1 : 0)
+  for (const vercel of ['1', undefined]) {
+    for (const nodeEnv of ['production', 'development', 'test', '', undefined]) {
+      for (const vercelEnv of ['production', 'preview', 'development', 'unknown', '', undefined]) {
+        setEnv(t, { NODE_ENV: nodeEnv, VERCEL_ENV: vercelEnv, VERCEL: vercel })
+        const before = fetchMock.mock.calls.length
+        const allowed = nodeEnv === 'production' &&
+          (vercelEnv === 'production' || (vercel === undefined && vercelEnv === undefined))
+        assert.deepEqual(await email.sendFacilitatorInquiryEmail(emailInput), { sent: allowed },
+          `NODE_ENV=${nodeEnv}, VERCEL_ENV=${vercelEnv}, VERCEL=${vercel}`)
+        assert.equal(fetchMock.mock.calls.length - before, allowed ? 1 : 0)
+      }
     }
   }
 })
