@@ -350,6 +350,54 @@ test('full form contact-only saves bypass review, but mixed practice edits still
   assert.equal(mixed.afterCallbacks.length, 1)
 })
 
+test('unchanged and contact-only full forms preserve moderation after a JSONB location round trip', async () => {
+  const initial = fixture()
+  await initial.applications.POST(submission())
+  // PostgreSQL JSONB returns city/region/country, while validation emits
+  // city/country/region. Reusing the write object would hide this regression.
+  const stored = initial.writes[0].value
+  const locations = stored.locations.map(({ city, region, country }) => ({ city, region, country }))
+  assert.notEqual(JSON.stringify(stored.locations), JSON.stringify(locations))
+  for (const verification_status of ['approved', 'pending', 'rejected']) {
+    for (const changes of [{}, { whatsapp_url: 'https://wa.me/14155552671' }]) {
+      const current = { ...stored, locations, verification_status,
+        visibility: verification_status === 'approved' ? 'public' : 'hidden' }
+      const f = fixture({ current })
+      const response = await f.applications.POST(submission({ profileId, application: application(changes) }))
+      assert.equal(response.status, 200)
+      assert.equal((await response.json()).reviewRequired, false)
+      assert.deepEqual(f.writes, [])
+      assert.deepEqual(f.afterCallbacks, [])
+      assert.equal(f.contactWrites.length, 1)
+      assert.equal('verification_status' in f.contactWrites[0].value, false)
+      assert.equal('visibility' in f.contactWrites[0].value, false)
+      assert.deepEqual(f.contactWrites[0].filters, [['id', profileId], ['user_id', userId]])
+    }
+  }
+})
+
+test('real profile and location changes still require review with JSONB-shaped current values', async () => {
+  const initial = fixture()
+  await initial.applications.POST(submission())
+  const current = { ...initial.writes[0].value,
+    locations: [{ city: 'Cary', region: 'NC', country: 'US' }],
+    verification_status: 'approved', visibility: 'public' }
+  for (const changes of [
+    { locations: [{ city: 'Raleigh', country: 'US', region: 'NC' }] },
+    { locations: [{ city: 'Cary', country: 'US', region: 'NC' }, { city: 'Boston', country: 'US', region: 'MA' }] },
+    { bio: 'Changed practice description. '.repeat(10) },
+    { image_paths: [`${userId}/22222222-2222-4222-8222-222222222222.webp`] },
+  ]) {
+    const f = fixture({ current })
+    const response = await f.applications.POST(submission({ profileId, application: application(changes) }))
+    assert.equal(response.status, 200)
+    assert.deepEqual(f.contactWrites, [])
+    assert.equal(f.writes[0].value.verification_status, 'pending')
+    assert.equal(f.writes[0].value.visibility, 'hidden')
+    assert.equal(f.afterCallbacks.length, 1)
+  }
+})
+
 test('social-link saves use the same owner-scoped contact path and preserve moderation', async () => {
   const f = fixture()
   const response = await f.applications.POST(contactSubmission({
