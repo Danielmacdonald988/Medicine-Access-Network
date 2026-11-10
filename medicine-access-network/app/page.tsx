@@ -1,3 +1,4 @@
+import { organizationStructuredData, serializeStructuredData } from "@/lib/organization-identity";
 import { getTranslation } from "@/lib/i18n/server";
 import Link from "next/link";
 import FacilitatorsPage from "./facilitators/page";
@@ -85,12 +86,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Dir
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            name: APP_NAME,
-            url: SITE_URL,
-          }).replace(/</g, "\\u003c"),
+          __html: serializeStructuredData(organizationStructuredData()),
         }}
       />
       <FacilitatorsPage searchParams={searchParams} />

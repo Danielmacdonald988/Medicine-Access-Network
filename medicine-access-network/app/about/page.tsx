@@ -1,3 +1,4 @@
+import { ORGANIZATION_DESCRIPTION, OFFICIAL_BRAND_PROFILES } from '@/lib/organization-identity'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, ShieldCheck } from 'lucide-react'
@@ -16,6 +17,16 @@ export default async function AboutPage() {
       <p className="text-sm font-medium text-emerald-800">{t('About the network')}</p>
       <h1 className="mt-3 text-4xl font-semibold tracking-tight">{t('Support starts with an informed choice.')}</h1>
       <p className="mt-6 text-lg leading-relaxed text-stone-600">{t('Discover preparation, integration, breathwork, and wellness support. Explore profiles and resources without creating an account.')}</p>
+      <section lang="en" aria-labelledby="network-definition" className="mt-8">
+        <h2 id="network-definition" className="text-2xl font-semibold">What is The Facilitator Network?</h2>
+        <p className="mt-4 leading-relaxed text-stone-600">{ORGANIZATION_DESCRIPTION}</p>
+        <p className="mt-4 text-sm font-medium">Official brand channels</p>
+        <ul className="flex flex-wrap gap-x-6">
+          {OFFICIAL_BRAND_PROFILES.map(profile => (
+            <li key={profile.name}><a href={profile.url} className="inline-flex min-h-11 items-center text-emerald-800 underline underline-offset-4">{profile.name}</a></li>
+          ))}
+        </ul>
+      </section>
       <section id="profile-review" className="mt-10 scroll-mt-24 rounded-2xl border border-emerald-200 bg-white p-6 sm:p-8">
         <ShieldCheck className="mb-4 size-7 text-emerald-800" aria-hidden />
         <h2 className="text-2xl font-semibold">{t('What “Listing approved” means')}</h2>
