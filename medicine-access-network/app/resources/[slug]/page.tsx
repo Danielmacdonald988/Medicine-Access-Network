@@ -5,8 +5,9 @@ import { getTranslation } from '@/lib/i18n/server'
 import { resourceSummaries } from '@/lib/i18n/resource-summaries'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, AlertTriangle, Info, Siren } from 'lucide-react'
+import { AlertTriangle, Info, Siren } from 'lucide-react'
 import { getResource, resources, type Block } from '@/lib/resources'
+import { resourceBreadcrumbs, breadcrumbJsonLd } from '@/lib/resource-breadcrumbs'
 
 export async function generateStaticParams() {
   return resources.map((r) => ({ slug: r.slug }))
@@ -123,6 +124,7 @@ export default async function ResourcePage({ params }: PageProps) {
   const { slug } = await params
   const resource = getResource(slug)
   if (!resource) notFound()
+  const breadcrumbs = resourceBreadcrumbs(resource.slug, t(resource.title), t('Safety library'))
   const profileShortcut = resourceProfileShortcut(slug)
   const summary = resourceSummaries[slug]
   const translatedSummary = t(summary)
@@ -130,14 +132,21 @@ export default async function ResourcePage({ params }: PageProps) {
 
   return (
     <article className="space-y-5">
-      {/* Back link */}
-      <Link
-        href="/resources"
-        className="inline-flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-700"
-      >
-        <ArrowLeft className="size-3.5" />
-        {t('Safety library')}
-      </Link>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd(breadcrumbs) }} />
+      <nav aria-label="Breadcrumb">
+        <ol className="flex flex-wrap items-center gap-x-2 text-sm text-stone-600">
+          {breadcrumbs.map((crumb, index) => (
+            <li key={crumb.href} className="flex min-w-0 items-center gap-2">
+              {index > 0 && <span aria-hidden="true" className="text-stone-400">/</span>}
+              {index === breadcrumbs.length - 1 ? (
+                <span aria-current="page" className="py-3">{crumb.name}</span>
+              ) : (
+                <Link href={crumb.href} className="inline-flex min-h-11 items-center rounded text-emerald-800 underline underline-offset-4 hover:text-emerald-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900">{crumb.name}</Link>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
 
       {/* Header */}
       <div className="border-b border-stone-100 pb-6">
