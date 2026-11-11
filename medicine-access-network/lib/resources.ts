@@ -1,10 +1,10 @@
 // ─── Content types ────────────────────────────────────────────────────────────
 
 export type Block =
-  | { type: 'p'; text: string }
+  | { type: 'p'; text: string; links?: { label: string; href: string }[] }
   | { type: 'ul'; items: string[] }
   | { type: 'ol'; items: string[] }
-  | { type: 'h3'; text: string }
+  | { type: 'h3'; text: string; id?: string }
   | { type: 'callout'; variant: 'warning' | 'info' | 'emergency'; text: string }
 
 export interface Resource {
@@ -63,7 +63,7 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Listings on this platform describe coaching, preparation support, integration conversations, and related legal wellness services. A listing does not establish a professional license or a clinical care relationship. Ask what capacity the guide is working in, check any claimed license with its issuing body, and confirm that the service matches your needs.',
+        text: 'Listings on this platform describe coaching, preparation support, integration conversations, and related wellness services. A listing does not establish a professional license or a clinical care relationship. Ask what capacity the guide is working in, check any claimed license with its issuing body, and confirm that the service matches your needs.',
       },
       {
         type: 'p',
@@ -110,7 +110,7 @@ export const resources: Resource[] = [
       {
         type: 'callout',
         variant: 'warning',
-        text: 'This platform does not coordinate, facilitate, source, or have any involvement in the use of controlled substances. Guides here offer legal coaching and support services only.',
+        text: 'This platform does not coordinate, facilitate, source, or have any involvement in the use of controlled substances. Guides must offer only lawful support within their qualifications. A listing does not verify service legality; confirm the proposed service and the requirements where you live.',
       },
     ],
   },
@@ -120,7 +120,7 @@ export const resources: Resource[] = [
     title: 'Integration Basics',
     searchTitle: 'Psychedelic Integration: What Support Can and Cannot Offer',
     nextStep: { label: 'Find integration support', href: '/integration-support', description: 'Compare guides who list integration conversations. Read their approach, ask about fit and fees, and confirm availability directly. No account is needed to browse or send an inquiry.' },
-    relatedSlugs: ['questions-to-ask', 'scope-of-practice'],
+    relatedSlugs: ['questions-to-ask', 'scope-of-practice', 'integration-circles-vs-individual'],
     subtitle: 'Understanding reflection and support after a psychedelic or other significant experience',
     description:
       'Understand integration conversations, what to ask a guide, and how to compare scope, fees, format and boundaries before reaching out.',
@@ -141,6 +141,21 @@ export const resources: Resource[] = [
       ] },
       { type: 'p', text: 'Guides choose their own service labels. An integration listing is not proof of clinical qualifications or a promise of a particular result. Confirm what the individual offers; a first inquiry does not book a session.' },
 
+      { type: 'h3', id: 'online-integration-readiness', text: 'Before booking online integration support' },
+      { type: 'p', text: 'An online listing describes a possible format, not worldwide availability. Before agreeing to a remote conversation, confirm the exact service and the practical arrangements. These checks do not establish suitability or guarantee an outcome.' },
+      { type: 'ul', items: [
+        'Confirm session location and role. Tell the guide the state or country where you will physically be during the appointment, including if you will be traveling. Ask where they will be and whether they may offer this specific service in those locations. For US clinical care, check the relevant licensing authority; cross-state rules vary. Do not assume the same rules apply to every nonclinical service.',
+        'Ask about recording and notes. Will anyone record, transcribe or use an AI note-taking tool? Ask who can access the information, how long it is retained, and whether you can decline recording or choose another arrangement. A promise of confidentiality does not answer all of these questions.',
+        'Plan for privacy and access. Choose a space where others cannot overhear or see your screen, and consider headphones. Ask in advance about captions, interpretation or other accommodations. Confirm the joining link, time zone and a backup plan if the connection drops; test your device before the appointment.',
+        'Get the practical terms in writing. Confirm session length, total fee and currency, cancellation terms and whether there is an ongoing commitment. You can ask for clarification or decide not to proceed.',
+      ] },
+      { type: 'p', text: 'A simple first message: “I am considering an online integration conversation. Can you confirm the service you offer, eligible locations, session length, total fee and cancellation terms? Please also explain your recording or note-taking practices and available accessibility options.” Keep diagnoses, medication lists, trauma details and substance use history out of an introductory platform message. Ask about a suitable private intake process if one is needed.' },
+      { type: 'p', text: 'Sources for this online-readiness section checked November 8, 2026: US Department of Health and Human Services guidance on clinical cross-state practice, appointment preparation and privacy precautions. These sources describe healthcare settings; citing them does not mean TFN or every listed guide is a healthcare provider or covered by HIPAA.', links: [
+        { label: 'HHS: cross-state clinical licensing', href: 'https://telehealth.hhs.gov/licensure/licensing-across-state-lines' },
+        { label: 'HHS: preparing for a telehealth visit', href: 'https://telehealth.hhs.gov/patients/what-should-i-know-before-my-telehealth-visit' },
+        { label: 'HHS: privacy and security tips', href: 'https://www.hhs.gov/hipaa/for-professionals/privacy/guidance/telehealth-privacy-security/index.html' },
+      ] },
+
       {
         type: 'p',
         text: 'Integration is the ongoing process of making sense of an experience and weaving what you have learned into your daily life. It is not a single conversation or a checklist — it is a slow, often nonlinear process of reflection, embodiment, and change.',
@@ -155,7 +170,7 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Insight without integration tends to fade. A meaningful experience — whether in a breathwork session, a somatic session, or any other deep personal work — can surface material that is new, confusing, or emotionally charged. Without time and support to process it, that material can be left unresolved.',
+        text: 'After a meaningful experience, you may want time to reflect on what it means to you. A conversation is one option, not a requirement, and does not guarantee lasting insights. You can choose whether to seek support, and an integration service cannot promise a particular outcome.',
       },
       {
         type: 'p',
@@ -378,7 +393,7 @@ export const resources: Resource[] = [
     blocks: [
       {
         type: 'p',
-        text: 'Most guides working in this space are doing so with genuine care and integrity. But as with any unregulated field, there are people who cause harm — sometimes through incompetence, sometimes through exploitation. Knowing what to look for protects you.',
+        text: 'A profile or reassuring description cannot establish a guide’s competence or integrity. Review the proposed service, qualifications and boundaries, and watch for pressure or unsupported claims. These questions can help you make a more informed choice; they cannot guarantee safety.',
       },
       {
         type: 'h3',
@@ -561,15 +576,15 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Coaching is a future-focused, goal-oriented practice. Coaches help clients identify what they want, build clarity and accountability, and take steps toward change. Coaching is generally unregulated — there is no licensing body, no protected title, and no minimum training requirement, though many coaches pursue certification programmes.',
+        text: 'Coaching is a future-focused, goal-oriented practice. Coaches help clients identify what they want, build clarity and accountability, and take steps toward change. The coach title alone does not establish a clinical license or a standard level of training. Certification, title protection and practice requirements vary by service and jurisdiction; check the specific credential and role.',
       },
       {
         type: 'ul',
         items: [
-          'Future-focused: oriented toward where you want to go, not where you came from',
+          'May focus on goals, reflection and practical next steps; the approach varies by coach',
           'Does not diagnose or treat mental health conditions',
           'Not a substitute for therapy when clinical support is needed',
-          'No protected title — anyone can call themselves a coach',
+          'A coaching certificate is not the same as a clinical license',
           'Confidentiality varies — ask explicitly what a coach\'s policy is',
           'May include preparation support, integration conversations, or accountability work',
         ],
@@ -580,15 +595,15 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Psychotherapy is a licensed, regulated clinical practice. Therapists, psychotherapists, counsellors, psychologists, and social workers are trained and licensed to assess, diagnose, and treat mental health conditions. They operate within a formal ethical and legal framework including mandatory confidentiality, duty of care, and professional accountability.',
+        text: 'Psychotherapy includes approaches intended to help people with troubling emotions, thoughts and behaviours. Professional titles, licensing requirements and permitted activities vary by jurisdiction. A therapist or counsellor title alone does not establish a license or authority to diagnose. Check the exact qualification, applicable regulator or accredited register, and the scope of the proposed service.',
       },
       {
         type: 'ul',
         items: [
-          'Can diagnose and treat mental health conditions',
-          'Licensed and regulated by professional bodies',
-          'Subject to mandatory ethical standards and disciplinary processes',
-          'Often past-oriented — explores roots of current patterns',
+          'Appropriately qualified professionals may assess or treat mental health conditions within their permitted scope',
+          'Check licensing or registration requirements in the relevant jurisdiction',
+          'Ask which ethical standards and complaints process apply',
+          'May address current thoughts, behaviours, relationships or earlier experiences, depending on the approach',
           'Appropriate for trauma, depression, anxiety, and other clinical presentations',
           'Can work alongside psychiatry and medication management',
         ],
@@ -626,7 +641,7 @@ export const resources: Resource[] = [
       },
       {
         type: 'p',
-        text: 'Guides here offer legal coaching and support services — preparation conversations, integration support, breathwork facilitation, somatic coaching, harm reduction education, and similar practices. This is meaningful, valuable work. It is also distinct from therapy and medicine.',
+        text: 'Profiles may list preparation conversations, integration support, breathwork facilitation, somatic coaching, harm reduction education and similar practices. Guides must work lawfully and within their qualifications. TFN does not independently verify service legality; confirm the exact activity, role and location requirements. A support-service label does not establish a clinical care relationship.',
       },
       {
         type: 'p',
@@ -646,6 +661,14 @@ export const resources: Resource[] = [
         ],
       },
     ],
+    sourceCheck: {
+      date: '2026-11-08',
+      scope: 'Psychotherapy approaches and jurisdiction-dependent professional regulation checked against the sources below. This is general information, not individual medical or legal advice.',
+      sources: [
+        { title: 'NIMH: Psychotherapies', url: 'https://www.nimh.nih.gov/health/topics/psychotherapies' },
+        { title: 'UK Parliament: Counselling and psychotherapy regulation (3 March 2026)', url: 'https://questions-statements.parliament.uk/written-questions/detail/2026-02-24/115490' },
+      ],
+    },
   },
 
   {
@@ -669,11 +692,18 @@ export const resources: Resource[] = [
         text: 'For emotional distress or a suicidal crisis in the United States, contact one of these services. If you are outside the US, use the crisis and emergency services in your location.',
       },
       {
-        type: 'ul',
-        items: [
-          '988 Suicide & Crisis Lifeline — call or text 988 (US). Available 24/7 for anyone in emotional distress or suicidal crisis.',
-          'Crisis Text Line — text HOME to 741741 in the US for free crisis support, available 24/7.',
+        type: 'p',
+        text: '988 Suicide & Crisis Lifeline — call or text 988 (US). Available 24/7 for anyone in emotional distress or suicidal crisis.',
+        links: [
+          { label: 'Call 988 (US)', href: 'tel:988' },
+          { label: 'Text 988 (US)', href: 'sms:988' },
+          { label: '988 accessibility options: chat, videophone and relay', href: 'https://988lifeline.org/deaf-hard-of-hearing-hearing-loss/' },
         ],
+      },
+      {
+        type: 'p',
+        text: 'Crisis Text Line — text HOME to 741741 in the US for free crisis support, available 24/7.',
+        links: [{ label: 'Text Crisis Text Line at 741741 (US); enter HOME', href: 'sms:741741' }],
       },
       {
         type: 'h3',
@@ -682,17 +712,32 @@ export const resources: Resource[] = [
       {
         type: 'p',
         text: 'Fireside Project — call or text 623-473-7433 in the US, daily from 11 a.m. to 11 p.m. Pacific. It offers non-clinical emotional support during or after psychedelic experiences. It is not an emergency service, a suicide hotline, or medical care. For immediate danger or a medical emergency, call 911; for suicidal crisis, call or text 988.',
+        links: [
+          { label: 'Call Fireside Project (US)', href: 'tel:+16234737433' },
+          { label: 'Text Fireside Project (US)', href: 'sms:+16234737433' },
+        ],
       },
       {
         type: 'h3',
         text: 'Treatment information and event support',
       },
       {
-        type: 'ul',
-        items: [
-          'SAMHSA National Helpline — 1-800-662-4357. A free, confidential US treatment referral and information service, available 24/7. Use 988 for immediate crisis support.',
-          'Zendo Project — peer support at participating events, plus harm reduction training and educational resources. It is not a general emergency phone line; check its website for current event services.',
-        ],
+        type: 'p',
+        text: 'SAMHSA National Helpline — 1-800-662-4357. A free, confidential US treatment referral and information service, available 24/7. Use 988 for immediate crisis support.',
+        links: [{ label: 'Call SAMHSA National Helpline (US)', href: 'tel:+18006624357' }],
+      },
+      {
+        type: 'p',
+        text: 'Zendo Project — peer support at participating events, plus harm reduction training and educational resources. It is not a general emergency phone line; check its website for current event services.',
+      },
+      {
+        type: 'h3',
+        text: 'Outside the United States',
+      },
+      {
+        type: 'p',
+        text: 'Use emergency services in your current location for immediate danger. US short codes and support lines are not worldwide services. Crisis Text Line lists country-specific international partners; check the partner’s location, eligibility and current service details before using it.',
+        links: [{ label: 'Find Crisis Text Line international partners by country', href: 'https://www.crisistextline.org/about-us/where-we-are/' }],
       },
       {
         type: 'h3',
@@ -750,10 +795,12 @@ export const resources: Resource[] = [
       },
     ],
     sourceCheck: {
-      date: '2026-09-06',
-      scope: 'Support-line numbers, hours, and service scope checked against the providers below.',
+      date: '2026-11-08',
+      scope: 'Support-line numbers, hours, service scope, 988 accessibility options and the international-partner resource checked against the providers below. This is a source check, not a test call or guarantee of availability.',
       sources: [
         { title: '988 Suicide & Crisis Lifeline', url: 'https://988lifeline.org/' },
+        { title: '988: Deaf, Hard of Hearing, Hearing Loss', url: 'https://988lifeline.org/deaf-hard-of-hearing-hearing-loss/' },
+        { title: 'Crisis Text Line: International partners', url: 'https://www.crisistextline.org/about-us/where-we-are/' },
         { title: 'Crisis Text Line', url: 'https://www.crisistextline.org/' },
         { title: 'Fireside Project: Psychedelic Support Line', url: 'https://firesideproject.org/support-line' },
         { title: 'SAMHSA National Helpline', url: 'https://www.samhsa.gov/find-help/helplines/national-helpline' },
@@ -794,6 +841,120 @@ export const resources: Resource[] = [
       { type: 'p', text: 'You could ask: “I would like to understand your approach to spiritual support. How do you work with someone who is still exploring their beliefs, and what are your fees and session options?” Keep private health information out of the first platform message. Sending an inquiry does not book a session.' },
       { type: 'callout', variant: 'info', text: 'TFN connects people with listed legal support services. It does not sell, source or coordinate access to controlled substances. A spiritual-support listing does not imply ceremonies, substances or any particular religious role.' },
     ],
+  },
+  {
+    "slug": "integration-circles-vs-individual",
+    "title": "Integration Circles or One-to-One Support?",
+    "searchTitle": "Psychedelic Integration Circles vs One-to-One Support",
+    "subtitle": "Compare participation, privacy and professional roles before choosing a format",
+    "description": "Compare psychedelic integration circles and one-to-one support. Ask about group rules, confidentiality, professional roles, fees and your right not to share.",
+    "relatedSlugs": [
+      "integration-basics",
+      "scope-of-practice",
+      "questions-to-ask",
+      "emergency"
+    ],
+    "nextStep": {
+      "label": "Explore integration profiles",
+      "href": "/integration-support",
+      "description": "Compare the services people list, then ask directly about format, scope, availability and location eligibility. TFN does not confirm that these profiles offer groups. An inquiry is not a booking."
+    },
+    "sourceCheck": {
+      "date": "2026-11-08",
+      "scope": "Sources inform the distinctions and questions below. APA guidance concerns clinical group therapy, not the effectiveness or regulation of peer integration circles. No clinical reviewer or endorsement is implied.",
+      "sources": [
+        {
+          "title": "American Psychological Association: Understanding group therapy",
+          "url": "https://www.apa.org/topics/psychotherapy/group-therapy"
+        },
+        {
+          "title": "APA Ethics Code: Group Therapy (10.03)",
+          "url": "https://www.apa.org/ethics/code"
+        },
+        {
+          "title": "Institute of Psychedelic Therapy: Integration groups and service limits",
+          "url": "https://instituteofpsychedelictherapy.org/directory/integration-groups/"
+        }
+      ]
+    },
+    "blocks": [
+      {
+        "type": "p",
+        "text": "If you are looking for a conversation after a psychedelic or other significant experience, a group and a one-to-one appointment involve different choices. Start with the kind of conversation you want, how much you want to share and the role of the person leading it. Neither format guarantees a particular outcome."
+      },
+      {
+        "type": "h3",
+        "text": "A circle is not automatically therapy"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "A peer integration circle is a shared discussion, not automatically a clinical service. Ask who leads it and what support is outside its scope.",
+          "A professionally facilitated nonclinical group may offer a structured conversation. Training or a professional-sounding title does not by itself establish a healthcare license.",
+          "Clinical group therapy is a distinct service. Verify the clinician’s current license, whether they may work with you in your location, and the clinical service actually being offered.",
+          "One-to-one integration support can also be clinical or nonclinical. The private format does not establish qualifications or make it therapy."
+        ]
+      },
+      {
+        "type": "h3",
+        "text": "Which conversation format fits your preferences?"
+      },
+      {
+        "type": "p",
+        "text": "In a group, time and attention are shared with other participants. Ask about group size, whether membership stays the same or newcomers can join, and how turns are managed. In a one-to-one appointment, ask how the conversation is structured around your questions. You can compare options without explaining your personal history or committing to either format."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Do you want to hear other perspectives, or would you prefer to discuss your questions with one person?",
+          "Can you attend only to listen, pass on an exercise or leave early? What happens if you do not want advice or an interpretation?",
+          "Is this a drop-in circle or a fixed series? What attendance commitment and total fees apply?",
+          "How does the leader handle pressure, interruptions, conflict or a participant whose needs are beyond the group’s scope?"
+        ]
+      },
+      {
+        "type": "h3",
+        "text": "A confidentiality agreement is not a guarantee"
+      },
+      {
+        "type": "p",
+        "text": "Other participants hear what is shared in a group. Even when everyone agrees to confidentiality, the organizer cannot guarantee that participants will keep information private. APA makes this limitation explicit for group therapy; do not assume a peer circle offers stronger protection. Ask what rules apply before you disclose anything sensitive."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Are names, attendance lists or contact details shared with other participants?",
+          "What are the rules about discussing someone else’s story outside the group? How are breaches handled?",
+          "May participants contact one another afterward, and is permission required first?",
+          "Who keeps any notes, who can access them, and what confidentiality limits apply to the leader?"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "A one-to-one conversation also has privacy limits. Ask the person to explain their actual policy and any legal duties; do not assume every integration guide has the same obligations as a licensed therapist."
+      },
+      {
+        "type": "h3",
+        "text": "A brief question you can send"
+      },
+      {
+        "type": "p",
+        "text": "“I am comparing group and one-to-one integration support. Is your service clinical care or a nonclinical conversation? For groups, how many people attend, can I listen without sharing, and what are the confidentiality and contact-between-participants rules? What are the total fees and attendance expectations?” Keep diagnoses, medication lists, substance-use history and other sensitive details out of an introductory platform message."
+      },
+      {
+        "type": "h3",
+        "text": "Know when a different service is needed"
+      },
+      {
+        "type": "p",
+        "text": "A peer circle or nonclinical guide is not a substitute for assessment or treatment by an appropriately licensed healthcare professional. If distress persists or interferes with daily life, seek qualified clinical support rather than relying on a group discussion alone. For immediate danger or urgent support, use the urgent-help guide linked below."
+      },
+      {
+        "type": "callout",
+        "variant": "info",
+        "text": "This guide concerns reflection and support, not obtaining or taking substances. TFN does not sell, source, administer or arrange access to controlled substances. It does not confirm group availability, independently verify every qualification or guarantee that a proposed service is permitted in every location."
+      }
+    ]
   },
 ]
 

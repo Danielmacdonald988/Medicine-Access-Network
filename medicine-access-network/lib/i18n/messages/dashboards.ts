@@ -1,6 +1,30 @@
 import type { MessageCatalog } from '../config'
 
 export const dashboardMessages = {
+  "Original application: {date}": [
+    "Solicitud original: {date}",
+    "Candidature initiale : {date}",
+    "Candidatura original: {date}",
+    "Ursprünglicher Antrag: {date}",
+    "Candidatura originale: {date}",
+    "Oorspronkelijke aanvraag: {date}",
+    "首次申请：{date}",
+    "最初の申請：{date}",
+    "최초 신청: {date}",
+    "Iarratas bunaidh: {date}"
+  ],
+  "Last profile update: {date}": [
+    "Última actualización del perfil: {date}",
+    "Dernière mise à jour du profil : {date}",
+    "Última atualização do perfil: {date}",
+    "Letzte Profilaktualisierung: {date}",
+    "Ultimo aggiornamento del profilo: {date}",
+    "Laatste profielupdate: {date}",
+    "上次资料更新：{date}",
+    "プロフィールの最終更新：{date}",
+    "마지막 프로필 업데이트: {date}",
+    "Nuashonrú deireanach próifíle: {date}"
+  ],
   "A profile photo is required before publication.": [
     "Se requiere una foto de perfil antes de publicar.",
     "Une photo de profil est requise avant publication.",

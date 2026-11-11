@@ -63,7 +63,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     supabase
       .from('facilitator_profiles')
       .select(
-        'id, display_name, location, modalities, bio, safety_practices, years_experience, lineage_or_training, certifications, agreement_version, agreement_accepted_at, created_at, user_id, image_paths, whatsapp_url, signal_url, telegram_url, instagram_url, facebook_url, linkedin_url, website_url'
+        'id, display_name, location, modalities, bio, safety_practices, years_experience, lineage_or_training, certifications, agreement_version, agreement_accepted_at, created_at, updated_at, user_id, image_paths, whatsapp_url, signal_url, telegram_url, instagram_url, facebook_url, linkedin_url, website_url'
       )
       .eq('verification_status', 'pending')
       .order('created_at', { ascending: true }),
@@ -196,9 +196,14 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                         <p className="text-sm text-stone-500">{f.location}</p>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-stone-400">
-                      <Clock className="size-3" />
-                      {formatDate(f.created_at, locale)}
+                    <div className="space-y-1 text-xs text-stone-500">
+                      <p className="flex items-center gap-2">
+                        <Clock className="size-3 shrink-0" aria-hidden="true" />
+                        {t('Original application: {date}', { date: formatDate(f.created_at, locale) })}
+                      </p>
+                      {f.updated_at && f.updated_at !== f.created_at && (
+                        <p>{t('Last profile update: {date}', { date: formatDate(f.updated_at, locale) })}</p>
+                      )}
                     </div>
                   </div>
                 </CardHeader>

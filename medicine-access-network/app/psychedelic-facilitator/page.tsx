@@ -1,3 +1,4 @@
+import { EducationalAttribution } from '@/components/educational-attribution'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
@@ -14,6 +15,7 @@ export default function PsychedelicFacilitatorPage() {
     <header>
       <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Understand your options</p>
       <h1 className="mt-3 text-3xl font-medium tracking-tight text-stone-900 sm:text-5xl">What is a psychedelic facilitator?</h1>
+      <EducationalAttribution />
       <p className="mt-5 text-lg leading-relaxed text-stone-700">People use “psychedelic facilitator” to describe different roles: preparation education, support during an experience, or integration conversations afterward. The title alone does not tell you which service someone offers, whether they hold a professional license, or where they may work.</p>
       <p className="mt-4 leading-relaxed text-stone-600">The Facilitator Network helps adults explore preparation, integration and related nonadministration support. TFN does not sell, source, administer or arrange access to controlled substances. If you are looking for a reflective conversation rather than a substance session, you can compare profiles without an account.</p>
       <Link href="/integration-support" className="mt-5 inline-flex min-h-11 items-center rounded-lg bg-emerald-900 px-5 py-3 font-medium text-white hover:bg-emerald-800">Compare integration support</Link>

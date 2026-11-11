@@ -23,6 +23,7 @@ const migrationNames = [
 const migrations = await Promise.all(migrationNames.map(name => readFile(new URL(`../migrations/${name}`, import.meta.url), 'utf8')))
 const grantsName = '20261030143300_explicit_core_api_grants.sql'
 const explicitGrants = await readFile(new URL(`../migrations/${grantsName}`, import.meta.url), 'utf8')
+const inquiryLeastPrivilege = await readFile(new URL('../migrations/20261108011526_inquiry_least_privilege.sql', import.meta.url), 'utf8')
 let assertions = 0
 
 async function createDatabase(automaticGrants) {
@@ -101,6 +102,29 @@ for (const mode of ['fresh schema', 'fresh schema without automatic grants', 'ex
   // No blanket defaults are installed in the new fresh-database scenario.
   await db.exec(explicitGrants)
   await db.exec(explicitGrants) // idempotent; preserves existing column restrictions
+
+  // Compare all service-role table rights across repeated application. No
+  // assumed blanket grants: the no-automatic-grants scenario is also covered.
+  const tableRights = async role => (await db.query(`
+    select privilege, has_table_privilege($1, 'public.booking_requests', privilege) as allowed
+    from unnest(array['SELECT','INSERT','UPDATE','DELETE','TRUNCATE','REFERENCES','TRIGGER']) privilege
+    order by privilege`, [role])).rows
+  const serviceRightsBefore = await tableRights('service_role')
+  await db.exec(inquiryLeastPrivilege)
+  await db.exec(inquiryLeastPrivilege)
+  assert.deepEqual(await tableRights('service_role'), serviceRightsBefore, `${mode}: service rights unchanged`)
+  assertions++
+  for (const role of ['anon', 'authenticated']) {
+    const rights = await tableRights(role)
+    for (const privilege of ['DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER']) {
+      assert.equal(rights.find(r => r.privilege === privilege).allowed, false, `${mode}: ${role} lacks ${privilege}`)
+      assertions++
+    }
+  }
+  assert.equal((await db.query("select has_table_privilege('authenticated','public.booking_requests','SELECT') as allowed")).rows[0].allowed, true)
+  assert.equal((await db.query("select has_column_privilege('authenticated','public.booking_requests','status','UPDATE') as allowed")).rows[0].allowed, true)
+  assert.equal((await db.query("select has_table_privilege('authenticated','public.booking_requests','UPDATE') as allowed")).rows[0].allowed, false)
+  assertions += 3
 
   const id = n => `10000000-0000-0000-0000-${String(n).padStart(12, '0')}`
   const guide = id(1), otherGuide = id(2), seeker = id(3), admin = id(4), applicant = id(5), recovery = id(6)
@@ -538,7 +562,7 @@ for (const mode of ['fresh schema', 'fresh schema without automatic grants', 'ex
 // Test the actual full fresh-install file, not only the historical prefixes
 // above. Reproduce the original session failure before the fix, then verify the
 // complete schema and minimal ACLs with defaults disabled.
-assert.equal(schema.split(`-- Included migration: ${grantsName}\n`)[1], explicitGrants)
+assert.equal(schema.split(`-- Included migration: ${grantsName}\n`)[1].split('-- Included migration:')[0].trimEnd(), explicitGrants.trimEnd())
 assertions++
 for (const repaired of [false, true]) {
   const db = await createDatabase(false)

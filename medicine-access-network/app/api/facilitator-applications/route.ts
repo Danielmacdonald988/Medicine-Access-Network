@@ -1,4 +1,5 @@
 import { formatProfileLocations } from '@/lib/locations'
+import { isDeepStrictEqual } from 'node:util'
 import { after, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createAdminSupabaseClient } from '@/lib/supabaseAdmin'
@@ -101,8 +102,10 @@ export async function POST(request: Request) {
         .eq('id', profileId).eq('user_id', user.id).single()
       if (readError || !current) return json({ error: 'Your profile could not be loaded. Please try again.' }, 404)
       const excluded = new Set(['whatsapp_url', 'signal_url', 'telegram_url', 'instagram_url', 'facebook_url', 'linkedin_url', 'website_url', 'verification_status', 'visibility'])
+      // JSONB can reorder object keys. Compare values so an unchanged location
+      // does not turn a no-op or contact-only save into a new review request.
       const contactOnly = Object.entries(profileData).every(([key, value]) =>
-        excluded.has(key) || JSON.stringify(value) === JSON.stringify((current as unknown as Record<string, unknown>)[key]))
+        excluded.has(key) || isDeepStrictEqual(value, (current as unknown as Record<string, unknown>)[key]))
       if (contactOnly) return await saveContacts(user.id, profileId, data)
     }
     // A new application never overwrites an existing one. An edit requires both

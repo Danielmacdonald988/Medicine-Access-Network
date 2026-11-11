@@ -1,3 +1,4 @@
+import { ORGANIZATION_DESCRIPTION, OFFICIAL_BRAND_PROFILES } from '@/lib/organization-identity'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, ShieldCheck } from 'lucide-react'
@@ -16,6 +17,16 @@ export default async function AboutPage() {
       <p className="text-sm font-medium text-emerald-800">{t('About the network')}</p>
       <h1 className="mt-3 text-4xl font-semibold tracking-tight">{t('Support starts with an informed choice.')}</h1>
       <p className="mt-6 text-lg leading-relaxed text-stone-600">{t('Discover preparation, integration, breathwork, and wellness support. Explore profiles and resources without creating an account.')}</p>
+      <section lang="en" aria-labelledby="network-definition" className="mt-8">
+        <h2 id="network-definition" className="text-2xl font-semibold">What is The Facilitator Network?</h2>
+        <p className="mt-4 leading-relaxed text-stone-600">{ORGANIZATION_DESCRIPTION}</p>
+        <p className="mt-4 text-sm font-medium">Official brand channels</p>
+        <ul className="flex flex-wrap gap-x-6">
+          {OFFICIAL_BRAND_PROFILES.map(profile => (
+            <li key={profile.name}><a href={profile.url} className="inline-flex min-h-11 items-center text-emerald-800 underline underline-offset-4">{profile.name}</a></li>
+          ))}
+        </ul>
+      </section>
       <section id="profile-review" className="mt-10 scroll-mt-24 rounded-2xl border border-emerald-200 bg-white p-6 sm:p-8">
         <ShieldCheck className="mb-4 size-7 text-emerald-800" aria-hidden />
         <h2 className="text-2xl font-semibold">{t('What “Listing approved” means')}</h2>
@@ -25,6 +36,14 @@ export default async function AboutPage() {
         <p className="mt-4 leading-relaxed text-stone-600">{t('Ask about fees, qualifications, and boundaries. Decide whether the service fits your needs. You have the right to ask questions and decline.')}</p><p className="mt-3"><Link href="/review-standards" className="underline">Read our administrative review standards</Link></p>
         <Link href="/resources/questions-to-ask" className="mt-5 inline-flex items-center gap-2 font-medium text-emerald-800 underline underline-offset-4">{t('Questions to ask a guide')} <ArrowRight className="size-4 shrink-0" aria-hidden /></Link>
       </section>
+      <section id="educational-content" lang="en" className="mt-10 scroll-mt-24">
+        <h2 className="text-2xl font-semibold">About our educational content</h2>
+        <p className="mt-4 leading-relaxed text-stone-600">The Facilitator Network publishes these guides to help adults understand support roles, compare options and prepare questions. They are general educational material, not individualized medical or legal advice, clinical guidelines or evidence that a listed service is effective or safe.</p>
+        <p className="mt-4 leading-relaxed text-stone-600">Some educational content uses AI-assisted drafting and editing. Source links let you check the information described alongside them. A source-check date applies to the stated facts or service details, not to a clinical review of the whole article. Neither a citation nor publication by TFN implies endorsement by the source organization.</p>
+        <p className="mt-4 leading-relaxed text-stone-600">Facilitator profiles are separate from these guides: their service descriptions and experience are self-reported. Check credentials, service scope and location eligibility independently before deciding.</p>
+        <Link href="/contact" className="mt-4 inline-flex min-h-11 items-center font-medium text-emerald-800 underline underline-offset-4">Report an error or outdated information</Link>
+        <p className="mt-2 text-sm leading-relaxed text-stone-600">Include the page link and the statement you are questioning. Please do not send medical records or sensitive personal history.</p>
+      </section>
       <section id="site-analytics" className="mt-10 scroll-mt-24">
         <h2 className="text-2xl font-semibold">{t('How we measure site engagement')}</h2>
         <p className="mt-4 leading-relaxed text-stone-600">{t('We use a temporary identifier in your browser tab to understand which features are used and where signup or applications stop. It lasts up to 24 hours. These engagement records contain action names, application step numbers, broad referral sources, and device types, without names, emails, messages, search text, or the identity of guides you view.')}</p>
@@ -33,6 +52,7 @@ export default async function AboutPage() {
       <section className="mt-10">
         <h2 className="text-2xl font-semibold">{t('Keep the first conversation simple')}</h2>
         <p className="mt-4 leading-relaxed text-stone-600">{t('A request starts a conversation, not a confirmed booking. Share the support you want and your preferred format. Leave medical records and sensitive personal history out of introductory messages.')}</p>
+        <Link href="/facilitators" className="mt-4 inline-flex min-h-11 items-center gap-2 font-medium text-emerald-800 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">{t('Explore support')} <ArrowRight className="size-4 shrink-0" aria-hidden /></Link>
       </section>
       <section className="mt-10">
         <h2 className="text-2xl font-semibold">{t('Clear limits')}</h2>

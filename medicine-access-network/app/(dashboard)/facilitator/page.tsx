@@ -15,6 +15,7 @@ import {
   Calendar,
   Mail,
 } from 'lucide-react'
+import { parseRequestPage, REQUEST_PAGE_SIZE } from '@/lib/request-pagination'
 import { requireRole } from '@/lib/auth'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { Card, CardContent } from '@/components/ui/card'
@@ -196,14 +197,19 @@ async function RequestCard({
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default async function FacilitatorDashboard() {
+export default async function FacilitatorDashboard({ searchParams }: {
+  searchParams: Promise<{ pendingPage?: string | string[] }>
+}) {
+  const pendingPage = parseRequestPage((await searchParams).pendingPage)
+  const pendingOffset = (pendingPage - 1) * REQUEST_PAGE_SIZE
   const { t, locale } = await getTranslation()
   const user = await requireRole('facilitator')
   const supabase = await createServerSupabaseClient()
 
   const [
     { data: facilitatorProfile },
-    { data: incomingRequests },
+    { data: pendingRows, error: pendingError, count: pendingCount },
+    { data: incomingRequests, error: requestsError },
     { data: reviews },
   ] = await Promise.all([
     supabase
@@ -216,9 +222,21 @@ export default async function FacilitatorDashboard() {
     supabase
       .from('booking_requests')
       .select(
+        'id, requested_service, message, preferred_format, preferred_time_window, status, created_at, seeker_name, seeker_email',
+        { count: 'exact' }
+      )
+      .eq('facilitator_id', user.id)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false })
+      .range(pendingOffset, pendingOffset + REQUEST_PAGE_SIZE - 1),
+    supabase
+      .from('booking_requests')
+      .select(
         'id, requested_service, message, preferred_format, preferred_time_window, status, created_at, seeker_name, seeker_email'
       )
       .eq('facilitator_id', user.id)
+      .in('status', ['accepted', 'completed', 'declined'])
       .order('created_at', { ascending: false })
       .limit(40),
     supabase
@@ -236,7 +254,7 @@ export default async function FacilitatorDashboard() {
       ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
       : null
 
-  const pendingRequests = incomingRequests?.filter((r) => r.status === 'pending') ?? []
+  const pendingRequests = pendingError ? [] : pendingRows ?? []
   const acceptedRequests = incomingRequests?.filter((r) => r.status === 'accepted') ?? []
   const pastRequests =
     incomingRequests?.filter(
@@ -309,13 +327,13 @@ export default async function FacilitatorDashboard() {
           {[
             {
               label: 'Pending',
-              value: pendingRequests.length,
+              value: pendingError ? '—' : pendingCount ?? pendingRequests.length,
               icon: Clock,
               highlight: pendingRequests.length > 0,
             },
             {
               label: 'Accepted',
-              value: acceptedRequests.length,
+              value: requestsError ? '—' : acceptedRequests.length,
               icon: CheckCircle,
               highlight: false,
             },
@@ -402,16 +420,20 @@ export default async function FacilitatorDashboard() {
                 variant="outline"
                 className="border-amber-200 bg-amber-50 text-xs text-amber-700"
               >
-                {pendingRequests.length}
+                {pendingCount ?? pendingRequests.length}
               </Badge>
             )}
           </h2>
 
-          {pendingRequests.length === 0 ? (
+          {pendingError ? (
+            <p role="alert" className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+              {t('We could not load your new requests. Please reload this page to try again.')}
+            </p>
+          ) : pendingRequests.length === 0 ? (
             <Card className="border-dashed border-stone-200">
               <CardContent className="py-10 text-center">
                 <MessageSquare className="mx-auto mb-3 size-8 text-stone-300" />
-                <p className="text-stone-500">{t("No new requests.")}</p>
+                <p className="text-stone-500">{pendingPage > 1 ? t('No requests on this page. Return to the first page to check your new requests.') : t('No new requests.')}</p>
                 {facilitatorProfile?.verification_status !== 'approved' && (
                   <p className="mt-1 text-sm text-stone-400">{t("Once your profile is approved, seekers can send you requests.")}</p>
                 )}
@@ -424,7 +446,23 @@ export default async function FacilitatorDashboard() {
               ))}
             </div>
           )}
+          {!pendingError && (pendingPage > 1 || (pendingCount ?? 0) > pendingOffset + REQUEST_PAGE_SIZE) && (
+            <nav aria-label={t('New request pages')} className="mt-4 flex flex-wrap gap-4 text-sm text-emerald-800 underline">
+              {pendingPage > 1 && <Link href="/facilitator">{t('First page')}</Link>}
+              {pendingPage > 1 && <Link href={`/facilitator?pendingPage=${pendingPage - 1}`}>{t('Previous page')}</Link>}
+              {(pendingCount ?? 0) > pendingOffset + REQUEST_PAGE_SIZE && <Link href={`/facilitator?pendingPage=${pendingPage + 1}`}>{t('Next page')}</Link>}
+            </nav>
+          )}
         </div>
+      )}
+
+      {hasProfile && requestsError && (
+        <p role="alert" className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+          {t('We could not load your accepted and past requests. Please reload this page to try again.')}
+        </p>
+      )}
+      {hasProfile && !requestsError && incomingRequests && incomingRequests.length >= 40 && (
+        <p className="text-sm text-stone-600">{t('Showing the 40 most recent accepted and past requests. New requests are listed separately above.')}</p>
       )}
 
       {/* Accepted requests */}

@@ -1,3 +1,5 @@
+import { resourceProfileShortcut } from '@/lib/resource-navigation'
+import { EducationalAttribution } from '@/components/educational-attribution'
 import type { Metadata } from 'next'
 import { getTranslation } from '@/lib/i18n/server'
 import { resourceSummaries } from '@/lib/i18n/resource-summaries'
@@ -33,13 +35,23 @@ function RenderBlock({ block }: { block: Block }) {
   switch (block.type) {
     case 'h3':
       return (
-        <h3 className="mt-8 mb-3 text-lg font-semibold text-stone-900 first:mt-0">
+        <h3 id={block.id} className="scroll-mt-24 mt-8 mb-3 text-lg font-semibold text-stone-900 first:mt-0">
           {block.text}
         </h3>
       )
 
     case 'p':
-      return <p className="leading-relaxed text-stone-600">{block.text}</p>
+      if (!block.links) return <p className="leading-relaxed text-stone-600">{block.text}</p>
+      return (
+        <div className="space-y-2">
+          <p className="leading-relaxed text-stone-600">{block.text}</p>
+          {block.links && <ul className="flex flex-wrap gap-2">
+            {block.links.map((link) => <li key={link.href}>
+              <a href={link.href} className="inline-flex min-h-11 items-center rounded-lg border border-emerald-800 px-3 py-2 text-sm font-medium text-emerald-900 underline underline-offset-4 hover:bg-emerald-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900">{link.label}</a>
+            </li>)}
+          </ul>}
+        </div>
+      )
 
     case 'ul':
       return (
@@ -113,6 +125,7 @@ export default async function ResourcePage({ params }: PageProps) {
   const resource = getResource(slug)
   if (!resource) notFound()
   const breadcrumbs = resourceBreadcrumbs(resource.slug, t(resource.title), t('Safety library'))
+  const profileShortcut = resourceProfileShortcut(slug)
   const summary = resourceSummaries[slug]
   const translatedSummary = t(summary)
   const hasTranslatedSummary = translatedSummary !== summary
@@ -139,6 +152,7 @@ export default async function ResourcePage({ params }: PageProps) {
       <div className="border-b border-stone-100 pb-6">
         <h1 className="text-3xl font-bold text-stone-900">{t(resource.title)}</h1>
         <p lang="en" className="mt-2 text-lg text-stone-500">{resource.subtitle}</p>
+        <EducationalAttribution />
       </div>
 
       {locale !== 'en' && <section className="space-y-3 rounded-xl border border-emerald-200 bg-emerald-50 p-5">
@@ -148,9 +162,10 @@ export default async function ResourcePage({ params }: PageProps) {
       </section>}
       <div id="original-article" lang="en" className="scroll-mt-28 space-y-5">
       {locale !== 'en' && <h2 className="text-lg font-semibold">Original English article</h2>}
-      {slug === 'integration-basics' && <p className="text-sm leading-relaxed text-stone-600">
-        Ready to compare approaches? <Link href="/integration-support" className="inline-flex min-h-11 items-center text-emerald-800 underline underline-offset-4">Explore guides who list integration conversations</Link>. You can keep reading before deciding.
-      </p>}
+      {profileShortcut && <nav aria-label="Compare support options" className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3">
+        <p className="text-sm text-stone-600">Ready to compare? Browse listed services, then confirm fit and availability directly. You can keep reading first.</p>
+        <Link href={profileShortcut.href} className="mt-1 inline-flex min-h-11 items-center text-sm font-medium text-emerald-800 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900">{profileShortcut.label}</Link>
+      </nav>}
       {slug === 'questions-to-ask' && <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-5" aria-labelledby="comparison-worksheet">
         <h2 id="comparison-worksheet" className="text-xl font-semibold text-stone-900">Compare options at your own pace</h2>
         <p className="mt-2 leading-relaxed text-stone-700">Use this blank, two-page worksheet to compare two facilitators side by side. Print it and keep your notes privately. No account or online answers are needed; do not include health history or other sensitive personal information.</p>

@@ -123,6 +123,7 @@ type FixtureOptions = {
   storageError?: 'list' | 'upload' | 'remove' | 'download'
   files?: FileEntry[]
   downloadMissing?: boolean
+  downloadBytes?: Uint8Array
 }
 type Routes = {
   POST: (request: Request) => Promise<Response>
@@ -168,7 +169,7 @@ function fixture(options: FixtureOptions = {}) {
     },
     async download(objectPath: string) {
       events.push({ op: 'download', path: objectPath })
-      return { data: options.downloadMissing ? null : new Blob(['private-image-bytes'], { type: 'image/webp' }), error: options.storageError === 'download' ? error : null }
+      return { data: options.downloadMissing ? null : new Blob([options.downloadBytes ? new Uint8Array(options.downloadBytes) : 'private-image-bytes'], { type: 'image/webp' }), error: options.storageError === 'download' ? error : null }
     },
   }
   const mocks: Record<string, unknown> = {
@@ -205,7 +206,7 @@ function fixture(options: FixtureOptions = {}) {
   const route = { ...load('../app/api/profile-images/route.ts'), ...load('../app/api/profile-images/[...path]/route.ts') } as Routes
   return {
     route, events,
-    get: (objectPath = path) => route.GET(new Request(`${endpoint}/${objectPath}`), { params: Promise.resolve({ path: objectPath.split('/') }) }),
+    get: (objectPath = path, query = '') => route.GET(new Request(`${endpoint}/${objectPath}${query}`), { params: Promise.resolve({ path: objectPath.split('/') }) }),
   }
 }
 
@@ -409,4 +410,62 @@ test('image lookup failures remain generic and unavailable objects reveal no sto
     assert.equal(await response.text(), '')
     privateResponse(response)
   }
+})
+
+
+test('card thumbnails retain authorization and private response headers for every visibility state', async () => {
+  const original = await sharp({ create: { width: 800, height: 1200, channels: 3, background: '#00695c' } }).webp().toBuffer()
+  for (const options of [
+    { user: null, publicProfile: { id: 'published' } },
+    { user: owner },
+    { user: other, role: 'admin', reviewableProfile: { id: 'reviewable' } },
+  ]) {
+    const { get } = fixture({ ...options, downloadBytes: original })
+    const response = await get(path, '?variant=thumbnail')
+    assert.equal(response.status, 200)
+    privateResponse(response)
+    const thumb = await sharp(Buffer.from(await response.arrayBuffer())).metadata()
+    assert.equal(thumb.format, 'webp')
+    assert.equal(thumb.height, 160)
+    assert.ok(thumb.width! < 160)
+    assert.equal(thumb.exif, undefined)
+  }
+  for (const options of [
+    { user: null }, // unapproved, withdrawn or deleted: no public view match
+    { user: other },
+    { user: other, role: 'admin' }, // no matching reviewable profile
+  ]) {
+    const { get, events } = fixture({ ...options, downloadBytes: original })
+    const response = await get(path, '?variant=thumbnail')
+    assert.equal(response.status, 404)
+    privateResponse(response)
+    noServiceClient(events)
+  }
+})
+
+test('thumbnail processing is bounded and original response stays byte-for-byte compatible', async () => {
+  const small = await sharp(await png).webp().toBuffer()
+  const { get } = fixture({ downloadBytes: small })
+  assert.deepEqual(Buffer.from(await (await get()).arrayBuffer()), small)
+  const response = await get(path, '?variant=thumbnail')
+  const meta = await sharp(Buffer.from(await response.arrayBuffer())).metadata()
+  assert.deepEqual([meta.width, meta.height], [32, 20])
+  for (const query of ['?variant=large', '?variant=', '?variant=thumbnail&variant=thumbnail']) {
+    const f = fixture()
+    assert.equal((await f.get(path, query)).status, 404)
+    assert.deepEqual(f.events, [])
+  }
+  for (const options of [{ downloadMissing: true }, { storageError: 'download' as const }]) {
+    const r = await fixture(options).get(path, '?variant=thumbnail')
+    assert.equal(r.status, 404)
+    privateResponse(r)
+  }
+  const corrupt = await fixture().get(path, '?variant=thumbnail')
+  assert.equal(corrupt.status, 503)
+  privateResponse(corrupt)
+  assert.doesNotMatch(await corrupt.text(), /private-image-bytes/)
+  await assert.rejects(images.createProfileThumbnail(await png), /image/)
+  await assert.rejects(images.createProfileThumbnail(new Uint8Array(media.MAX_PROFILE_IMAGE_BYTES + 1)), /size/)
+  assert.equal(media.profileThumbnailUrl(path), `/api/profile-images/${path}?variant=thumbnail`)
+  assert.equal(media.profileThumbnailUrl('https://untrusted.test/image.webp'), null)
 })
