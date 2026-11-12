@@ -7,7 +7,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { AlertTriangle, Info, Siren } from 'lucide-react'
 import { getResource, resources, type Block } from '@/lib/resources'
+import { APP_NAME } from '@/lib/constants'
 import { resourceBreadcrumbs, breadcrumbJsonLd } from '@/lib/resource-breadcrumbs'
+import { resourceArticleJsonLd } from '@/lib/resource-article-schema'
 
 export async function generateStaticParams() {
   return resources.map((r) => ({ slug: r.slug }))
@@ -22,10 +24,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const resource = getResource(slug)
   if (!resource) return { title: 'Not found' }
   const { t, locale } = await getTranslation()
+  const title = locale === 'en' ? resource.searchTitle ?? resource.title : t(resource.title)
+  const description = locale === 'en' ? resource.description : t(resourceSummaries[slug])
   return {
-    title: locale === 'en' ? resource.searchTitle ?? resource.title : t(resource.title),
-    description: locale === 'en' ? resource.description : t(resourceSummaries[slug]),
+    title,
+    description,
     alternates: { canonical: `/resources/${resource.slug}` },
+    openGraph: { title, description, url: `/resources/${resource.slug}`, type: 'article', siteName: APP_NAME },
   }
 }
 
@@ -133,6 +138,7 @@ export default async function ResourcePage({ params }: PageProps) {
   return (
     <article className="space-y-5">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd(breadcrumbs) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: resourceArticleJsonLd(resource) }} />
       <nav aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-x-2 text-sm text-stone-600">
           {breadcrumbs.map((crumb, index) => (
