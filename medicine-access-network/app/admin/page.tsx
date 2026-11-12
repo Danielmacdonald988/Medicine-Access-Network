@@ -1,5 +1,6 @@
 import { SocialLinks } from '@/components/profile/SocialLinks'
 import { EngagementMetrics } from '@/components/admin/EngagementMetrics'
+import { TodayActivity } from '@/components/admin/TodayActivity'
 import { getTranslation } from '@/lib/i18n/server'
 import type { Locale } from '@/lib/i18n/config'
 import type { Metadata } from 'next'
@@ -99,6 +100,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           {t(notices[notice])}
         </p>
       )}
+      <TodayActivity />
       <div className="flex flex-col gap-4 rounded-xl border border-stone-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-sm font-semibold text-stone-900">{t("Application email alerts")}</h2>
