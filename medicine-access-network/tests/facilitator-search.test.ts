@@ -137,7 +137,8 @@ test('database search finds older matching profiles beyond the original 50-row c
   const supabase = clientWithFetch(async (input, options) => {
     const url = new URL(String(input))
     assert.equal(url.pathname, '/rest/v1/facilitator_public_profiles')
-    assert.ok(!url.searchParams.get('select')?.split(',').includes('bio'))
+    // The bio is public only for guides who accepted the agreement that publishes it; the view returns NULL otherwise.
+    assert.doesNotMatch(url.searchParams.get('select') ?? '', /safety_practices|lineage_or_training|certifications/)
     assert.ok(url.searchParams.get('select')?.includes('display_name'))
     // The public view enforces approval and visibility and does not expose this column.
     assert.equal(url.searchParams.has('verification_status'), false)

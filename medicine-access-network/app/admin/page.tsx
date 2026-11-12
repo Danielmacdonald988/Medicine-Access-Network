@@ -1,3 +1,4 @@
+import { bioIsPublicUnder } from '@/lib/agreement'
 import { SocialLinks } from '@/components/profile/SocialLinks'
 import { EngagementMetrics } from '@/components/admin/EngagementMetrics'
 import { getTranslation } from '@/lib/i18n/server'
@@ -277,6 +278,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                   <Separator />
 
                   <p className="text-sm text-stone-600">Agreement: {f.agreement_version ? `${f.agreement_version} · ${f.agreement_accepted_at ? new Date(f.agreement_accepted_at).toISOString() : 'No acceptance time recorded'}` : 'No recorded acceptance of the current agreement. Request a new submission.'}</p>
+                  <p className="text-sm text-stone-600">{bioIsPublicUnder(f.agreement_version) ? 'Bio: will be shown on the public profile if you approve. Read it as public copy.' : 'Bio: stays private. This guide has not accepted the agreement version that publishes it.'}</p>
                   <a href="/review-standards" target="_blank" rel="noopener noreferrer" className="text-sm underline">Read the approval checklist</a>
                   {/* Approve / Reject form */}
                   <form

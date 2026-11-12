@@ -131,7 +131,7 @@ export function textSearchExpression(q: string): string {
 export function buildFacilitatorQuery(
   supabase: SupabaseClient,
   filters: FacilitatorFilters,
-  { limit, offset, columns = 'id, user_id, display_name, location, remote_available, modalities, years_experience, donation_based, minimum_donation, hourly_rate, avatar_url, image_paths, whatsapp_url, signal_url, telegram_url, instagram_url, facebook_url, linkedin_url, website_url, created_at' }: { limit: number; offset: number; columns?: string }
+  { limit, offset, columns = 'id, user_id, display_name, location, remote_available, modalities, years_experience, donation_based, minimum_donation, hourly_rate, avatar_url, image_paths, whatsapp_url, signal_url, telegram_url, instagram_url, facebook_url, linkedin_url, website_url, created_at, bio' }: { limit: number; offset: number; columns?: string }
 ) {
   let query = supabase
     // The public view owns the approved + public visibility rule and excludes

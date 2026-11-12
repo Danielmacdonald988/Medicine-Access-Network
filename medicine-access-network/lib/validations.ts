@@ -4,6 +4,11 @@ import { socialUrlSchema } from './social-links'
 import { directContactUrlSchema } from './direct-contact'
 import { isProfileImagePath, MAX_PROFILE_IMAGES } from './profile-media'
 
+// Provider Agreement / Privacy Policy version accepted on submission. Defined
+// here (not imported) so this module keeps its small, explicit dependency
+// list; lib/agreement.ts re-exports it with the public-bio rule.
+export const CURRENT_AGREEMENT_VERSION = '2026-11-11.1'
+
 // ─── Auth ────────────────────────────────────────────────────────────────────
 
 // Seekers have no accounts — signup only ever creates a facilitator. No
@@ -67,7 +72,7 @@ export const facilitatorOnboardingSchema = z.object({
   website_url: socialUrlSchema('website_url'),
 
   // Step 14 — explicit version sent by the form and verified by the server
-  agreement_version: z.literal('2026-09-27.1', { message: 'Refresh this page to review the current agreement.' }),
+  agreement_version: z.literal(CURRENT_AGREEMENT_VERSION, { message: 'Refresh this page to review the current agreement.' }),
   platform_agreement: z.literal(true, {
     message: 'You must agree to the platform rules to apply',
   }),
