@@ -1,4 +1,3 @@
-import { bioIsPublicUnder } from '@/lib/agreement'
 import { SocialLinks } from '@/components/profile/SocialLinks'
 import { EngagementMetrics } from '@/components/admin/EngagementMetrics'
 import { getTranslation } from '@/lib/i18n/server'
@@ -64,7 +63,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     supabase
       .from('facilitator_profiles')
       .select(
-        'id, display_name, location, modalities, bio, safety_practices, years_experience, lineage_or_training, certifications, agreement_version, agreement_accepted_at, created_at, updated_at, user_id, image_paths, whatsapp_url, signal_url, telegram_url, instagram_url, facebook_url, linkedin_url, website_url'
+        'id, display_name, location, modalities, bio, bio_withheld, safety_practices, years_experience, lineage_or_training, certifications, agreement_version, agreement_accepted_at, created_at, updated_at, user_id, image_paths, whatsapp_url, signal_url, telegram_url, instagram_url, facebook_url, linkedin_url, website_url'
       )
       .eq('verification_status', 'pending')
       .order('created_at', { ascending: true }),
@@ -278,7 +277,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                   <Separator />
 
                   <p className="text-sm text-stone-600">Agreement: {f.agreement_version ? `${f.agreement_version} · ${f.agreement_accepted_at ? new Date(f.agreement_accepted_at).toISOString() : 'No acceptance time recorded'}` : 'No recorded acceptance of the current agreement. Request a new submission.'}</p>
-                  <p className="text-sm text-stone-600">{bioIsPublicUnder(f.agreement_version) ? 'Bio: will be shown on the public profile if you approve. Read it as public copy.' : 'Bio: stays private. This guide has not accepted the agreement version that publishes it.'}</p>
+                  <p className="text-sm text-stone-600">{f.bio_withheld ? 'Bio: withheld by an administrator. It stays private even if you approve.' : 'Bio: will be shown on the public profile if you approve. Read it as public copy.'}</p>
                   <a href="/review-standards" target="_blank" rel="noopener noreferrer" className="text-sm underline">Read the approval checklist</a>
                   {/* Approve / Reject form */}
                   <form
