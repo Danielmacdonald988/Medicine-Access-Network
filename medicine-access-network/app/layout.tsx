@@ -38,6 +38,11 @@ export const metadata: Metadata = {
     siteName: APP_NAME,
     type: "website",
   },
+  // Large preview card wherever a page has no card of its own; the image
+  // comes from app/opengraph-image.tsx. Guide profiles set their own card.
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default async function RootLayout({
