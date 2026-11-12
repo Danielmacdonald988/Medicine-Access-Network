@@ -1,7 +1,10 @@
 .header {
   display: grid;
   grid-template-columns: 5rem minmax(0, 1fr);
-  grid-template-areas: 'photo identity' 'services services' 'contact contact' 'sections sections' 'fee fee';
+  /* Phones and tablets: the contact panel comes straight after the name, so
+     a long bio never pushes the way to reach a guide several screens down.
+     Desktop keeps it in the right-hand column (see the 1024px rule). */
+  grid-template-areas: 'photo identity' 'contact contact' 'sections sections' 'services services' 'fee fee';
   align-items: start;
   gap: 1.25rem;
   padding: 1.25rem;
