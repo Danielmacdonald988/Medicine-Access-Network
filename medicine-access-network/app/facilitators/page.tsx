@@ -72,8 +72,40 @@ async function EmptyResults({ filters, page }: { filters: FacilitatorFilters; pa
           </Button>
         )}
       </div>
+      {active && page === 1 && <OnlineAlternatives />}
       <SupportResources />
     </>
+  )
+}
+
+// A filtered search with no matches used to end at "clear filters". Most
+// empty searches are for a place with no listed guide, so offer the guides
+// who list online sessions instead of a dead end. Nothing is shown if that
+// query fails or is empty; the "no matches" message above stays accurate.
+const ONLINE_ALTERNATIVES_LIMIT = 6
+
+async function OnlineAlternatives() {
+  let guides: FacilitatorSearchResult[] = []
+  try {
+    const supabase = await createServerSupabaseClient()
+    const onlineOnly = parseFacilitatorFilters(new URLSearchParams({ remote: 'true' }))
+    const { data, error } = await buildFacilitatorQuery(supabase, onlineOnly, { limit: ONLINE_ALTERNATIVES_LIMIT, offset: 0 })
+    if (error) return null
+    guides = await addFacilitatorRatings(supabase, (data ?? []) as unknown as FacilitatorSearchResult[])
+  } catch {
+    return null
+  }
+  if (!guides.length) return null
+
+  return (
+    <section lang="en" aria-labelledby="online-alternatives-heading" className="mt-5">
+      <h2 id="online-alternatives-heading" className="text-xl font-medium tracking-tight text-stone-900">Guides who list online sessions</h2>
+      <p className="mt-2 mb-4 max-w-2xl text-sm leading-relaxed text-stone-600">These guides did not match your search, but they list online sessions. An online listing is not worldwide availability: ask each guide whether they can work with you where you live. An inquiry is not a booking.</p>
+      <div className="grid grid-cols-1 gap-2">
+        {guides.map((facilitator) => <FacilitatorCard key={facilitator.id} facilitator={facilitator} returnTo="/facilitators?remote=true" />)}
+      </div>
+      <Link href="/facilitators?remote=true" className="mt-4 inline-flex min-h-9 items-center gap-2 text-sm font-medium text-emerald-800 underline underline-offset-4">See all guides with online sessions<ArrowRight aria-hidden="true" className="size-4" /></Link>
+    </section>
   )
 }
 
