@@ -11,4 +11,7 @@ export const resourceSummaries: Record<string, string> = {
   'integration-support-cost': 'Guides set their own fees. Compare the total cost, session length and cancellation terms in writing. Do not assume insurance applies. You can decline before agreeing to pay.',
   'choosing-breathwork-facilitator': 'Breathwork styles vary from gentle to intensive. Ask about style, screening, consent and your right to stop. Discuss your health with a qualified healthcare professional first.',
   'colorado-facilitator-license-check': 'Check a claimed Colorado facilitator license with the official state lookup. A result confirms a license record, not fit or quality. A directory profile is not license verification.',
+  'integration-support-after-retreat': 'Some people find the weeks after a retreat harder than expected. Ask the retreat about its aftercare, and compare one-to-one, group and clinical support. Get help quickly if you feel unsafe.',
+  'choosing-somatic-practitioner': 'Somatic work ranges from awareness exercises to hands-on bodywork. A method certificate is not a license. Ask about training, touch and consent, and choose a therapist for trauma or persistent distress.',
+  'certificate-vs-license': 'A license is government authorization tied to a place; a certificate usually comes from a training organization. Ask who issued a credential and check it yourself.',
 }
