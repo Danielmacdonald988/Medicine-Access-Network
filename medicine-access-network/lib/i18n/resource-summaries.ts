@@ -8,4 +8,7 @@ export const resourceSummaries: Record<string, string> = {
   'spiritual-support': 'Ask how a guide approaches beliefs, consent, privacy and fees. You can decline a practice or take time to decide. Spiritual support does not replace clinical care.',
   'emergency': 'In the US, call or text 988 for emotional distress or suicidal crisis. For immediate danger or a medical emergency, call 911. Outside the US, contact your local emergency or crisis service.',
   'integration-circles-vs-individual': 'Compare group and one-to-one support. Ask about professional roles, participation, fees and confidentiality limits. A circle is not automatically therapy.',
+  'integration-support-cost': 'Guides set their own fees. Compare the total cost, session length and cancellation terms in writing. Do not assume insurance applies. You can decline before agreeing to pay.',
+  'choosing-breathwork-facilitator': 'Breathwork styles vary from gentle to intensive. Ask about style, screening, consent and your right to stop. Discuss your health with a qualified healthcare professional first.',
+  'colorado-facilitator-license-check': 'Check a claimed Colorado facilitator license with the official state lookup. A result confirms a license record, not fit or quality. A directory profile is not license verification.',
 }
