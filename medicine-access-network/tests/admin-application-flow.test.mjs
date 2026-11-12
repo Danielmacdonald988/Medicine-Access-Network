@@ -46,7 +46,7 @@ const application = (overrides = {}) => ({
   signal_url: null,
   telegram_url: null,
   platform_agreement: true,
-  agreement_version: '2026-09-27.1',
+  agreement_version: '2026-11-11.1',
   ...overrides,
 })
 
@@ -433,6 +433,6 @@ test('applications require current agreement acceptance and cannot supply the re
  }
  const f=fixture()
  assert.equal((await f.applications.POST(submission({application:application({agreement_accepted_at:'2000-01-01'})}))).status,201)
- assert.equal(f.writes[0].value.agreement_version,'2026-09-27.1')
+ assert.equal(f.writes[0].value.agreement_version,'2026-11-11.1')
  assert.equal('agreement_accepted_at' in f.writes[0].value,false)
 })

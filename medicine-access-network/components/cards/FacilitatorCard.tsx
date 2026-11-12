@@ -21,6 +21,7 @@ export function FacilitatorCard({ facilitator: f, returnTo, service }: { facilit
     <div className={styles.content}>
       <div className={styles.identity}><h3><Link href={href}>{f.display_name}</Link></h3><span>{f.location}{f.remote_available && ` · ${t('Online sessions')}`}</span></div>
       <div className={styles.services}>{profileServices(f.modalities).map(name=><Link key={name} href={href} aria-label={`${t(name)} — ${t('View {name}’s profile', {name:f.display_name})}`}><span aria-hidden="true">✓</span> {t(name)}</Link>)}</div>
+      {f.bio && <p className={styles.excerpt} translate="no">{f.bio}</p>}
       <p className={styles.meta}>{typeof f.years_experience === 'number' && <>{t('{years} years of practice (self-reported)',{years:f.years_experience})} · </>}{rate}</p>
     </div>
     <Link href={href} className={styles.view} aria-label={t('View {name}’s profile',{name:f.display_name})}>{t('View')} →</Link>

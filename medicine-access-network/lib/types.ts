@@ -85,6 +85,8 @@ export interface FacilitatorPublicProfile {
   linkedin_url?: string | null
   website_url?: string | null
   created_at: string
+  // Present only when the guide accepted the agreement that publishes it.
+  bio?: string | null
 }
 
 export interface Modality {

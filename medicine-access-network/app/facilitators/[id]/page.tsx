@@ -47,7 +47,7 @@ export async function generateMetadata({
   // on this view at all).
   const { data } = await supabase
     .from('facilitator_public_profiles')
-    .select('display_name, location, modalities, image_paths')
+    .select('display_name, bio, location, modalities, image_paths')
     .eq('id', id)
     .maybeSingle()
 
@@ -61,7 +61,11 @@ export async function generateMetadata({
     }
   }
 
-  const description = [data.display_name, data.location, profileServices(data.modalities).join(', ')].filter(Boolean).join(' — ').slice(0, 160)
+  const summary = [data.display_name, data.location, profileServices(data.modalities).join(', ')].filter(Boolean).join(' — ')
+  // A published bio (see lib/agreement.ts) describes the guide better than a
+  // list of services; fall back to the summary when there is none.
+  const bioText = typeof data.bio === 'string' ? data.bio.replace(/\s+/g, ' ').trim() : ''
+  const description = (bioText ? `${data.display_name} — ${bioText}` : summary).slice(0, 160)
   const photoUrl = getProfileImageUrl(data.image_paths?.[0])
 
   return {
@@ -138,7 +142,7 @@ export default async function FacilitatorProfilePage({ params, searchParams }: P
 
   const { data: facilitator } = await supabase
     .from('facilitator_public_profiles')
-    .select('id, user_id, display_name, location, modalities, image_paths, remote_available, years_experience, donation_based, minimum_donation, hourly_rate, whatsapp_url, signal_url, telegram_url, instagram_url, facebook_url, linkedin_url, website_url')
+    .select('id, user_id, display_name, bio, location, modalities, image_paths, remote_available, years_experience, donation_based, minimum_donation, hourly_rate, whatsapp_url, signal_url, telegram_url, instagram_url, facebook_url, linkedin_url, website_url')
     .eq('id', id)
     .maybeSingle()
 
@@ -304,6 +308,7 @@ export default async function FacilitatorProfilePage({ params, searchParams }: P
         className={headerStyles.sections}
       >
         {[
+          ...(facilitator.bio ? [{ href: '#about', label: 'About' }] : []),
           { href: '#services', label: 'Type of support' },
           ...(photoUrls.length ? [{ href: '#photos', label: 'Photos' }] : []),
           { href: '#fees', label: 'Fees' },
@@ -322,7 +327,15 @@ export default async function FacilitatorProfilePage({ params, searchParams }: P
           </a>
         ))}
       </nav>
-        <section id="services" aria-labelledby="services-heading" className={headerStyles.services}>
+        <div className={headerStyles.services}>
+        {facilitator.bio && (
+          <section id="about" aria-labelledby="about-heading" className="mb-6 scroll-mt-28">
+            <h2 id="about-heading" className="mb-3 text-base font-semibold text-stone-900">{t('About {name}', { name: facilitator.display_name })}</h2>
+            <p translate="no" className="whitespace-pre-line break-words text-sm leading-relaxed text-stone-700">{facilitator.bio}</p>
+            <p className="mt-3 text-xs leading-relaxed text-stone-500">{t('Written by the guide. Self-reported and not verified by The Facilitator Network.')}</p>
+          </section>
+        )}
+        <section id="services" aria-labelledby="services-heading" className="scroll-mt-28">
           <h2 id="services-heading" className="mb-3 text-base font-semibold text-stone-900">{t('Type of support')}</h2>
           <ul className="grid gap-2 sm:grid-cols-2">
             {profileServices(facilitator.modalities).map((service) => (
@@ -333,6 +346,7 @@ export default async function FacilitatorProfilePage({ params, searchParams }: P
             ))}
           </ul>
         </section>
+        </div>
         <div className={headerStyles.fee}>
           <p className="text-xs font-medium uppercase tracking-wide text-stone-500">{t("Listed fee · USD")}</p>
               <p className="mt-1 font-semibold text-stone-900">{rateDisplay}</p>

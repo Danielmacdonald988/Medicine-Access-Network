@@ -18,7 +18,7 @@ test('integration discovery uses the public projection, real service aliases and
     assert.equal(url.searchParams.get('order'), 'display_name.asc,id.asc')
     assert.equal(url.searchParams.get('offset'), '0')
     assert.equal(url.searchParams.get('limit'), '6')
-    assert.doesNotMatch(url.searchParams.get('select') ?? '', /bio|safety_practices|lineage_or_training|certifications/)
+    assert.doesNotMatch(url.searchParams.get('select') ?? '', /safety_practices|lineage_or_training|certifications/)
     assert.equal(url.searchParams.has('location'), false)
     assert.equal(url.searchParams.has('remote_available'), false)
     return new Response(JSON.stringify([guide]), { headers: { 'Content-Type': 'application/json', 'Content-Range': '0-0/9' } })

@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
-import { facilitatorOnboardingSchema, type FacilitatorOnboardingInput } from '@/lib/validations'
+import { facilitatorOnboardingSchema, CURRENT_AGREEMENT_VERSION, type FacilitatorOnboardingInput } from '@/lib/validations'
 import type { FacilitatorProfile } from '@/lib/types'
 import { ProfileMediaFields } from '@/components/profile/ProfileMediaFields'
 import { LocationFields } from '@/components/profile/LocationFields'
@@ -41,7 +41,7 @@ const STEP_META: Record<number, { title: string; description: string }> = {
   4: {
     title: 'Tell us about your practice',
     description:
-      'Your bio is for you and our administrators to review. Public profiles show your selected services and basic details.',
+      'Your bio appears on your public profile once your listing is approved. Write it for people looking for support. Leave out client details, medical or outcome claims, and anything about obtaining substances.',
   },
   5: {
     title: 'What modalities do you offer?',
@@ -222,7 +222,7 @@ export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }:
       website_url: existingProfile?.website_url ?? '',
 
       platform_agreement: undefined,
-      agreement_version: '2026-09-27.1',
+      agreement_version: CURRENT_AGREEMENT_VERSION,
     },
   })
 
@@ -842,7 +842,7 @@ export function FacilitatorOnboardingForm({ existingProfile, initialName = '' }:
                   }
                   className="mt-0.5 shrink-0"
                 />
-                <span className="text-sm font-medium text-stone-800">{t("I am at least 18. I agree to the platform rules, Terms of Use, and Provider Agreement, and acknowledge the Privacy Policy (version 2026-09-27.1).") }</span>
+                <span className="text-sm font-medium text-stone-800">{t("I am at least 18. I agree to the platform rules, Terms of Use, and Provider Agreement, and acknowledge the Privacy Policy (version {version}). I understand my bio will be shown on my public profile once my listing is approved.", { version: CURRENT_AGREEMENT_VERSION })}</span>
               </label>
             )}
           />
