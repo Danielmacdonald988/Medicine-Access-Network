@@ -1,6 +1,7 @@
 import { SocialLinks } from '@/components/profile/SocialLinks'
 import { EngagementMetrics } from '@/components/admin/EngagementMetrics'
-import { TodayActivity } from '@/components/admin/TodayActivity'
+import { AdminDashboard } from '@/components/admin/AdminDashboard'
+import { parseRange } from '@/lib/admin-dashboard'
 import { getTranslation } from '@/lib/i18n/server'
 import type { Locale } from '@/lib/i18n/config'
 import type { Metadata } from 'next'
@@ -10,8 +11,6 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  Users,
-  CalendarDays,
 } from 'lucide-react'
 import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -33,7 +32,7 @@ function formatDate(iso: string, locale: Locale) {
   })
 }
 
-export default async function AdminPage({ searchParams }: { searchParams: Promise<{ notice?: string | string[]; days?: string }> }) {
+export default async function AdminPage({ searchParams }: { searchParams: Promise<{ notice?: string | string[]; days?: string; range?: string }> }) {
   const { t, locale } = await getTranslation()
   const supabase = await createServerSupabaseClient()
   const params = await searchParams
@@ -100,7 +99,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           {t(notices[notice])}
         </p>
       )}
-      <TodayActivity />
+      <AdminDashboard range={parseRange(params.range)} />
       <div className="flex flex-col gap-4 rounded-xl border border-stone-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-sm font-semibold text-stone-900">{t("Application email alerts")}</h2>
@@ -114,63 +113,10 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           <Button type="submit" name="action" value="retry" variant="outline" className="min-h-11 w-full sm:w-auto">{t("Retry pending alerts")}</Button>
         </form>
       </div>
-      <EngagementMetrics days={[7, 30, 90].includes(Number(params.days)) ? Number(params.days) : 30} />
-      <Separator />
-      {/* Stats grid */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[
-          {
-            label: 'Total accounts',
-            value: counts.users.total,
-            sub: t('{count} guide accounts · visitors need no account', { count: counts.users.facilitators }),
-            icon: Users,
-            color: 'text-stone-500',
-          },
-          {
-            label: 'Pending review',
-            value: counts.facilitators.pending,
-            sub: t('Applications awaiting decision'),
-            icon: Clock,
-            color: 'text-amber-600',
-            highlight: counts.facilitators.pending > 0,
-          },
-          {
-            label: 'Published guides',
-            value: counts.facilitators.published,
-            sub: t('{count} rejected', { count: counts.facilitators.rejected }),
-            icon: CheckCircle,
-            color: 'text-emerald-600',
-          },
-          {
-            label: 'Conversation requests',
-            value: counts.bookings.total,
-            sub: t('{pending} pending · {accepted} accepted', { pending: counts.bookings.pending, accepted: counts.bookings.accepted }),
-            icon: CalendarDays,
-            color: 'text-stone-500',
-          },
-        ].map(({ label, value, sub, icon: Icon, color, highlight }) => (
-          <Card
-            key={label}
-            className={`border-stone-200 ${highlight ? 'ring-1 ring-amber-300' : ''}`}
-          >
-            <CardContent className="p-4">
-              <div className="mb-1 flex items-center gap-2 text-stone-400">
-                <Icon className={`size-3.5 ${color}`} />
-                <span className="text-xs">{t(label)}</span>
-              </div>
-              <p className={`text-2xl font-bold ${highlight ? 'text-amber-600' : 'text-stone-900'}`}>
-                {value}
-              </p>
-              <p className="mt-0.5 text-xs text-stone-400">{sub}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
       <Separator />
 
       {/* Pending applications */}
-      <div>
+      <div id="pending-applications" className="scroll-mt-24">
         <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-stone-900">
           <Shield className="size-5 text-amber-500" />{t("Pending applications")}{counts.facilitators.pending > 0 && (
             <Badge
@@ -366,6 +312,13 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           </div>
         </>
       )}
+      <details id="full-report" open={params.days !== undefined} className="rounded-2xl border border-stone-200 bg-white p-5">
+        <summary className="cursor-pointer font-semibold text-stone-900">Full tracking report</summary>
+        <p className="mt-2 text-sm text-stone-600">Signup and application funnels, every tracked signal, 7, 30 and 90-day views, and definitions.</p>
+        <div className="mt-5">
+          <EngagementMetrics days={[7, 30, 90].includes(Number(params.days)) ? Number(params.days) : 30} />
+        </div>
+      </details>
     </div>
   )
 }
