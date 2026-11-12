@@ -38,7 +38,7 @@ async function render(updated_at) {
     '@/lib/admin-notifications': { isAdminNotificationConfigured: () => false },
     '@/components/profile/SocialLinks': passthrough,
     '@/components/admin/EngagementMetrics': passthrough,
-    '@/components/admin/TodayActivity': passthrough,
+    '@/components/admin/AdminDashboard': passthrough,
     'next/image': { default: 'img', __esModule: true },
     'lucide-react': passthrough,
   }

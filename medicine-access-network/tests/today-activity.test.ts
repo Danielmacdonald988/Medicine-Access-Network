@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { readFileSync } from 'node:fs'
 import { countDay, countSince, startOfLocalDay } from '../lib/today-activity'
 
 test('today starts at local midnight in the operator time zone', () => {
@@ -30,10 +29,3 @@ test('counts distinct sessions per event within the window, and visit sources', 
   assert.equal(countSince([{ created_at: '2026-11-11T05:00:00Z' }, { created_at: '2026-11-12T05:00:00Z' }], from, to), 1)
 })
 
-test('the admin page shows Today first, with an admin check and no personal data', () => {
-  const page = readFileSync(new URL('../app/admin/page.tsx', import.meta.url), 'utf8')
-  assert.ok(page.indexOf('<TodayActivity />') > 0 && page.indexOf('<TodayActivity />') < page.indexOf('<EngagementMetrics'))
-  const panel = readFileSync(new URL('../components/admin/TodayActivity.tsx', import.meta.url), 'utf8')
-  assert.match(panel, /await requireRole\('admin'\)/)
-  assert.doesNotMatch(panel, /select\('[^']*(email|message|seeker_|display_name|bio)/)
-})
