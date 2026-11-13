@@ -1,4 +1,5 @@
 import { directorySupportIntent } from '@/lib/seeker-navigation'
+import { facilitatorSearchRecovery } from '@/lib/facilitator-search-recovery'
 import { SupportDiscovery } from '@/components/search/SupportDiscovery'
 import { SearchEngagement } from '@/components/EngagementTracker'
 import { getTranslation } from '@/lib/i18n/server'
@@ -54,6 +55,7 @@ async function EmptyResults({ filters, page }: { filters: FacilitatorFilters; pa
   const { t } = await getTranslation()
   const active = hasActiveFilters(filters)
   const firstPageHref = directoryHref(filterSearchParams(filters))
+  const alternatives = facilitatorSearchRecovery(filters, page)
   return (
     <>
       <div className="rounded-2xl border border-stone-200 bg-white px-6 py-14 text-center sm:py-20">
@@ -63,9 +65,14 @@ async function EmptyResults({ filters, page }: { filters: FacilitatorFilters; pa
         <h2 className="text-2xl font-medium tracking-tight text-stone-900">
           {t(page > 1 ? 'You’ve reached the end of these results' : active ? 'No guides match your search yet' : 'Guides coming soon')}
         </h2>
-        <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-stone-600">
+        {alternatives.length ? <nav lang="en" aria-label="Explore listed support instead" className="mx-auto mt-3 max-w-lg">
+          <p className="text-sm leading-relaxed text-stone-600">TFN focuses on preparation, integration and related support, not substance administration. Choose a listed type of support to search instead. Your location, format and other practical filters stay in place; matching guides may not be available.</p>
+          <div className="mt-4 flex flex-wrap justify-center gap-3">
+            {alternatives.map(({ label, href }) => <Link key={href} href={href} className="inline-flex min-h-11 items-center rounded-lg border border-emerald-700 px-4 py-2 text-sm font-medium text-emerald-800 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-800">{label}</Link>)}
+          </div>
+        </nav> : <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-stone-600">
           {t(page > 1 ? 'Profiles can change. Return to the first page to see the current results.' : active ? 'Try removing a filter, choosing a broader location, or exploring online sessions.' : 'There are no approved profiles to browse right now. New guides appear after their applications are reviewed.')}
-        </p>
+        </p>}
         {(active || page > 1) && (
           <Button asChild variant="outline" className="mt-5">
             <Link href={page > 1 ? firstPageHref : '/facilitators'}>{t(page > 1 ? 'Back to first page' : 'Clear search and filters')}</Link>
