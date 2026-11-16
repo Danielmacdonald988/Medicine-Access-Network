@@ -1,4 +1,5 @@
 import { getTranslation } from '@/lib/i18n/server'
+import { SharePanel } from '@/components/dashboard/SharePanel'
 import type { Locale } from '@/lib/i18n/config'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -409,6 +410,8 @@ export default async function FacilitatorDashboard({ searchParams }: {
           })()}
         </>
       )}
+
+      {facilitatorProfile?.verification_status === 'approved' && <SharePanel profileId={facilitatorProfile.id} />}
 
       {hasProfile && <Separator />}
 
