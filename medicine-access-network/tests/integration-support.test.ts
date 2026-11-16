@@ -51,3 +51,11 @@ test('integration service page has a distinct canonical, sitemap entry and bidir
   assert.match(page, /not verified availability/)
   assert.match(page, /diagnoses, medication lists, trauma details and substance use history/)
 })
+
+test('integration page targets online searches without promising availability everywhere', () => {
+  const page = readFileSync('app/integration-support/page.tsx', 'utf8')
+  assert.match(page, /title: 'Online Psychedelic Integration Support/)
+  assert.match(page, /\$\{INTEGRATION_DIRECTORY_HREF\}&remote=true/)
+  assert.match(page, /not a promise that the guide can work with you wherever you are/)
+  assert.doesNotMatch(page, /\b(heals?|cures?|guaranteed|dos(e|es|ing)|ceremon(y|ies))\b/i)
+})
