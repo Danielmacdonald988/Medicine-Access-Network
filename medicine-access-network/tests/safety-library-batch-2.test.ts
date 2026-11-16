@@ -4,7 +4,7 @@ import { getResource } from '../lib/resources'
 import { getVerifiedResourceContentDate } from '../lib/resource-content-dates'
 
 const slugs = ['integration-support-after-retreat', 'choosing-somatic-practitioner', 'certificate-vs-license']
-const content = (slug: string) => JSON.stringify(getResource(slug)?.blocks)
+const content = (slug: string) => JSON.stringify([getResource(slug)?.blocks, getResource(slug)?.faq])
 
 test('second batch follows platform language rules and claims no unverified dates', () => {
   for (const slug of slugs) {

@@ -16,6 +16,7 @@ export interface Resource {
   searchTitle?: string
   nextStep?: { label: string; href: string; description: string }
   relatedSlugs?: string[]
+  faq?: { q: string; a: string }[]
   sourceCheck?: {
     date: string
     scope: string
@@ -120,7 +121,7 @@ export const resources: Resource[] = [
     title: 'Integration Basics',
     searchTitle: 'Psychedelic Integration: What Support Can and Cannot Offer',
     nextStep: { label: 'Find integration support', href: '/integration-support', description: 'Compare guides who list integration conversations. Read their approach, ask about fit and fees, and confirm availability directly. No account is needed to browse or send an inquiry.' },
-    relatedSlugs: ['questions-to-ask', 'scope-of-practice', 'integration-circles-vs-individual'],
+    relatedSlugs: ['questions-to-ask', 'scope-of-practice', 'integration-circles-vs-individual', 'spiritual-support'],
     subtitle: 'Understanding reflection and support after a psychedelic or other significant experience',
     description:
       'Understand integration conversations, what to ask a guide, and how to compare scope, fees, format and boundaries before reaching out.',
@@ -565,6 +566,7 @@ export const resources: Resource[] = [
     subtitle: 'Understanding what each type of support offers — and what it does not',
     description:
       'A clear explanation of the differences between coaching, psychotherapy, and medical care — and why understanding those distinctions helps you seek the right support.',
+    relatedSlugs: ['choosing-somatic-practitioner', 'spiritual-support', 'certificate-vs-license'],
     blocks: [
       {
         type: 'p',
@@ -811,12 +813,19 @@ export const resources: Resource[] = [
   {
     slug: 'spiritual-support',
     title: 'Exploring Spiritual Support',
-    searchTitle: 'Spiritual Support: Approaches, Boundaries and Choosing a Guide',
+    searchTitle: 'What Is Spiritual Support? Meaning and How to Choose a Guide',
     subtitle: 'Questions about meaning, values and the kind of conversation you want',
-    description: 'Explore what spiritual support can mean, questions about beliefs and boundaries, and how to compare guides without pressure or an account.',
+    description: 'Spiritual support is help reflecting on meaning, values and beliefs, with or without religion. How it differs from therapy, and how to choose a guide.',
     nextStep: { label: 'Browse spiritual support', href: '/facilitators?modality=Spiritual+support', description: 'Explore profiles that list spiritual support. The label alone does not establish a tradition, credential or approach. Ask each guide what they offer and whether it fits what you want. No account or payment is needed to inquire.' },
     relatedSlugs: ['integration-basics', 'questions-to-ask', 'red-flags', 'scope-of-practice'],
+    faq: [
+      { q: 'What does spiritual support mean?', a: 'Spiritual support is help reflecting on meaning, purpose, values or beliefs, often through conversation. It can draw on a religious tradition or none. The term is broad, so ask each guide what it means in their practice.' },
+      { q: 'Do I need to be religious to get spiritual support?', a: 'No. Many people who look for spiritual support are non-religious, uncertain or still finding language for their questions. A guide should not require you to adopt a belief, and you can ask how they work with beliefs different from their own.' },
+      { q: 'Is spiritual support the same as therapy?', a: 'No. Spiritual support is a nonclinical conversation about meaning and values. Therapy is a clinical service provided by a licensed professional. If you are dealing with persistent distress or symptoms that affect daily life, consider a licensed mental health professional.' },
+      { q: 'How is it different from spiritual direction or chaplaincy?', a: 'Spiritual direction and chaplaincy are specific roles with their own training paths, and chaplains often work within hospitals or other institutions. A directory label of spiritual support does not mean someone holds either role. Ask the guide directly about their training and tradition.' },
+    ],
     blocks: [
+      { type: 'p', text: 'Spiritual support means having someone help you reflect on meaning, purpose, values or beliefs. It can happen within a religious tradition or with none at all. It is usually a conversation, sometimes with an agreed practice such as reflection or meditation, and it is not a clinical treatment.' },
       { type: 'p', text: 'Adults may look for spiritual support when they want to talk about meaning, values, beliefs, belonging or changes in how they see their life. You can be curious, uncertain, religious, non-religious or still finding language for your questions. You do not need to adopt a belief to ask what a guide offers.' },
       { type: 'h3', text: 'Ask what spiritual support means to this guide' },
       { type: 'p', text: 'The term is broad. A conversation might involve reflection, a particular tradition or a practice agreed in advance, but do not assume that a directory label promises any of these. Ask the guide to describe their approach, training and limits in plain language.' },
@@ -1014,7 +1023,7 @@ export const resources: Resource[] = [
     subtitle: 'Ask about the style, the screening and your right to stop',
     description:
       'Breathwork styles range from gentle to intensive. Learn what to ask a breathwork facilitator about screening, consent, group size, online sessions and fees.',
-    relatedSlugs: ['contraindications', 'questions-to-ask', 'red-flags', 'scope-of-practice'],
+    relatedSlugs: ['choosing-somatic-practitioner', 'contraindications', 'questions-to-ask', 'red-flags'],
     nextStep: { label: 'Browse breathwork profiles', href: '/facilitators?modality=Breathwork', description: 'Compare the services people list, then ask directly about style, screening, format and location eligibility. Profiles are self-reported. Browsing needs no account, and an inquiry is not a booking.' },
     sourceCheck: {
       date: '2026-11-11',
@@ -1117,7 +1126,7 @@ export const resources: Resource[] = [
     subtitle: 'The weeks after you return home, and how to find someone to talk to',
     description:
       'Coming home from a retreat can bring up more than expected. Learn what people report afterwards, what to ask the retreat, and how to find integration support.',
-    relatedSlugs: ['integration-basics', 'integration-circles-vs-individual', 'integration-support-cost', 'emergency'],
+    relatedSlugs: ['integration-basics', 'integration-circles-vs-individual', 'spiritual-support', 'emergency'],
     nextStep: { label: 'Compare integration profiles', href: '/integration-support', description: 'Compare guides who list integration conversations, then ask about their approach, fees and whether they can work with you where you live. Browsing needs no account, and an inquiry is not a booking.' },
     sourceCheck: {
       date: '2026-11-11',
@@ -1158,11 +1167,18 @@ export const resources: Resource[] = [
   {
     slug: 'choosing-somatic-practitioner',
     title: 'Choosing a Somatic Practitioner',
-    searchTitle: 'What Does a Somatic Practitioner Do? How to Choose One',
+    searchTitle: 'What Is a Somatic Practitioner? What They Do and How to Choose One',
     subtitle: 'Body-based approaches, training, touch and consent',
     description:
-      'Somatic practitioners work with body awareness, breath and movement. What training titles mean, questions about touch and consent, and when to see a therapist.',
+      'A somatic practitioner works with body awareness, breath and movement. What a session involves, licensing, touch and consent, and when to see a therapist.',
     relatedSlugs: ['scope-of-practice', 'certificate-vs-license', 'questions-to-ask', 'red-flags'],
+    faq: [
+      { q: 'What does a somatic practitioner do?', a: 'A somatic practitioner guides you to notice sensations in the body, often through talking, breath, grounding or movement exercises. Some also use hands-on work. Ask what a typical session with them involves before you book.' },
+      { q: 'Is a somatic practitioner a licensed therapist?', a: 'Not necessarily. Many somatic practitioners hold a certificate from a training program, which is not a healthcare license. Some are also licensed therapists, counsellors or massage therapists. If someone says they are licensed, check it with the authority that issued the license.' },
+      { q: 'Do somatic sessions involve touch?', a: 'Some do and many do not. Ask before the first session, and ask whether you can choose a session without touch. You can decline or stop touch at any point without giving a reason.' },
+      { q: 'Can somatic work be done online?', a: 'Many practitioners offer online sessions built on talking, breath and movement exercises. Hands-on work requires meeting in person. Ask which parts of their approach work remotely.' },
+      { q: 'How much does a somatic practitioner cost?', a: 'Fees vary by practitioner, location and session length. Ask for the total cost, including any package, cancellation terms and whether a first call is free, before you commit.' },
+    ],
     nextStep: { label: 'Browse somatic profiles', href: '/facilitators?modality=Somatic+practices', description: 'Compare the services people list, then ask directly about their training, approach to touch and whether they can work with you where you live. Profiles are self-reported. Browsing needs no account, and an inquiry is not a booking.' },
     sourceCheck: {
       date: '2026-11-11',
@@ -1173,6 +1189,7 @@ export const resources: Resource[] = [
       ],
     },
     blocks: [
+      { type: 'p', text: 'A somatic practitioner is someone who works with the body’s sensations, breath, posture and movement, usually alongside conversation, to help you notice and respond to stress. Most are trained in a specific method rather than licensed, so what a session involves varies widely from one practitioner to the next.' },
       { type: 'p', text: '“Somatic” describes approaches that pay attention to the body: sensation, breath, posture, movement and how stress shows up physically. The word covers a wide range of practices, from gentle awareness exercises to hands-on bodywork, and from trained therapists to people with a short course. Before comparing practitioners, find out what a session would actually involve.' },
       { type: 'h3', text: 'What a session can involve' },
       { type: 'ul', items: [
@@ -1207,7 +1224,7 @@ export const resources: Resource[] = [
     subtitle: 'How to read a guide’s qualifications, and how to check them',
     description:
       'Certified, licensed, trained, accredited: these words mean different things. What each tells you about a guide, and how to check a claimed credential yourself.',
-    relatedSlugs: ['questions-to-ask', 'colorado-facilitator-license-check', 'scope-of-practice', 'red-flags'],
+    relatedSlugs: ['questions-to-ask', 'colorado-facilitator-license-check', 'choosing-somatic-practitioner', 'red-flags'],
     blocks: [
       { type: 'p', text: 'Guides describe their qualifications in many ways: certified, licensed, trained, accredited, registered. These words are often used as if they mean the same thing. They do not, and the difference matters when you are deciding whom to trust.' },
       { type: 'h3', text: 'What each word usually means' },

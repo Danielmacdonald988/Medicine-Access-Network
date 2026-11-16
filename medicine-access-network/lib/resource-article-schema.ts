@@ -29,6 +29,24 @@ export function resourceArticleStructuredData(resource: Pick<Resource, 'slug' | 
   }
 }
 
+// FAQ markup mirrors the "Common questions" section rendered on the page,
+// word for word, so the structured data never says more than the visible text.
+export function resourceFaqStructuredData(faq: NonNullable<Resource['faq']>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  }
+}
+
+export function resourceFaqJsonLd(faq: NonNullable<Resource['faq']>): string {
+  return serializeStructuredData(resourceFaqStructuredData(faq))
+}
+
 export function resourceArticleJsonLd(resource: Parameters<typeof resourceArticleStructuredData>[0]): string {
   return serializeStructuredData(resourceArticleStructuredData(resource))
 }

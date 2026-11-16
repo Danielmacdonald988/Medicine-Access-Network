@@ -9,7 +9,7 @@ import { AlertTriangle, Info, Siren } from 'lucide-react'
 import { getResource, resources, type Block } from '@/lib/resources'
 import { APP_NAME } from '@/lib/constants'
 import { resourceBreadcrumbs, breadcrumbJsonLd } from '@/lib/resource-breadcrumbs'
-import { resourceArticleJsonLd } from '@/lib/resource-article-schema'
+import { resourceArticleJsonLd, resourceFaqJsonLd } from '@/lib/resource-article-schema'
 
 export async function generateStaticParams() {
   return resources.map((r) => ({ slug: r.slug }))
@@ -139,6 +139,7 @@ export default async function ResourcePage({ params }: PageProps) {
     <article className="space-y-5">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd(breadcrumbs) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: resourceArticleJsonLd(resource) }} />
+      {resource.faq && resource.faq.length > 0 && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: resourceFaqJsonLd(resource.faq) }} />}
       <nav aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-x-2 text-sm text-stone-600">
           {breadcrumbs.map((crumb, index) => (
@@ -200,6 +201,20 @@ export default async function ResourcePage({ params }: PageProps) {
           <RenderBlock key={i} block={block} />
         ))}
       </div>
+
+      {resource.faq && resource.faq.length > 0 && (
+        <section className="space-y-4 rounded-xl border border-stone-200 p-5" aria-labelledby="resource-faq">
+          <h2 id="resource-faq" className="text-lg font-semibold text-stone-900">Common questions</h2>
+          <dl className="space-y-4">
+            {resource.faq.map((item) => (
+              <div key={item.q}>
+                <dt className="font-medium text-stone-900">{item.q}</dt>
+                <dd className="mt-1 leading-relaxed text-stone-600">{item.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
 
       {resource.sourceCheck && (
         <section className="rounded-xl border border-stone-200 bg-stone-50 p-5" aria-labelledby="resource-sources">
