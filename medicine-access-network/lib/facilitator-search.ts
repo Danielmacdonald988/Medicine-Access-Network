@@ -90,7 +90,10 @@ function quoteFilterValue(value: string): string {
 
 export function textSearchExpression(q: string): string {
   const value = quoteFilterValue(literalSearchPattern(q))
-  const clauses = ['display_name', 'location'].map((column) => `${column}.imatch.${value}`)
+  // The bio is the guide's own published text (NULL when withheld), so a
+  // literal match there finds e.g. "grief" or "Alexander Technique" without
+  // inferring a support need. Name and location stay first for readability.
+  const clauses = ['display_name', 'location', 'bio'].map((column) => `${column}.imatch.${value}`)
   // Only expand a small set of plain-language descriptions of the catalog.
   // These are support categories, not a clinical or suitability assessment.
   const aliases: Record<string, 'preparation' | 'integration'> = {
