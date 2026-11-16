@@ -8,12 +8,20 @@ import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { INTEGRATION_DIRECTORY_HREF, loadIntegrationGuides } from '@/lib/integration-support'
 
 export const metadata: Metadata = {
-  title: 'Find Psychedelic Integration Support | Compare Guides',
-  description: 'Explore guides who list integration conversations. Compare their approach, ask about scope, fees and session format, and request a conversation without an account.',
+  title: 'Online Psychedelic Integration Support | Compare Guides',
+  description: 'Compare integration guides who offer online or in-person sessions. Ask about approach, fees and where they can work with you, and reach out without an account.',
   alternates: { canonical: '/integration-support' },
 }
 
+const ONLINE_INTEGRATION_HREF = `${INTEGRATION_DIRECTORY_HREF}&remote=true`
+
 const linkStyle = 'inline-flex min-h-11 items-center text-emerald-800 underline underline-offset-4'
+
+function onlineCount(guides: { remote_available?: boolean | null }[]) {
+  const online = guides.filter(guide => guide.remote_available).length
+  if (!online) return ''
+  return online === guides.length ? 'Each profile shown lists online sessions.' : `${online} of the profiles shown list online sessions.`
+}
 
 async function IntegrationGuides() {
   const { locale } = await getTranslation()
@@ -26,7 +34,7 @@ async function IntegrationGuides() {
   if (result.status === 'unavailable') return <p role="status" className="rounded-xl border border-stone-200 p-5">Guide profiles could not be loaded right now. You can still read the comparison questions below or <Link className={linkStyle} href={INTEGRATION_DIRECTORY_HREF}>try the integration directory</Link>.</p>
   if (!result.guides.length) return <p role="status" className="rounded-xl border border-stone-200 p-5">No public profiles currently list integration conversations. <Link className={linkStyle} href="/facilitators">Explore other listed support</Link> without assuming it offers the same service.</p>
   return <>
-    <p className="mb-4 text-sm text-stone-600">Showing {result.guides.length} of {result.total} matching profiles, alphabetically. Placement is not a recommendation or quality rating.</p>
+    <p className="mb-4 text-sm text-stone-600">Showing {result.guides.length} of {result.total} matching profiles, alphabetically. {onlineCount(result.guides)} Placement is not a recommendation or quality rating.</p>
     <div lang={locale} className="grid gap-3">{result.guides.map(guide => <FacilitatorCard key={guide.id} facilitator={guide} returnTo="/integration-support" service={INTEGRATION_SERVICE} />)}</div>
     <Link className={`${linkStyle} mt-3`} href={INTEGRATION_DIRECTORY_HREF}>See all integration profiles and filter your options →</Link>
   </>
@@ -37,7 +45,7 @@ export default function IntegrationSupportPage() {
     <header className="max-w-3xl">
       <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Find your support</p>
       <h1 className="mt-3 text-3xl font-medium tracking-tight text-stone-900 sm:text-5xl">Find integration support</h1>
-      <p className="mt-5 text-lg leading-relaxed text-stone-600">Looking for someone to talk with after a psychedelic or other significant personal experience? Compare guides who list integration conversations, understand what they offer, and decide whether to reach out.</p>
+      <p className="mt-5 text-lg leading-relaxed text-stone-600">Looking for someone to talk with after a psychedelic or other significant personal experience? Compare guides who list integration conversations, online or in person, understand what they offer, and decide whether to reach out.</p>
       <p className="mt-4 leading-relaxed text-stone-600">Integration support can mean space to reflect, explore meaning and consider everyday changes. Each guide defines their own approach. It does not require another psychedelic experience, and this directory does not supply, source or administer substances or arrange access to them.</p>
       <a href="#integration-guides" className="mt-5 inline-flex min-h-11 items-center rounded-lg bg-emerald-900 px-5 py-3 font-medium text-white hover:bg-emerald-800">Explore integration guides</a>
       <p className="mt-3 text-sm text-stone-600">No account needed. An inquiry is not a booking, payment or guarantee of a reply.</p>
@@ -48,6 +56,17 @@ export default function IntegrationSupportPage() {
       <p className="mb-5 mt-3 max-w-3xl leading-relaxed text-stone-600">These are current public directory listings, not verified availability. Services, experience and prices are self-reported. A listed city is not a confirmed service area; ask whether the guide can work with you where you live, online or in person, and confirm the total fee.</p>
       <Suspense fallback={<p role="status" className="py-8 text-stone-600">Loading current public profiles…</p>}><IntegrationGuides /></Suspense>
       <Link className={`${linkStyle} mt-3`} href="/about#profile-review">What profile review does—and does not—mean</Link>
+    </section>
+
+    <section aria-labelledby="online-heading" className="max-w-3xl">
+      <h2 id="online-heading" className="text-2xl font-medium text-stone-900">Integration support online</h2>
+      <p className="mt-3 leading-relaxed text-stone-600">Many guides offer integration conversations by video or phone, so you are not limited to someone nearby. Online support can make it easier to find a guide whose approach fits you, but a profile that lists online sessions is not a promise that the guide can work with you wherever you are.</p>
+      <ul className="mt-4 list-disc space-y-2 pl-5 leading-relaxed text-stone-600">
+        <li>Tell the guide where you will physically be during the session, and ask whether they can offer this service there. A clinical license usually applies only in the place that issued it.</li>
+        <li>Check the time zone, session length and how you will connect, and ask how the call is kept private.</li>
+        <li>Agree in advance what happens if the connection drops or you want to pause.</li>
+      </ul>
+      <Link className={`${linkStyle} mt-3`} href={ONLINE_INTEGRATION_HREF}>Browse guides who list online sessions</Link>
     </section>
 
     <section aria-labelledby="compare-heading" className="max-w-3xl rounded-2xl bg-stone-50 p-6 sm:p-8">
