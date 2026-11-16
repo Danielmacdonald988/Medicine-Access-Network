@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { readFileSync } from 'node:fs'
-import { badgeEmbedCode, initialsFor, storyServices, suggestedCaption, profileUrl, BADGE_PATH } from '../lib/share-kit'
+import { storyLocation as __storyLocation, badgeEmbedCode, initialsFor, storyServices, suggestedCaption, profileUrl, BADGE_PATH } from '../lib/share-kit'
 import { SITE_URL } from '../lib/constants'
 
 const id = '00000000-0000-4000-8000-000000000001'
@@ -36,4 +36,10 @@ test('story route only reads the public projection and is never publicly cached'
   assert.match(route, /from\('facilitator_public_profiles'\)/)
   assert.doesNotMatch(route, /from\('facilitator_profiles'\)/)
   assert.match(route, /'Cache-Control': 'private, no-store'/)
+})
+
+test('story location keeps the first place, city and region only', () => {
+  assert.equal(__storyLocation('Boston, Massachusetts, United States; Playa del Carmen, Quintana Roo, Mexico'), 'Boston, Massachusetts')
+  assert.equal(__storyLocation('Pisac'), 'Pisac')
+  assert.equal(__storyLocation(null), '')
 })

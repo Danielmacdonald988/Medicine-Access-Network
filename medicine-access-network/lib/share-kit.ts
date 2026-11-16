@@ -21,6 +21,13 @@ export function storyServices(modalities: readonly string[] | null | undefined, 
   return profileServices(modalities ?? []).slice(0, max)
 }
 
+// First listed place, city and region only: "Boston, Massachusetts, United
+// States; Playa del Carmen, ..." -> "Boston, Massachusetts".
+export function storyLocation(location: string | null | undefined) {
+  const first = location?.split(';')[0] ?? ''
+  return first.split(',').map((part) => part.trim()).filter(Boolean).slice(0, 2).join(', ')
+}
+
 export function initialsFor(name: string) {
   return name.split(/\s+/).filter(Boolean).map((part) => part[0]).join('').toUpperCase().slice(0, 2) || '?'
 }

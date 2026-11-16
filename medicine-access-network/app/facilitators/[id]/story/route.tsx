@@ -4,7 +4,7 @@ import { createServerSupabaseClient } from '@/lib/supabaseServer'
 import { createAdminSupabaseClient } from '@/lib/supabaseAdmin'
 import { isProfileImagePath, PROFILE_IMAGE_BUCKET } from '@/lib/profile-media'
 import { APP_NAME } from '@/lib/constants'
-import { initialsFor, storyServices } from '@/lib/share-kit'
+import { initialsFor, storyLocation, storyServices } from '@/lib/share-kit'
 
 export const runtime = 'nodejs'
 
@@ -39,7 +39,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 
   const photo = await photoDataUrl(guide.image_paths?.[0])
   const services = storyServices(guide.modalities)
-  const place = [guide.location?.split(';')[0]?.trim(), guide.remote_available ? 'Online sessions' : null].filter(Boolean).join(' · ')
+  const place = [storyLocation(guide.location), guide.remote_available ? 'Online sessions' : null].filter(Boolean).join(' · ')
 
   const image = new ImageResponse(
     (
