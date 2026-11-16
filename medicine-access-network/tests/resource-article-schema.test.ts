@@ -46,3 +46,15 @@ test('a default share image and large card are configured site-wide', () => {
   assert.doesNotMatch(image, /heal|cure|treat|therap|ceremon|dos(e|ing)|verified/i)
   assert.match(layout, /card: "summary_large_image"/)
 })
+
+test('FAQ markup mirrors the visible questions on guides that have them', async () => {
+  const { resourceFaqStructuredData } = await import('../lib/resource-article-schema')
+  const { getResource } = await import('../lib/resources')
+  for (const slug of ['choosing-somatic-practitioner', 'spiritual-support']) {
+    const faq = getResource(slug)?.faq
+    assert.ok(faq && faq.length >= 4, slug)
+    const data = resourceFaqStructuredData(faq)
+    assert.equal(data['@type'], 'FAQPage')
+    assert.deepEqual(data.mainEntity.map((q) => [q.name, q.acceptedAnswer.text]), faq.map((q) => [q.q, q.a]))
+  }
+})
