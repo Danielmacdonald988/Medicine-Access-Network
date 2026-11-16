@@ -48,7 +48,8 @@ test('translated free text expands supported practices without replacing entered
   const expression = textSearchExpression(filters.q)
   assert.ok(expression.includes('Integration Coaching'))
   assert.ok(expression.includes('display_name.imatch."INTEGRACIÓN"'))
-  assert.ok(!expression.includes('bio.imatch.'))
+  // Bios are public listing text (withheld bios are NULL in the public view), so a literal bio match is expected.
+  assert.ok(expression.includes('bio.imatch."INTEGRACIÓN"'))
   assert.deepEqual([...filterSearchParams(filters)], [['q', query], ['location', 'México'], ['modality', 'Breathwork'], ['remote', 'true']])
   assert.equal(textSearchExpression('Example Name 123').includes('modalities.ov.'), false)
   assert.equal(textSearchExpression('private.person@example.com').includes('modalities.ov.'), false)

@@ -202,3 +202,12 @@ test('a truncated reviews response never produces a misleading partial average',
   const supabase = clientWithFetch(async () => jsonResponse([{ facilitator_id: 'user-id', rating: 5 }], 1001))
   assert.deepEqual(await addFacilitatorRatings(supabase, [profile]), [profile])
 })
+
+test('typed searches also match the words of a published guide bio, literally', () => {
+  const expression = textSearchExpression('Alexander Technique')
+  assert.ok(expression.startsWith('display_name.imatch.'))
+  assert.match(expression, /,location\.imatch\.[^,]+,bio\.imatch\./)
+  // A bio match is literal text, not an inferred category.
+  assert.equal(textSearchExpression('grief').includes('modalities.ov.'), false)
+  assert.match(textSearchExpression('grief'), /bio\.imatch\./)
+})
